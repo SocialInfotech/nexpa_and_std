@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent" android:layout_height="match_parent"
+android:orientation="vertical">
+	<LinearLayout android:id="@+id/lnBroadcast"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:background="@color/toucan_green"
+	android:orientation="vertical">
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:gravity="center"
+		android:layout_centerInParent="true" android:orientation="horizontal">
+		<ImageView 
+			android:layout_width="30dp" android:layout_height="30dp"
+			android:paddingLeft="3dp"
+			android:src="@drawable/btn_search"
+			/>
+		<TextView android:id="@+id/txtMes" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:gravity="left"
+			android:padding="5dp" android:text="Search results for '#Sample"
+			android:textColor="@color/white_smoke"
+			android:textSize="18dp" />
+		</LinearLayout>
+	</LinearLayout>
+
+	<TextView
+	    android:id="@+id/txtNo"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:gravity="center"
+	    android:padding="5dp"
+	    android:text="No Results Found"
+	    android:textColor="@color/asbestos"
+	    android:textSize="18dp" />
+
+	<ListView android:layout_width="match_parent"
+		android:layout_height="match_parent" 
+		android:id="@+id/listview" 
+		tools:context=".SearchPostActivity"
+		android:dividerHeight="10.0sp"  android:animateLayoutChanges="true"
+		/>
+</LinearLayout>	

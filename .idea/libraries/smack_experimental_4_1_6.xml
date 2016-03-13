@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="smack-experimental-4.1.6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/smack-experimental-4.1.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

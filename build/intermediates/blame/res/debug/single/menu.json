@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\build\\intermediates\\res\\merged\\debug\\menu\\toolbar.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\res\\menu\\toolbar.xml"
+    },
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\build\\intermediates\\res\\merged\\debug\\menu\\test.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\res\\menu\\test.xml"
+    },
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\build\\intermediates\\res\\merged\\debug\\menu\\scroll_view.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\res\\menu\\scroll_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\build\\intermediates\\res\\merged\\debug\\menu\\list_view.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\res\\menu\\list_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\build\\intermediates\\res\\merged\\debug\\menu\\distance.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\res\\menu\\distance.xml"
+    },
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\build\\intermediates\\res\\merged\\debug\\menu\\items.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\res\\menu\\items.xml"
+    },
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\build\\intermediates\\res\\merged\\debug\\menu\\main.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\res\\menu\\main.xml"
+    }
+]

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/broad_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:tag="broad_id"
+        android:visibility="gone" />
+    
+    <TextView
+        android:id="@+id/click_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:tag="click_count"
+        android:text="0"
+        android:visibility="gone"
+         />
+
+    <LinearLayout
+        android:id="@+id/btn_broadcast_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:descendantFocusability="blocksDescendants"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <RelativeLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@color/white" >
+
+            <View
+                android:id="@+id/innerPic"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_marginBottom="1dip"
+                android:layout_marginTop="1dip"
+                android:background="@drawable/circle"
+                android:orientation="vertical" />
+
+            <ImageView
+                android:id="@+id/img_profile"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/innerPic"
+                android:layout_alignLeft="@id/innerPic"
+                android:layout_alignRight="@id/innerPic"
+                android:layout_alignTop="@id/innerPic"
+                android:padding="1dip"
+                android:scaleType="fitXY" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/linearLayout1"
+            android:layout_weight="0"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/broad_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Anny McLintoch"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/broad_from_raw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/date_broad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/broad_from"
+                android:fontFamily="sans-serif-light"
+                android:singleLine="true"
+                android:text="Dec 9, 2014"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/location_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/date_broad"
+                android:fontFamily="sans-serif-light"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="12dp"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutTexts"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="2dp" >
+
+        <TextView
+            android:id="@+id/broad_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayout1"
+            android:paddingBottom="3dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et tempor nulla, quis rutrum ante." />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/white_smoke" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp" >
+
+        <LinearLayout
+            android:id="@+id/btnReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+
+            <!-- <View android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" /> -->
+
+            <ImageView
+                android:id="@+id/imgReply"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@drawable/btn_reply" />
+
+            <TextView
+                android:id="@+id/txtReply"
+                style="@android:style/TextAppearance.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:paddingLeft="1dp"
+                android:text="REPLY" />
+            <!-- <View androi d:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" /> -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+
+            <!-- <View android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" /> -->
+
+            <ImageButton
+                android:id="@+id/btnFave"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_star"
+                android:clickable="false"
+                android:focusable="false" />
+
+            <TextView
+                android:id="@+id/txtFave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:paddingLeft="1dp"
+                android:text="0"
+                android:visibility="gone" />
+            <!-- <View android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" /> -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+
+            <!-- <View android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" /> -->
+
+            <ImageButton
+                android:id="@+id/btnTrash"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_block_user"
+                android:clickable="false"
+                android:focusable="false" />
+
+            <TextView
+                android:id="@+id/txtDel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:paddingLeft="1dp"
+                android:singleLine="true"
+                android:text="0"
+                android:visibility="gone" />
+            <!-- <View android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" /> -->
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/reach"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:background="@color/white_smoke"
+        android:fontFamily="sans-serif-light"
+        android:paddingBottom="3dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="3dp"
+        android:text=" Reached 56"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/_broad_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+
+</LinearLayout>

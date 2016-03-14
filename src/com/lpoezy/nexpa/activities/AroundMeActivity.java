@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -39,6 +40,8 @@ import com.devspark.appmsg.AppMsg;
 import com.devspark.appmsg.AppMsg.Style;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.lpoezy.nexpa.JSON.JSONParser;
 import com.lpoezy.nexpa.R;
@@ -61,6 +64,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -70,8 +74,11 @@ import java.util.Map;
 
 public class AroundMeActivity extends AppCompatActivity
 		implements
-		GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener {
+		GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener {
 	private static final String TAG = AroundMeActivity.class.getSimpleName();
+	private static final String REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY";
+	private static final String LOCATION_KEY = "LOCATION_KEY";
+	private static final String LAST_UPDATED_TIME_STRING_KEY = "LAST_UPDATED_TIME_STRING_KEY";
 	// Button btnUpdate;
 	LocationManager locationManager;
 	// MyLocationListener locationListener;
@@ -302,34 +309,125 @@ public class AroundMeActivity extends AppCompatActivity
 		}
 	}
 
-	@Override
-	protected void onStop() {
-		mGoogleApiClient.disconnect();
-		super.onStop();
+	protected void onPause() {
+		super.onPause();
+		// locationManager.removeUpdates(locationListener);
+		isRunning = false;
+		stopLocationUpdates();
+
+
 	}
 
-	@Override
-	protected void onStart() {
-		mGoogleApiClient.connect();
-		super.onStart();
+	protected void stopLocationUpdates() {
+		LocationServices.FusedLocationApi.removeLocationUpdates(
+				mGoogleApiClient, this);
+
+		mRequestingLocationUpdates = false;
 	}
 
+
+	@Override
+	protected void onResume() {
+
+		super.onResume();
+		isRunning = true;
+
+		if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+			startLocationUpdates();
+		}
+
+//		try {
+//			dst = Integer.parseInt(db.getBroadcastDist());
+//		} catch (Exception e) {
+//			dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+//		}
+//
+//		if (oldDst != dst) {
+//			// force grid update when new distance detected
+//			tryGridToUpdate();
+//			oldDst = dst;
+//		}
+//		adapter.notifyDataSetChanged();
+//
+//		final XMPPConnection connection = XMPPLogic.getInstance().getConnection();
+//
+//		if (connection == null || !connection.isConnected()) {
+//			SQLiteHandler db = new SQLiteHandler(getApplicationContext());
+//			db.openToWrite();
+//
+//			// db.updateBroadcasting(0);
+//			// db.updateBroadcastTicker(0);
+//			/*/
+//			Account ac = new Account();
+//			ac.LogInChatAccount(db.getUsername(), db.getEncryptedPassword(), db.getEmail(), new OnXMPPConnectedListener() {
+//
+//				@Override
+//				public void onXMPPConnected(XMPPConnection con) {
+//
+//					subscriptionRequestListener(con);
+//				}
+//
+//			});
+//			//*/
+//			db.close();
+//		} else {
+//
+//			subscriptionRequestListener(connection);
+//
+//		}
+	}
+
+
+	private Location mCurrentLocation;
 	private Location mLastLocation;
 	private GoogleApiClient mGoogleApiClient;
+	private String mLastUpdateTime;
+	private LocationRequest mLocationRequest;
+	private boolean mRequestingLocationUpdates;
 
+	protected void createLocationRequest() {
+		mLocationRequest = new LocationRequest();
+		mLocationRequest.setInterval(10000);
+		mLocationRequest.setFastestInterval(5000);
+		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+	}
+
+	protected void startLocationUpdates() {
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			// TODO: Consider calling
+			//    ActivityCompat#requestPermissions
+			// here to request the missing permissions, and then overriding
+			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+			//                                          int[] grantResults)
+			// to handle the case where the user grants the permission. See the documentation
+			// for ActivityCompat#requestPermissions for more details.
+			return;
+		}
+
+
+
+		LocationServices.FusedLocationApi.requestLocationUpdates(
+				mGoogleApiClient, mLocationRequest, this);
+
+		mRequestingLocationUpdates = true;
+	}
 
 	@Override
 	public void onConnected(Bundle bundle) {
-		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-			return;
+		if (mRequestingLocationUpdates) {
+			startLocationUpdates();
 		}
-		mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-				mGoogleApiClient);
-		if (mLastLocation != null) {
-			L.debug("last loc latitude: "+String.valueOf(mLastLocation.getLatitude()));
-			L.debug("last loc long: "+String.valueOf(mLastLocation.getLongitude()));
-		}
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+
+		mCurrentLocation = location;
+		mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+
+		updateUI();
+
 	}
 
 	@Override
@@ -342,6 +440,52 @@ public class AroundMeActivity extends AppCompatActivity
 
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+
+		savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
+				mRequestingLocationUpdates);
+		savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
+		savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, mLastUpdateTime);
+
+
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	private void updateValuesFromBundle(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			// Update the value of mRequestingLocationUpdates from the Bundle, and
+			// make sure that the Start Updates and Stop Updates buttons are
+			// correctly enabled or disabled.
+			if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
+				mRequestingLocationUpdates = savedInstanceState.getBoolean(
+						REQUESTING_LOCATION_UPDATES_KEY);
+
+			}
+
+			// Update the value of mCurrentLocation from the Bundle and update the
+			// UI to show the correct latitude and longitude.
+			if (savedInstanceState.keySet().contains(LOCATION_KEY)) {
+				// Since LOCATION_KEY was found in the Bundle, we can be sure that
+				// mCurrentLocationis not null.
+				mCurrentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
+			}
+
+			// Update the value of mLastUpdateTime from the Bundle and update the UI.
+			if (savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
+				mLastUpdateTime = savedInstanceState.getString(
+						LAST_UPDATED_TIME_STRING_KEY);
+			}
+
+		}
+	}
+
+	private void updateUI() {
+
+		L.debug("last loc latitude: "+String.valueOf(mCurrentLocation.getLatitude()));
+		L.debug("last loc long: "+String.valueOf(mCurrentLocation.getLongitude()));
+		L.debug("last update time: "+mLastUpdateTime);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -1032,53 +1176,9 @@ public class AroundMeActivity extends AppCompatActivity
 
 	}
 
-	@Override
-	protected void onResume() {
 
-		super.onResume();
-		isRunning = true;
 
-//		try {
-//			dst = Integer.parseInt(db.getBroadcastDist());
-//		} catch (Exception e) {
-//			dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
-//		}
-//
-//		if (oldDst != dst) {
-//			// force grid update when new distance detected
-//			tryGridToUpdate();
-//			oldDst = dst;
-//		}
-//		adapter.notifyDataSetChanged();
-//
-//		final XMPPConnection connection = XMPPLogic.getInstance().getConnection();
-//
-//		if (connection == null || !connection.isConnected()) {
-//			SQLiteHandler db = new SQLiteHandler(getApplicationContext());
-//			db.openToWrite();
-//
-//			// db.updateBroadcasting(0);
-//			// db.updateBroadcastTicker(0);
-//			/*/
-//			Account ac = new Account();
-//			ac.LogInChatAccount(db.getUsername(), db.getEncryptedPassword(), db.getEmail(), new OnXMPPConnectedListener() {
-//
-//				@Override
-//				public void onXMPPConnected(XMPPConnection con) {
-//
-//					subscriptionRequestListener(con);
-//				}
-//
-//			});
-//			//*/
-//			db.close();
-//		} else {
-//
-//			subscriptionRequestListener(connection);
-//
-//		}
 
-	}
 	
 	private void subscriptionRequestListener(final XMPPConnection connection) {
 		
@@ -1156,13 +1256,7 @@ public class AroundMeActivity extends AppCompatActivity
 		}, 2000);
 	}
 
-	protected void onPause() {
-		super.onPause();
-		// locationManager.removeUpdates(locationListener);
-		isRunning = false;
-		Log.e("ON PAUSE", "APP PAUSE");
 
-	}
 
 	@Override
 	public void onCorrespondentUpdate() {
@@ -1173,6 +1267,7 @@ public class AroundMeActivity extends AppCompatActivity
 		});
 
 	}
+
 
 
 }

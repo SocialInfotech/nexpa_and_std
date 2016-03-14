@@ -157,7 +157,7 @@ public class MainSignInActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		Intent service = new Intent(this, XMPPService.class);
-		startService(service);
+		//startService(service);
 		bindService(service, mServiceConn, Context.BIND_AUTO_CREATE);
 
 	}
@@ -166,6 +166,7 @@ public class MainSignInActivity extends Activity {
 	public void onPause() {
 		super.onPause();
 		if (mServiceConn != null) {
+
 			unbindService(mServiceConn);
 		}
 	}

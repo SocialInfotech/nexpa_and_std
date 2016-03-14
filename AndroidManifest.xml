@@ -45,14 +45,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SampActivity" />
+
         <activity android:name=".activities.PeopleActivity" />
         <activity android:name=".activities.ForgotPasswordActivity" />
         <activity
             android:name=".activities.TabHostActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.SearchActivity" />
-        <activity android:name=".activities.MapActivity" />
+
         <activity
             android:name=".activities.ChatActivity"
             android:parentActivityName=".activities.TabHostActivity"
@@ -84,9 +84,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".activities.GroupActivity" />
         <activity android:name=".activities.AroundMeActivity" />
-        <activity
-            android:name="com.facebook.LoginActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -102,10 +99,7 @@
             android:exported="true" >
         </service>
 
-        <activity
-            android:name=".TestActivity"
-            android:label="@string/title_activity_test" >
-        </activity>
+
 
         <receiver
             android:name=".chatservice.NetworkChangeReceiver"
@@ -150,7 +144,7 @@
         </service>
         
         <service
-            android:name="com.example.MyInstanceIdListenerService"
+            android:name="com.lpoezy.nexpa.chatservice.MyInstanceIdListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />

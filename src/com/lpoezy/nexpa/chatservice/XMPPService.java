@@ -70,7 +70,16 @@ public class XMPPService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        xmpp.connection.disconnect();
+
+        try {
+
+            xmpp.disconnect();
+        } catch (NotConnectedException e) {
+
+           L.debug(e.getMessage());
+        }
+
+
         isRunning = false;
     }
 

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Nexpa.iml" filepath="$PROJECT_DIR$/Nexpa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nexpa_and_std.iml" filepath="$PROJECT_DIR$/nexpa_and_std.iml" />
     </modules>
   </component>
 </project>

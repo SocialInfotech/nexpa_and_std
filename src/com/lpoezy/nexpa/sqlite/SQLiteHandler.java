@@ -149,11 +149,13 @@ public class SQLiteHandler {
     public static final String BROADCAST_REACH = "reach";
     public static final String BROADCAST_STATUS = "status";
 
-    private static final String DATABASE_TABLE_4 = "location";
-    private static final String LOC_ID = "_id";
+    private static final String TABLE_LOCATION = "location";
+    private static final String LOC_USERNAME = "username";
     private static final String LOC_LONGI = "longitude";
     private static final String LOC_LATI = "latitude";
-    private static final String LOC_DATE = "date_written";
+    private static final String GPS_PROVIDER = "gps_provider";
+    private static final String LOC_DATE_CREATE = "date_create";
+    private static final String LOC_DATE_UPDATE = "date_update";
 
     private static final String DATABASE_TABLE_5 = "options";
     private static final String OPTION_ID = "_id";
@@ -266,10 +268,10 @@ public class SQLiteHandler {
             Log.e("CREATE 3", DATABASE_CREATE_3);
             db.execSQL(DATABASE_CREATE_3);
 
-            String DATABASE_CREATE_4 = "create table " + DATABASE_TABLE_4 + "(" + LOC_ID
-                    + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, " + LOC_LONGI + " float," + LOC_LATI + " float,"
-                    + LOC_DATE + " TEXT);";
-            db.execSQL(DATABASE_CREATE_4);
+            String CREATE_TABLE_LOC = "create table " + TABLE_LOCATION + "(" + LOC_USERNAME
+                    + " TEXT UNIQUE, " + LOC_LONGI + " float," + LOC_LATI + " float, "+GPS_PROVIDER+" TEXT, "
+                    + LOC_DATE_CREATE + " CHAR(15), "+LOC_DATE_UPDATE+" CHAR(15));";
+            db.execSQL(CREATE_TABLE_LOC);
 
             String DATABASE_CREATE_5 = "create table " + DATABASE_TABLE_5 + "(" + OPTION_ID
                     + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, " + OPTION_IS_RECIEVING_BROADCAST + " integer, "
@@ -1499,16 +1501,17 @@ public class SQLiteHandler {
         Log.e(TAG, "Nearby user inserted into sqlite: " + id + " : " + lname);
     }
 
-    public void insertLocation(float longitude, float latitude) {
+    public void insertLocation(String username, float longitude, float latitude) {
         String dateNow = requestLocalDate();
-        // SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues values = new ContentValues();
+        values.put(LOC_USERNAME, username);
         values.put(LOC_LONGI, longitude);
         values.put(LOC_LATI, latitude);
-        values.put(LOC_DATE, dateNow);
-        long id = sqLiteDatabase.insert(DATABASE_TABLE_4, null, values);
-        // db.close();
-        L.error(TAG + " Broadcast inserted to sqlite: message " + id);
+
+        sqLiteDatabase.insertWithOnConflict(TABLE_LOCATION, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+
+        L.debug("updated new loc of "+username+"(lat: "+latitude+", long: "+longitude+")");
     }
 
 
@@ -2093,7 +2096,7 @@ public class SQLiteHandler {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(
-                "select " + LOC_LONGI + " from " + DATABASE_TABLE_4 + " ORDER BY " + LOC_ID + " DESC LIMIT 1 ", null);
+                "select " + LOC_LONGI + " from " + TABLE_LOCATION +  " LIMIT 1 ", null);
         try {
             cursor.moveToFirst();
             last = cursor.getString(0);
@@ -2108,7 +2111,7 @@ public class SQLiteHandler {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(
-                "select " + LOC_LATI + " from " + DATABASE_TABLE_4 + " ORDER BY " + LOC_ID + " DESC LIMIT 1 ", null);
+                "select " + LOC_LATI + " from " + TABLE_LOCATION + " LIMIT 1 ", null);
         try {
             cursor.moveToFirst();
             last = cursor.getString(0);
@@ -2123,7 +2126,7 @@ public class SQLiteHandler {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(
-                "select " + LOC_DATE + " from " + DATABASE_TABLE_4 + " ORDER BY " + LOC_ID + " DESC LIMIT 1 ", null);
+                "select " + LOC_DATE_UPDATE + " from " + TABLE_LOCATION + " LIMIT 1 ", null);
         try {
             cursor.moveToFirst();
             last = cursor.getString(0);
@@ -2214,7 +2217,7 @@ public class SQLiteHandler {
         // SQLiteDatabase db = this.getWritableDatabase();
         sqLiteDatabase.delete(TABLE_OFUSER, null, null);
         sqLiteDatabase.delete(DATABASE_TABLE_3, null, null);
-        sqLiteDatabase.delete(DATABASE_TABLE_4, null, null);
+        sqLiteDatabase.delete(TABLE_LOCATION, null, null);
         // db.close();
         Log.d(TAG, "Deleted all user info from sqlite");
     }

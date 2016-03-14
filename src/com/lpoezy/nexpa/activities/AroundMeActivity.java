@@ -1,5 +1,6 @@
 package com.lpoezy.nexpa.activities;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -8,9 +9,11 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +37,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.appyvet.rangebar.RangeBar;
 import com.devspark.appmsg.AppMsg;
 import com.devspark.appmsg.AppMsg.Style;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.lpoezy.nexpa.JSON.JSONParser;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.configuration.AppConfig;
@@ -63,7 +69,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AroundMeActivity extends AppCompatActivity
-		implements OnRefreshListener, Correspondent.OnCorrespondentUpdateListener {
+		implements
+		GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener {
 	private static final String TAG = AroundMeActivity.class.getSimpleName();
 	// Button btnUpdate;
 	LocationManager locationManager;
@@ -146,6 +153,7 @@ public class AroundMeActivity extends AppCompatActivity
 	private int dst;
 	private int oldDst;
 
+
 	// @Override
 	// public void onBackPressed() {
 	//
@@ -177,87 +185,87 @@ public class AroundMeActivity extends AppCompatActivity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
-		case R.id.action_distance:
-			dialogPref = new Dialog(AroundMeActivity.this);
-			dialogPref.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			dialogPref.setContentView(R.layout.activity_profile_distance_settings);
+			case R.id.action_distance:
+				dialogPref = new Dialog(AroundMeActivity.this);
+				dialogPref.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				dialogPref.setContentView(R.layout.activity_profile_distance_settings);
 
-			rbDistance = (RangeBar) dialogPref.findViewById(R.id.rbDistance);
-			rbDistance.setRangeBarEnabled(false);
+				rbDistance = (RangeBar) dialogPref.findViewById(R.id.rbDistance);
+				rbDistance.setRangeBarEnabled(false);
 
-			try {
-				dst = Integer.parseInt(db.getBroadcastDist());
-			} catch (Exception e) {
-				dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
-			}
-
-			L.debug("db.getBroadcastDist()" + db.getBroadcastDist());
-			rbDistance.setSeekPinByValue(dst);
-
-			rbDistance.setPinColor(getResources().getColor(R.color.EDWARD));
-			rbDistance.setConnectingLineColor(getResources().getColor(R.color.EDWARD));
-			rbDistance.setSelectorColor(getResources().getColor(R.color.EDWARD));
-			rbDistance.setPinRadius(30f);
-			rbDistance.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
-				@Override
-				public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex,
-						String leftPinValue, String rightPinValue) {
-					distTick = rightPinValue;
+				try {
+					dst = Integer.parseInt(db.getBroadcastDist());
+				} catch (Exception e) {
+					dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
 				}
-			});
 
-			Button dialogButton = (Button) dialogPref.findViewById(R.id.dialogButtonOK);
-			dialogButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
+				L.debug("db.getBroadcastDist()" + db.getBroadcastDist());
+				rbDistance.setSeekPinByValue(dst);
 
-					db.updateBroadcastDist(distTick);
-
-					try {
-						dst = Integer.parseInt(distTick);
-						tryGridToUpdate();
-
-					} catch (NumberFormatException e) {
-						dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+				rbDistance.setPinColor(getResources().getColor(R.color.EDWARD));
+				rbDistance.setConnectingLineColor(getResources().getColor(R.color.EDWARD));
+				rbDistance.setSelectorColor(getResources().getColor(R.color.EDWARD));
+				rbDistance.setPinRadius(30f);
+				rbDistance.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+					@Override
+					public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex,
+													  String leftPinValue, String rightPinValue) {
+						distTick = rightPinValue;
 					}
+				});
 
-					dialogPref.dismiss();
-				}
-			});
+				Button dialogButton = (Button) dialogPref.findViewById(R.id.dialogButtonOK);
+				dialogButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
 
-			CheckBox cbxSuperUser = (CheckBox) dialogPref.findViewById(R.id.cbx_superuser);
-			SessionManager sm = new SessionManager(AroundMeActivity.this);
-			cbxSuperUser.setChecked(sm.isSuperuser());
+						db.updateBroadcastDist(distTick);
 
-			cbxSuperUser.setOnClickListener(new OnClickListener() {
+						try {
+							dst = Integer.parseInt(distTick);
+							tryGridToUpdate();
 
-				@Override
-				public void onClick(View v) {
-					SessionManager sm = new SessionManager(AroundMeActivity.this);
-					if (((CheckBox) v).isChecked()) {
-						rbDistance.setEnabled(false);
-						sm.setSuperuser(true);
-					} else {
-						sm.setSuperuser(false);
-						rbDistance.setEnabled(true);
+						} catch (NumberFormatException e) {
+							dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+						}
+
+						dialogPref.dismiss();
 					}
+				});
 
+				CheckBox cbxSuperUser = (CheckBox) dialogPref.findViewById(R.id.cbx_superuser);
+				SessionManager sm = new SessionManager(AroundMeActivity.this);
+				cbxSuperUser.setChecked(sm.isSuperuser());
+
+				cbxSuperUser.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						SessionManager sm = new SessionManager(AroundMeActivity.this);
+						if (((CheckBox) v).isChecked()) {
+							rbDistance.setEnabled(false);
+							sm.setSuperuser(true);
+						} else {
+							sm.setSuperuser(false);
+							rbDistance.setEnabled(true);
+						}
+
+					}
+				});
+
+				if (cbxSuperUser.isChecked()) {
+					rbDistance.setEnabled(false);
+				} else {
+					rbDistance.setEnabled(true);
 				}
-			});
 
-			if (cbxSuperUser.isChecked()) {
-				rbDistance.setEnabled(false);
-			} else {
-				rbDistance.setEnabled(true);
-			}
-
-			WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-			lp.copyFrom(dialogPref.getWindow().getAttributes());
-			lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-			lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-			dialogPref.show();
-			dialogPref.getWindow().setAttributes(lp);
-			return true;
+				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+				lp.copyFrom(dialogPref.getWindow().getAttributes());
+				lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+				lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+				dialogPref.show();
+				dialogPref.getWindow().setAttributes(lp);
+				return true;
 
 		/*
 		 * / case R.id.action_distance_test: dialogPref = new
@@ -286,23 +294,64 @@ public class AroundMeActivity extends AppCompatActivity
 		 * WindowManager.LayoutParams.WRAP_CONTENT; dialogPref.show();
 		 * dialogPref.getWindow().setAttributes(lp1); return true; //
 		 */
-		default:
-			// If we got here, the user's action was not recognized.
-			// Invoke the superclass to handle it.
-			return super.onOptionsItemSelected(item);
+			default:
+				// If we got here, the user's action was not recognized.
+				// Invoke the superclass to handle it.
+				return super.onOptionsItemSelected(item);
 
 		}
 	}
+
+	@Override
+	protected void onStop() {
+		mGoogleApiClient.disconnect();
+		super.onStop();
+	}
+
+	@Override
+	protected void onStart() {
+		mGoogleApiClient.connect();
+		super.onStart();
+	}
+
+	private Location mLastLocation;
+	private GoogleApiClient mGoogleApiClient;
+
+
+	@Override
+	public void onConnected(Bundle bundle) {
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+			return;
+		}
+		mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+				mGoogleApiClient);
+		if (mLastLocation != null) {
+			L.debug("last loc latitude: "+String.valueOf(mLastLocation.getLatitude()));
+			L.debug("last loc long: "+String.valueOf(mLastLocation.getLongitude()));
+		}
+	}
+
+	@Override
+	public void onConnectionSuspended(int i) {
+
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult connectionResult) {
+
+	}
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_around_me);
 
-//		Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-//		setSupportActionBar(myToolbar);
-//		myToolbar.setLogo(R.drawable.icon_nexpa);
-//		myToolbar.setTitle("");
+		Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(myToolbar);
+		myToolbar.setLogo(R.drawable.icon_nexpa);
+		myToolbar.setTitle("");
 //		oldDst = 0;
 //
 //		du = new DateUtils();
@@ -310,22 +359,34 @@ public class AroundMeActivity extends AppCompatActivity
 //		db.openToWrite();
 //		userList = new ArrayList<HashMap<String, String>>();
 //
-//		mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
-//		mSwipeRefreshLayout.setColorSchemeResources(R.color.niagara, R.color.buttercup, R.color.niagara);
-//		mSwipeRefreshLayout.setBackgroundColor(getResources().getColor(R.color.carrara));
-//		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//
-//			@Override
-//			public void onRefresh() {
-//
-//				new Handler().postDelayed(new Runnable() {
-//					@Override
-//					public void run() {
-//						getNewLoc();
-//					}
-//				}, 2000);
-//			}
-//		});
+		mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+		mSwipeRefreshLayout.setColorSchemeResources(R.color.niagara, R.color.buttercup, R.color.niagara);
+		mSwipeRefreshLayout.setBackgroundColor(getResources().getColor(R.color.carrara));
+		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						//getNewLoc();
+					}
+				}, 500);
+			}
+		});
+
+
+		// Create an instance of GoogleAPIClient.
+		if (mGoogleApiClient == null) {
+			mGoogleApiClient = new GoogleApiClient.Builder(this)
+					.addConnectionCallbacks(this)
+					.addOnConnectionFailedListener(this)
+					.addApi(LocationServices.API)
+					.build();
+		}
+
+
 //
 //		// web.add(0, "You");
 //		// distance.add(0, 0);
@@ -388,61 +449,61 @@ public class AroundMeActivity extends AppCompatActivity
 
 	private void getNewLoc() {
 
-		String dtUpdate = db.getLocationDateUpdate();
-		L.error("AroundMeActivity, getNewLoc dtUpdate: " + dtUpdate);
-		if ((dtUpdate == "") || (du.hoursAgo(dtUpdate))) {
-
-			L.error("LOCATION INTELLIGENCE, Update needed...");
-
-			LocationResult locationResult = new LocationResult() {
-
-				@Override
-				public void gotLocation(Location location) {
-
-					if (location != null) {
-
-						ftLatitude = (float) location.getLatitude() /*-33.8788025f*/;
-						ftLongitude = (float) location
-								.getLongitude() /* 151.2120050f */;
-						latitude = ftLatitude;
-						longitude = ftLongitude;
-						db.insertLocation(longitude, latitude);
-						SendLocToServer();
-
-					} else {
-						// Looper.prepare();
-
-						try {
-
-							mHandler.sendEmptyMessage(1);
-						} catch (Exception e) {
-							Log.e("FAIL", "FAILED A:LL");
-						}
-						// makeNotify("Failed To Retrieve GPS Location",
-						// AppMsg.STYLE_INFO);
-						// mSwipeRefreshLayout.setRefreshing(false);
-					}
-				}
-			};
-
-			PackageManager packMan = getPackageManager();
-			hasGps = packMan.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
-
-			MyLocation myLocation = new MyLocation();
-			boolean availLoc = myLocation.getLocation(this, locationResult);
-			if (availLoc == false) {
-				makeNotify("GPS Services Unavailable", AppMsg.STYLE_ALERT);
-				mSwipeRefreshLayout.setRefreshing(false);
-			}
-		} else {
-			L.error("LOCATION INTELLIGENCE, Getting db location...");
-			ftLatitude = Float.parseFloat(db.getLocationLatitude()) /*-33.8788025f*/;
-			ftLongitude = Float
-					.parseFloat(db.getLocationLongitude()) /* 151.2120050f */;
-			latitude = ftLatitude;
-			longitude = ftLongitude;
-			SendLocToServer();
-		}
+//		String dtUpdate = db.getLocationDateUpdate();
+//		L.error("AroundMeActivity, getNewLoc dtUpdate: " + dtUpdate);
+//		if ((dtUpdate == "") || (du.hoursAgo(dtUpdate))) {
+//
+//			L.error("LOCATION INTELLIGENCE, Update needed...");
+//
+//			LocationResult locationResult = new LocationResult() {
+//
+//				@Override
+//				public void gotLocation(Location location) {
+//
+//					if (location != null) {
+//
+//						ftLatitude = (float) location.getLatitude() /*-33.8788025f*/;
+//						ftLongitude = (float) location
+//								.getLongitude() /* 151.2120050f */;
+//						latitude = ftLatitude;
+//						longitude = ftLongitude;
+//						db.insertLocation(username, longitude, latitude);
+//						SendLocToServer();
+//
+//					} else {
+//						// Looper.prepare();
+//
+//						try {
+//
+//							mHandler.sendEmptyMessage(1);
+//						} catch (Exception e) {
+//							Log.e("FAIL", "FAILED A:LL");
+//						}
+//						// makeNotify("Failed To Retrieve GPS Location",
+//						// AppMsg.STYLE_INFO);
+//						// mSwipeRefreshLayout.setRefreshing(false);
+//					}
+//				}
+//			};
+//
+//			PackageManager packMan = getPackageManager();
+//			hasGps = packMan.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
+//
+//			MyLocation myLocation = new MyLocation();
+//			boolean availLoc = myLocation.getLocation(this, locationResult);
+//			if (availLoc == false) {
+//				makeNotify("GPS Services Unavailable", AppMsg.STYLE_ALERT);
+//				mSwipeRefreshLayout.setRefreshing(false);
+//			}
+//		} else {
+//			L.error("LOCATION INTELLIGENCE, Getting db location...");
+//			ftLatitude = Float.parseFloat(db.getLocationLatitude()) /*-33.8788025f*/;
+//			ftLongitude = Float
+//					.parseFloat(db.getLocationLongitude()) /* 151.2120050f */;
+//			latitude = ftLatitude;
+//			longitude = ftLongitude;
+//			SendLocToServer();
+//		}
 	}
 
 	private void updateGrid(String sentType) {
@@ -977,45 +1038,45 @@ public class AroundMeActivity extends AppCompatActivity
 		super.onResume();
 		isRunning = true;
 
-		try {
-			dst = Integer.parseInt(db.getBroadcastDist());
-		} catch (Exception e) {
-			dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
-		}
-
-		if (oldDst != dst) {
-			// force grid update when new distance detected
-			tryGridToUpdate();
-			oldDst = dst;
-		}
-		adapter.notifyDataSetChanged();
-
-		final XMPPConnection connection = XMPPLogic.getInstance().getConnection();
-
-		if (connection == null || !connection.isConnected()) {
-			SQLiteHandler db = new SQLiteHandler(getApplicationContext());
-			db.openToWrite();
-
-			// db.updateBroadcasting(0);
-			// db.updateBroadcastTicker(0);
-			/*/
-			Account ac = new Account();
-			ac.LogInChatAccount(db.getUsername(), db.getEncryptedPassword(), db.getEmail(), new OnXMPPConnectedListener() {
-
-				@Override
-				public void onXMPPConnected(XMPPConnection con) {
-					
-					subscriptionRequestListener(con);
-				}
-
-			});
-			//*/
-			db.close();
-		} else {
-
-			subscriptionRequestListener(connection);
-
-		}
+//		try {
+//			dst = Integer.parseInt(db.getBroadcastDist());
+//		} catch (Exception e) {
+//			dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+//		}
+//
+//		if (oldDst != dst) {
+//			// force grid update when new distance detected
+//			tryGridToUpdate();
+//			oldDst = dst;
+//		}
+//		adapter.notifyDataSetChanged();
+//
+//		final XMPPConnection connection = XMPPLogic.getInstance().getConnection();
+//
+//		if (connection == null || !connection.isConnected()) {
+//			SQLiteHandler db = new SQLiteHandler(getApplicationContext());
+//			db.openToWrite();
+//
+//			// db.updateBroadcasting(0);
+//			// db.updateBroadcastTicker(0);
+//			/*/
+//			Account ac = new Account();
+//			ac.LogInChatAccount(db.getUsername(), db.getEncryptedPassword(), db.getEmail(), new OnXMPPConnectedListener() {
+//
+//				@Override
+//				public void onXMPPConnected(XMPPConnection con) {
+//
+//					subscriptionRequestListener(con);
+//				}
+//
+//			});
+//			//*/
+//			db.close();
+//		} else {
+//
+//			subscriptionRequestListener(connection);
+//
+//		}
 
 	}
 	
@@ -1112,4 +1173,6 @@ public class AroundMeActivity extends AppCompatActivity
 		});
 
 	}
+
+
 }

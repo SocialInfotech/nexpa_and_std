@@ -126,7 +126,7 @@ public class XMPPManager {
 //			public void run() {
 
 
-
+				L.debug("xmpp, Disconnected");
 				connection.disconnect();
 
 
@@ -319,28 +319,9 @@ public class XMPPManager {
 
 			L.debug("xmpp, Connected!");
 			connected = true;
-			if (!connection.isAuthenticated()) {
 
-				SessionManager sm = new SessionManager(context);
-				if (sm.isLoggedIn()) {
 
-//					String uname, password;
-//					SQLiteHandler db = new SQLiteHandler(context);
-//					db.openToRead();
-//					uname = db.getUsername();
-//					password = db.getPlainPassword();
-//
-//					try {
-//						login(uname, password);
-//					} catch (Exception e) {
-//						L.error("" + e);
-//					}
-//
-//					db.close();
 
-				}
-
-			}
 		}
 
 		@Override
@@ -387,7 +368,7 @@ public class XMPPManager {
 		@Override
 		public void reconnectingIn(int arg0) {
 
-			Log.d("xmpp", "Reconnectingin " + arg0);
+			L.debug("xmpp, Reconnectingin " + arg0);
 
 			loggedin = false;
 		}
@@ -406,7 +387,7 @@ public class XMPPManager {
 
 					}
 				});
-			Log.d("xmpp", "ReconnectionFailed!");
+			L.error("xmpp, ReconnectionFailed!");
 			connected = false;
 
 			chat_created = false;
@@ -428,7 +409,7 @@ public class XMPPManager {
 
 					}
 				});
-			Log.d("xmpp", "ReconnectionSuccessful");
+			L.debug("xmpp, ReconnectionSuccessful");
 			connected = true;
 
 			chat_created = false;
@@ -437,7 +418,7 @@ public class XMPPManager {
 
 		@Override
 		public void authenticated(XMPPConnection arg0, boolean arg1) {
-			Log.d("xmpp", "Authenticated!");
+			L.debug("xmpp, Authenticated! "+connection.getUser());
 			loggedin = true;
 
 			ChatManager.getInstanceFor(connection).addChatListener(

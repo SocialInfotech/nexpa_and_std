@@ -1330,13 +1330,13 @@ public class GroupChatHomeActivity extends AppCompatActivity implements
 			@Override
 			public void gotLocation(Location location) {
 				if (location != null) {
-					ftLatitude = (float) location.getLatitude();
-					ftLongitude = (float) location.getLongitude();
-					latitude = ftLatitude;
-					longitude = ftLongitude;
-					db.insertLocation(longitude, latitude);
-					isLocAvail = true;
-					getNearbyUsersId();
+//					ftLatitude = (float) location.getLatitude();
+//					ftLongitude = (float) location.getLongitude();
+//					latitude = ftLatitude;
+//					longitude = ftLongitude;
+//					db.insertLocation(longitude, latitude);
+//					isLocAvail = true;
+//					getNearbyUsersId();
 				}
 			}
 		};

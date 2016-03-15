@@ -103,7 +103,7 @@ public class OfUser {
         return success;
     }
 
-    public void downloadOnline() throws JSONException {
+    public boolean downloadOnline()  {
 
         HashMap<String, String> postDataParams = new HashMap<String, String>();
 
@@ -115,17 +115,30 @@ public class OfUser {
         String webPage = HttpUtilz.makeRequest(spec, postDataParams);
 
         L.debug("downloadOfUserOnline: " + webPage);
-        JSONObject result = new JSONObject(webPage);
-        if(!result.getBoolean("error")){
-            JSONObject user = result.getJSONObject("user");
-            this.encryptedPassword = user.getString("encryptedPassword");
-            this.name = user.getString("name");
-            this.email = user.getString("email");
-            this.creationDate = Long.parseLong(user.getString("creationDate"));
-            this.modificationDate = Long.parseLong(user.getString("modificationDate"));
-            this.gcmRegistrationId = user.getString("gcmRegistrationId");
+        JSONObject result = null;
+        try {
+            result = new JSONObject(webPage);
+
+            if(!result.getBoolean("error")){
+                JSONObject user = result.getJSONObject("user");
+                this.encryptedPassword = user.getString("encryptedPassword");
+                this.name = user.getString("name");
+                this.email = user.getString("email");
+                this.creationDate = Long.parseLong(user.getString("creationDate"));
+                this.modificationDate = Long.parseLong(user.getString("modificationDate"));
+                this.gcmRegistrationId = user.getString("gcmRegistrationId");
+
+                return true;
+            }
+
+
+
+        } catch (JSONException e) {
+           L.error(e.getMessage());
         }
 
+
+        return false;
 
     }
 

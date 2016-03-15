@@ -8,7 +8,7 @@ public class AppConfig {
 
 	// Server user register url
 	public static String URL_OFUSER = "http://198.154.106.139/~nexpa/json/ofuser.php/";
-	
+	public static String URL_GEO = "http://198.154.106.139/~nexpa/json/geolocation.php/";
 	
 	public static String URL_REGISTER = "http://www.lpoezy.com/happn/json/user.php/";
 	public static String URL_NEARBY = "http://www.lpoezy.com/happn/json/collect_users.php/";

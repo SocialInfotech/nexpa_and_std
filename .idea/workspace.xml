@@ -7,7 +7,7 @@
         <option name="logMessagePattern" value="" />
         <option name="logTagPattern" value="NEXPA" />
         <option name="name" value="nexpa" />
-        <option name="packageNamePattern" value="" />
+        <option name="packageNamePattern" value="com.lpoezy.nexpa" />
         <option name="pid" value="" />
       </filter>
     </filters>
@@ -23,6 +23,54 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="62d49d6d-72bc-4aac-80a5-141f71c0079a" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/Geolocation.java" />
+      <change type="DELETED" beforePath="C:\Users\HP PAVILION\Desktop\git\nexpa_and_std\build\intermediates\classes\debug\com\lpoezy\nexpa\activities\AroundMeActivity$14.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\HP PAVILION\Desktop\git\nexpa_and_std\build\intermediates\classes\debug\com\lpoezy\nexpa\activities\AroundMeActivity$15.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\HP PAVILION\Desktop\git\nexpa_and_std\build\intermediates\classes\debug\com\lpoezy\nexpa\activities\AroundMeActivity$16.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\HP PAVILION\Desktop\git\nexpa_and_std\build\intermediates\classes\debug\com\lpoezy\nexpa\activities\AroundMeActivity$17.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\HP PAVILION\Desktop\git\nexpa_and_std\build\intermediates\classes\debug\com\lpoezy\nexpa\chatservice\XMPPService$3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\HP PAVILION\Desktop\git\nexpa_and_std\build\intermediates\classes\debug\com\lpoezy\nexpa\chatservice\XMPPService$4.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/configuration/AppConfig.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/configuration/AppConfig.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$1.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$10.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$10.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$11.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$11.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$12.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$12.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$13.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$13.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$2.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$3.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$4.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$5.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$6.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$6.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$7.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$7.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$8.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$8.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$9.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity$9.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$1.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$2.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$3.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$4.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$5.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$6.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity$6.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MainSignInActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/objects/OfUser.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/objects/OfUser.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/openfire/XMPPManager$ChatManagerListenerImpl.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/openfire/XMPPManager$ChatManagerListenerImpl.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/openfire/XMPPManager$XMPPConnectionListener.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/openfire/XMPPManager$XMPPConnectionListener.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/openfire/XMPPManager.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/openfire/XMPPManager.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/chatservice/XMPPService$1.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/chatservice/XMPPService$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/chatservice/XMPPService$2.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/chatservice/XMPPService$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/chatservice/XMPPService.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/chatservice/XMPPService.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/cache.properties.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex" afterPath="$PROJECT_DIR$/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileHashes.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/configuration/AppConfig.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/configuration/AppConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/AroundMeActivity.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/AroundMeActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/HttpUtilz.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/HttpUtilz.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MainSignInActivity.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MainSignInActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/OfUser.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/OfUser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Nexpa.iws" />
@@ -56,11 +104,9 @@
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="206" column="28" selection-start-line="206" selection-start-column="28" selection-end-line="206" selection-end-column="28" />
+              <caret line="209" column="0" selection-start-line="209" selection-start-column="0" selection-end-line="210" selection-end-column="52" />
               <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#2170#2171#0" expanded="false" />
-                <element signature="e#2215#2216#0" expanded="false" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -69,10 +115,11 @@
       <file leaf-file-name="XMPPManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="422" column="0" selection-start-line="422" selection-start-column="0" selection-end-line="422" selection-end-column="0" />
+            <state vertical-scroll-proportion="-9.310345">
+              <caret line="254" column="32" selection-start-line="254" selection-start-column="32" selection-end-line="254" selection-end-column="32" />
               <folding>
-                <element signature="imports" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#3626#3658#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -82,36 +129,8 @@
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/OfUser.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="152" column="19" selection-start-line="152" selection-start-column="19" selection-end-line="152" selection-end-column="19" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#715#716#0" expanded="false" />
-                <element signature="e#746#747#0" expanded="false" />
-                <element signature="e#794#795#0" expanded="false" />
-                <element signature="e#834#835#0" expanded="false" />
-                <element signature="e#874#875#0" expanded="false" />
-                <element signature="e#910#911#0" expanded="false" />
-                <element signature="e#968#969#0" expanded="false" />
-                <element signature="e#1018#1019#0" expanded="false" />
-                <element signature="e#1062#1063#0" expanded="false" />
-                <element signature="e#1102#1103#0" expanded="false" />
-                <element signature="e#1257#1258#0" expanded="false" />
-                <element signature="e#1284#1285#0" expanded="false" />
-                <element signature="e#1324#1325#0" expanded="false" />
-                <element signature="e#1356#1357#0" expanded="false" />
-                <element signature="e#1388#1389#0" expanded="false" />
-                <element signature="e#1416#1417#0" expanded="false" />
-                <element signature="e#1458#1459#0" expanded="false" />
-                <element signature="e#1492#1493#0" expanded="false" />
-                <element signature="e#1529#1530#0" expanded="false" />
-                <element signature="e#1564#1565#0" expanded="false" />
-                <element signature="e#1618#1619#0" expanded="false" />
-                <element signature="e#1666#1667#0" expanded="false" />
-                <element signature="e#1707#1708#0" expanded="false" />
-                <element signature="e#1746#1747#0" expanded="false" />
-                <element signature="e#1908#1909#0" expanded="false" />
-                <element signature="e#1948#1949#0" expanded="false" />
-              </folding>
+              <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -120,27 +139,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="272" column="84" selection-start-line="272" selection-start-column="84" selection-end-line="272" selection-end-column="84" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainSignInActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MainSignInActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="96" column="74" selection-start-line="96" selection-start-column="74" selection-end-line="96" selection-end-column="74" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="65" selection-start-line="32" selection-start-column="65" selection-end-line="32" selection-end-column="65" />
+              <caret line="1242" column="18" selection-start-line="1242" selection-start-column="18" selection-end-line="1242" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -150,7 +149,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/TabHostActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="198" column="36" selection-start-line="198" selection-start-column="36" selection-end-line="198" selection-end-column="36" />
+              <caret line="120" column="36" selection-start-line="120" selection-start-column="36" selection-end-line="120" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -159,53 +158,77 @@
       <file leaf-file-name="AroundMeActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/AroundMeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6987952">
-              <caret line="365" column="2" selection-start-line="365" selection-start-column="2" selection-end-line="365" selection-end-column="2" />
+            <state vertical-scroll-proportion="0.070281126">
+              <caret line="417" column="64" selection-start-line="417" selection-start-column="64" selection-end-line="417" selection-end-column="64" />
               <folding>
-                <element signature="e#3491#3499#0" expanded="true" />
-                <element signature="e#3549#3557#0" expanded="true" />
-                <element signature="e#3605#3614#0" expanded="true" />
-                <element signature="e#3661#3670#0" expanded="true" />
-                <element signature="e#3715#3723#0" expanded="true" />
-                <element signature="e#3787#3802#0" expanded="true" />
-                <element signature="e#3850#3858#0" expanded="true" />
-                <element signature="e#3904#3912#0" expanded="true" />
-                <element signature="e#3960#3968#0" expanded="true" />
-                <element signature="e#4017#4025#0" expanded="true" />
-                <element signature="e#4080#4088#0" expanded="true" />
-                <element signature="e#4140#4148#0" expanded="true" />
-                <element signature="e#4196#4204#0" expanded="true" />
-                <element signature="e#4252#4260#0" expanded="true" />
-                <element signature="e#4309#4317#0" expanded="true" />
-                <element signature="e#4358#4365#0" expanded="true" />
-                <element signature="e#4407#4414#0" expanded="true" />
-                <element signature="e#7751#8007#0" expanded="true" />
-                <element signature="e#8006#8007#0" expanded="true" />
-                <element signature="e#8128#8465#0" expanded="true" />
-                <element signature="e#8464#8465#0" expanded="true" />
-                <element signature="e#8704#9058#0" expanded="true" />
-                <element signature="e#9057#9058#0" expanded="true" />
-                <element signature="e#16775#17000#0" expanded="true" />
-                <element signature="e#16894#16984#0" expanded="true" />
-                <element signature="e#16983#16984#0" expanded="true" />
-                <element signature="e#16999#17000#0" expanded="true" />
-                <element signature="e#21794#21937#0" expanded="true" />
-                <element signature="e#21936#21937#0" expanded="true" />
-                <element signature="e#23176#23331#0" expanded="true" />
-                <element signature="e#23330#23331#0" expanded="true" />
-                <element signature="e#25911#26959#0" expanded="true" />
-                <element signature="e#26958#26959#0" expanded="true" />
-                <element signature="e#27608#27749#0" expanded="true" />
-                <element signature="e#27748#27749#0" expanded="true" />
-                <element signature="e#29905#29921#0" expanded="true" />
-                <element signature="e#36611#36627#0" expanded="true" />
-                <element signature="e#39456#39562#0" expanded="true" />
-                <element signature="e#39561#39562#0" expanded="true" />
-                <element signature="e#39594#39717#0" expanded="true" />
-                <element signature="e#39716#39717#0" expanded="true" />
-                <element signature="e#39803#39887#0" expanded="true" />
-                <element signature="e#39886#39887#0" expanded="true" />
+                <element signature="e#3579#3587#0" expanded="true" />
+                <element signature="e#3637#3645#0" expanded="true" />
+                <element signature="e#3693#3702#0" expanded="true" />
+                <element signature="e#3749#3758#0" expanded="true" />
+                <element signature="e#3803#3811#0" expanded="true" />
+                <element signature="e#3875#3890#0" expanded="true" />
+                <element signature="e#3938#3946#0" expanded="true" />
+                <element signature="e#3992#4000#0" expanded="true" />
+                <element signature="e#4048#4056#0" expanded="true" />
+                <element signature="e#4105#4113#0" expanded="true" />
+                <element signature="e#4168#4176#0" expanded="true" />
+                <element signature="e#4228#4236#0" expanded="true" />
+                <element signature="e#4284#4292#0" expanded="true" />
+                <element signature="e#4340#4348#0" expanded="true" />
+                <element signature="e#4397#4405#0" expanded="true" />
+                <element signature="e#4446#4453#0" expanded="true" />
+                <element signature="e#4495#4502#0" expanded="true" />
+                <element signature="e#7537#7793#0" expanded="true" />
+                <element signature="e#7792#7793#0" expanded="true" />
+                <element signature="e#13252#14230#0" expanded="true" />
+                <element signature="e#13362#13378#0" expanded="true" />
+                <element signature="e#14229#14230#0" expanded="true" />
+                <element signature="e#14331#14548#0" expanded="true" />
+                <element signature="e#14547#14548#0" expanded="true" />
+                <element signature="e#18590#18831#0" expanded="true" />
+                <element signature="e#18709#18815#0" expanded="true" />
+                <element signature="e#18814#18815#0" expanded="true" />
+                <element signature="e#18830#18831#0" expanded="true" />
+                <element signature="e#39554#39660#0" expanded="true" />
+                <element signature="e#39659#39660#0" expanded="true" />
+                <element signature="e#39692#39815#0" expanded="true" />
+                <element signature="e#39814#39815#0" expanded="true" />
+                <element signature="e#39901#39985#0" expanded="true" />
+                <element signature="e#39984#39985#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Geolocation.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/Geolocation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="85" column="55" selection-start-line="75" selection-start-column="8" selection-end-line="85" selection-end-column="55" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1638#1654#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HttpUtilz.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/HttpUtilz.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="202" column="81" selection-start-line="202" selection-start-column="71" selection-end-line="202" selection-end-column="81" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AppConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/configuration/AppConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -215,18 +238,48 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="1350" column="70" selection-start-line="1350" selection-start-column="70" selection-end-line="1350" selection-end-column="70" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyLocation.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/MyLocation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="false" />
+                <element signature="e#6099#6239#0" expanded="false" />
+                <element signature="e#6238#6239#0" expanded="false" />
+                <element signature="e#15275#18010#0" expanded="false" />
+                <element signature="e#16627#16938#0" expanded="false" />
+                <element signature="e#16937#16938#0" expanded="false" />
+                <element signature="e#17196#17564#0" expanded="false" />
+                <element signature="e#17563#17564#0" expanded="false" />
+                <element signature="e#18009#18010#0" expanded="false" />
+                <element signature="e#19386#19783#0" expanded="false" />
+                <element signature="e#19782#19783#0" expanded="false" />
+                <element signature="e#19818#20334#0" expanded="false" />
+                <element signature="e#20333#20334#0" expanded="false" />
+                <element signature="e#20371#20736#0" expanded="false" />
+                <element signature="e#20735#20736#0" expanded="false" />
+                <element signature="e#20914#25299#0" expanded="false" />
+                <element signature="e#21604#22217#0" expanded="false" />
+                <element signature="e#22216#22217#0" expanded="false" />
+                <element signature="e#22312#23027#0" expanded="false" />
+                <element signature="e#23026#23027#0" expanded="false" />
+                <element signature="e#23142#23992#0" expanded="false" />
+                <element signature="e#23991#23992#0" expanded="false" />
+                <element signature="e#24104#25185#0" expanded="false" />
+                <element signature="e#25184#25185#0" expanded="false" />
+                <element signature="e#25298#25299#0" expanded="false" />
+                <element signature="e#33179#33758#0" expanded="false" />
+                <element signature="e#33757#33758#0" expanded="false" />
+                <element signature="e#33773#34220#0" expanded="false" />
+                <element signature="e#34219#34220#0" expanded="false" />
+                <element signature="e#34277#34394#0" expanded="false" />
+                <element signature="e#34393#34394#0" expanded="false" />
+                <element signature="e#35336#36467#0" expanded="false" />
+                <element signature="e#36466#36467#0" expanded="false" />
+                <element signature="e#36501#36762#0" expanded="false" />
+                <element signature="e#36761#36762#0" expanded="false" />
+                <element signature="e#39588#39863#0" expanded="false" />
+                <element signature="e#39862#39863#0" expanded="false" />
+                <element signature="e#39903#40011#0" expanded="false" />
+                <element signature="e#40010#40011#0" expanded="false" />
+                <element signature="e#44981#44997#0" expanded="false" />
+                <element signature="e#46725#46732#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -1186,22 +1239,24 @@
         <option value="$PROJECT_DIR$/build/intermediates/res/merged/debug/values-v23/values-v23.xml" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/UserProfileActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/DateUtils.java" />
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/configuration/AppConfig.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/Ofuser.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/SearchPostActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SessionManager.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/RegistrationIntentService.java" />
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/OfUser.java" />
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MainSignInActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java" />
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/TabHostActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/MyLocation.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/OfUser.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MainSignInActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/configuration/AppConfig.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/HttpUtilz.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/Geolocation.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/AroundMeActivity.java" />
       </list>
     </option>
@@ -1248,6 +1303,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1284,11 +1340,102 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Nexpa" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Nexpa" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Nexpa" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="objects" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Nexpa" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="configuration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1305,7 +1452,7 @@
     <property name="recentsLimit" value="5" />
     <property name="android.project.structure.last.selected" value="Nexpa" />
     <property name="android.project.structure.proportion" value="0.15" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="LGOTMS656ba4f" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="E659GEIRR8VWO7NJ" />
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -1521,7 +1668,13 @@
       <option name="project" value="LOCAL" />
       <updated>1457949270548</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="merge">
+      <created>1457949371135</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1457949371135</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1535,7 +1688,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1932" height="1056" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938388" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.49413645" order="7" side_tool="false" content_ui="tabs" />
@@ -1544,20 +1697,20 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1724138" sideWeight="0.50801283" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43159065" sideWeight="0.491453" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3826474" sideWeight="0.49198717" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.53503895" sideWeight="0.491453" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3826474" sideWeight="0.49198717" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938388" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32922825" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16773504" sideWeight="0.45434782" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20245726" sideWeight="0.45434782" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17467949" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22222222" sideWeight="0.47826087" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12820514" sideWeight="0.47826087" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25862068" sideWeight="0.5079681" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1565,7 +1718,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928804" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928804" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292978" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1584,43 +1737,20 @@
     <MESSAGE value="init commit" />
     <MESSAGE value="added get last location" />
     <MESSAGE value="added receive location updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="added receive location updates" />
+    <MESSAGE value="merge" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/TabHostActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/RegistrationIntentService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="27" selection-start-line="32" selection-start-column="27" selection-end-line="32" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/L.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2170#2171#0" expanded="false" />
-            <element signature="e#2215#2216#0" expanded="false" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1629,35 +1759,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="94" column="23" selection-start-line="94" selection-start-column="23" selection-end-line="94" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#715#716#0" expanded="false" />
-            <element signature="e#746#747#0" expanded="false" />
-            <element signature="e#794#795#0" expanded="false" />
-            <element signature="e#834#835#0" expanded="false" />
-            <element signature="e#874#875#0" expanded="false" />
-            <element signature="e#910#911#0" expanded="false" />
-            <element signature="e#968#969#0" expanded="false" />
-            <element signature="e#1018#1019#0" expanded="false" />
-            <element signature="e#1062#1063#0" expanded="false" />
-            <element signature="e#1102#1103#0" expanded="false" />
-            <element signature="e#1257#1258#0" expanded="false" />
-            <element signature="e#1284#1285#0" expanded="false" />
-            <element signature="e#1324#1325#0" expanded="false" />
-            <element signature="e#1356#1357#0" expanded="false" />
-            <element signature="e#1388#1389#0" expanded="false" />
-            <element signature="e#1416#1417#0" expanded="false" />
-            <element signature="e#1458#1459#0" expanded="false" />
-            <element signature="e#1492#1493#0" expanded="false" />
-            <element signature="e#1529#1530#0" expanded="false" />
-            <element signature="e#1564#1565#0" expanded="false" />
-            <element signature="e#1618#1619#0" expanded="false" />
-            <element signature="e#1666#1667#0" expanded="false" />
-            <element signature="e#1707#1708#0" expanded="false" />
-            <element signature="e#1746#1747#0" expanded="false" />
-            <element signature="e#1908#1909#0" expanded="false" />
-            <element signature="e#1948#1949#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1673,7 +1775,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="333" column="0" selection-start-line="333" selection-start-column="0" selection-end-line="333" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#4471#5009#0" expanded="true" />
+            <element signature="e#5008#5009#0" expanded="true" />
+            <element signature="e#5057#5307#0" expanded="true" />
+            <element signature="e#5306#5307#0" expanded="true" />
+            <element signature="e#5362#5616#0" expanded="true" />
+            <element signature="e#5615#5616#0" expanded="true" />
+            <element signature="e#6600#7309#0" expanded="true" />
+            <element signature="e#7308#7309#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1833,13 +1944,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/configuration/AppConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="87" selection-start-line="9" selection-start-column="87" selection-end-line="9" selection-end-column="87" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1903,61 +2007,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/OfUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="152" column="19" selection-start-line="152" selection-start-column="19" selection-end-line="152" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#715#716#0" expanded="false" />
-            <element signature="e#746#747#0" expanded="false" />
-            <element signature="e#794#795#0" expanded="false" />
-            <element signature="e#834#835#0" expanded="false" />
-            <element signature="e#874#875#0" expanded="false" />
-            <element signature="e#910#911#0" expanded="false" />
-            <element signature="e#968#969#0" expanded="false" />
-            <element signature="e#1018#1019#0" expanded="false" />
-            <element signature="e#1062#1063#0" expanded="false" />
-            <element signature="e#1102#1103#0" expanded="false" />
-            <element signature="e#1257#1258#0" expanded="false" />
-            <element signature="e#1284#1285#0" expanded="false" />
-            <element signature="e#1324#1325#0" expanded="false" />
-            <element signature="e#1356#1357#0" expanded="false" />
-            <element signature="e#1388#1389#0" expanded="false" />
-            <element signature="e#1416#1417#0" expanded="false" />
-            <element signature="e#1458#1459#0" expanded="false" />
-            <element signature="e#1492#1493#0" expanded="false" />
-            <element signature="e#1529#1530#0" expanded="false" />
-            <element signature="e#1564#1565#0" expanded="false" />
-            <element signature="e#1618#1619#0" expanded="false" />
-            <element signature="e#1666#1667#0" expanded="false" />
-            <element signature="e#1707#1708#0" expanded="false" />
-            <element signature="e#1746#1747#0" expanded="false" />
-            <element signature="e#1908#1909#0" expanded="false" />
-            <element signature="e#1948#1949#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/smack-core-4.1.6.jar!/org/jivesoftware/smack/AbstractXMPPConnection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.351626">
-          <caret line="346" column="16" selection-start-line="346" selection-start-column="16" selection-end-line="346" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="206" column="28" selection-start-line="206" selection-start-column="28" selection-end-line="206" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2170#2171#0" expanded="false" />
-            <element signature="e#2215#2216#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/adt-bundle-windows-x86_64-20130729/sdk/sources/android-23/android/content/ContextWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -1965,23 +2014,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="422" column="0" selection-start-line="422" selection-start-column="0" selection-end-line="422" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/MyLocation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2007,82 +2044,198 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="1350" column="70" selection-start-line="1350" selection-start-column="70" selection-end-line="1350" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="272" column="84" selection-start-line="272" selection-start-column="84" selection-end-line="272" selection-end-column="84" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#6099#6239#0" expanded="false" />
+            <element signature="e#6238#6239#0" expanded="false" />
+            <element signature="e#15275#18010#0" expanded="false" />
+            <element signature="e#16627#16938#0" expanded="false" />
+            <element signature="e#16937#16938#0" expanded="false" />
+            <element signature="e#17196#17564#0" expanded="false" />
+            <element signature="e#17563#17564#0" expanded="false" />
+            <element signature="e#18009#18010#0" expanded="false" />
+            <element signature="e#19386#19783#0" expanded="false" />
+            <element signature="e#19782#19783#0" expanded="false" />
+            <element signature="e#19818#20334#0" expanded="false" />
+            <element signature="e#20333#20334#0" expanded="false" />
+            <element signature="e#20371#20736#0" expanded="false" />
+            <element signature="e#20735#20736#0" expanded="false" />
+            <element signature="e#20914#25299#0" expanded="false" />
+            <element signature="e#21604#22217#0" expanded="false" />
+            <element signature="e#22216#22217#0" expanded="false" />
+            <element signature="e#22312#23027#0" expanded="false" />
+            <element signature="e#23026#23027#0" expanded="false" />
+            <element signature="e#23142#23992#0" expanded="false" />
+            <element signature="e#23991#23992#0" expanded="false" />
+            <element signature="e#24104#25185#0" expanded="false" />
+            <element signature="e#25184#25185#0" expanded="false" />
+            <element signature="e#25298#25299#0" expanded="false" />
+            <element signature="e#33179#33758#0" expanded="false" />
+            <element signature="e#33757#33758#0" expanded="false" />
+            <element signature="e#33773#34220#0" expanded="false" />
+            <element signature="e#34219#34220#0" expanded="false" />
+            <element signature="e#34277#34394#0" expanded="false" />
+            <element signature="e#34393#34394#0" expanded="false" />
+            <element signature="e#35336#36467#0" expanded="false" />
+            <element signature="e#36466#36467#0" expanded="false" />
+            <element signature="e#36501#36762#0" expanded="false" />
+            <element signature="e#36761#36762#0" expanded="false" />
+            <element signature="e#39588#39863#0" expanded="false" />
+            <element signature="e#39862#39863#0" expanded="false" />
+            <element signature="e#39903#40011#0" expanded="false" />
+            <element signature="e#40010#40011#0" expanded="false" />
+            <element signature="e#44981#44997#0" expanded="false" />
+            <element signature="e#46725#46732#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/TabHostActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="198" column="36" selection-start-line="198" selection-start-column="36" selection-end-line="198" selection-end-column="36" />
+          <caret line="120" column="36" selection-start-line="120" selection-start-column="36" selection-end-line="120" selection-end-column="36" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/smack-core-4.1.6.jar!/org/jivesoftware/smack/AbstractXMPPConnection.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35307017">
+          <caret line="204" column="29" selection-start-line="204" selection-start-column="29" selection-end-line="204" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.310345">
+          <caret line="254" column="32" selection-start-line="254" selection-start-column="32" selection-end-line="254" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3626#3658#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="209" column="0" selection-start-line="209" selection-start-column="0" selection-end-line="210" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MainSignInActivity.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5797101">
+          <caret line="216" column="21" selection-start-line="216" selection-start-column="21" selection-end-line="216" selection-end-column="21" />
+          <folding>
+            <element signature="e#4471#5009#0" expanded="true" />
+            <element signature="e#5008#5009#0" expanded="true" />
+            <element signature="e#5057#5307#0" expanded="true" />
+            <element signature="e#5306#5307#0" expanded="true" />
+            <element signature="e#5362#5616#0" expanded="true" />
+            <element signature="e#5615#5616#0" expanded="true" />
+            <element signature="e#6600#7309#0" expanded="true" />
+            <element signature="e#7308#7309#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="96" column="74" selection-start-line="96" selection-start-column="74" selection-end-line="96" selection-end-column="74" />
+          <caret line="1242" column="18" selection-start-line="1242" selection-start-column="18" selection-end-line="1242" selection-end-column="18" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/adt-bundle-windows-x86_64-20130729/sdk/sources/android-23/android/location/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="555" column="33" selection-start-line="555" selection-start-column="33" selection-end-line="555" selection-end-column="33" />
+          <folding>
+            <element signature="e#20219#20220#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/utility/HttpUtilz.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="202" column="81" selection-start-line="202" selection-start-column="71" selection-end-line="202" selection-end-column="81" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/configuration/AppConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/OfUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/Geolocation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="85" column="55" selection-start-line="75" selection-start-column="8" selection-end-line="85" selection-end-column="55" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1638#1654#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/AroundMeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6987952">
-          <caret line="365" column="2" selection-start-line="365" selection-start-column="2" selection-end-line="365" selection-end-column="2" />
+        <state vertical-scroll-proportion="0.070281126">
+          <caret line="417" column="64" selection-start-line="417" selection-start-column="64" selection-end-line="417" selection-end-column="64" />
           <folding>
-            <element signature="e#3491#3499#0" expanded="true" />
-            <element signature="e#3549#3557#0" expanded="true" />
-            <element signature="e#3605#3614#0" expanded="true" />
-            <element signature="e#3661#3670#0" expanded="true" />
-            <element signature="e#3715#3723#0" expanded="true" />
-            <element signature="e#3787#3802#0" expanded="true" />
-            <element signature="e#3850#3858#0" expanded="true" />
-            <element signature="e#3904#3912#0" expanded="true" />
-            <element signature="e#3960#3968#0" expanded="true" />
-            <element signature="e#4017#4025#0" expanded="true" />
-            <element signature="e#4080#4088#0" expanded="true" />
-            <element signature="e#4140#4148#0" expanded="true" />
-            <element signature="e#4196#4204#0" expanded="true" />
-            <element signature="e#4252#4260#0" expanded="true" />
-            <element signature="e#4309#4317#0" expanded="true" />
-            <element signature="e#4358#4365#0" expanded="true" />
-            <element signature="e#4407#4414#0" expanded="true" />
-            <element signature="e#7751#8007#0" expanded="true" />
-            <element signature="e#8006#8007#0" expanded="true" />
-            <element signature="e#8128#8465#0" expanded="true" />
-            <element signature="e#8464#8465#0" expanded="true" />
-            <element signature="e#8704#9058#0" expanded="true" />
-            <element signature="e#9057#9058#0" expanded="true" />
-            <element signature="e#16775#17000#0" expanded="true" />
-            <element signature="e#16894#16984#0" expanded="true" />
-            <element signature="e#16983#16984#0" expanded="true" />
-            <element signature="e#16999#17000#0" expanded="true" />
-            <element signature="e#21794#21937#0" expanded="true" />
-            <element signature="e#21936#21937#0" expanded="true" />
-            <element signature="e#23176#23331#0" expanded="true" />
-            <element signature="e#23330#23331#0" expanded="true" />
-            <element signature="e#25911#26959#0" expanded="true" />
-            <element signature="e#26958#26959#0" expanded="true" />
-            <element signature="e#27608#27749#0" expanded="true" />
-            <element signature="e#27748#27749#0" expanded="true" />
-            <element signature="e#29905#29921#0" expanded="true" />
-            <element signature="e#36611#36627#0" expanded="true" />
-            <element signature="e#39456#39562#0" expanded="true" />
-            <element signature="e#39561#39562#0" expanded="true" />
-            <element signature="e#39594#39717#0" expanded="true" />
-            <element signature="e#39716#39717#0" expanded="true" />
-            <element signature="e#39803#39887#0" expanded="true" />
-            <element signature="e#39886#39887#0" expanded="true" />
+            <element signature="e#3579#3587#0" expanded="true" />
+            <element signature="e#3637#3645#0" expanded="true" />
+            <element signature="e#3693#3702#0" expanded="true" />
+            <element signature="e#3749#3758#0" expanded="true" />
+            <element signature="e#3803#3811#0" expanded="true" />
+            <element signature="e#3875#3890#0" expanded="true" />
+            <element signature="e#3938#3946#0" expanded="true" />
+            <element signature="e#3992#4000#0" expanded="true" />
+            <element signature="e#4048#4056#0" expanded="true" />
+            <element signature="e#4105#4113#0" expanded="true" />
+            <element signature="e#4168#4176#0" expanded="true" />
+            <element signature="e#4228#4236#0" expanded="true" />
+            <element signature="e#4284#4292#0" expanded="true" />
+            <element signature="e#4340#4348#0" expanded="true" />
+            <element signature="e#4397#4405#0" expanded="true" />
+            <element signature="e#4446#4453#0" expanded="true" />
+            <element signature="e#4495#4502#0" expanded="true" />
+            <element signature="e#7537#7793#0" expanded="true" />
+            <element signature="e#7792#7793#0" expanded="true" />
+            <element signature="e#13252#14230#0" expanded="true" />
+            <element signature="e#13362#13378#0" expanded="true" />
+            <element signature="e#14229#14230#0" expanded="true" />
+            <element signature="e#14331#14548#0" expanded="true" />
+            <element signature="e#14547#14548#0" expanded="true" />
+            <element signature="e#18590#18831#0" expanded="true" />
+            <element signature="e#18709#18815#0" expanded="true" />
+            <element signature="e#18814#18815#0" expanded="true" />
+            <element signature="e#18830#18831#0" expanded="true" />
+            <element signature="e#39554#39660#0" expanded="true" />
+            <element signature="e#39659#39660#0" expanded="true" />
+            <element signature="e#39692#39815#0" expanded="true" />
+            <element signature="e#39814#39815#0" expanded="true" />
+            <element signature="e#39901#39985#0" expanded="true" />
+            <element signature="e#39984#39985#0" expanded="true" />
           </folding>
         </state>
       </provider>

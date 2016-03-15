@@ -200,7 +200,7 @@ public class HttpUtilz {
 		return null;
 
 	}
-
+//longitude=121.019616&username=momo&tag=update_user_location&latitude=14.5580815
 	private static String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
 		StringBuilder result = new StringBuilder();
 		boolean first = true;
@@ -214,7 +214,7 @@ public class HttpUtilz {
 			result.append("=");
 			result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
 		}
-
+		//L.debug(result.toString());
 		return result.toString();
 	}
 

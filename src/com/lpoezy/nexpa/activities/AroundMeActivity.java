@@ -48,6 +48,7 @@ import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.configuration.AppController;
 import com.lpoezy.nexpa.objects.Correspondent;
+import com.lpoezy.nexpa.objects.Geolocation;
 import com.lpoezy.nexpa.objects.ProfilePicture;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.objects.Users;
@@ -55,6 +56,7 @@ import com.lpoezy.nexpa.openfire.XMPPLogic;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
+import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 import com.lpoezy.nexpa.utility.MyLocation;
 import com.lpoezy.nexpa.utility.MyLocation.LocationResult;
@@ -159,21 +161,8 @@ public class AroundMeActivity extends AppCompatActivity
 	public static boolean isRunning = false;
 	private int dst;
 	private int oldDst;
+	private  String mUsername;
 
-
-	// @Override
-	// public void onBackPressed() {
-	//
-	// //super.onBackPressed();
-	// SessionManager session = new SessionManager(getApplicationContext());
-	// if(session.isLoggedIn()){
-	// UserProfileActivity.promptYesNoDialog("Quit Toucan?",
-	// "Are you sure you want to log off?",
-	// this,
-	// "DEAC",
-	// true);
-	// }
-	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -309,13 +298,23 @@ public class AroundMeActivity extends AppCompatActivity
 		}
 	}
 
+	protected void onStart() {
+
+		mGoogleApiClient.connect();
+
+		super.onStart();
+	}
+
+	protected void onStop() {
+		mGoogleApiClient.disconnect();
+		super.onStop();
+	}
+
 	protected void onPause() {
 		super.onPause();
 		// locationManager.removeUpdates(locationListener);
 		isRunning = false;
-		stopLocationUpdates();
-
-
+		//stopLocationUpdates();
 	}
 
 	protected void stopLocationUpdates() {
@@ -332,21 +331,18 @@ public class AroundMeActivity extends AppCompatActivity
 		super.onResume();
 		isRunning = true;
 
-		if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
-			startLocationUpdates();
+		try {
+			dst = Integer.parseInt(db.getBroadcastDist());
+		} catch (Exception e) {
+			dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
 		}
 
-//		try {
-//			dst = Integer.parseInt(db.getBroadcastDist());
-//		} catch (Exception e) {
-//			dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
-//		}
-//
-//		if (oldDst != dst) {
-//			// force grid update when new distance detected
-//			tryGridToUpdate();
-//			oldDst = dst;
-//		}
+		if (oldDst != dst) {
+			// force grid update when new distance detected
+			//tryGridToUpdate();
+			oldDst = dst;
+		}
+
 //		adapter.notifyDataSetChanged();
 //
 //		final XMPPConnection connection = XMPPLogic.getInstance().getConnection();
@@ -393,17 +389,12 @@ public class AroundMeActivity extends AppCompatActivity
 	}
 
 	protected void startLocationUpdates() {
+
+
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			// TODO: Consider calling
-			//    ActivityCompat#requestPermissions
-			// here to request the missing permissions, and then overriding
-			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-			//                                          int[] grantResults)
-			// to handle the case where the user grants the permission. See the documentation
-			// for ActivityCompat#requestPermissions for more details.
+
 			return;
 		}
-
 
 
 		LocationServices.FusedLocationApi.requestLocationUpdates(
@@ -412,8 +403,82 @@ public class AroundMeActivity extends AppCompatActivity
 		mRequestingLocationUpdates = true;
 	}
 
+	private void downloadNearbyUsersOnline(){
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+
+				HashMap<String, String> postDataParams = new HashMap<String, String>();
+
+
+				SessionManager sm = new SessionManager(AroundMeActivity.this);
+				int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
+
+				postDataParams.put("tag", "download_nearby_users");
+				postDataParams.put("username", mUsername);
+				postDataParams.put("longitude", mCurrentLocation.getLongitude() + "");
+				postDataParams.put("latitude", mCurrentLocation.getLatitude() + "");
+
+				postDataParams.put("dist", newDistance + "");
+				postDataParams.put("unit", "k");
+
+				//L.error("MAP, " + mUsername + " + " + mCurrentLocation.getLongitude() + " :" + mCurrentLocation.getLatitude() + ": " + newDistance);
+				// params.put("latitude", latitude +"");
+
+				final String spec = AppConfig.URL_GEO;
+				String webPage = HttpUtilz.makeRequest(spec, postDataParams);
+
+				L.debug("Geolocation, saveOnline: "+webPage);
+
+			}
+		}).start();
+
+	}
+
+	private void sendNewLocToServer(final double lat,final  double longi){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+
+
+
+				Geolocation geo = new Geolocation();
+				geo.setUsername(mUsername);
+				geo.setLatitude(lat);
+				geo.setLongitude(longi);
+
+				geo.saveOnline();
+
+
+			}
+		}).start();
+
+
+	}
+
 	@Override
 	public void onConnected(Bundle bundle) {
+
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+			return;
+		}
+
+		if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+			startLocationUpdates();
+		}
+
+		mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
+				mGoogleApiClient);
+
+		if (mCurrentLocation != null) {
+			//send new location to server
+
+			L.debug("last loc latitude: "+String.valueOf(mCurrentLocation.getLatitude()));
+			L.debug("last loc long: " + String.valueOf(mCurrentLocation.getLongitude()));
+			sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+		}
 
 		if (mRequestingLocationUpdates) {
 			startLocationUpdates();
@@ -426,8 +491,14 @@ public class AroundMeActivity extends AppCompatActivity
 		mCurrentLocation = location;
 		mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
 
-		updateUI();
+		//L.debug("last loc change latitude: "+String.valueOf(mCurrentLocation.getLatitude()));
+		//L.debug("last loc change long: "+String.valueOf(mCurrentLocation.getLongitude()));
+		//L.debug("last update time: "+mLastUpdateTime);
 
+		//send new location to server
+		if(mCurrentLocation!=null) {
+			sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+		}
 	}
 
 	@Override
@@ -480,12 +551,7 @@ public class AroundMeActivity extends AppCompatActivity
 		}
 	}
 
-	private void updateUI() {
 
-		L.debug("last loc latitude: "+String.valueOf(mCurrentLocation.getLatitude()));
-		L.debug("last loc long: "+String.valueOf(mCurrentLocation.getLongitude()));
-		L.debug("last update time: "+mLastUpdateTime);
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -496,7 +562,13 @@ public class AroundMeActivity extends AppCompatActivity
 		setSupportActionBar(myToolbar);
 		myToolbar.setLogo(R.drawable.icon_nexpa);
 		myToolbar.setTitle("");
-//		oldDst = 0;
+
+		SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
+		db.openToRead();
+
+		mUsername = db.getUsername();
+		db.close();
+		oldDst = 0;
 //
 //		du = new DateUtils();
 //		db = new SQLiteHandler(this);
@@ -514,7 +586,9 @@ public class AroundMeActivity extends AppCompatActivity
 				new Handler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						//getNewLoc();
+
+
+						downloadNearbyUsersOnline();
 					}
 				}, 500);
 			}
@@ -530,7 +604,7 @@ public class AroundMeActivity extends AppCompatActivity
 					.build();
 		}
 
-
+		createLocationRequest();
 //
 //		// web.add(0, "You");
 //		// distance.add(0, 0);
@@ -899,6 +973,7 @@ public class AroundMeActivity extends AppCompatActivity
 		}
 	}
 
+	/*/
 	private void SendLocToServer() {
 		String tag_string_req = "getgeo";
 		StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_GETGEO, new Response.Listener<String>() {
@@ -968,11 +1043,11 @@ public class AroundMeActivity extends AppCompatActivity
 		// Adding request to request queue
 		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 	}
-
+//*/
 	private void makeNotify(CharSequence con, Style style) {
 		AppMsg.makeText(this, con, style).show();
 	}
-
+/*/
 	private void GetNearbyUsers() {
 
 		L.error(TAG + " GetNearbyUsers");
@@ -1009,43 +1084,21 @@ public class AroundMeActivity extends AppCompatActivity
 							for (int i = 0; i < nearby_users.length(); i++) {
 								JSONObject c = nearby_users.getJSONObject(i);
 
-								// Not sure what will be the effect,
-								// if I remove the other variables,
-								// so I will just initialized it with default
-								// value
-								// -ldonios
 
 								// Storing each json item in variable
 								String id = c.getString(TAG_GEO_PID);
 
-								String lname = ""/*
-													 * c.getString(
-													 * TAG_GEO_LNAME)
-													 */;
+								String lname = "";
 
-								String status = ""/*
-													 * c.getString(
-													 * TAG_GEO_STATUS)
-													 */;
-								String about_me = ""/*
-													 * c.getString(
-													 * TAG_GEO_ABOUTME)
-													 */;
-								String looking_type = ""/*
-														 * c.getString(
-														 * TAG_GEO_LOOKING_TYPE)
-														 */;
+								String status = "";
+								String about_me = "";
+								String looking_type = "";
 								String email_address = c.getString(TAG_GEO_EMAIL);
 
-								Date bday = new Date()/*
-														 * du.
-														 * convertStringToDateToLocal
-														 * (c.getString(
-														 * TAG_GEO_BIRTHDAY))
-														 */;
-								String age = ""/* du.getAge(bday) */;
+								Date bday = new Date()
+								String age = ""
 								int distance = Math.round(Float.parseFloat(c.getString(TAG_GEO_DISTANCE)));
-								String sex = ""/* c.getString(TAG_GEO_GENDER) */;
+								String sex = ""
 
 								// user profile
 								String userId = c.getString("user_id");
@@ -1071,10 +1124,7 @@ public class AroundMeActivity extends AppCompatActivity
 								String imgFile = c.getString("img_file");
 								String dateCreated = c.getString("date_uploaded");
 
-								// L.debug("getting profile picture of userId:
-								// "+userId+", imgDir
-								// "+imgDir.equalsIgnoreCase("null")+", imgFile
-								// "+imgFile);
+
 								if ((imgDir != null && !imgDir.isEmpty() && !imgDir.equalsIgnoreCase("null"))
 										&& (imgFile != null && !imgFile.isEmpty()
 												&& !imgFile.equalsIgnoreCase("null"))) {
@@ -1087,37 +1137,12 @@ public class AroundMeActivity extends AppCompatActivity
 
 								boolean containerContainsContent = org.apache.commons.lang3.StringUtils
 										.containsIgnoreCase(existingUsers, "." + id + ".");
-								// if (containerContainsContent == true) {
-								// if (distance <= dst) {
-								// db.updateUser(id, uname, distance, fname,
-								// lname, age, sex, "",
-								// "2012-12-12 09:09:09", 1, about_me,
-								// looking_type, status, email_address,
-								// "1");
-								// } else {
-								// db.updateUser(id, uname, distance, fname,
-								// lname, age, sex, "",
-								// "2012-12-12 09:09:09", 0, about_me,
-								// looking_type, status, email_address,
-								// "0");
-								// }
-								// } else {
-								// if (distance <= dst) {
-								//
-								// db.insertNearbyUser(id, uname, distance,
-								// fname, lname, age, sex, "",
-								// "2012-12-12 09:09:09", 0, about_me,
-								// looking_type, status, email_address,
-								// "1");
-								// }
-								// }
+
 
 								db.insertNearbyUser(id, uname, distance, fname, lname, age, sex, "",
 										"2012-12-12 09:09:09", 0, about_me, looking_type, status, email_address, "1");
 
-								// if (i == nearby_users.length() - 1) {
-								// updateGrid("1");
-								// }
+
 
 							}
 
@@ -1169,7 +1194,7 @@ public class AroundMeActivity extends AppCompatActivity
 		// Adding request to request queue
 		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 	}
-
+//*/
 	@Override
 	public void onRefresh() {
 		// TODO Auto-generated method stub

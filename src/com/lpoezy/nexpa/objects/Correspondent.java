@@ -1,15 +1,15 @@
 package com.lpoezy.nexpa.objects;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
-import android.content.Context;
-import android.graphics.Bitmap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Correspondent {
 
@@ -127,7 +127,7 @@ public class Correspondent {
 			return;
 		
 		ProfilePicture profilePicture = new ProfilePicture();
-		profilePicture.setUserId(userId);
+		//profilePicture.setUserId(userId);
 
 		// download profile pic info offline
 		profilePicture.downloadOffline(context);

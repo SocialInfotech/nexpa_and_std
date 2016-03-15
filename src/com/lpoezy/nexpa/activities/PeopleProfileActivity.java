@@ -1,14 +1,5 @@
 package com.lpoezy.nexpa.activities;
 
-import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.objects.ProfilePicture;
-import com.lpoezy.nexpa.objects.UserProfile;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.utility.BmpFactory;
-import com.lpoezy.nexpa.utility.L;
-import com.lpoezy.nexpa.utility.RoundedImageView;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -21,6 +12,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.objects.Correspondent;
+import com.lpoezy.nexpa.objects.ProfilePicture;
+import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
+import com.lpoezy.nexpa.utility.RoundedImageView;
 
 public class PeopleProfileActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener{
 
@@ -86,72 +84,11 @@ public class PeopleProfileActivity extends Activity implements Correspondent.OnC
 		}
 		
 		Intent intent = getIntent();
-		userId = intent.getLongExtra("TAG_GEO_USER_ID", -1);
+
 		username = intent.getStringExtra("TAG_GEO_USER");
-		email = intent.getStringExtra("TAG_GEO_EMAIL");
-		distance = intent.getIntExtra("TAG_GEO_DISTANCE", 0)+"m";
-		L.debug("userId = "+userId);
 
-/*
-		txtFName = (TextView) findViewById(R.id.user_fname);
-		//txtLName = (TextView) findViewById(R.id.email);
-		txtAge = (TextView) findViewById(R.id.user_age);
-		txtGender = (TextView) findViewById(R.id.user_gender);
-		txtLookingType = (TextView) findViewById(R.id.user_looking_for);
-		txtStatus = (TextView) findViewById(R.id.user_status);
-		txtAboutMe = (TextView) findViewById(R.id.user_about);
+		distance = intent.getStringExtra("TAG_GEO_DISTANCE")+"m";
 
-		Intent intent = getIntent();
-		userId = intent.getLongExtra("TAG_GEO_USER_ID", -1);
-		username = intent.getStringExtra("TAG_GEO_USER");
-		email = intent.getStringExtra("TAG_GEO_EMAIL");
-		fname = intent.getStringExtra("TAG_GEO_FNAME");
-		age = intent.getStringExtra("TAG_GEO_AGE");
-		gender = intent.getStringExtra("TAG_GEO_GENDER");
-		distance = intent.getStringExtra("TAG_GEO_DISTANCE");
-		about_me = intent.getStringExtra("TAG_GEO_ABOUTME");
-		looking_type = intent.getStringExtra("TAG_GEO_LOOKING_TYPE");
-		status = intent.getStringExtra("TAG_GEO_STATUS");
-
-
-		//txtLName = (TextView) findViewById(R.id.email);
-		
-		if (age.length() < 4) {
-			txtFName.setText(fname + ",");
-			txtAge.setText(age);
-		} else {
-			txtFName.setText(fname);
-			txtAge.setText("");
-		}
-		if (gender.length() == 0) {
-			if ((looking_type.length() == 0) || (looking_type.equals("null"))) {
-				txtGender.setText("");
-				txtLookingType.setText("");
-			} else {
-				txtGender.setText("");
-				txtLookingType.setText("Looking for " + looking_type);
-			}
-		} else {
-			if ((looking_type.length() == 0) || (looking_type.equals("null"))) {
-				txtGender.setText(gender);
-				txtLookingType.setText("");
-			} else {
-				txtGender.setText(gender + ",");
-				txtLookingType.setText("Looking for " + looking_type);
-			}
-		}
-
-		if ((about_me.length() == 0) || (about_me.equals("null"))) {
-			txtAboutMe.setText("No status yet");
-		} else {
-			txtAboutMe.setText(about_me);
-		}
-
-		txtStatus.setText(status);
-		
-		*/
-		
-		
 		mTvJobTitle = (TextView)this.findViewById(R.id.tv_job_title);
         mTvUname = (TextView)this.findViewById(R.id.tv_uname);
         mTvUrl0 = (TextView)this.findViewById(R.id.tv_url0);
@@ -236,12 +173,10 @@ public class PeopleProfileActivity extends Activity implements Correspondent.OnC
 			mTvJobTitle.setVisibility(View.VISIBLE);
 			mTvJobTitle.setText(profile.getProfession());
 		}
-		
-		if(profile.getUsername()!=null &&!profile.getUsername().equalsIgnoreCase("null") && !profile.getUsername().equals("")){
-			mTvUname.setVisibility(View.VISIBLE);
-			mTvUname.setText(profile.getUsername()+" | "+distance);
-		}
-		
+
+		mTvUname.setVisibility(View.VISIBLE);
+		mTvUname.setText(username+ " | " + distance);
+
 		if(profile.getUrl0()!=null &&!profile.getUrl0().equalsIgnoreCase("null") && !profile.getUrl0().equals("")){
 			mTvUrl0.setVisibility(View.VISIBLE);
 			mTvUrl0.setText(profile.getUrl0());

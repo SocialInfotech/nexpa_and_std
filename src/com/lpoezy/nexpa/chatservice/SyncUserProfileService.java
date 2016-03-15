@@ -1,7 +1,5 @@
 package com.lpoezy.nexpa.chatservice;
 
-import java.util.concurrent.TimeUnit;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -9,9 +7,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
-
-import com.lpoezy.nexpa.objects.UserProfile;
-import com.lpoezy.nexpa.utility.L;
 
 public class SyncUserProfileService extends Service {
 	
@@ -77,27 +72,27 @@ public class SyncUserProfileService extends Service {
 			@Override
 			public void run() {
 				
-				UserProfile userProfile = new UserProfile();
-				userProfile.setSyncedOnline(true);
-				userProfile.downloadMyUnsyncedDetailsOffline(getApplicationContext());
-				
-				if(!userProfile.isSyncedOnline()){
-					
-					if(userProfile.saveOnline(getApplicationContext())){
-						userProfile.setSyncedOnline(true);
-						userProfile.updateOffline(getApplicationContext());
-					}
-					retry = SECONDS;
-				}else{
-					L.debug("(2<<"+n+") : "+(2<<n));
-					retry = (2<<n)* SECONDS;
-					if(n<5)n++;
-					
-					L.debug("SyncUserProfileService, no changes to update online");
-				}
-				//L.debug("SyncUserProfileService, next update is after  "+TimeUnit.MILLISECONDS.toMinutes(retry)+" minute(s)");
-				L.debug("SyncProfilePictureService, next update is after  "+TimeUnit.MILLISECONDS.toSeconds(retry)+" second(s)");
-				mServiceHandler.postDelayed(this, retry);
+//				UserProfile userProfile = new UserProfile();
+//				userProfile.setSyncedOnline(true);
+//				userProfile.downloadMyUnsyncedDetailsOffline(getApplicationContext());
+//
+//				if(!userProfile.isSyncedOnline()){
+//
+//					if(userProfile.saveOnline(getApplicationContext())){
+//						userProfile.setSyncedOnline(true);
+//						userProfile.updateOffline(getApplicationContext());
+//					}
+//					retry = SECONDS;
+//				}else{
+//					L.debug("(2<<"+n+") : "+(2<<n));
+//					retry = (2<<n)* SECONDS;
+//					if(n<5)n++;
+//
+//					L.debug("SyncUserProfileService, no changes to update online");
+//				}
+//				//L.debug("SyncUserProfileService, next update is after  "+TimeUnit.MILLISECONDS.toMinutes(retry)+" minute(s)");
+//				L.debug("SyncProfilePictureService, next update is after  "+TimeUnit.MILLISECONDS.toSeconds(retry)+" second(s)");
+//				mServiceHandler.postDelayed(this, retry);
 			}
 		}, retry);
 		

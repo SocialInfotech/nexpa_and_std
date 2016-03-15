@@ -1,10 +1,5 @@
 package com.lpoezy.nexpa.activities;
 
-import java.util.ArrayList;
-
-import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.objects.Correspondent;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.objects.Correspondent;
+
+import java.util.ArrayList;
 
 public class CustomGrid extends BaseAdapter {
 	 private Context mContext;
@@ -65,6 +65,7 @@ public class CustomGrid extends BaseAdapter {
        
        @Override
        public View getView(int position, View convertView, ViewGroup parent) {
+
            // TODO Auto-generated method stub
            View grid;
            grid = new View(mContext);

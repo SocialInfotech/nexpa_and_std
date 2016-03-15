@@ -1,40 +1,34 @@
 package com.lpoezy.nexpa.objects;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+
+import com.devspark.appmsg.AppMsg;
+import com.lpoezy.nexpa.configuration.AppConfig;
+import com.lpoezy.nexpa.utility.BmpFactory;
+import com.lpoezy.nexpa.utility.HttpUtilz;
+import com.lpoezy.nexpa.utility.L;
+import com.lpoezy.nexpa.utility.SystemUtilz;
+
+import org.jivesoftware.smack.util.stringencoder.Base64;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.jivesoftware.smack.util.stringencoder.Base64;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.devspark.appmsg.AppMsg;
-import com.lpoezy.nexpa.activities.SettingsActivity;
-import com.lpoezy.nexpa.configuration.AppConfig;
-import com.lpoezy.nexpa.objects.Correspondent.OnCorrespondentUpdateListener;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.utility.BmpFactory;
-import com.lpoezy.nexpa.utility.DateUtils;
-import com.lpoezy.nexpa.utility.HttpUtilz;
-import com.lpoezy.nexpa.utility.L;
-import com.lpoezy.nexpa.utility.StringFormattingUtils;
-import com.lpoezy.nexpa.utility.SystemUtilz;
-import com.lpoezy.nexpa.utility.DateUtils.DateFormatz;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
-
 public class ProfilePicture {
 
 	public static final String TEMP_LOC = "PROFILE_PIC_LOC";
 
-	private long userId;
+	//private long userId;
+	private String username;
 	private String imgDir;
 	private String imgFile;
 	private String dateUploaded;
@@ -44,21 +38,31 @@ public class ProfilePicture {
 	public ProfilePicture() {
 	}
 
-	public ProfilePicture(long userId, String imgDir, String imgFile, String dateCreated, boolean isSyncOnline) {
+	public ProfilePicture(String username, String imgDir, String imgFile, String dateCreated, boolean isSyncOnline) {
 
-		this.userId = userId;
+		this.username = username;
 		this.imgDir = imgDir;
 		this.imgFile = imgFile;
 		this.dateUploaded = dateCreated;
 		this.isSyncedOnline = isSyncOnline;
 	}
 
-	public long getUserId() {
-		return userId;
+//	public long getUserId() {
+//		return userId;
+//	}
+//
+//	public void setUserId(long userId) {
+//		this.userId = userId;
+//		notifyListeners();
+//	}
+
+
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setUsername(String username) {
+		this.username = username;
 		notifyListeners();
 	}
 
@@ -139,7 +143,7 @@ public class ProfilePicture {
 			// DateFormatz.DATE_FORMAT_5);
 
 			Uri uri = Uri.parse(imgDecodableString);
-			imgFile = SystemUtilz.getDeviceUniqueId(context.getApplicationContext()) + userId
+			imgFile = SystemUtilz.getDeviceUniqueId(context.getApplicationContext()) + username
 					+ uri.getLastPathSegment().replace(" ", "");
 			L.debug("imgFile " + imgFile);
 
@@ -147,8 +151,8 @@ public class ProfilePicture {
 			postDataParams.put("tag", "upload");
 			postDataParams.put("image", imageStr);
 			postDataParams.put("img_file", imgFile);
-			postDataParams.put("user_id", Long.toString(userId));
-			postDataParams.put("date_created", this.dateUploaded);
+			postDataParams.put("username", username);
+			postDataParams.put("date_created", dateUploaded);
 
 			final String spec = AppConfig.URL_PROFILE_PIC;
 			String webPage = HttpUtilz.makeRequest(spec, postDataParams);
@@ -180,16 +184,16 @@ public class ProfilePicture {
 	}
 
 	public void saveOffline(Context context) {
-		if (imgDir == null || imgFile == null || imgDir.isEmpty() || imgFile.isEmpty()
-				|| imgDir.equalsIgnoreCase("null") || imgFile.equalsIgnoreCase("null")) {
-			return;
-		}
-		L.debug("ProfilePicture, saveOffline");
-		SQLiteHandler db = new SQLiteHandler(context);
-		db.openToWrite();
-		// save picture info offline
-		db.saveProfilePicture(userId, imgDir, imgFile, dateUploaded, isSyncedOnline);
-		db.close();
+//		if (imgDir == null || imgFile == null || imgDir.isEmpty() || imgFile.isEmpty()
+//				|| imgDir.equalsIgnoreCase("null") || imgFile.equalsIgnoreCase("null")) {
+//			return;
+//		}
+//		L.debug("ProfilePicture, saveOffline");
+//		SQLiteHandler db = new SQLiteHandler(context);
+//		db.openToWrite();
+//		// save picture info offline
+//		db.saveProfilePicture(username, imgDir, imgFile, dateUploaded, isSyncedOnline);
+//		db.close();
 	}
 
 	public void downloadOnline() {
@@ -198,37 +202,37 @@ public class ProfilePicture {
 
 	public void downloadMyUnsyncPicProfileOffline(Context context) {
 
-		L.debug("ProfilePicture, downloadMyUnsyncPicProfileOffline");
-		SQLiteHandler db = new SQLiteHandler(context);
-		db.openToRead();
-		// download picture info offline
-		HashMap<String, String> map = db.downloadMyUnsyncedPicProfile();
-		if (map != null) {
-			this.userId = Long.parseLong(map.get(SQLiteHandler.IMG_USER_ID));
-			this.imgDir = map.get(SQLiteHandler.IMG_DIR);
-			this.imgFile = map.get(SQLiteHandler.IMG_FILE);
-			this.dateUploaded = map.get(SQLiteHandler.IMG_DATE_UPLOADED);
-			this.isSyncedOnline = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.IMG_IS_SYNCED_ONLINE));
-		}
-
-		db.close();
+//		L.debug("ProfilePicture, downloadMyUnsyncPicProfileOffline");
+//		SQLiteHandler db = new SQLiteHandler(context);
+//		db.openToRead();
+//		// download picture info offline
+//		HashMap<String, String> map = db.downloadMyUnsyncedPicProfile();
+//		if (map != null) {
+//			this.userId = Long.parseLong(map.get(SQLiteHandler.IMG_USER_ID));
+//			this.imgDir = map.get(SQLiteHandler.IMG_DIR);
+//			this.imgFile = map.get(SQLiteHandler.IMG_FILE);
+//			this.dateUploaded = map.get(SQLiteHandler.IMG_DATE_UPLOADED);
+//			this.isSyncedOnline = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.IMG_IS_SYNCED_ONLINE));
+//		}
+//
+//		db.close();
 	}
 
 	public void downloadOffline(Context context) {
 
-		SQLiteHandler db = new SQLiteHandler(context);
-		db.openToRead();
-		// download picture info offline
-		HashMap<String, String> map = db.downloadProfilePicture(userId);
-		if (map != null) {
-			this.userId = Long.parseLong(map.get(SQLiteHandler.IMG_USER_ID));
-			this.imgDir = map.get(SQLiteHandler.IMG_DIR);
-			this.imgFile = map.get(SQLiteHandler.IMG_FILE);
-			this.dateUploaded = map.get(SQLiteHandler.IMG_DATE_UPLOADED);
-			this.isSyncedOnline = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.IMG_IS_SYNCED_ONLINE));
-		}
-
-		db.close();
+//		SQLiteHandler db = new SQLiteHandler(context);
+//		db.openToRead();
+//		// download picture info offline
+//		HashMap<String, String> map = db.downloadProfilePicture(userId);
+//		if (map != null) {
+//			this.userId = Long.parseLong(map.get(SQLiteHandler.IMG_USER_ID));
+//			this.imgDir = map.get(SQLiteHandler.IMG_DIR);
+//			this.imgFile = map.get(SQLiteHandler.IMG_FILE);
+//			this.dateUploaded = map.get(SQLiteHandler.IMG_DATE_UPLOADED);
+//			this.isSyncedOnline = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.IMG_IS_SYNCED_ONLINE));
+//		}
+//
+//		db.close();
 	}
 
 	public String downloadImageOnline() {
@@ -249,24 +253,26 @@ public class ProfilePicture {
 	}
 
 	public static String getUserImgDecodableString(Context context) {
-		long userId = -1;
-		SQLiteHandler db = new SQLiteHandler(context);
-		db.openToRead();
-		userId = Long.parseLong(db.getLoggedInID());
-		db.close();
+//		long userId = -1;
+//		SQLiteHandler db = new SQLiteHandler(context);
+//		db.openToRead();
+//		userId = Long.parseLong(db.getLoggedInID());
+//		db.close();
+//
+//		ProfilePicture pic = new ProfilePicture();
+//		pic.setUserId(userId);
+//		pic.downloadOffline(context);
+//
+//		String imgDecodableString = null;
+//
+//		if ((pic.getImgDir() != null && !pic.getImgDir().isEmpty())
+//				&& (pic.getImgFile() != null && !pic.getImgFile().isEmpty())) {
+//			imgDecodableString = pic.getImgDir() + "/" + pic.getImgFile();
+//		}
+//
+//		return imgDecodableString;
 
-		ProfilePicture pic = new ProfilePicture();
-		pic.setUserId(userId);
-		pic.downloadOffline(context);
-
-		String imgDecodableString = null;
-
-		if ((pic.getImgDir() != null && !pic.getImgDir().isEmpty())
-				&& (pic.getImgFile() != null && !pic.getImgFile().isEmpty())) {
-			imgDecodableString = pic.getImgDir() + "/" + pic.getImgFile();
-		}
-
-		return imgDecodableString;
+		return null;
 	}
 
 	private List<OnProfilePictureUpdateListener> listeners = new ArrayList<OnProfilePictureUpdateListener>();

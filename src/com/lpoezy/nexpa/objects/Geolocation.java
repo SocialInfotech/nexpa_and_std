@@ -20,8 +20,17 @@ public class Geolocation {
     private String gpsProvider;
     private long dateCreate;
     private long dateUpdate;
+    private double distance;
 
     public Geolocation(){}
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 
     public long getDateUpdate() {
         return dateUpdate;

@@ -14,8 +14,8 @@ import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Favorite;
+import com.lpoezy.nexpa.objects.Geolocation;
 import com.lpoezy.nexpa.objects.NewMessage;
-import com.lpoezy.nexpa.objects.Users;
 import com.lpoezy.nexpa.openfire.Account;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.DateUtils.DateFormatz;
@@ -44,6 +44,18 @@ public class SQLiteHandler {
     private static final String CREATION_DATE = "creationDate";
     private static final String MODIFICATION_DATE = "modificationDate";
     private static final String GCM_REG_ID = "gcmRegId";
+
+    //uname, latitude, longitude, gps_provider, date_create, date_update, geo_distance
+    private static final String TABLE_GPS = "geolocation";
+    private static final String GPS_USERNAME= "username";
+    private static final String GPS_LAT = "latitude";
+    private static final String GPS_LONG = "longitude";
+    private static final String GPS_PROV = "gps_provider";
+    private static final String GPS_DATE_CREATE = "date_create";
+    private static final String GPS_DATE_UPDATE = "date_update";
+    private static final String GPS_DISTANCE = "distance";
+
+
 
     private static final String TABLE_LOGIN = "user";
     private static final String KEY_ID = "_id";// offline id
@@ -191,6 +203,14 @@ public class SQLiteHandler {
                     + PLAIN_PASSWORD + " TEXT, "+ ENCRYPTED_PASSWORD + " TEXT, " + NAME + " TEXT, " + EMAIL + " TEXT, "
                     + CREATION_DATE + " CHAR(15), " + MODIFICATION_DATE + " CHAR(15), "+GCM_REG_ID+" TEXT);";
             db.execSQL(CREATE_OFUSER_TABLE);
+
+
+            String CREATE_GPS_TABLE = "CREATE TABLE " + TABLE_GPS + "(" + GPS_USERNAME + " TEXT UNIQUE, "
+                    + GPS_LAT + " REAL, " + GPS_LONG + " REAL, " + GPS_PROV + " TEXT, "
+                    + GPS_DATE_CREATE + " CHAR(15), " + GPS_DATE_UPDATE + " CHAR(15), "+GPS_DISTANCE+" INTEGER);";
+            db.execSQL(CREATE_GPS_TABLE);
+
+
 
 //            String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
 //                    + KEY_NAME + " TEXT," + KEY_PASS + " TEXT," + KEY_EMAIL + " TEXT UNIQUE," + KEY_UTYPE + " TEXT,"
@@ -1476,43 +1496,34 @@ public class SQLiteHandler {
         return id;
     }
 
-    public void insertNearbyUser(String userid, String username, int distance, String fname, String lname, String age,
-                                 String gender, String looking_for, String date_seen, int shown, String about_me, String looking_type,
-                                 String status, String email, String val) {
+    public void insertNearbyUser(String username, String latitude, String longitude, String gps_provider, String date_create, String date_update, String distance) {
         // SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(PROFILE_USER_ID, userid);
-        values.put(PROFILE_USERNAME, username);
-        values.put(PROFILE_DISTANCE, distance);
-        values.put(PROFILE_FNAME, fname);
-        values.put(PROFILE_LNAME, lname);
-        values.put(PROFILE_AGE, age);
-        values.put(PROFILE_GENDER, gender);
-        values.put(PROFILE_LOOKING_FOR, looking_for);
-        values.put(PROFILE_DATE_SEEN, date_seen);
-        values.put(PROFILE_SHOWN, shown);
-        values.put(PROFILE_ABOUTME, about_me);
-        values.put(PROFILE_LOOKING_TYPE, looking_type);
-        values.put(PROFILE_STATUS, status);
-        values.put(PROFILE_EMAIL, email);
-        values.put(PROFILE_VALID, val);
-        long id = sqLiteDatabase.insert(DATABASE_TABLE_2, null, values);
+        values.put(GPS_USERNAME, username);
+        values.put(GPS_LAT, latitude);
+        values.put(GPS_LONG, longitude);
+        values.put(GPS_PROV, gps_provider);
+        values.put(GPS_DATE_CREATE, date_create);
+        values.put(GPS_DATE_UPDATE, date_update);
+        values.put(GPS_DISTANCE, distance);
+
+        sqLiteDatabase.insertWithOnConflict(TABLE_GPS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         // db.close();
-        Log.e(TAG, "Nearby user inserted into sqlite: " + id + " : " + lname);
+        Log.e(TAG, "Nearby user inserted into sqlite: "  + username);
     }
 
-    public void insertLocation(String username, float longitude, float latitude) {
-        String dateNow = requestLocalDate();
-
-        ContentValues values = new ContentValues();
-        values.put(LOC_USERNAME, username);
-        values.put(LOC_LONGI, longitude);
-        values.put(LOC_LATI, latitude);
-
-        sqLiteDatabase.insertWithOnConflict(TABLE_LOCATION, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-
-        L.debug("updated new loc of "+username+"(lat: "+latitude+", long: "+longitude+")");
-    }
+//    public void insertLocation(String username, float longitude, float latitude) {
+//        String dateNow = requestLocalDate();
+//
+//        ContentValues values = new ContentValues();
+//        values.put(LOC_USERNAME, username);
+//        values.put(LOC_LONGI, longitude);
+//        values.put(LOC_LATI, latitude);
+//
+//        sqLiteDatabase.insertWithOnConflict(TABLE_LOCATION, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+//
+//        L.debug("updated new loc of "+username+"(lat: "+latitude+", long: "+longitude+")");
+//    }
 
 
     public List<Announcement> downloadOthersBroadcasts(String uname) {
@@ -2137,39 +2148,34 @@ public class SQLiteHandler {
         return last;
     }
 
-    public ArrayList<Users> getNearByUserDetails() {
-        ArrayList<Users> userlist = new ArrayList<Users>();
-        String selectQuery = "SELECT * FROM " + DATABASE_TABLE_2 + " WHERE " + PROFILE_VALID + " = '1'";
+    public ArrayList<Geolocation> getNearByUserDetails() {
+        ArrayList<Geolocation> userlist = new ArrayList<Geolocation>();
+
+
+        //String selectQuery = "SELECT * FROM " + TABLE_GPS + " WHERE "+GPS_USERNAME+" <> "+getUsername();
         // SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery(selectQuery, null);
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
+        Cursor cursor = sqLiteDatabase.query(TABLE_GPS, new String[]{GPS_USERNAME, GPS_LONG, GPS_LAT, GPS_PROV, GPS_DATE_CREATE, GPS_DATE_UPDATE, GPS_DISTANCE}, GPS_USERNAME+"<>?",new String[]{getUsername()},null, null,null);
+
+        if (cursor.moveToFirst()) {
             do {
-                Users us = new Users();
 
-                us.setId(cursor.getInt(cursor.getColumnIndex(PROFILE_ID)));
-                us.setUserId(cursor.getInt(cursor.getColumnIndex(PROFILE_USER_ID)));
-                us.setUserName(cursor.getString(cursor.getColumnIndex(PROFILE_USERNAME)));
-                us.setDistance(cursor.getInt(cursor.getColumnIndex(PROFILE_DISTANCE)));
-                us.setFName(cursor.getString(cursor.getColumnIndex(PROFILE_FNAME)));
-                us.setLName(cursor.getString(cursor.getColumnIndex(PROFILE_LNAME)));
-                us.setAge(cursor.getString(cursor.getColumnIndex(PROFILE_AGE)));
-                us.setGender(cursor.getString(cursor.getColumnIndex(PROFILE_GENDER)));
-                us.setLookingFor(cursor.getString(cursor.getColumnIndex(PROFILE_LOOKING_FOR)));
-                us.setDateSeen(cursor.getString(cursor.getColumnIndex(PROFILE_DATE_SEEN)));
-                us.setShown(cursor.getString(cursor.getColumnIndex(PROFILE_SHOWN)));
-                us.setAboutMe(cursor.getString(cursor.getColumnIndex(PROFILE_ABOUTME)));
-                us.setLookingType(cursor.getString(cursor.getColumnIndex(PROFILE_LOOKING_TYPE)));
-                us.setStatus(cursor.getString(cursor.getColumnIndex(PROFILE_STATUS)));
-                us.setEmail(cursor.getString(cursor.getColumnIndex(PROFILE_EMAIL)));
-                userlist.add(us);
+                Geolocation geo = new Geolocation();
+                geo.setUsername(cursor.getString(cursor.getColumnIndex(GPS_USERNAME)));
+                geo.setLongitude(cursor.getDouble(cursor.getColumnIndex(GPS_LONG)));
+                geo.setLatitude(cursor.getDouble(cursor.getColumnIndex(GPS_LAT)));
+                geo.setGpsProvider(cursor.getString(cursor.getColumnIndex(GPS_PROV)));
+                geo.setDateCreate(cursor.getLong(cursor.getColumnIndex(GPS_DATE_CREATE)));
+                geo.setDateUpdate(cursor.getLong(cursor.getColumnIndex(GPS_DATE_UPDATE)));
+                geo.setDistance(cursor.getDouble(cursor.getColumnIndex(GPS_DISTANCE)));
 
-                // L.debug("SqliteHelper, us.getFName() "+us.getFName());
+
+                userlist.add(geo);
             } while (cursor.moveToNext());
-            cursor.close();
-        } else {
-            cursor.close();
+
         }
+
+        cursor.close();
+
         return userlist;
     }
 

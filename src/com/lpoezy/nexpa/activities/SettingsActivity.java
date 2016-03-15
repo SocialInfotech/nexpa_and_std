@@ -1,15 +1,5 @@
 package com.lpoezy.nexpa.activities;
 
-import com.appyvet.rangebar.RangeBar;
-import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.JSON.Profile;
-import com.lpoezy.nexpa.objects.ProfilePicture;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.sqlite.SessionManager;
-import com.lpoezy.nexpa.utility.BmpFactory;
-import com.lpoezy.nexpa.utility.L;
-import com.lpoezy.nexpa.utility.NiceDialog;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,6 +26,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import com.appyvet.rangebar.RangeBar;
+import com.lpoezy.nexpa.JSON.Profile;
+import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.objects.ProfilePicture;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
+import com.lpoezy.nexpa.sqlite.SessionManager;
+import com.lpoezy.nexpa.utility.BmpFactory;
+import com.lpoezy.nexpa.utility.L;
+import com.lpoezy.nexpa.utility.NiceDialog;
 
 public class SettingsActivity extends Activity {
 	RangeBar rbDistance;
@@ -689,7 +689,7 @@ public class SettingsActivity extends Activity {
 			db.close();
 			
 			ProfilePicture pic = new ProfilePicture();
-			pic.setUserId(userId);
+			//pic.setUserId(userId);
 			pic.downloadOffline(SettingsActivity.this);
 			
 			

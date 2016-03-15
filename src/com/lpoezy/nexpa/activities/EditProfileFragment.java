@@ -1,16 +1,5 @@
 package com.lpoezy.nexpa.activities;
 
-import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.configuration.AppConfig;
-import com.lpoezy.nexpa.objects.ProfilePicture;
-import com.lpoezy.nexpa.objects.UserProfile;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.utility.BmpFactory;
-import com.lpoezy.nexpa.utility.DateUtils;
-import com.lpoezy.nexpa.utility.DateUtils.DateFormatz;
-import com.lpoezy.nexpa.utility.L;
-import com.lpoezy.nexpa.utility.Utilz;
-
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
@@ -28,6 +17,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+
+import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.configuration.AppConfig;
+import com.lpoezy.nexpa.objects.ProfilePicture;
+import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
+import com.lpoezy.nexpa.utility.BmpFactory;
+import com.lpoezy.nexpa.utility.DateUtils;
+import com.lpoezy.nexpa.utility.DateUtils.DateFormatz;
+import com.lpoezy.nexpa.utility.L;
+import com.lpoezy.nexpa.utility.Utilz;
 
 public class EditProfileFragment extends DialogFragment {
 
@@ -179,7 +179,7 @@ public class EditProfileFragment extends DialogFragment {
 		String url1 = edtUrl1.getText().toString();
 		String url2 = edtUrl2.getText().toString();
 		boolean isSyncedOnline = false;
-		UserProfile userProfile = new UserProfile(uId, uname, description, profession, url0, url1, url2, dateUpdated, isSyncedOnline);
+		UserProfile userProfile = new UserProfile(uname, description, profession, url0, url1, url2, dateUpdated);
 
 		//moved to sync in settings screen
 		//String result = userProfile.saveOnline(getActivity());
@@ -285,8 +285,8 @@ public class EditProfileFragment extends DialogFragment {
 			long userId = -1;
 			SQLiteHandler db = new SQLiteHandler(getActivity());
 			db.openToRead();
-			userId = Long.parseLong(db.getLoggedInID());
-			mProfilePicture.setUserId(userId);
+			//userId = Long.parseLong(db.getLoggedInID());
+			//mProfilePicture.setUserId(userId);
 			db.close();
 			 
 			 

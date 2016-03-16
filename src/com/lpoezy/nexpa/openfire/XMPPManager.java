@@ -8,18 +8,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.ChatMessage;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.SmackException.AlreadyLoggedInException;
 import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.XMPPConnection;
@@ -45,6 +41,8 @@ import java.util.Map;
 public class XMPPManager {
 
     public static boolean connected = false;
+    private final XMPPService.OnProcessMessage processMessageCallback;
+    private final XMPPService.OnConnectedToOPenfireListener connectedToOperfire;
     public boolean loggedin = false;
     public static boolean isconnecting = false;
     public static boolean isToasted = true;
@@ -59,20 +57,22 @@ public class XMPPManager {
     public static boolean instanceCreated = false;
 
     public XMPPManager(XMPPService context, String serverAdress,
-                       String logiUser, String passwordser) {
+                       String logiUser, String passwordser, XMPPService.OnProcessMessage processMessageCallback, XMPPService.OnConnectedToOPenfireListener connectedToOperfire) {
         this.serverAddress = serverAdress;
         this.loginUser = logiUser;
         this.passwordUser = passwordser;
         this.context = context;
+        this.processMessageCallback = processMessageCallback;
+        this.connectedToOperfire = connectedToOperfire;
         init();
 
     }
 
     public static XMPPManager getInstance(XMPPService context, String server,
-                                          String user, String pass) {
+                                          String user, String pass, XMPPService.OnProcessMessage processMessageCallback, XMPPService.OnConnectedToOPenfireListener connectedToOperfire) {
 
         if (instance == null) {
-            instance = new XMPPManager(context, server, user, pass);
+            instance = new XMPPManager(context, server, user, pass, processMessageCallback, connectedToOperfire);
             instanceCreated = true;
         }
         return instance;
@@ -270,6 +270,8 @@ public class XMPPManager {
         @Override
         public void chatCreated(final org.jivesoftware.smack.chat.Chat chat,
                                 final boolean createdLocally) {
+
+
             if (!createdLocally)
                 chat.addMessageListener(mMessageListener);
 
@@ -281,9 +283,10 @@ public class XMPPManager {
         String body = gson.toJson(chatMessage);
 
         if (!chat_created) {
+            L.debug("to: "+chatMessage.receiver + "@" + "198.154.106.139");
             Mychat = ChatManager.getInstanceFor(connection).createChat(
                     chatMessage.receiver + "@"
-                            + context.getString(R.string.server),
+                            + this.serverAddress,
                     mMessageListener);
             chat_created = true;
         }
@@ -322,6 +325,7 @@ public class XMPPManager {
                 login();
             }
 
+            connectedToOperfire.onConnectedToOpenfire(connection);
         }
 
         @Override
@@ -462,11 +466,12 @@ public class XMPPManager {
         @Override
         public void processMessage(final org.jivesoftware.smack.chat.Chat chat,
                                    final Message message) {
-            Log.i("MyXMPP_MESSAGE_LISTENER", "Xmpp message received: '"
+            L.debug("MyXMPP_MESSAGE_LISTENER, Xmpp message received: '"
                     + message);
 
             if (message.getType() == Message.Type.chat
                     && message.getBody() != null) {
+
                 final ChatMessage chatMessage = gson.fromJson(
                         message.getBody(), ChatMessage.class);
 
@@ -475,15 +480,19 @@ public class XMPPManager {
         }
 
         private void processMessage(final ChatMessage chatMessage) {
-            /*
-			 * / chatMessage.isMine = false; Chats.chatlist.add(chatMessage);
-			 * new Handler(Looper.getMainLooper()).post(new Runnable() {
-			 * 
-			 * @Override public void run() {
-			 * Chats.chatAdapter.notifyDataSetChanged();
-			 * 
-			 * } }); //
-			 */
+             chatMessage.isMine = false;
+
+            processMessageCallback.onProcessMessage(chatMessage);
+
+
+//            Chats.chatlist.add(chatMessage);
+//			 new Handler(Looper.getMainLooper()).post(new Runnable() {
+//
+//			 @Override public void run() {
+//			  Chats.chatAdapter.notifyDataSetChanged();
+//
+//			  } });
+
         }
 
     }

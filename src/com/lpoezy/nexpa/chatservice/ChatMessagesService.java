@@ -1,18 +1,5 @@
 package com.lpoezy.nexpa.chatservice;
 
-import org.jivesoftware.smack.XMPPConnection;
-
-import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.activities.ChatActivity;
-import com.lpoezy.nexpa.configuration.AppConfig;
-import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.objects.NewMessage;
-import com.lpoezy.nexpa.openfire.Account;
-import com.lpoezy.nexpa.openfire.OnXMPPConnectedListener;
-import com.lpoezy.nexpa.openfire.XMPPLogic;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.utility.L;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,6 +10,13 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+
+import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.activities.ChatActivity;
+import com.lpoezy.nexpa.configuration.AppConfig;
+import com.lpoezy.nexpa.objects.Correspondent;
+import com.lpoezy.nexpa.objects.NewMessage;
+import com.lpoezy.nexpa.utility.L;
 
 //started in TabHostActivity class onResume
 public class ChatMessagesService extends Service {
@@ -148,14 +142,14 @@ public class ChatMessagesService extends Service {
 //							// receive the brodacast
 //							if (!TabHostActivity.isRunning && !ChatHistoryActivity.isRunning
 //									&& !ChatActivity.isRunning) {
-//								
+//
 //								L.debug("sending nottification!");
 //
 //								// send notification
 //								sendNotification(correspondent);
-//								
+//
 //							} else {
-//								
+//
 //								// send broadcast
 //								Intent broadcast = new Intent(AppConfig.ACTION_RECEIVED_MSG);
 //								broadcast.putExtra("userid", correspondent.getId());
@@ -164,7 +158,7 @@ public class ChatMessagesService extends Service {
 //								broadcast.putExtra("date", msg.getDate());
 //								L.debug("sending broadcast!");
 //								sendBroadcast(broadcast);
-//								
+//
 //							}
 //							
 //							

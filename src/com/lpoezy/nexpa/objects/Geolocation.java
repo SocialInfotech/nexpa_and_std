@@ -92,7 +92,7 @@ public class Geolocation {
         final String spec = AppConfig.URL_GEO;
         String webPage = HttpUtilz.makeRequest(spec, postDataParams);
 
-        //L.debug("Geolocation, saveOnline: "+webPage);
+        L.debug("Geolocation, saveOnline: "+webPage);
 
         JSONObject res = null;
         try {

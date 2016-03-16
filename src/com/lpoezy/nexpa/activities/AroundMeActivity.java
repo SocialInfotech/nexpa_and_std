@@ -2,7 +2,10 @@ package com.lpoezy.nexpa.activities;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,6 +14,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,6 +47,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.lpoezy.nexpa.JSON.JSONParser;
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.LocalBinder;
+import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Geolocation;
@@ -68,7 +74,9 @@ import java.util.HashMap;
 
 public class AroundMeActivity extends AppCompatActivity
         implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener,
+        XMPPService.OnConnectedToOPenfireListener{
     private static final String TAG = AroundMeActivity.class.getSimpleName();
     private static final String REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY";
     private static final String LOCATION_KEY = "LOCATION_KEY";
@@ -211,12 +219,14 @@ public class AroundMeActivity extends AppCompatActivity
 
                         try {
                             dst = Integer.parseInt(distTick);
-                            tryGridToUpdate();
+
+                            //tryGridToUpdate();
 
                         } catch (NumberFormatException e) {
                             dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
                         }
 
+                        downloadNearbyUsersOnline();
                         dialogPref.dismiss();
                     }
                 });
@@ -307,6 +317,10 @@ public class AroundMeActivity extends AppCompatActivity
         // locationManager.removeUpdates(locationListener);
         isRunning = false;
         //stopLocationUpdates();
+
+        if(mService!=null){
+            unbindService(mServiceConn);
+        }
     }
 
     protected void stopLocationUpdates() {
@@ -315,6 +329,27 @@ public class AroundMeActivity extends AppCompatActivity
 
         mRequestingLocationUpdates = false;
     }
+
+    private boolean mBounded;
+    private XMPPService mService;
+
+    private ServiceConnection mServiceConn = new ServiceConnection() {
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBounded = false;
+            mService = null;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBounded = true;
+
+            mService = ((LocalBinder<XMPPService>) service).getService();
+            mService.addconnectedToOperfireListener(AroundMeActivity.this);
+        }
+    };
 
 
     @Override
@@ -334,6 +369,9 @@ public class AroundMeActivity extends AppCompatActivity
             //tryGridToUpdate();
             oldDst = dst;
         }
+
+        Intent service = new Intent(this, XMPPService.class);
+        bindService(service, mServiceConn, Context.BIND_AUTO_CREATE);
 
 //		adapter.notifyDataSetChanged();
 //
@@ -396,6 +434,15 @@ public class AroundMeActivity extends AppCompatActivity
     }
 
     private void downloadNearbyUsersOnline() {
+        L.debug("Geolocation, downloadNearbyUsersOnline");
+
+
+        if(mCurrentLocation == null) {
+            L.error("mCurrentLocation is null!!!");
+            return;
+        }
+
+        mSwipeRefreshLayout.setRefreshing(true);
 
         new Thread(new Runnable() {
             @Override
@@ -420,7 +467,7 @@ public class AroundMeActivity extends AppCompatActivity
                 final String spec = AppConfig.URL_GEO;
                 String webpage = HttpUtilz.makeRequest(spec, postDataParams);
 
-               // L.debug("Geolocation, saveOnline: "+webpage);
+                L.debug(webpage);
                 updateUI(webpage);
 
 
@@ -429,80 +476,92 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
-    private void updateUI(String webpage) {
+    private void updateUI(final String webpage) {
 
-        try {
-            JSONObject jObj = new JSONObject(webpage);
-            boolean error = jObj.getBoolean("error");
-            if (!error) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
 
 
-                nearby_users = jObj.getJSONArray("data");
+            @Override
+            public void run() {
+
+                try {
+                    JSONObject jObj = new JSONObject(webpage);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
 
 
-                Log.e("LOG", "*****JARRAY*****" + nearby_users.length());
-                //db.deleteAllPeople();
-                ///////////////////////
-                if (nearby_users.length() == 0) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                } else {
-                    for (int i = 0; i < nearby_users.length(); i++) {
-                        JSONObject c = nearby_users.getJSONObject(i);
-
-                        // user profile
-
-                        String uname = c.getString("username");
-                        String latitude = c.getString("latitude");
-                        String longitude = c.getString("longitude");
-                        String gps_provider = c.getString("gps_provider");
-                        String date_create = c.getString("date_create");
-                        String date_update = c.getString("date_update");
-                        String geo_distance = c.getString("geo_distance");
-
-                        String description = c.getString("description");
-                        String title = c.getString("title");
-                        String url0 = c.getString("url0");
-                        String url1 = c.getString("url1");
-                        String url2 = c.getString("url2");
-                        String dateUpdated = c.getString("date_updated");
-
-                        // save profile of specific users
-                        UserProfile userProfile = new UserProfile(uname, description,
-                                title, url0, url1, url2, dateUpdated);
-
-                        userProfile.updateOffline(AroundMeActivity.this);
-
-                        // replace geo id with userid
-
-                        // profile pic info
-                        String imgDir = c.getString("img_dir");
-                        String imgFile = c.getString("img_file");
-                        String dateCreated = c.getString("date_uploaded");
+                        nearby_users = jObj.getJSONArray("data");
 
 
-                        if ((imgDir != null && !imgDir.isEmpty() && !imgDir.equalsIgnoreCase("null"))
-                                && (imgFile != null && !imgFile.isEmpty()
-                                && !imgFile.equalsIgnoreCase("null"))) {
-                            L.error("getting profile picture of uname: " + uname
-                                    + ", imgDir: " + imgDir + ", imgFile: " + imgFile);
-                            ProfilePicture profilePic = new ProfilePicture(uname, imgDir,
-                                    imgFile, dateCreated, true);
-                            profilePic.saveOffline(AroundMeActivity.this);
+                        Log.e("LOG", "*****JARRAY*****" + nearby_users.length());
+                        //db.deleteAllPeople();
+                        ///////////////////////
+                        if (nearby_users.length() == 0) {
+
+                            mSwipeRefreshLayout.setRefreshing(false);
+
+                        } else {
+                            for (int i = 0; i < nearby_users.length(); i++) {
+                                JSONObject c = nearby_users.getJSONObject(i);
+
+                                // user profile
+
+                                String uname = c.getString("username");
+                                String latitude = c.getString("latitude");
+                                String longitude = c.getString("longitude");
+                                String gps_provider = c.getString("gps_provider");
+                                String date_create = c.getString("date_create");
+                                String date_update = c.getString("date_update");
+                                String geo_distance = c.getString("geo_distance");
+
+                                String description = c.getString("description");
+                                String title = c.getString("title");
+                                String url0 = c.getString("url0");
+                                String url1 = c.getString("url1");
+                                String url2 = c.getString("url2");
+                                String dateUpdated = c.getString("date_updated");
+
+                                // save profile of specific users
+                                UserProfile userProfile = new UserProfile(uname, description,
+                                        title, url0, url1, url2, dateUpdated);
+
+                                userProfile.updateOffline(AroundMeActivity.this);
+
+                                // replace geo id with userid
+
+                                // profile pic info
+                                String imgDir = c.getString("img_dir");
+                                String imgFile = c.getString("img_file");
+                                String dateCreated = c.getString("date_uploaded");
+
+
+                                if ((imgDir != null && !imgDir.isEmpty() && !imgDir.equalsIgnoreCase("null"))
+                                        && (imgFile != null && !imgFile.isEmpty()
+                                        && !imgFile.equalsIgnoreCase("null"))) {
+                                    L.error("getting profile picture of uname: " + uname
+                                            + ", imgDir: " + imgDir + ", imgFile: " + imgFile);
+                                    ProfilePicture profilePic = new ProfilePicture(uname, imgDir,
+                                            imgFile, dateCreated, true);
+                                    profilePic.saveOffline(AroundMeActivity.this);
+                                }
+
+
+                                db.insertNearbyUser(uname, latitude, longitude, gps_provider, date_create, date_update, geo_distance);
+                            }
+
+                            updateGrid();
                         }
-
-
-
-                        db.insertNearbyUser(uname, latitude, longitude, gps_provider, date_create, date_update, geo_distance);
+                    } else {
+                        makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
                     }
-
-                    updateGrid();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } else {
-                makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
+
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        });
+
+
 
 
     }
@@ -734,10 +793,6 @@ public class AroundMeActivity extends AppCompatActivity
 				// finish();
 			}
 		});
-
-
-
-
 
     }
 
@@ -1199,6 +1254,56 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onConnectedToOpenfire(final XMPPConnection connection) {
+
+//        connection.addPacketListener(new PacketListener() {
+//
+//            @Override
+//            public void processPacket(Stanza stanza) throws SmackException.NotConnectedException {
+//                final Presence presence = (Presence) stanza;
+//                final String fromId = presence.getFrom();
+//                //final RosterEntry newEntry = connection.getRoster().getEntry(fromId);
+//                final String uname = fromId.split("@")[0];
+//
+//                Correspondent correspondent = null;
+//                for(Correspondent c : arr_correspondents){
+//                    if(c.getUsername().equals(uname)){
+//                        correspondent = c;
+//                        break;
+//                    }
+//                }
+//                // Correspondent correspondent = arr_correspondents.;
+//
+//                if (presence.getType() == Presence.Type.subscribe) {
+//
+//                    L.debug("subscribe: "+fromId);
+//                    //approved request
+//                    Presence subscribed = new Presence(Presence.Type.subscribed);
+//                    subscribed.setTo(fromId);
+//                    connection.sendPacket(subscribed);
+//
+//                } else if (presence.getType() == Presence.Type.unsubscribe) {
+//                    L.debug("unsubscribe: "+fromId);
+//                } else if (presence.getType() == Presence.Type.subscribed) {
+//                    L.debug("subscribed: "+fromId);
+//                } else if (presence.getType() == Presence.Type.unsubscribed) {
+//                    L.debug("unsubscribed: "+fromId);
+//                } else if (presence.getType() == Presence.Type.available) {
+//                    L.debug("available: "+fromId);
+//
+//                    updateCorrespondentsAvailability(correspondent, fromId, connection);
+//                } else if (presence.getType() == Presence.Type.unavailable) {
+//                    L.debug("unavailable: "+fromId);
+//
+//                    //arr_correspondents.add(j, correspondent);
+//                    updateCorrespondentsAvailability(correspondent, fromId, connection);
+//            }
+//
+//        },  new PacketTypeFilter(Presence.class));
+
+    }
+
 
     private void subscriptionRequestListener(final XMPPConnection connection) {
 		
@@ -1286,6 +1391,7 @@ public class AroundMeActivity extends AppCompatActivity
         });
 
     }
+
 
 
 }

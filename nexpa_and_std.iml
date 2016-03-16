@@ -97,25 +97,25 @@
     <orderEntry type="library" exported="" name="play-services-measurement-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-maps-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="parallaxscroll-1.0" level="project" />
-    <orderEntry type="library" exported="" name="smack-tcp-4.1.6" level="project" />
+    <orderEntry type="library" exported="" name="smack-tcp-4.1.5" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="smack-experimental-4.1.6" level="project" />
+    <orderEntry type="library" exported="" name="smack-android-4.1.5" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="smack-android-4.1.6" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.4" level="project" />
     <orderEntry type="library" exported="" name="appmsg-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="minidns-0.1.7" level="project" />
     <orderEntry type="library" exported="" name="com.android.volley-2015.05.28" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />
+    <orderEntry type="library" exported="" name="smack-experimental-4.1.5" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="smack-core-4.1.6" level="project" />
+    <orderEntry type="library" exported="" name="smack-core-4.1.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-gcm-8.4.0" level="project" />
-    <orderEntry type="library" exported="" name="smack-im-4.1.6" level="project" />
-    <orderEntry type="library" exported="" name="smack-sasl-provided-4.1.6" level="project" />
-    <orderEntry type="library" exported="" name="smack-resolver-minidns-4.1.6" level="project" />
-    <orderEntry type="library" exported="" name="smack-extensions-4.1.6" level="project" />
+    <orderEntry type="library" exported="" name="smack-resolver-minidns-4.1.5" level="project" />
+    <orderEntry type="library" exported="" name="smack-sasl-provided-4.1.5" level="project" />
+    <orderEntry type="library" exported="" name="smack-im-4.1.5" level="project" />
+    <orderEntry type="library" exported="" name="smack-android-extensions-4.1.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-8.4.0" level="project" />
-    <orderEntry type="library" exported="" name="smack-android-extensions-4.1.6" level="project" />
+    <orderEntry type="library" exported="" name="smack-extensions-4.1.5" level="project" />
     <orderEntry type="library" exported="" name="org.apache.http.legacy-android-23" level="project" />
   </component>
 </module>

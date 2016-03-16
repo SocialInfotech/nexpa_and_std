@@ -1,53 +1,19 @@
 package com.lpoezy.nexpa.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jivesoftware.smack.PacketListener;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.filter.MessageTypeFilter;
-import org.jivesoftware.smack.filter.PacketFilter;
-import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smack.util.StringUtils;
-
-import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.chatservice.ChatAdapterActivity;
-import com.lpoezy.nexpa.chatservice.OneComment;
-import com.lpoezy.nexpa.configuration.AppConfig;
-import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.objects.Messages;
-import com.lpoezy.nexpa.objects.NewMessage;
-import com.lpoezy.nexpa.objects.ProfilePicture;
-import com.lpoezy.nexpa.openfire.Account;
-import com.lpoezy.nexpa.openfire.OnXMPPConnectedListener;
-import com.lpoezy.nexpa.openfire.XMPPLogic;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.utility.BmpFactory;
-import com.lpoezy.nexpa.utility.DateUtils;
-import com.lpoezy.nexpa.utility.DividerItemDecoration;
-import com.lpoezy.nexpa.utility.L;
-import com.lpoezy.nexpa.utility.RoundedImageView;
-import com.lpoezy.nexpa.utility.SystemUtilz;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
-import com.lpoezy.nexpa.utility.DateUtils.DateFormatz;
-
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.os.IBinder;
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -60,11 +26,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class ChatActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener {
+import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.LocalBinder;
+import com.lpoezy.nexpa.chatservice.XMPPService;
+import com.lpoezy.nexpa.configuration.AppConfig;
+import com.lpoezy.nexpa.objects.ChatMessage;
+import com.lpoezy.nexpa.objects.Correspondent;
+import com.lpoezy.nexpa.objects.Messages;
+import com.lpoezy.nexpa.objects.ProfilePicture;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
+import com.lpoezy.nexpa.utility.BmpFactory;
+import com.lpoezy.nexpa.utility.L;
+import com.lpoezy.nexpa.utility.RoundedImageView;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+
+import org.jivesoftware.smack.XMPPConnection;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class ChatActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener, XMPPService.OnProcessMessage {
 	private com.lpoezy.nexpa.chatservice.ChatAdapterActivity adapter;
 
 	public boolean isMine;
@@ -100,6 +85,8 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 	private String mCorrespondentName;
 
 	public static boolean isRunning = false;
+	private Random random;
+	private List<ChatMessage> chatMsgs;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -159,7 +146,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
 		
 		mComments = new Messages();
-		
+		chatMsgs = new ArrayList<ChatMessage>();
 		mAdapter = new ChatAdapter(ChatActivity.this);
 
 		listview.setAdapter(mAdapter);
@@ -182,7 +169,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 		// String fname = intentMes.getStringExtra("fname");
 
 		recipient.setText(mCorrespondentName + "@vps.gigapros.com/Smack", TextView.BufferType.EDITABLE);
-		recipient.setVisibility(0);
+		recipient.setVisibility(View.INVISIBLE);
 		// Smack
 		if (int_broad != null && int_broad.equals("BROADCAST")) {
 			int_broad = "";
@@ -191,7 +178,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 		} else {
 			textMessage.setText("");
 		}
-		
+		random = new Random();
 		// Set a listener to send a chat text message
 		send = (Button) this.findViewById(R.id.sendBtn);
 		send.setOnClickListener(new View.OnClickListener() {
@@ -200,10 +187,44 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			public void onClick(View view) {
 				// String to = username + "@vps.gigapros.com/Smack";
 				final String to = recipient.getText().toString();
-				final String text = textMessage.getText().toString();
-				
-				
-				
+				final String message = textMessage.getText().toString();
+
+
+				if (!message.equalsIgnoreCase("")) {
+
+					SQLiteHandler db = new SQLiteHandler(ChatActivity.this);
+					db.openToRead();
+
+					final ChatMessage chatMessage = new ChatMessage(db.getUsername(), mCorrespondentName,
+							message, "" + random.nextInt(1000), true);
+
+					chatMessage.setMsgID();
+					chatMessage.body = message;
+					//chatMessage.Date = CommonMethods.getCurrentDate();
+					//chatMessage.Time = CommonMethods.getCurrentTime();
+
+					textMessage.setText("");
+
+
+
+					if(mBounded){
+						mService.sendMessage(chatMessage);
+
+						chatMsgs.add(chatMessage);
+						mAdapter.notifyDataSetChanged();
+						listview.smoothScrollToPosition(chatMsgs.size() - 1);
+						//lat, 14.5580795
+						//long, 121.0196150
+					}
+
+					db.close();
+//					chatAdapter.add(chatMessage);
+//					chatAdapter.notifyDataSetChanged();
+//					MainActivity activity = ((MainActivity) getActivity());
+//					activity.getmService().xmpp.sendMessage(chatMessage);
+				}
+
+				/*/
 				if(!text.isEmpty()){
 					
 					textMessage.setText("");
@@ -231,7 +252,8 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
 						isSuccessful = false;
 						
-						NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
+						NewMessage comment = new NewMessage(
+						, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
 						comment.saveMySentMsgOffline(ChatActivity.this);
 						//long now = System.currentTimeMillis();
 						//String date = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
@@ -249,7 +271,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 							Account ac = new Account();
 							SQLiteHandler db = new SQLiteHandler(getApplicationContext());
 							db.openToWrite();
-							/*/
+
 							ac.LogInChatAccount(db.getUsername(), db.getEncryptedPassword(), db.getEmail(),
 									new OnXMPPConnectedListener() {
 
@@ -260,7 +282,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
 								}
 							});
-							//*/
+
 							db.close();
 						}
 
@@ -281,7 +303,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 					}
 					
 				}
-				
+				//*/
 			}
 		});
 		
@@ -314,6 +336,8 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
 	// receiving messages will be handle by receivedMessage
 	// in ChatMessagesService
+
+	/*/
 	private BroadcastReceiver mReceivedMessage = new BroadcastReceiver() {
 
 		@Override
@@ -322,9 +346,6 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			mHandler.post(new Runnable() {
 				public void run() {
 
-					
-
-					//final long userId = intent.getLongExtra("userid", -1);
 					String senderName = intent.getStringExtra("username");
 					String receiverName = "";
 					String body = intent.getStringExtra("msg");
@@ -347,7 +368,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 					// intentMes.getStringExtra("username");
 					
 					
-					NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
+					//NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
 					
 					mComments.add(comment);
 					mAdapter.notifyDataSetChanged();
@@ -357,12 +378,33 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			});
 		}
 	};
-
+//*/
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		mComments.markMyOfflineMsgsAsRead(ChatActivity.this, mCorrespondentName);
 	}
+
+	private boolean mBounded;
+	private XMPPService mService;
+
+	private ServiceConnection mServiceConn = new ServiceConnection() {
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			mBounded = false;
+			mService = null;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			mBounded = true;
+
+			mService = ((LocalBinder<XMPPService>) service).getService();
+			mService.addMessageListener(ChatActivity.this);
+		}
+	};
 
 	@Override
 	protected void onResume() {
@@ -371,7 +413,10 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
 		isRunning = true;
 
-		registerReceiver(mReceivedMessage, new IntentFilter(AppConfig.ACTION_RECEIVED_MSG));
+		//registerReceiver(mReceivedMessage, new IntentFilter(AppConfig.ACTION_RECEIVED_MSG));
+
+		Intent service = new Intent(this, XMPPService.class);
+		bindService(service, mServiceConn, Context.BIND_AUTO_CREATE);
 
 	}
 
@@ -385,7 +430,11 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
 		isRunning = false;
 
-		unregisterReceiver(mReceivedMessage);
+		//unregisterReceiver(mReceivedMessage);
+
+		if(mService!=null){
+			unbindService(mServiceConn);
+		}
 
 		// save messages here,
 		// and clear all the conversation array
@@ -418,6 +467,32 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 		}
 	}
 
+	@Override
+	public void onProcessMessage(final  ChatMessage chatMessage) {
+		new Handler(Looper.getMainLooper()).post(new Runnable() {
+			@Override
+			public void run() {
+
+
+				//if(!chatMessage.sender.equals(mCorrespondentName))return;
+
+
+				// mCorrespondentId = userId;
+				//mCorrespondent.setId(userId);
+				//L.debug("msg received from ..." + senderName);
+				// final String username =
+				// intentMes.getStringExtra("username");
+
+
+				//NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
+				chatMsgs.add(chatMessage);
+				//mComments.add(comment);
+				mAdapter.notifyDataSetChanged();
+				listview.smoothScrollToPosition(chatMsgs.size() - 1);
+			}
+		});
+	}
+
 	private class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
 		class ViewHolder extends RecyclerView.ViewHolder {
@@ -432,12 +507,12 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 				// countryName = (TextView) itemView.findViewById(R.id.comment);
 
 				iv = new ImageView(context);
-				iv.setId(1);
+				iv.setId(R.id.img_1);
 				RelativeLayout.LayoutParams layoutParams0 = new RelativeLayout.LayoutParams(50, 50); 
 				wrapper.addView(iv, layoutParams0);
 
 				countryName = new TextView(context);
-				countryName.setId(2);
+				countryName.setId(R.id.tv_2);
 				
 				int width = 250;
 				DisplayMetrics metrics = new DisplayMetrics();
@@ -481,27 +556,27 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 		@Override
 		public int getItemCount() {
 
-			return mComments.size();
+			return chatMsgs.size();
 		}
 
 		@Override
 		public void onBindViewHolder(ViewHolder vh, int pos) {
 
-			NewMessage comment = mComments.get(pos);
-			vh.countryName.setText(comment.getBody());
+			ChatMessage comment = chatMsgs.get(pos);
+			vh.countryName.setText(comment.body);
 			
 			SQLiteHandler db = new SQLiteHandler(getApplicationContext());
 			db.openToRead();
 			
 			db.close();
-
-			if (comment.isSuccessful()) {
-				vh.countryName.setBackgroundResource(!comment.isLeft() ? R.drawable.bubble_green : R.drawable.bubble_yellow);
-			} else {
-				vh.countryName.setBackgroundResource(!comment.isLeft() ? R.drawable.bubble_failed : R.drawable.bubble_yellow);
-			}
+			vh.countryName.setBackgroundResource(R.drawable.bubble_green);
+//			if (comment.isSuccessful()) {
+				vh.countryName.setBackgroundResource(comment.isMine ? R.drawable.bubble_green : R.drawable.bubble_yellow);
+//			} else {
+//				vh.countryName.setBackgroundResource(!comment.isLeft() ? R.drawable.bubble_failed : R.drawable.bubble_yellow);
+//			}
 			
-			if (!comment.isLeft()) {
+			if (comment.isMine) {
 
 				Bitmap bmp = getUserPic(vh.iv);
 				vh.iv.setImageBitmap(bmp);
@@ -512,8 +587,8 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 						vh.countryName.getId());
 
 			} else {
-				
-				
+
+
 				Bitmap bmp = getCorrespondentPic();
 				vh.iv.setImageBitmap(bmp);
 
@@ -523,11 +598,11 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 				((RelativeLayout.LayoutParams) vh.countryName.getLayoutParams()).addRule(RelativeLayout.RIGHT_OF,
 						vh.iv.getId());
 
-				
+
 
 			}
 
-			vh.wrapper.setGravity(!comment.isLeft() ? Gravity.RIGHT : Gravity.LEFT);
+			vh.wrapper.setGravity(comment.isMine ? Gravity.RIGHT : Gravity.LEFT);
 		}
 
 		@Override

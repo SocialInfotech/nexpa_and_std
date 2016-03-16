@@ -1,53 +1,5 @@
 [
     {
-        "outputFile": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\build\\intermediates\\res\\merged\\debug\\values-w820dp-v13\\values-w820dp-v13.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 57,
-                    "endOffset": 108
-                },
-                "from": {
-                    "file": "C:\\Users\\ldonios\\git\\nexpa_as\\Nexpa\\res\\values-w820dp\\dimens.xml",
-                    "position": {
-                        "startLine": 7,
-                        "startColumn": 4,
-                        "startOffset": 312,
-                        "endColumn": 57,
-                        "endOffset": 365
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\values-w820dp-v13\\values-w820dp-v13.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 57,
-                    "endOffset": 108
-                },
-                "from": {
-                    "file": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_and_std\\res\\values-w820dp\\dimens.xml",
-                    "position": {
-                        "startLine": 7,
-                        "startColumn": 4,
-                        "startOffset": 312,
-                        "endColumn": 57,
-                        "endOffset": 365
-                    }
-                }
-            }
-        ]
-    },
-    {
         "outputFile": "C:\\Users\\ldonios\\git\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\values-w820dp-v13\\values-w820dp-v13.xml",
         "map": [
             {

@@ -1505,7 +1505,13 @@
       <option name="project" value="LOCAL" />
       <updated>1458161198751</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="commit work space">
+      <created>1458161222741</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1458161222741</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1558,7 +1564,8 @@
     <MESSAGE value="done downloading user info" />
     <MESSAGE value="test2" />
     <MESSAGE value="commit new" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit new" />
+    <MESSAGE value="commit work space" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit work space" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

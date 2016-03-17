@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
     android:isScrollContainer="false"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -59,11 +60,20 @@
                     android:background="@color/white_smoke"
                     android:orientation="horizontal" >
 
-                    <ImageView
+                    <com.github.siyamed.shapeimageview.RoundedImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/img_profile_pic"
+                        app:siRadius="6dp"
+                        app:siBorderWidth="6dp"
+                        app:siBorderColor="@color/flat_silver"
+                        app:siSquare="true"/>
+
+                    <!--<ImageView
                         android:id="@+id/img_profile_pic"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/pic_sample_girl" />
+                        android:src="@drawable/pic_sample_girl" />-->
 
                     <FrameLayout
                         android:layout_width="match_parent"

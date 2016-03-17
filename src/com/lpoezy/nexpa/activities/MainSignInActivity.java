@@ -3,7 +3,6 @@ package com.lpoezy.nexpa.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -29,8 +28,6 @@ import com.lpoezy.nexpa.objects.OfUser;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.L;
-
-import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -212,13 +209,21 @@ public class MainSignInActivity extends Activity {
                                 hideDialog();
                             }
                         });
+                        //XEP-0136
+                        //http://stackoverflow.com/questions/6830175/how-can-we-access-archive-messages-into-android-application-from-xmpp-server
+
+
+
+
+
+                        //*/
                         SessionManager sm = new SessionManager(getApplicationContext());
                         sm.setLogin(true);
 
                         Intent act = new Intent(MainSignInActivity.this, TabHostActivity.class);
                         startActivity(act);
                         finish();
-
+                        //*/
                     }
 
                 }

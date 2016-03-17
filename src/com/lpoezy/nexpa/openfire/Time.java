@@ -5,8 +5,8 @@ import org.jivesoftware.smack.packet.IQ;
 public class Time extends IQ{
 
 	public Time() {
-		//super("query ", "jabber:iq:search");
-		super("database");
+		super("list", "urn:xmpp:archive");
+		//super("database");
 		
 		
 	}
@@ -20,12 +20,13 @@ public class Time extends IQ{
 	@Override
 	protected IQChildElementXmlStringBuilder getIQChildElementBuilder(
 			IQChildElementXmlStringBuilder xml) {
-		xml.attribute("name","openfire");
-		xml.attribute("xmlns","http://openaether.org/projects/jabber_database.html");
+		xml.attribute("with", "vps.gigapros.com");
+//		xml.attribute("xmlns","http://openaether.org/projects/jabber_database.html");
 //		xml.attribute("version","1.1");
         xml.rightAngleBracket();
 //        
-       // xml.append("<first>momo</first>");
+       xml.append("<set xmlns='http://jabber.org/protocol/rsm'>");
+		xml.append("<max>30</max></set>");
         
 		return xml;
 	}

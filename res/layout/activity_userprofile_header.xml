@@ -30,16 +30,23 @@
                 android:background="@drawable/circle"
                 android:orientation="vertical" />
 
-            <ImageView
+            <com.github.siyamed.shapeimageview.CircularImageView
                 android:id="@+id/img_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/innerPic"
-                android:layout_alignLeft="@id/innerPic"
-                android:layout_alignRight="@id/innerPic"
-                android:layout_alignTop="@id/innerPic"
-                android:padding="12dip"
-                android:scaleType="fitXY" />
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:siBorderWidth="6dp"
+                app:siBorderColor="@color/flat_silver"/>
+
+            <!--<ImageView-->
+                <!--android:id="@+id/img_profile"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignBottom="@id/innerPic"-->
+                <!--android:layout_alignLeft="@id/innerPic"-->
+                <!--android:layout_alignRight="@id/innerPic"-->
+                <!--android:layout_alignTop="@id/innerPic"-->
+                <!--android:padding="12dip"-->
+                <!--android:scaleType="fitXY" />-->
         </RelativeLayout>
 
         <LinearLayout

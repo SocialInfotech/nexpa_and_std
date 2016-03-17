@@ -2,10 +2,7 @@ package com.lpoezy.nexpa.activities;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,7 +11,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -47,13 +43,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.lpoezy.nexpa.JSON.JSONParser;
 import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Geolocation;
-import com.lpoezy.nexpa.objects.ProfilePicture;
-import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.objects.Users;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
@@ -67,8 +60,6 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterListener;
-import org.jivesoftware.smackx.vcardtemp.VCardManager;
-import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1220,6 +1211,50 @@ public class AroundMeActivity extends AppCompatActivity
     @Override
     public void onConnectedToOpenfire(final XMPPConnection connection) {
 
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                L.debug("=====================================================");
+//
+//                ServiceDiscoveryManager sdm = ServiceDiscoveryManager
+//                        .getInstanceFor(connection);
+//
+//                sdm.addFeature("http://jabber.org/protocol/disco#info");
+//                sdm.addFeature("urn:xmpp:archive");
+//
+//
+//                Time iq = new Time();
+//                iq.setType(IQ.Type.get);
+//                //iq.setTo(XMPPService.DOMAIN);
+//
+//                try {
+//                    connection.sendIqWithResponseCallback(iq,
+//                            new StanzaListener() {
+//
+//                                @Override
+//                                public void processPacket(Stanza arg0)
+//                                        throws SmackException.NotConnectedException {
+//
+//                                    L.debug("Send IQ with Response, ****** message "
+//                                            + arg0);
+//                                }
+//                            }, new ExceptionCallback() {
+//                                @Override
+//                                public void processException(
+//                                        Exception exception) {
+//                                    exception.printStackTrace();
+//                                    L.error("IO archjieve Exception, "
+//                                            + exception.getMessage());
+//                                }
+//                            });
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(""+e.getMessage());
+//                }
+//
+//            }
+//        }).start();
+
         final Roster roster = Roster.getInstanceFor(connection);
         if (!nearbyUsers.isEmpty()) {
 
@@ -1248,6 +1283,9 @@ public class AroundMeActivity extends AppCompatActivity
                 } catch (SmackException.NoResponseException e) {
                     L.error(e.getMessage());
                 }
+
+
+
 
                 /*/
                 L.debug("saving vcard: "+address);

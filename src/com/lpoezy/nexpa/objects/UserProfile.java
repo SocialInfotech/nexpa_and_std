@@ -3,29 +3,19 @@ package com.lpoezy.nexpa.objects;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.media.ImageReader;
 
 import com.lpoezy.nexpa.chatservice.XMPPService;
-import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.BmpFactory;
-import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.util.stringencoder.Base64;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -129,17 +119,20 @@ public class UserProfile {
         final int MAX_SIZE = 175;
         Bitmap bmp = bmpFactory.getBmpWithTargetWTargetHFrm(MAX_SIZE, MAX_SIZE, avatarDir);
 
+        if(bmp!=null){
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        bmp.compress(Bitmap.CompressFormat.PNG, 90, stream); // compress to which format you want.
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, stream); // compress to which format you want.
 
-        byte[] byte_arr = stream.toByteArray();
-        //final String imageStr = Base64.encodeToString(byte_arr);//Base64.encodeBytes(byte_arr)
+            byte[] byte_arr = stream.toByteArray();
+            //final String imageStr = Base64.encodeToString(byte_arr);//Base64.encodeBytes(byte_arr)
 
-        saveCard.setAvatar(byte_arr, "image/png");
+            saveCard.setAvatar(byte_arr, "image/png");
 
-        saveCard.setJabberId(this.username + "@" + XMPPService.DOMAIN);
+            saveCard.setJabberId(this.username + "@" + XMPPService.DOMAIN);
+        }
+
 
         VCardManager vCardManager = VCardManager.getInstanceFor(connection);
 
@@ -399,7 +392,7 @@ public class UserProfile {
             this.url0 = map.get(SQLiteHandler.USER_PROFILE_URL0);
             this.url1 = map.get(SQLiteHandler.USER_PROFILE_URL1);
             this.url2 = map.get(SQLiteHandler.USER_PROFILE_URL2);
-
+            this.avatarDir = map.get(SQLiteHandler.USER_PROFILE_AVATAR_DIR);
         }
 
         db.close();

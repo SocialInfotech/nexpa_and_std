@@ -23,14 +23,12 @@ import android.widget.TextView;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
-import com.lpoezy.nexpa.objects.ProfilePicture;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.parallaxrecyclerview.ParallaxRecyclerAdapter;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.BmpFactory;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.L;
-import com.lpoezy.nexpa.utility.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +77,8 @@ public class MyBroadcastsFragment extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			
-			resetProfilePic();
-			resetUserInfo();
+			//resetProfilePic();
+			updateUI();
 		}
 	};
 	
@@ -207,11 +205,11 @@ public class MyBroadcastsFragment extends Fragment {
 		L.debug("MyBroadcastFragment, onResume");
 		super.onResume();
 		
-		getActivity().registerReceiver(mActionUserProfileUpdatedReceived , new IntentFilter(AppConfig.ACTION_USER_PROFILE_UPDATED));
+		getActivity().registerReceiver(mActionUserProfileUpdatedReceived, new IntentFilter(AppConfig.ACTION_USER_PROFILE_UPDATED));
+
+		//resetProfilePic();
+		updateUI();
 		/*/
-		resetProfilePic();
-		resetUserInfo();
-		
 		new Thread(new Runnable() {
 			
 			@Override
@@ -246,42 +244,66 @@ public class MyBroadcastsFragment extends Fragment {
 	}
 	
 	
-	private void resetUserInfo() {
-		/*/
+	private void updateUI() {
+		//*/
 		SQLiteHandler db = new SQLiteHandler(getActivity());
 		db.openToRead();
 		
 		UserProfile profile = new UserProfile();
-		profile.setId(Long.parseLong(db.getLoggedInID()));
+		profile.setUsername(db.getUsername());
 		profile.downloadOffline(getActivity());
+
+
+		Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(),
+				R.drawable.pic_sample_girl);
+
+		if(profile.getAvatarDir()!=null && !profile.getAvatarDir().isEmpty()){
+
+			// Get the dimensions of the View
+			int targetW = mImgProfile.getWidth();
+			int targetH = mImgProfile.getHeight();
+
+			BmpFactory bmpFactory = new BmpFactory();
+
+			Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, profile.getAvatarDir());
+
+			if(newImage!=null)rawImage = newImage;
+		}
+
+
+//		RoundedImageView riv = new RoundedImageView(getActivity());
+//		Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
+//		mImgProfile.setImageBitmap(circImage);
+		mImgProfile.setImageBitmap(rawImage);
 		
 		mTvJobTitle.setVisibility(View.GONE);
 		mTvUname.setVisibility(View.GONE);
 		mTvUrl0.setVisibility(View.GONE);
 		mTvUrl1.setVisibility(View.GONE);
 		mTvUrl2.setVisibility(View.GONE);
-		
-		if(profile.getProfession()!=null &&!profile.getProfession().equalsIgnoreCase("null") && !profile.getProfession().equals("")){
+
+
+		if(profile.getProfession()!=null  && !profile.getProfession().equals("")){
 			mTvJobTitle.setVisibility(View.VISIBLE);
 			mTvJobTitle.setText(profile.getProfession());
 		}
 		
-		if(profile.getUsername()!=null &&!profile.getUsername().equalsIgnoreCase("null") && !profile.getUsername().equals("")){
+		if(profile.getUsername()!=null && !profile.getUsername().equals("")){
 			mTvUname.setVisibility(View.VISIBLE);
 			mTvUname.setText(profile.getUsername());
 		}
 		
-		if(profile.getUrl0()!=null &&!profile.getUrl0().equalsIgnoreCase("null") && !profile.getUrl0().equals("")){
+		if(profile.getUrl0()!=null  && !profile.getUrl0().equals("")){
 			mTvUrl0.setVisibility(View.VISIBLE);
 			mTvUrl0.setText(profile.getUrl0());
 		}
 		
-		if(profile.getUrl1()!=null &&!profile.getUrl1().equalsIgnoreCase("null") && !profile.getUrl1().equals("")){
+		if(profile.getUrl1()!=null && !profile.getUrl1().equals("")){
 			mTvUrl1.setVisibility(View.VISIBLE);
 			mTvUrl1.setText(profile.getUrl1());
 		}
 		
-		if(profile.getUrl2()!=null &&!profile.getUrl2().equalsIgnoreCase("null") && !profile.getUrl2().equals("")){
+		if(profile.getUrl2()!=null && !profile.getUrl2().equals("")){
 			mTvUrl2.setVisibility(View.VISIBLE);
 			mTvUrl2.setText(profile.getUrl2());
 		}
@@ -290,32 +312,30 @@ public class MyBroadcastsFragment extends Fragment {
 		//*/
 	}
 
-	private void resetProfilePic(){
-		
-		String imgDecodableString = ProfilePicture.getUserImgDecodableString(getActivity());
-		
-        Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(),
-        R.drawable.pic_sample_girl);
-       L.debug("MyBroadcastFragment, imgDecodableString "+imgDecodableString);
-        if(imgDecodableString!=null && !imgDecodableString.isEmpty()){
-        	
-        	// Get the dimensions of the View
-            int targetW = mImgProfile.getWidth();
-            int targetH = mImgProfile.getHeight();
-            
-            BmpFactory  bmpFactory = new BmpFactory();
-        	
-        	Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, imgDecodableString);
-          
-        	if(newImage!=null)rawImage = newImage;
-        }
-        
-        L.debug("imgDecodableString "+imgDecodableString+", rawImage "+rawImage);
-        RoundedImageView riv = new RoundedImageView(getActivity());
-        Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
-        mImgProfile.setImageBitmap(circImage);
-       // mImgProfile.setImageBitmap(rawImage);
-	}
+//	private void resetProfilePic(){
+//
+//        Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(),
+//        R.drawable.pic_sample_girl);
+//
+//        if(imgDecodableString!=null && !imgDecodableString.isEmpty()){
+//
+//        	// Get the dimensions of the View
+//            int targetW = mImgProfile.getWidth();
+//            int targetH = mImgProfile.getHeight();
+//
+//            BmpFactory  bmpFactory = new BmpFactory();
+//
+//        	Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, imgDecodableString);
+//
+//        	if(newImage!=null)rawImage = newImage;
+//        }
+//
+//        L.debug("imgDecodableString "+imgDecodableString+", rawImage "+rawImage);
+//        RoundedImageView riv = new RoundedImageView(getActivity());
+//        Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
+//        mImgProfile.setImageBitmap(circImage);
+//       // mImgProfile.setImageBitmap(rawImage);
+//	}
 	
 //	private class MyBroascastsAdapter extends RecyclerView.Adapter<MyBroascastsAdapter.ViewHolder>{
 //		

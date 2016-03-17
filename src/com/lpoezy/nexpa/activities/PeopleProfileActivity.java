@@ -2,15 +2,10 @@ package com.lpoezy.nexpa.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,17 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.objects.ProfilePicture;
 import com.lpoezy.nexpa.objects.UserProfile;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.utility.RoundedImageView;
 
-import org.jivesoftware.smack.XMPPConnection;
-
-public class PeopleProfileActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener{
+public class PeopleProfileActivity extends Activity /*implements Correspondent.OnCorrespondentUpdateListener*/{
 
 	private ImageView imgProfile;
 	private Button btnMessage;
@@ -121,24 +110,24 @@ public class PeopleProfileActivity extends Activity implements Correspondent.OnC
 
 	}
 
-	@Override
-	public void onCorrespondentUpdate() {
-		Bitmap rawImage = mCorrespondent.getProfilePic();
-		
-		RoundedImageView riv = new RoundedImageView(PeopleProfileActivity.this);
-        final Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
-        
-        imgProfile.post(new Runnable() {
-
-			@Override
-			public void run() {
-
-				imgProfile.setImageBitmap(circImage);
-
-			}
-		});
-		
-	}
+//	@Override
+//	public void onCorrespondentUpdate() {
+//		Bitmap rawImage = mCorrespondent.getProfilePic();
+//
+//		RoundedImageView riv = new RoundedImageView(PeopleProfileActivity.this);
+//        final Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
+//
+//        imgProfile.post(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//
+//				imgProfile.setImageBitmap(circImage);
+//
+//			}
+//		});
+//
+//	}
 
 
 	private void updateUI() {

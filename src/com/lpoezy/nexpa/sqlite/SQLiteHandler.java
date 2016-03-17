@@ -509,7 +509,7 @@ public class SQLiteHandler {
     public Map<String, String> downloadUserProfile(String username) {
         L.debug("SqliteHandler, downloadUserProfile " + username);
         String[] columns = new String[]{USER_PROFILE_USERNAME, USER_PROFILE_DESCRIPTION,
-                USER_PROFILE_PROFESSION, USER_PROFILE_URL0, USER_PROFILE_URL1, USER_PROFILE_URL2};
+                USER_PROFILE_PROFESSION, USER_PROFILE_URL0, USER_PROFILE_URL1, USER_PROFILE_URL2, USER_PROFILE_AVATAR_DIR};
         String selection = USER_PROFILE_USERNAME + " = ?";
         String[] selectionArgs = new String[]{username};
         Cursor c = sqLiteDatabase.query(TABLE_USER_PROFILE, columns, selection, selectionArgs, null, null, null);
@@ -525,7 +525,7 @@ public class SQLiteHandler {
             map.put(USER_PROFILE_URL0, c.getString(c.getColumnIndex(USER_PROFILE_URL0)));
             map.put(USER_PROFILE_URL1, c.getString(c.getColumnIndex(USER_PROFILE_URL1)));
             map.put(USER_PROFILE_URL2, c.getString(c.getColumnIndex(USER_PROFILE_URL2)));
-
+            map.put(USER_PROFILE_AVATAR_DIR, c.getString(c.getColumnIndex(USER_PROFILE_AVATAR_DIR)));
 
         }
 

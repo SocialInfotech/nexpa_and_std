@@ -61,7 +61,14 @@ import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.roster.Roster;
+import org.jivesoftware.smack.roster.RosterListener;
+import org.jivesoftware.smackx.vcardtemp.VCardManager;
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,6 +76,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -76,7 +84,7 @@ public class AroundMeActivity extends AppCompatActivity
         implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener,
-        XMPPService.OnConnectedToOPenfireListener{
+        XMPPService.OnConnectedToOPenfireListener {
     private static final String TAG = AroundMeActivity.class.getSimpleName();
     private static final String REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY";
     private static final String LOCATION_KEY = "LOCATION_KEY";
@@ -97,7 +105,7 @@ public class AroundMeActivity extends AppCompatActivity
     ArrayList<Integer> imageId = new ArrayList<Integer>();
     ArrayList<Bitmap> images = new ArrayList<Bitmap>();
     ArrayList<Correspondent> arr_correspondents = new ArrayList<Correspondent>();
-   // ArrayList<String> arr_fname = new ArrayList<String>();
+    // ArrayList<String> arr_fname = new ArrayList<String>();
     //ArrayList<String> arr_age = new ArrayList<String>();
     ArrayList<String> arr_uname = new ArrayList<String>();
     //ArrayList<String> arr_gender = new ArrayList<String>();
@@ -108,7 +116,7 @@ public class AroundMeActivity extends AppCompatActivity
     //ArrayList<String> arr_status = new ArrayList<String>();
 
     //ArrayList<Users> us = new ArrayList<Users>();
-    ArrayList<Geolocation> list = new ArrayList<Geolocation>();
+    ArrayList<Geolocation> nearbyUsers = new ArrayList<Geolocation>();
 
     SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -317,10 +325,6 @@ public class AroundMeActivity extends AppCompatActivity
         // locationManager.removeUpdates(locationListener);
         isRunning = false;
         //stopLocationUpdates();
-
-        if(mService!=null){
-            unbindService(mServiceConn);
-        }
     }
 
     protected void stopLocationUpdates() {
@@ -329,27 +333,6 @@ public class AroundMeActivity extends AppCompatActivity
 
         mRequestingLocationUpdates = false;
     }
-
-    private boolean mBounded;
-    private XMPPService mService;
-
-    private ServiceConnection mServiceConn = new ServiceConnection() {
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBounded = false;
-            mService = null;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBounded = true;
-
-            mService = ((LocalBinder<XMPPService>) service).getService();
-            mService.addconnectedToOperfireListener(AroundMeActivity.this);
-        }
-    };
 
 
     @Override
@@ -370,8 +353,6 @@ public class AroundMeActivity extends AppCompatActivity
             oldDst = dst;
         }
 
-        Intent service = new Intent(this, XMPPService.class);
-        bindService(service, mServiceConn, Context.BIND_AUTO_CREATE);
 
 //		adapter.notifyDataSetChanged();
 //
@@ -434,14 +415,13 @@ public class AroundMeActivity extends AppCompatActivity
     }
 
     private void downloadNearbyUsersOnline() {
-        L.debug("Geolocation, downloadNearbyUsersOnline");
 
 
-        if(mCurrentLocation == null) {
+        if (mCurrentLocation == null) {
             L.error("mCurrentLocation is null!!!");
             return;
         }
-
+        L.debug("Geolocation, downloadNearbyUsersOnline");
         mSwipeRefreshLayout.setRefreshing(true);
 
         new Thread(new Runnable() {
@@ -463,11 +443,10 @@ public class AroundMeActivity extends AppCompatActivity
                 postDataParams.put("unit", "k");
 
 
-
                 final String spec = AppConfig.URL_GEO;
                 String webpage = HttpUtilz.makeRequest(spec, postDataParams);
 
-                L.debug(webpage);
+                //L.debug(webpage);
                 updateUI(webpage);
 
 
@@ -478,90 +457,85 @@ public class AroundMeActivity extends AppCompatActivity
 
     private void updateUI(final String webpage) {
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+        try {
+            JSONObject jObj = new JSONObject(webpage);
+            boolean error = jObj.getBoolean("error");
+            if (!error) {
 
 
-            @Override
-            public void run() {
-
-                try {
-                    JSONObject jObj = new JSONObject(webpage);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
+                nearby_users = jObj.getJSONArray("data");
 
 
-                        nearby_users = jObj.getJSONArray("data");
-
-
-                        Log.e("LOG", "*****JARRAY*****" + nearby_users.length());
-                        //db.deleteAllPeople();
-                        ///////////////////////
-                        if (nearby_users.length() == 0) {
-
+                Log.e("LOG", "*****JARRAY*****" + nearby_users.length());
+                //db.deleteAllPeople();
+                ///////////////////////
+                if (nearby_users.length() == 0) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
                             mSwipeRefreshLayout.setRefreshing(false);
-
-                        } else {
-                            for (int i = 0; i < nearby_users.length(); i++) {
-                                JSONObject c = nearby_users.getJSONObject(i);
-
-                                // user profile
-
-                                String uname = c.getString("username");
-                                String latitude = c.getString("latitude");
-                                String longitude = c.getString("longitude");
-                                String gps_provider = c.getString("gps_provider");
-                                String date_create = c.getString("date_create");
-                                String date_update = c.getString("date_update");
-                                String geo_distance = c.getString("geo_distance");
-
-                                String description = c.getString("description");
-                                String title = c.getString("title");
-                                String url0 = c.getString("url0");
-                                String url1 = c.getString("url1");
-                                String url2 = c.getString("url2");
-                                String dateUpdated = c.getString("date_updated");
-
-                                // save profile of specific users
-                                UserProfile userProfile = new UserProfile(uname, description,
-                                        title, url0, url1, url2, dateUpdated);
-
-                                userProfile.updateOffline(AroundMeActivity.this);
-
-                                // replace geo id with userid
-
-                                // profile pic info
-                                String imgDir = c.getString("img_dir");
-                                String imgFile = c.getString("img_file");
-                                String dateCreated = c.getString("date_uploaded");
-
-
-                                if ((imgDir != null && !imgDir.isEmpty() && !imgDir.equalsIgnoreCase("null"))
-                                        && (imgFile != null && !imgFile.isEmpty()
-                                        && !imgFile.equalsIgnoreCase("null"))) {
-                                    L.error("getting profile picture of uname: " + uname
-                                            + ", imgDir: " + imgDir + ", imgFile: " + imgFile);
-                                    ProfilePicture profilePic = new ProfilePicture(uname, imgDir,
-                                            imgFile, dateCreated, true);
-                                    profilePic.saveOffline(AroundMeActivity.this);
-                                }
-
-
-                                db.insertNearbyUser(uname, latitude, longitude, gps_provider, date_create, date_update, geo_distance);
-                            }
-
-                            updateGrid();
                         }
-                    } else {
-                        makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
+                    });
+
+
+                } else {
+                    for (int i = 0; i < nearby_users.length(); i++) {
+                        JSONObject c = nearby_users.getJSONObject(i);
+
+                        // user profile
+
+                        String uname = c.getString("username");
+                        String latitude = c.getString("latitude");
+                        String longitude = c.getString("longitude");
+                        String gps_provider = c.getString("gps_provider");
+                        String date_create = c.getString("date_create");
+                        String date_update = c.getString("date_update");
+                        String geo_distance = c.getString("geo_distance");
+
+//                        String description = c.getString("description");
+//                        String title = c.getString("title");
+//                        String url0 = c.getString("url0");
+//                        String url1 = c.getString("url1");
+//                        String url2 = c.getString("url2");
+//                        String dateUpdated = c.getString("date_updated");
+//
+//                        // saveVCard profile of specific users
+//                        UserProfile userProfile = new UserProfile(uname, description,
+//                                title, url0, url1, url2);
+//
+//                        userProfile.saveOffline(AroundMeActivity.this);
+
+                        // replace geo id with userid
+
+                        // profile pic info
+//                        String imgDir = c.getString("img_dir");
+//                        String imgFile = c.getString("img_file");
+//                        String dateCreated = c.getString("date_uploaded");
+//
+//
+//                        if ((imgDir != null && !imgDir.isEmpty() && !imgDir.equalsIgnoreCase("null"))
+//                                && (imgFile != null && !imgFile.isEmpty()
+//                                && !imgFile.equalsIgnoreCase("null"))) {
+//                            L.error("getting profile picture of uname: " + uname
+//                                    + ", imgDir: " + imgDir + ", imgFile: " + imgFile);
+//                            ProfilePicture profilePic = new ProfilePicture(uname, imgDir,
+//                                    imgFile, dateCreated, true);
+//                            profilePic.saveOffline(AroundMeActivity.this);
+//                        }
+
+
+                        db.insertNearbyUser(uname, latitude, longitude, gps_provider, date_create, date_update, geo_distance);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                    updateGrid();
                 }
-
+            } else {
+                makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
             }
-        });
-
-
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -755,44 +729,44 @@ public class AroundMeActivity extends AppCompatActivity
 //		// distance.add(0, 0);
 //		// imageId.add(0, R.drawable.pic_sample_girl);
 //		// availabilty.add(0, "Online");
-		adapter = new CustomGrid(AroundMeActivity.this, web, arr_correspondents/* imageId */, availabilty, distance);
+        adapter = new CustomGrid(AroundMeActivity.this, web, arr_correspondents/* imageId */, availabilty, distance);
 
 
 //
-		grid = (GridView) findViewById(R.id.grid);
+        grid = (GridView) findViewById(R.id.grid);
 
-		grid.setAdapter(adapter);
-		grid.setBackgroundColor(Color.WHITE);
-		grid.setVerticalSpacing(1);
-		grid.setHorizontalSpacing(1);
+        grid.setAdapter(adapter);
+        grid.setBackgroundColor(Color.WHITE);
+        grid.setVerticalSpacing(1);
+        grid.setHorizontalSpacing(1);
 
-		grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				ArrayList<Users> us = new ArrayList<Users>();
-				try {
-					// Toast.makeText(AroundMeActivity.this, "You Clicked at "
-					// +arr_fname.get(position) , Toast.LENGTH_SHORT).show();
-					Intent intent = new Intent(AroundMeActivity.this, PeopleProfileActivity.class);
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ArrayList<Users> us = new ArrayList<Users>();
+                try {
+                    // Toast.makeText(AroundMeActivity.this, "You Clicked at "
+                    // +arr_fname.get(position) , Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(AroundMeActivity.this, PeopleProfileActivity.class);
 
-					// intent.putExtra("TAG_GEO_PID", us.get(position).getId());
-					long correspondentId = arr_correspondents.get(position).getId();
+                    // intent.putExtra("TAG_GEO_PID", us.get(position).getId());
+                    //long correspondentId = arr_correspondents.get(position).getId();
 
 
-					intent.putExtra("TAG_GEO_USER", list.get(position).getUsername());
+                    intent.putExtra("TAG_GEO_USER", nearbyUsers.get(position).getUsername());
                     String distance = String.format(
-                            new DecimalFormat("#.###").format(list.get(position).getDistance() * 0.621));
+                            new DecimalFormat("#.###").format(nearbyUsers.get(position).getDistance() * 0.621));
 
-                   // L.debug("distance: "+distance);
-					intent.putExtra("TAG_GEO_DISTANCE", distance);
+                    // L.debug("distance: "+distance);
+                    intent.putExtra("TAG_GEO_DISTANCE", distance);
 
-					startActivity(intent);
-				} catch (Exception e) {
-				}
-				// finish();
-			}
-		});
+                    startActivity(intent);
+                } catch (Exception e) {
+                }
+                // finish();
+            }
+        });
 
     }
 
@@ -857,114 +831,78 @@ public class AroundMeActivity extends AppCompatActivity
 
     private void updateGrid() {
 
+
+        // us = null;
+        //us = new ArrayList<Geolocation>();
+
+        int dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+
+        try {
+            dst = Integer.parseInt(db.getBroadcastDist());
+        } catch (Exception e) {
+            dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+        }
+
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-               // us = null;
-                //us = new ArrayList<Geolocation>();
-
-                int dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
-
-                try {
-                    dst = Integer.parseInt(db.getBroadcastDist());
-                } catch (Exception e) {
-                    dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
-                }
-
                 grid.invalidateViews();
-                list = db.getNearByUserDetails();
 
-                imageId.clear();
-                availabilty.clear();
-                web.clear();
-                distance.clear();
-
-                Animation in = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_in_r);
-                Animation out = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_out_r);
-
-                for (int j = 0; j < list.size(); j++) {
-
-                    final String name = list.get(j).getUsername();
-                    final Correspondent correspondent = new Correspondent();
-                    correspondent.setUsername(name);
-                    correspondent.addListener(AroundMeActivity.this);
-
-                    arr_correspondents.add(j, correspondent);
+            }
+        });
 
 
-//			new Thread(new Runnable() {
-//
-//				@Override
-//				public void run() {
-//
-//
-//					correspondent.downloadProfilePicOnline(AroundMeActivity.this, userId);
-//
-//				}
-//			}).start();
+        nearbyUsers = db.getNearByUserDetails();
 
+        imageId.clear();
+        availabilty.clear();
+        web.clear();
+        distance.clear();
 
-                    imageId.add(j, R.drawable.pic_sample_girl);
-                    availabilty.add(j, "ADDED");
-                    web.add(j, name);
-                    //distance.add(j, list.get(j).getDistance());
+        Animation in = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_in_r);
+        Animation out = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_out_r);
 
+        for (int j = 0; j < nearbyUsers.size(); j++) {
 
+            final String name = nearbyUsers.get(j).getUsername();
+            final Correspondent correspondent = new Correspondent();
+            correspondent.setUsername(name);
+            correspondent.addListener(AroundMeActivity.this);
 
-//            new Thread(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//
-//
-//                    final String address = name + "@vps.gigapros.com/Smack";
-//
-//
-//                    //L.error(address+" is available? "+connection.getRoster().getPresence(address).isAvailable());
-//
-//
-//                    //final String address = us.get(j).getEmail();
-//                    if (connection == null || !connection.isConnected()) {
-//
-//
-//                        SQLiteHandler db = new SQLiteHandler(getApplicationContext());
-//                        db.openToWrite();
-//						/*/
-//						Account ac = new Account();
-//						ac.LogInChatAccount(db.getUsername(), db.getEncryptedPassword(), db.getEmail(), new OnXMPPConnectedListener() {
-//
-//							@Override
-//							public void onXMPPConnected(XMPPConnection con) {
-//								updateCorrespondentsAvailability(correspondent, address, con);
-//								requestSubscription(con, address);
-//							}
-//
-//						});
-//						//*/
-//                        db.close();
-//                    } else {
-//                        updateCorrespondentsAvailability(correspondent, address, connection);
-//                        requestSubscription(connection, address);
-//                    }
-//
-//                }
-//            }).start();
+            arr_correspondents.add(j, correspondent);
 
+            //check if connected to openfire server
+            if (XMPPService.xmpp.connection.isAuthenticated()) {
 
-                }
+                Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
+                String address = name + "@198.154.106.139/Smack";
+                updateUserAvailability(address, roster);
 
+            }
+
+            imageId.add(j, R.drawable.pic_sample_girl);
+            availabilty.add(j, "ADDED");
+            web.add(j, name);
+        }
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
                 adapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
+
+
     }
 
     protected void updateCorrespondentsAvailability(Correspondent correspondent, String address, XMPPConnection connection) {
         if (connection.isConnected()) {
-			
+
 			/*/
-			boolean isAvailable = connection.getRoster().getPresence(address).isAvailable();
+            boolean isAvailable = connection.getRoster().getPresence(address).isAvailable();
 			correspondent.setAvailable(isAvailable);
 			mSwipeRefreshLayout.post(new Runnable() {
 				
@@ -1164,11 +1102,11 @@ public class AroundMeActivity extends AppCompatActivity
                                     String url2 = c.getString("url2");
                                     String dateUpdated = c.getString("date_updated");
 
-                                    // save profile of specific users
+                                    // saveVCard profile of specific users
                                     UserProfile userProfile = new UserProfile(Long.parseLong(userId), uname, description,
                                             title, url0, url1, url2, dateUpdated, true);
 
-                                    userProfile.updateOffline(AroundMeActivity.this);
+                                    userProfile.saveOffline(AroundMeActivity.this);
 
                                     // replace geo id with userid
                                     id = userId;
@@ -1254,53 +1192,135 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
+    private void updateUserAvailability(final String addresss, final Roster roster) {
+
+        String username = addresss.split("@")[0];
+        for (Correspondent c : arr_correspondents) {
+
+            if (c.getUsername().equals(username)) {
+
+                boolean isAvailable = roster.getPresence(addresss).isAvailable();
+                L.debug(addresss + " isAvailable? " + isAvailable);
+                c.setAvailable(isAvailable);
+            }
+        }
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+
+
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
+    }
+
     @Override
     public void onConnectedToOpenfire(final XMPPConnection connection) {
 
-//        connection.addPacketListener(new PacketListener() {
-//
-//            @Override
-//            public void processPacket(Stanza stanza) throws SmackException.NotConnectedException {
-//                final Presence presence = (Presence) stanza;
-//                final String fromId = presence.getFrom();
-//                //final RosterEntry newEntry = connection.getRoster().getEntry(fromId);
-//                final String uname = fromId.split("@")[0];
-//
-//                Correspondent correspondent = null;
-//                for(Correspondent c : arr_correspondents){
-//                    if(c.getUsername().equals(uname)){
-//                        correspondent = c;
-//                        break;
-//                    }
-//                }
-//                // Correspondent correspondent = arr_correspondents.;
-//
-//                if (presence.getType() == Presence.Type.subscribe) {
-//
-//                    L.debug("subscribe: "+fromId);
-//                    //approved request
-//                    Presence subscribed = new Presence(Presence.Type.subscribed);
-//                    subscribed.setTo(fromId);
-//                    connection.sendPacket(subscribed);
-//
-//                } else if (presence.getType() == Presence.Type.unsubscribe) {
-//                    L.debug("unsubscribe: "+fromId);
-//                } else if (presence.getType() == Presence.Type.subscribed) {
-//                    L.debug("subscribed: "+fromId);
-//                } else if (presence.getType() == Presence.Type.unsubscribed) {
-//                    L.debug("unsubscribed: "+fromId);
-//                } else if (presence.getType() == Presence.Type.available) {
-//                    L.debug("available: "+fromId);
-//
-//                    updateCorrespondentsAvailability(correspondent, fromId, connection);
-//                } else if (presence.getType() == Presence.Type.unavailable) {
-//                    L.debug("unavailable: "+fromId);
-//
-//                    //arr_correspondents.add(j, correspondent);
-//                    updateCorrespondentsAvailability(correspondent, fromId, connection);
-//            }
-//
-//        },  new PacketTypeFilter(Presence.class));
+        final Roster roster = Roster.getInstanceFor(connection);
+        if (!nearbyUsers.isEmpty()) {
+
+            for (Geolocation nearByUser : nearbyUsers) {
+                String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
+
+                Presence subscribe = new Presence(Presence.Type.subscribe);
+                subscribe.setTo(address);
+                try {
+                    connection.sendPacket(subscribe);
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                }
+
+
+                try {
+                    roster.createEntry(address, null, null);
+
+                    updateUserAvailability(address, roster);
+                } catch (XMPPException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NotLoggedInException e) {
+                    L.error(address + ", " + e.getMessage());
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NoResponseException e) {
+                    L.error(e.getMessage());
+                }
+
+                /*/
+                L.debug("saving vcard: "+address);
+                //saveVCard vcard
+                VCard saveCard = new VCard();
+                saveCard.setFirstName(nearByUser.getUsername());
+                saveCard.setEmailHome("foo@fee0.bar");
+                saveCard.setEmailWork("foo@fee1.bar");
+                saveCard.setJabberId(connection.getUser().replace("/Smack", ""));
+
+                VCardManager vCardManager = VCardManager.getInstanceFor(connection);
+                try {
+                    L.debug("isVCArdSupported? "+connection.getUser()+", "+vCardManager.isSupported(connection.getUser()));
+                } catch (SmackException.NoResponseException e) {
+                    L.error(e.getMessage());
+                } catch (XMPPException.XMPPErrorException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                }
+
+                try {
+                    vCardManager.saveVCard(saveCard);
+                } catch (SmackException.NoResponseException e) {
+                    L.error(e.getMessage());
+                } catch (XMPPException.XMPPErrorException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                }
+
+                //load vcard
+                L.debug("loading vcard: "+address);
+                try {
+
+                    VCard loadCard = vCardManager.loadVCard(address.replace("/Smack", ""));
+                    //loadCard.load(connection, address); // load someone's VCard
+
+                    L.debug("vcard: "+loadCard.getEmailHome());
+                } catch (SmackException.NoResponseException e) {
+                    L.error(e.getMessage());
+                } catch (XMPPException.XMPPErrorException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                }
+                //*/
+            }
+
+        }
+
+        roster.addRosterListener(new RosterListener() {
+            // Ignored events public void entriesAdded(Collection<String> addresses) {}
+            public void entriesDeleted(Collection<String> addresses) {
+            }
+
+            @Override
+            public void entriesAdded(Collection<String> collection) {
+
+            }
+
+            public void entriesUpdated(Collection<String> addresses) {
+            }
+
+            public void presenceChanged(Presence presence) {
+                //L.debug("Presence changed: " + presence.getFrom() + " " + presence);
+                L.debug("Presence changed: " + presence.getFrom());
+                updateUserAvailability(presence.getFrom(), roster);
+
+            }
+        });
+
+
 
     }
 
@@ -1364,22 +1384,22 @@ public class AroundMeActivity extends AppCompatActivity
 		//*/
     }
 
-    private void tryGridToUpdate() {
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-                getNewLoc();
-            }
-        }, 2000);
-    }
+//    private void tryGridToUpdate() {
+//        mSwipeRefreshLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSwipeRefreshLayout.setRefreshing(true);
+//            }
+//        });
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSwipeRefreshLayout.setRefreshing(true);
+//                getNewLoc();
+//            }
+//        }, 2000);
+//    }
 
 
     @Override
@@ -1391,7 +1411,6 @@ public class AroundMeActivity extends AppCompatActivity
         });
 
     }
-
 
 
 }

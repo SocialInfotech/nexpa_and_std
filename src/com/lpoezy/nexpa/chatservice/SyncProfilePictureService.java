@@ -77,27 +77,27 @@ public class SyncProfilePictureService extends Service {
 			@Override
 			public void run() {
 				
-				ProfilePicture pic = new ProfilePicture();
-				pic.setSyncedOnline(true);
-				pic.downloadMyUnsyncPicProfileOffline(getApplicationContext());
-				
-				if(!pic.isSyncedOnline()){
-					
-					if(pic.saveImgOnline(getApplicationContext())){
-						pic.setSyncedOnline(true);
-						pic.saveOffline(getApplicationContext());
-					}
-					retry = SECONDS;
-				}else{
-					L.debug("(2<<"+n+") : "+(2<<n));
-					retry = (2<<n)* SECONDS;
-					if(n<5)n++;
-					
-					L.debug("SyncProfilePictureService, no changes to update online");
-				}
-				//L.debug("SyncProfilePictureService, next update is after  "+TimeUnit.MILLISECONDS.toMinutes(retry)+" minute(s)");
-				L.debug("SyncProfilePictureService, next update is after  "+TimeUnit.MILLISECONDS.toSeconds(retry)+" second(s)");
-				mServiceHandler.postDelayed(this, retry);
+//				ProfilePicture pic = new ProfilePicture();
+//				pic.setSyncedOnline(true);
+//				pic.downloadMyUnsyncPicProfileOffline(getApplicationContext());
+//
+//				if(!pic.isSyncedOnline()){
+//
+//					if(pic.saveImgOnline(getApplicationContext())){
+//						pic.setSyncedOnline(true);
+//						pic.saveOffline(getApplicationContext());
+//					}
+//					retry = SECONDS;
+//				}else{
+//					L.debug("(2<<"+n+") : "+(2<<n));
+//					retry = (2<<n)* SECONDS;
+//					if(n<5)n++;
+//
+//					L.debug("SyncProfilePictureService, no changes to update online");
+//				}
+//				//L.debug("SyncProfilePictureService, next update is after  "+TimeUnit.MILLISECONDS.toMinutes(retry)+" minute(s)");
+//				L.debug("SyncProfilePictureService, next update is after  "+TimeUnit.MILLISECONDS.toSeconds(retry)+" second(s)");
+//				mServiceHandler.postDelayed(this, retry);
 			}
 		}, retry);
 		

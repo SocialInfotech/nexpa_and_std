@@ -93,7 +93,7 @@ public class Correspondent {
 	}
 
 
-	// only save correspondent
+	// only saveVCard correspondent
 	public void saveOffline(Context context) {
 		L.debug("Correspondent, saveOffline");
 

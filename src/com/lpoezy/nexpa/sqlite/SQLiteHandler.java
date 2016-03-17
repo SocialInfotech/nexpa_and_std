@@ -82,16 +82,13 @@ public class SQLiteHandler {
     private static final String KEY_LAST_UPDATE = "last_update";
 
     private static final String TABLE_USER_PROFILE = "user_profile";
-    public static final String USER_PROFILE_ID = "_id";
-    public static final String USER_PROFILE_USER_ID = "user_id";
     public static final String USER_PROFILE_USERNAME = "username";
     public static final String USER_PROFILE_DESCRIPTION = "description";
     public static final String USER_PROFILE_PROFESSION = "title";
     public static final String USER_PROFILE_URL0 = "url0";
     public static final String USER_PROFILE_URL1 = "url1";
     public static final String USER_PROFILE_URL2 = "url2";
-    public static final String USER_PROFILE_DATE_UPDATED = "date_updated";
-    public static final String USER_PROFILE_IS_SYNCED_ONLINE = "is_synced_online";
+    public static final String USER_PROFILE_AVATAR_DIR = "avatar_dir";
 
 
     private static final String TABLE_FAVORITES = "favorites";
@@ -222,11 +219,9 @@ public class SQLiteHandler {
 //                    + KEY_LAST_UPDATE + " TEXT );";
 //            db.execSQL(CREATE_LOGIN_TABLE);
 
-            String CREATE_TABLE_USER_PROFILE = "CREATE TABLE " + TABLE_USER_PROFILE + "(" + USER_PROFILE_ID
-                    + " INTEGER PRIMARY KEY, " + USER_PROFILE_USER_ID + " INTEGER, " + USER_PROFILE_USERNAME + " TEXT, "
+            String CREATE_TABLE_USER_PROFILE = "CREATE TABLE " + TABLE_USER_PROFILE + "(" +USER_PROFILE_USERNAME + " TEXT UNIQUE, "
                     + USER_PROFILE_DESCRIPTION + " TEXT, " + USER_PROFILE_PROFESSION + " TEXT, " + USER_PROFILE_URL0
-                    + " TEXT, " + USER_PROFILE_URL1 + " TEXT, " + USER_PROFILE_URL2 + " TEXT, "
-                    + USER_PROFILE_DATE_UPDATED + " TEXT, " + USER_PROFILE_IS_SYNCED_ONLINE + " INTEGER);";
+                    + " TEXT, " + USER_PROFILE_URL1 + " TEXT, " + USER_PROFILE_URL2 + " TEXT, "+USER_PROFILE_AVATAR_DIR+" TEXT);";
             db.execSQL(CREATE_TABLE_USER_PROFILE);
 
             // String CREATE_TABLE_CORRESPONDENTS = "CREATE TABLE " +
@@ -481,12 +476,42 @@ public class SQLiteHandler {
 	 */
 
     public Map<String, String> downloadMyUnsyncedDetails() {
-        L.debug("SqliteHandler, downloadMyUnsyncedDetailsOffline");
-        String[] columns = new String[]{USER_PROFILE_USER_ID, USER_PROFILE_USERNAME, USER_PROFILE_DESCRIPTION,
-                USER_PROFILE_PROFESSION, USER_PROFILE_URL0, USER_PROFILE_URL1, USER_PROFILE_URL2,
-                USER_PROFILE_DATE_UPDATED, USER_PROFILE_IS_SYNCED_ONLINE};
-        String selection = USER_PROFILE_USER_ID + " = ? AND " + USER_PROFILE_IS_SYNCED_ONLINE + " = ?";
-        String[] selectionArgs = new String[]{getLoggedInID(), "0"};
+//        L.debug("SqliteHandler, downloadMyUnsyncedDetailsOffline");
+//        String[] columns = new String[]{USER_PROFILE_USERNAME, USER_PROFILE_DESCRIPTION,
+//                USER_PROFILE_PROFESSION, USER_PROFILE_URL0, USER_PROFILE_URL1, USER_PROFILE_URL2,
+//                };
+//        String selection = USER_PROFILE_USER_ID + " = ? AND " + USER_PROFILE_IS_SYNCED_ONLINE + " = ?";
+//        String[] selectionArgs = new String[]{getLoggedInID(), "0"};
+//        Cursor c = sqLiteDatabase.query(TABLE_USER_PROFILE, columns, selection, selectionArgs, null, null, null);
+//
+//        Map<String, String> map = null;
+//        if (c.moveToFirst()) {
+//
+//            map = new HashMap<String, String>();
+//
+//            map.put(USER_PROFILE_USER_ID, c.getString(c.getColumnIndex(USER_PROFILE_USER_ID)));
+//            map.put(USER_PROFILE_USERNAME, c.getString(c.getColumnIndex(USER_PROFILE_USERNAME)));
+//            map.put(USER_PROFILE_DESCRIPTION, c.getString(c.getColumnIndex(USER_PROFILE_DESCRIPTION)));
+//            map.put(USER_PROFILE_PROFESSION, c.getString(c.getColumnIndex(USER_PROFILE_PROFESSION)));
+//            map.put(USER_PROFILE_URL0, c.getString(c.getColumnIndex(USER_PROFILE_URL0)));
+//            map.put(USER_PROFILE_URL1, c.getString(c.getColumnIndex(USER_PROFILE_URL1)));
+//            map.put(USER_PROFILE_URL2, c.getString(c.getColumnIndex(USER_PROFILE_URL2)));
+//            map.put(USER_PROFILE_DATE_UPDATED, c.getString(c.getColumnIndex(USER_PROFILE_DATE_UPDATED)));
+//            map.put(USER_PROFILE_IS_SYNCED_ONLINE, c.getString(c.getColumnIndex(USER_PROFILE_IS_SYNCED_ONLINE)));
+//
+//        }
+//
+//        c.close();
+
+        return null;
+    }
+
+    public Map<String, String> downloadUserProfile(String username) {
+        L.debug("SqliteHandler, downloadUserProfile " + username);
+        String[] columns = new String[]{USER_PROFILE_USERNAME, USER_PROFILE_DESCRIPTION,
+                USER_PROFILE_PROFESSION, USER_PROFILE_URL0, USER_PROFILE_URL1, USER_PROFILE_URL2};
+        String selection = USER_PROFILE_USERNAME + " = ?";
+        String[] selectionArgs = new String[]{username};
         Cursor c = sqLiteDatabase.query(TABLE_USER_PROFILE, columns, selection, selectionArgs, null, null, null);
 
         Map<String, String> map = null;
@@ -494,45 +519,13 @@ public class SQLiteHandler {
 
             map = new HashMap<String, String>();
 
-            map.put(USER_PROFILE_USER_ID, c.getString(c.getColumnIndex(USER_PROFILE_USER_ID)));
             map.put(USER_PROFILE_USERNAME, c.getString(c.getColumnIndex(USER_PROFILE_USERNAME)));
             map.put(USER_PROFILE_DESCRIPTION, c.getString(c.getColumnIndex(USER_PROFILE_DESCRIPTION)));
             map.put(USER_PROFILE_PROFESSION, c.getString(c.getColumnIndex(USER_PROFILE_PROFESSION)));
             map.put(USER_PROFILE_URL0, c.getString(c.getColumnIndex(USER_PROFILE_URL0)));
             map.put(USER_PROFILE_URL1, c.getString(c.getColumnIndex(USER_PROFILE_URL1)));
             map.put(USER_PROFILE_URL2, c.getString(c.getColumnIndex(USER_PROFILE_URL2)));
-            map.put(USER_PROFILE_DATE_UPDATED, c.getString(c.getColumnIndex(USER_PROFILE_DATE_UPDATED)));
-            map.put(USER_PROFILE_IS_SYNCED_ONLINE, c.getString(c.getColumnIndex(USER_PROFILE_IS_SYNCED_ONLINE)));
 
-        }
-
-        c.close();
-
-        return map;
-    }
-
-    public Map<String, String> downloadUserProfile(long userId) {
-        L.debug("SqliteHandler, downloadUserProfile " + userId);
-        String[] columns = new String[]{USER_PROFILE_USER_ID, USER_PROFILE_USERNAME, USER_PROFILE_DESCRIPTION,
-                USER_PROFILE_PROFESSION, USER_PROFILE_URL0, USER_PROFILE_URL1, USER_PROFILE_URL2,
-                USER_PROFILE_DATE_UPDATED};
-        String selection = USER_PROFILE_USER_ID + " = ?";
-        String[] selectionArgs = new String[]{Long.toString(userId)};
-        Cursor c = sqLiteDatabase.query(TABLE_USER_PROFILE, columns, selection, selectionArgs, null, null, null);
-
-        Map<String, String> map = null;
-        if (c.moveToFirst()) {
-
-            map = new HashMap<String, String>();
-
-            map.put(USER_PROFILE_USER_ID, c.getString(c.getColumnIndex(USER_PROFILE_USER_ID)));
-            map.put(USER_PROFILE_USERNAME, c.getString(c.getColumnIndex(USER_PROFILE_USERNAME)));
-            map.put(USER_PROFILE_DESCRIPTION, c.getString(c.getColumnIndex(USER_PROFILE_DESCRIPTION)));
-            map.put(USER_PROFILE_PROFESSION, c.getString(c.getColumnIndex(USER_PROFILE_PROFESSION)));
-            map.put(USER_PROFILE_URL0, c.getString(c.getColumnIndex(USER_PROFILE_URL0)));
-            map.put(USER_PROFILE_URL1, c.getString(c.getColumnIndex(USER_PROFILE_URL1)));
-            map.put(USER_PROFILE_URL2, c.getString(c.getColumnIndex(USER_PROFILE_URL2)));
-            map.put(USER_PROFILE_DATE_UPDATED, c.getString(c.getColumnIndex(USER_PROFILE_DATE_UPDATED)));
 
         }
 
@@ -542,50 +535,44 @@ public class SQLiteHandler {
 
     }
 
-    public void saveUserProfile(long userid, String username, String description, String title, String url0,
-                                String url1, String url2, String dateUpdated, boolean isUnsyncedOnline) {
-
+    public void saveUserProfile(String username, String description, String title, String url0, String url1, String url2, String avatarDir) {
+        L.debug("SqliteHandler, saveUserProfile");
         ContentValues values = new ContentValues();
-        values.put(USER_PROFILE_USER_ID, userid);
+
         values.put(USER_PROFILE_USERNAME, username);
         values.put(USER_PROFILE_DESCRIPTION, description);
         values.put(USER_PROFILE_PROFESSION, title);
         values.put(USER_PROFILE_URL0, url0);
         values.put(USER_PROFILE_URL1, url1);
         values.put(USER_PROFILE_URL2, url2);
-        values.put(USER_PROFILE_DATE_UPDATED, dateUpdated);
-        values.put(USER_PROFILE_IS_SYNCED_ONLINE, StringFormattingUtils.getBoolean(isUnsyncedOnline));
-        long id = sqLiteDatabase.insert(TABLE_USER_PROFILE, null, values);
+        values.put(USER_PROFILE_AVATAR_DIR, avatarDir);
 
-        if (id > 0) {
-            L.debug(TAG + " profile with user id of " + userid + " inserted successfully!");
-        } else {
-            L.debug(TAG + " profile with user id of " + userid + " failed to insert");
-        }
-    }
-
-    public void updateUserProfile(long userid, String username, String description, String title, String url0,
-                                  String url1, String url2, String dateUpdated, boolean isUnsyncedOnline) {
-
-        ContentValues values = new ContentValues();
-        values.put(USER_PROFILE_USERNAME, username);
-        values.put(USER_PROFILE_DESCRIPTION, description);
-        values.put(USER_PROFILE_PROFESSION, title);
-        values.put(USER_PROFILE_URL0, url0);
-        values.put(USER_PROFILE_URL1, url1);
-        values.put(USER_PROFILE_URL2, url2);
-        values.put(USER_PROFILE_DATE_UPDATED, dateUpdated);
-        values.put(USER_PROFILE_IS_SYNCED_ONLINE, StringFormattingUtils.getBoolean(isUnsyncedOnline));
-
-        int row = sqLiteDatabase.update(TABLE_USER_PROFILE, values, USER_PROFILE_USER_ID + " =? ",
-                new String[]{Long.toString(userid)});
-        if (row > 0) {
-            L.debug(TAG + " profile with user id of " + userid + " updated successfully!");
-        } else {
-            L.debug(TAG + " profile with user id of " + userid + " failed to update");
-        }
+        sqLiteDatabase.insertWithOnConflict(TABLE_USER_PROFILE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
     }
+
+//    public void updateUserProfile(long userid, String username, String description, String title, String url0,
+//                                  String url1, String url2, String dateUpdated, boolean isUnsyncedOnline) {
+//
+//        ContentValues values = new ContentValues();
+//        values.put(USER_PROFILE_USERNAME, username);
+//        values.put(USER_PROFILE_DESCRIPTION, description);
+//        values.put(USER_PROFILE_PROFESSION, title);
+//        values.put(USER_PROFILE_URL0, url0);
+//        values.put(USER_PROFILE_URL1, url1);
+//        values.put(USER_PROFILE_URL2, url2);
+//        values.put(USER_PROFILE_DATE_UPDATED, dateUpdated);
+//        values.put(USER_PROFILE_IS_SYNCED_ONLINE, StringFormattingUtils.getBoolean(isUnsyncedOnline));
+//
+//        int row = sqLiteDatabase.update(TABLE_USER_PROFILE, values, USER_PROFILE_USER_ID + " =? ",
+//                new String[]{Long.toString(userid)});
+//        if (row > 0) {
+//            L.debug(TAG + " profile with user id of " + userid + " updated successfully!");
+//        } else {
+//            L.debug(TAG + " profile with user id of " + userid + " failed to update");
+//        }
+//
+//    }
 
     public HashMap<String, String> downloadMyUnsyncedPicProfile() {
 

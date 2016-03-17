@@ -436,12 +436,12 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			unbindService(mServiceConn);
 		}
 
-		// save messages here,
+		// saveVCard messages here,
 		// and clear all the conversation array
 		// L.debug("ChatActivity, saving msgs... ");
 
 		// mCorrespondent.saveOffline(ChatActivity.this, true);
-		// mCorrespondent.save(ChatActivity.this, true);
+		// mCorrespondent.saveVCard(ChatActivity.this, true);
 		
 		if (isFinishing()) {
 			

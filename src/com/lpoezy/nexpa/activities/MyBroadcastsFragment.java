@@ -208,7 +208,7 @@ public class MyBroadcastsFragment extends Fragment {
 		super.onResume();
 		
 		getActivity().registerReceiver(mActionUserProfileUpdatedReceived , new IntentFilter(AppConfig.ACTION_USER_PROFILE_UPDATED));
-		
+		/*/
 		resetProfilePic();
 		resetUserInfo();
 		
@@ -242,11 +242,12 @@ public class MyBroadcastsFragment extends Fragment {
 				
 			}
 		}).start();
+		//*/
 	}
 	
 	
 	private void resetUserInfo() {
-		
+		/*/
 		SQLiteHandler db = new SQLiteHandler(getActivity());
 		db.openToRead();
 		
@@ -286,7 +287,7 @@ public class MyBroadcastsFragment extends Fragment {
 		}
 		
 		db.close();
-		
+		//*/
 	}
 
 	private void resetProfilePic(){

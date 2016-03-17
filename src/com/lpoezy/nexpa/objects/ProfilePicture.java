@@ -8,6 +8,7 @@ import android.os.Environment;
 
 import com.devspark.appmsg.AppMsg;
 import com.lpoezy.nexpa.configuration.AppConfig;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.BmpFactory;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
@@ -25,46 +26,24 @@ import java.util.List;
 
 public class ProfilePicture {
 
-	public static final String TEMP_LOC = "PROFILE_PIC_LOC";
+	//public static final String DIR = "PROFILE_PIC_LOC";
 
-	//private long userId;
-	private String username;
 	private String imgDir;
 	private String imgFile;
-	private String dateUploaded;
 	private Bitmap img;
-	private boolean isSyncedOnline;
+
 
 	public ProfilePicture() {
 	}
 
-	public ProfilePicture(String username, String imgDir, String imgFile, String dateCreated, boolean isSyncOnline) {
+	public ProfilePicture(String imgDir, String imgFile) {
 
-		this.username = username;
+
 		this.imgDir = imgDir;
 		this.imgFile = imgFile;
-		this.dateUploaded = dateCreated;
-		this.isSyncedOnline = isSyncOnline;
+
 	}
 
-//	public long getUserId() {
-//		return userId;
-//	}
-//
-//	public void setUserId(long userId) {
-//		this.userId = userId;
-//		notifyListeners();
-//	}
-
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-		notifyListeners();
-	}
 
 	public String getImgDir() {
 		return imgDir;
@@ -84,15 +63,6 @@ public class ProfilePicture {
 		notifyListeners();
 	}
 
-	public String getDateUploaded() {
-		return dateUploaded;
-	}
-
-	public void setDateUploaded(String dateUploaded) {
-		this.dateUploaded = dateUploaded;
-		notifyListeners();
-	}
-
 	public Bitmap getImg() {
 		return img;
 	}
@@ -101,15 +71,7 @@ public class ProfilePicture {
 		this.img = img;
 		notifyListeners();
 	}
-
-	public boolean isSyncedOnline() {
-		return isSyncedOnline;
-	}
-
-	public void setSyncedOnline(boolean isSyncedOnline) {
-		this.isSyncedOnline = isSyncedOnline;
-	}
-
+	/*/
 	public boolean saveImgOnline(Context context) {
 
 		String imgDecodableString = getUserImgDecodableString(context);
@@ -170,7 +132,7 @@ public class ProfilePicture {
 					success = true;
 
 				if (error)
-					L.makeText((Activity) context, "Failed to save picture", AppMsg.STYLE_ALERT);
+					L.makeText((Activity) context, "Failed to saveVCard picture", AppMsg.STYLE_ALERT);
 
 			} catch (JSONException e) {
 				L.error("" + e);
@@ -184,18 +146,14 @@ public class ProfilePicture {
 	}
 
 	public void saveOffline(Context context) {
-//		if (imgDir == null || imgFile == null || imgDir.isEmpty() || imgFile.isEmpty()
-//				|| imgDir.equalsIgnoreCase("null") || imgFile.equalsIgnoreCase("null")) {
-//			return;
-//		}
-//		L.debug("ProfilePicture, saveOffline");
-//		SQLiteHandler db = new SQLiteHandler(context);
-//		db.openToWrite();
-//		// save picture info offline
-//		db.saveProfilePicture(username, imgDir, imgFile, dateUploaded, isSyncedOnline);
-//		db.close();
+		L.debug("ProfilePicture, saveOffline");
+		SQLiteHandler db = new SQLiteHandler(context);
+		db.openToWrite();
+		// saveVCard picture info offline
+		db.saveProfilePicture(imgDir, imgFile);
+		db.close();
 	}
-
+	//*/
 	public void downloadOnline() {
 
 	}

@@ -757,7 +757,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements
 					//toggle btn star
 					if (clickCount % 2 != 0) {
 						btnFave.setBackgroundResource(R.drawable.btn_star_yellow);
-						//save favorite
+						//saveVCard favorite
 						favorite.saveLocal(GroupChatHomeActivity.this);
 						
 						

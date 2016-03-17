@@ -609,26 +609,26 @@ public class SettingsActivity extends Activity {
 				rad_chat_noone = (RadioButton) dialogSettings.findViewById(R.id.rad_chat_noone);
 				strIndieChat = "";
 
-				if ((db.getIndiSetChatPrivacy().equals("")) || (db.getIndiSetChatPrivacy().equals("null"))) {
-					rad_chat_everyone.setChecked(true);
-				} else if (db.getIndiSetChatPrivacy().equals("NO")) {
-					rad_chat_noone.setChecked(true);
-				} else if (db.getIndiSetChatPrivacy().equals("FR")) {
-					rad_chat_friends.setChecked(true);
-				} else {
-					rad_chat_everyone.setChecked(true);
-				}
-
-				rad_com_receive = (RadioButton) dialogSettings.findViewById(R.id.rad_com_receive);
-				rad_com_dont_receive = (RadioButton) dialogSettings.findViewById(R.id.rad_com_dont_receive);
-				strComChat = "";
-				if ((db.getComSetChatPrivacy().equals("")) || (db.getComSetChatPrivacy().equals("null"))) {
-					rad_com_receive.setChecked(true);
-				} else if (db.getComSetChatPrivacy().equals("DO")) {
-					rad_com_dont_receive.setChecked(true);
-				} else {
-					rad_com_receive.setChecked(true);
-				}
+//				if ((db.getIndiSetChatPrivacy().equals("")) || (db.getIndiSetChatPrivacy().equals("null"))) {
+//					rad_chat_everyone.setChecked(true);
+//				} else if (db.getIndiSetChatPrivacy().equals("NO")) {
+//					rad_chat_noone.setChecked(true);
+//				} else if (db.getIndiSetChatPrivacy().equals("FR")) {
+//					rad_chat_friends.setChecked(true);
+//				} else {
+//					rad_chat_everyone.setChecked(true);
+//				}
+//
+//				rad_com_receive = (RadioButton) dialogSettings.findViewById(R.id.rad_com_receive);
+//				rad_com_dont_receive = (RadioButton) dialogSettings.findViewById(R.id.rad_com_dont_receive);
+//				strComChat = "";
+//				if ((db.getComSetChatPrivacy().equals("")) || (db.getComSetChatPrivacy().equals("null"))) {
+//					rad_com_receive.setChecked(true);
+//				} else if (db.getComSetChatPrivacy().equals("DO")) {
+//					rad_com_dont_receive.setChecked(true);
+//				} else {
+//					rad_com_receive.setChecked(true);
+//				}
 
 				Button dialogButton = (Button) dialogSettings.findViewById(R.id.dialogButtonOK);
 				dialogButton.setOnClickListener(new OnClickListener() {

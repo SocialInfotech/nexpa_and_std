@@ -206,7 +206,12 @@ public class MainSignInActivity extends Activity {
 
                     if (ofuser.saveOffline(getApplicationContext())) {
 
-
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideDialog();
+                            }
+                        });
                         SessionManager sm = new SessionManager(getApplicationContext());
                         sm.setLogin(true);
 

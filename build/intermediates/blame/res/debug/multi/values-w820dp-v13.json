@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "C:\\Users\\ldonios\\git\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\values-w820dp-v13\\values-w820dp-v13.xml",
+        "outputFile": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v2\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\values-w820dp-v13\\values-w820dp-v13.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 108
                 },
                 "from": {
-                    "file": "C:\\Users\\ldonios\\git\\nexpa_and_std\\res\\values-w820dp\\dimens.xml",
+                    "file": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v2\\nexpa_and_std\\res\\values-w820dp\\dimens.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,

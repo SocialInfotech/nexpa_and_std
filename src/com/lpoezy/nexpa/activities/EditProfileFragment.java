@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ProfilePicture;
 import com.lpoezy.nexpa.objects.UserProfile;
@@ -31,286 +32,294 @@ import com.lpoezy.nexpa.utility.Utilz;
 
 public class EditProfileFragment extends DialogFragment {
 
-	public static final String TAG = "EditProfileFragment";
+    public static final String TAG = "EditProfileFragment";
 
-	public static EditProfileFragment newInstance() {
-		EditProfileFragment fragment = new EditProfileFragment();
-		fragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-		return fragment;
-	}
+    public static EditProfileFragment newInstance() {
+        EditProfileFragment fragment = new EditProfileFragment();
+        fragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        return fragment;
+    }
 
-	protected ProgressDialog pDialog;
-	private EditText edtName;
-	private DatePicker dpBDay;
-	private ImageView profilePic;
-	private RadioButton radBoy;
-	private RadioButton radGirl;
-	private OnShowProfilePicScreenListener mCallback;
-	private EditText edtDescription;
-	private EditText edtProfession;
-	private EditText edtUrl0;
-	private EditText edtUrl1;
-	private EditText edtUrl2;
-	private ProfilePicture mProfilePicture;
-	
-	 public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-	      super.onActivityResult(requestCode, resultCode, intent);
+    protected ProgressDialog pDialog;
+    private EditText edtName;
+    private DatePicker dpBDay;
+    private ImageView profilePic;
+    private RadioButton radBoy;
+    private RadioButton radGirl;
+    private OnShowProfilePicScreenListener mCallback;
+    private EditText edtDescription;
+    private EditText edtProfession;
+    private EditText edtUrl0;
+    private EditText edtUrl1;
+    private EditText edtUrl2;
+    private ProfilePicture mProfilePicture;
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
 //	      ProfilePicFragment fragment = (ProfilePicFragment) getChildFragmentManager().findFragmentByTag(ProfilePicFragment.TAG);
 //	      if(fragment != null){
 //	            fragment.onActivityResult(requestCode, resultCode, intent);
 //	      }
-	      
-	      L.debug("EditProfileFragment, onActivityResult");
-	 }
-	 
-	 @Override
-	public void onAttach(Activity activity) {
-		
-		super.onAttach(activity);
-		
-		try{
-			mCallback = (OnShowProfilePicScreenListener)activity;
-		}catch(ClassCastException e){L.error(""+e);}
-	}
-	 
-	 @Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		
-		resetProfilePic();
-		resetProfileInfo();
-	}
 
-	@Override
-	public void onDestroy() {
-		
-		super.onDestroy();
-		
-		//let all the screens the listaening screens,
-		//that there is a change in,
-		//user profile information,
-		//and give the listening screens to update
-		getActivity().sendBroadcast(new Intent(AppConfig.ACTION_USER_PROFILE_UPDATED));
-		
-	}
+        L.debug("EditProfileFragment, onActivityResult");
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public void onAttach(Activity activity) {
 
-		View v = inflater.inflate(R.layout.activity_profile_personal, container, false);
+        super.onAttach(activity);
 
-		profilePic = (ImageView) v.findViewById(R.id.img_profile_pic);
-		
+        try {
+            mCallback = (OnShowProfilePicScreenListener) activity;
+        } catch (ClassCastException e) {
+            L.error("" + e);
+        }
+    }
 
-		addClickListenerToBtnProfilePic(v);
+    @Override
+    public void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
 
-		addClickListenerToBtnOk(v);
+        resetProfilePic();
+        resetProfileInfo();
+    }
 
-		edtName = (EditText) v.findViewById(R.id.edtName);
-		edtName.setEnabled(false);
-		
-		edtDescription =(EditText)v.findViewById(R.id.edt_short_description);
-		edtProfession =(EditText)v.findViewById(R.id.edt_profession);
-		edtUrl0 =(EditText)v.findViewById(R.id.edt_url0);
-		edtUrl1 =(EditText)v.findViewById(R.id.edt_url1);
-		edtUrl2 =(EditText)v.findViewById(R.id.edt_url2);
-		
-		return v;
-	}
+    @Override
+    public void onDestroy() {
 
-	private void addClickListenerToBtnOk(View v) {
+        super.onDestroy();
 
-		((Button) v.findViewById(R.id.dialogButtonOK)).setOnClickListener(new View.OnClickListener() {
+        //let all the screens the listaening screens,
+        //that there is a change in,
+        //user profile information,
+        //and give the listening screens to update
+        getActivity().sendBroadcast(new Intent(AppConfig.ACTION_USER_PROFILE_UPDATED));
 
-			@Override
-			public void onClick(View v) {
+    }
 
-				pDialog = new ProgressDialog(getActivity());
-				pDialog.setCancelable(false);
-				pDialog.setMessage("Saving ...");
-				pDialog.show();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-				new Thread(new Runnable() {
+        View v = inflater.inflate(R.layout.activity_profile_personal, container, false);
 
-					@Override
-					public void run() {
-						//this will make sure,
-						//that the progress will be visible
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e) {
-							L.error(""+e);
-						}
+        profilePic = (ImageView) v.findViewById(R.id.img_profile_pic);
 
-						saveProfilePicOffline();
-						saveUserInfoOffline();
 
-						profilePic.post(new Runnable() {
+        addClickListenerToBtnProfilePic(v);
 
-							@Override
-							public void run() {
-								pDialog.dismiss();
-								pDialog = null;
-							}
-						});
-					}
-				}).start();
+        addClickListenerToBtnOk(v);
 
-			}
-		});
+        edtName = (EditText) v.findViewById(R.id.edtName);
+        edtName.setEnabled(false);
 
-	}
+        edtDescription = (EditText) v.findViewById(R.id.edt_short_description);
+        edtProfession = (EditText) v.findViewById(R.id.edt_profession);
+        edtUrl0 = (EditText) v.findViewById(R.id.edt_url0);
+        edtUrl1 = (EditText) v.findViewById(R.id.edt_url1);
+        edtUrl2 = (EditText) v.findViewById(R.id.edt_url2);
 
-	protected void saveUserInfoOffline() {
-		
-		long now = System.currentTimeMillis();
-		
-		String dateUpdated = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
-		SQLiteHandler db = new SQLiteHandler(getActivity());
-		db.openToRead();
-		
-		long uId = Long.parseLong(db.getLoggedInID());
-		
-		String uname = edtName.getText().toString();
-		String description = edtDescription.getText().toString();
-		String profession = edtProfession.getText().toString();
-		String url0 = edtUrl0.getText().toString();
-		String url1 = edtUrl1.getText().toString();
-		String url2 = edtUrl2.getText().toString();
-		boolean isSyncedOnline = false;
-		UserProfile userProfile = new UserProfile(uname, description, profession, url0, url1, url2, dateUpdated);
+        return v;
+    }
 
-		//moved to sync in settings screen
-		//String result = userProfile.saveOnline(getActivity());
-		
-		userProfile.updateOffline(getActivity());
-		
-		
-//		try {
-//			JSONObject jResult = new JSONObject(result);
-//			if(!jResult.getBoolean("error")){
-//				userProfile.updateOffline(getActivity());
-//			}
-//		} catch (JSONException e) {
-//			L.error(""+e);
-//		}
-		
-		db.close();
-	}
+    private void addClickListenerToBtnOk(View v) {
 
-	protected void saveProfilePicOffline() {
+        ((Button) v.findViewById(R.id.dialogButtonOK)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setCancelable(false);
+                pDialog.setMessage("Saving ...");
+                pDialog.show();
+
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //this will make sure,
+                        //that the progress will be visible
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            L.error("" + e);
+                        }
+
+                        String uname = edtName.getText().toString();
+                        String description = edtDescription.getText().toString();
+                        String profession = edtProfession.getText().toString();
+                        String url0 = edtUrl0.getText().toString();
+                        String url1 = edtUrl1.getText().toString();
+                        String url2 = edtUrl2.getText().toString();
+                        String avatarDir = Utilz.getDataFrmSharedPref(getActivity().getApplicationContext(), UserProfile.AVATAR_DIR, "");
+
+                        UserProfile userProfile = new UserProfile(uname, description, profession, url0, url1, url2, avatarDir);
+                        userProfile.saveVCard(XMPPService.xmpp.connection);
+                        userProfile.saveOffline(getActivity());
+
+                        profilePic.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                Utilz.saveToSharedPref(getActivity(), UserProfile.AVATAR_DIR, "");
+                                pDialog.dismiss();
+                                pDialog = null;
+                            }
+                        });
+                    }
+                }).start();
+
+            }
+        });
+
+    }
+
+    protected void saveUserInfoOffline() {
+
+//		long now = System.currentTimeMillis();
+//
+//		String dateUpdated = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
 //		SQLiteHandler db = new SQLiteHandler(getActivity());
 //		db.openToRead();
-//		ProfilePicture pic = new ProfilePicture();
-//		pic.setUserId(Long.parseLong(db.getLoggedInID()));
-		
-		long now = System.currentTimeMillis();
-		
-		String dateUploaded = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
-		
-		mProfilePicture.setDateUploaded(dateUploaded);
-		mProfilePicture.setSyncedOnline(false);
-		
-		mProfilePicture.saveOffline(getActivity());
+//
+//		long uId = Long.parseLong(db.getLoggedInID());
+//
+//		String uname = edtName.getText().toString();
+//		String description = edtDescription.getText().toString();
+//		String profession = edtProfession.getText().toString();
+//		String url0 = edtUrl0.getText().toString();
+//		String url1 = edtUrl1.getText().toString();
+//		String url2 = edtUrl2.getText().toString();
+//		boolean isSyncedOnline = false;
+//		UserProfile userProfile = new UserProfile(uname, description, profession, url0, url1, url2);
+//
+//		//moved to sync in settings screen
+//		//String result = userProfile.saveOnline(getActivity());
+//
+//		userProfile.saveOffline(getActivity());
+//
+//
+////		try {
+////			JSONObject jResult = new JSONObject(result);
+////			if(!jResult.getBoolean("error")){
+////				userProfile.saveOffline(getActivity());
+////			}
+////		} catch (JSONException e) {
+////			L.error(""+e);
+////		}
+//
 //		db.close();
-		
-	}
+    }
 
-	private void addClickListenerToBtnProfilePic(View v) {
-		((LinearLayout) v.findViewById(R.id.btn_profile_pic)).setOnClickListener(new View.OnClickListener() {
+//    protected void saveProfilePicOffline() {
+////		SQLiteHandler db = new SQLiteHandler(getActivity());
+////		db.openToRead();
+////		ProfilePicture pic = new ProfilePicture();
+////		pic.setUserId(Long.parseLong(db.getLoggedInID()));
+//
+//        long now = System.currentTimeMillis();
+//
+//        String dateUploaded = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
+//
+//        //mProfilePicture.setDateUploaded(dateUploaded);
+//        //mProfilePicture.setSyncedOnline(false);
+//
+//        //mProfilePicture.saveOffline(getActivity());
+////		db.close();
+//
+//    }
 
-			@Override
-			public void onClick(View v) {
-				mCallback.onShowProfilePicScreen();
+    private void addClickListenerToBtnProfilePic(View v) {
+        ((LinearLayout) v.findViewById(R.id.btn_profile_pic)).setOnClickListener(new View.OnClickListener() {
 
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                mCallback.onShowProfilePicScreen();
 
-	}
-	
-	private void resetProfileInfo() {
-		
-		UserProfile userProfile = new UserProfile();
-		
-		SQLiteHandler db = new SQLiteHandler(getActivity());
-		db.openToRead();
-		long uId = Long.parseLong(db.getLoggedInID());
-		userProfile.setId(uId);
-		db.close();
-		
-		userProfile.downloadOffline(getActivity());
-		
-		edtName.setText(userProfile.getUsername());
-		
-		if(userProfile.getDescription()!=null && !userProfile.getDescription().equalsIgnoreCase("null")){
-			edtDescription.setText(userProfile.getDescription());
-			edtDescription.setSelection(userProfile.getDescription().length());
-		}
-		
-		if(userProfile.getProfession()!=null && !userProfile.getProfession().equalsIgnoreCase("null")){
-			edtProfession.setText(userProfile.getProfession());
-			edtProfession.setSelection(userProfile.getProfession().length());
-		}
-		
-		if(userProfile.getUrl0()!=null && !userProfile.getUrl0().equalsIgnoreCase("null")){
-			edtUrl0.setText(userProfile.getUrl0());
-			edtUrl0.setSelection(userProfile.getUrl0().length());
-		}
-		
-		if(userProfile.getUrl1()!=null && !userProfile.getUrl1().equalsIgnoreCase("null")){
-			edtUrl1.setText(userProfile.getUrl1());
-			edtUrl1.setSelection(userProfile.getUrl1().length());
-		}
-		
-		if(userProfile.getUrl2()!=null && !userProfile.getUrl2().equalsIgnoreCase("null")){
-			edtUrl2.setText(userProfile.getUrl2());
-			edtUrl2.setSelection(userProfile.getUrl2().length());
-		}
-		
-		
-	}
+            }
+        });
 
-	private void resetProfilePic() {
-		
+    }
 
-		if (profilePic != null) {
-			 String imgDecodableString = Utilz.getDataFrmSharedPref(getActivity().getApplicationContext(), ProfilePicture.TEMP_LOC, "");
-			 
-			if(mProfilePicture==null) mProfilePicture = new ProfilePicture();
-			//ProfilePicture pic = new ProfilePicture();
-//			pic.setUserId(userId);
-//			pic.downloadOffline(getActivity());
-			 
-			long userId = -1;
-			SQLiteHandler db = new SQLiteHandler(getActivity());
-			db.openToRead();
-			//userId = Long.parseLong(db.getLoggedInID());
-			//mProfilePicture.setUserId(userId);
-			db.close();
-			 
-			 
-			 if(imgDecodableString!=null && !imgDecodableString.equalsIgnoreCase("")){
-				int pos = imgDecodableString.lastIndexOf("/");
-				
-				String imgDir = imgDecodableString.substring(0 , pos);
-				String imgFile = Uri.parse(imgDecodableString).getLastPathSegment();
-				
-				mProfilePicture.setImgDir(imgDir);
-				mProfilePicture.setImgFile(imgFile);
-				
-			 }else{
-				 
-				 mProfilePicture.downloadOffline(getActivity());
-				 imgDecodableString = mProfilePicture.getImgDir() + "/" + mProfilePicture.getImgFile();
-			 }
-			 
-			 
-				
-				//ProfilePicture pic = new ProfilePicture(userId, imgDir, imgFile, dateCreated, isSyncedOnline);
-				//pic.saveOffline(getActivity());
-			 
-			
+    private void resetProfileInfo() {
+        L.debug("reset profile");
+        SQLiteHandler db = new SQLiteHandler(getActivity());
+        db.openToRead();
+        UserProfile userProfile = new UserProfile();
+        userProfile.setUsername(db.getUsername());
+        userProfile.downloadOffline(getActivity());
+
+        edtName.setText(userProfile.getUsername());
+
+        if (userProfile.getDescription() != null) {
+            edtDescription.setText(userProfile.getDescription());
+            edtDescription.setSelection(userProfile.getDescription().length());
+        }
+
+        if (userProfile.getProfession() != null) {
+            edtProfession.setText(userProfile.getProfession());
+            edtProfession.setSelection(userProfile.getProfession().length());
+        }
+
+        if (userProfile.getUrl0() != null) {
+            edtUrl0.setText(userProfile.getUrl0());
+            edtUrl0.setSelection(userProfile.getUrl0().length());
+        }
+
+        if (userProfile.getUrl1() != null) {
+            edtUrl1.setText(userProfile.getUrl1());
+            edtUrl1.setSelection(userProfile.getUrl1().length());
+        }
+
+        if (userProfile.getUrl2() != null) {
+            edtUrl2.setText(userProfile.getUrl2());
+            edtUrl2.setSelection(userProfile.getUrl2().length());
+        }
+
+        db.close();
+    }
+
+    private void resetProfilePic() {
+
+
+        if (profilePic != null) {
+            String imgDecodableString = Utilz.getDataFrmSharedPref(getActivity().getApplicationContext(), UserProfile.AVATAR_DIR, "");
+
+//            if (mProfilePicture == null) mProfilePicture = new ProfilePicture();
+//            //ProfilePicture pic = new ProfilePicture();
+////			pic.setUserId(userId);
+////			pic.downloadOffline(getActivity());
+//
+//            long userId = -1;
+//            SQLiteHandler db = new SQLiteHandler(getActivity());
+//            db.openToRead();
+//            //userId = Long.parseLong(db.getLoggedInID());
+//            //mProfilePicture.setUserId(userId);
+//            db.close();
+
+
+//            if (imgDecodableString != null && !imgDecodableString.equalsIgnoreCase("")) {
+//                int pos = imgDecodableString.lastIndexOf("/");
+//
+//                String imgDir = imgDecodableString.substring(0, pos);
+//                String imgFile = Uri.parse(imgDecodableString).getLastPathSegment();
+//
+//                mProfilePicture.setImgDir(imgDir);
+//                mProfilePicture.setImgFile(imgFile);
+//
+//            } else {
+//
+//                mProfilePicture.downloadOffline(getActivity());
+//                imgDecodableString = mProfilePicture.getImgDir() + "/" + mProfilePicture.getImgFile();
+//            }
+
+
+            //ProfilePicture pic = new ProfilePicture(userId, imgDir, imgFile, dateCreated, isSyncedOnline);
+            //pic.saveOffline(getActivity());
+
+
 //			ProfilePicture pic = new ProfilePicture();
 //			pic.setUserId(userId);
 //			pic.downloadOffline(getActivity());
@@ -318,29 +327,27 @@ public class EditProfileFragment extends DialogFragment {
 //			
 //			String imgDecodableString = pic.getImgDir() + "/" + pic.getImgFile();
 
-			Bitmap rawImage = BitmapFactory.decodeResource(getResources(), R.drawable.pic_sample_girl);
+            Bitmap rawImage = BitmapFactory.decodeResource(getResources(), R.drawable.pic_sample_girl);
 
-			if ((mProfilePicture.getImgDir() != null && !mProfilePicture.getImgDir().isEmpty())
-					&& (mProfilePicture.getImgFile() != null && !mProfilePicture.getImgFile().isEmpty())) {
-				L.debug("SettingsActivity, imgDecodableString " + imgDecodableString);
-				// Get the dimensions of the View
-				int targetW = profilePic.getWidth();
-				int targetH = profilePic.getHeight();
+            if (imgDecodableString != null && !imgDecodableString.equalsIgnoreCase("")) {
+                L.debug("SettingsActivity, imgDecodableString " + imgDecodableString);
+                // Get the dimensions of the View
+                int targetW = profilePic.getWidth();
+                int targetH = profilePic.getHeight();
 
-				BmpFactory bmpFactory = new BmpFactory();
-				Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, imgDecodableString);
-				if(newImage!=null)rawImage = newImage;
-				
-			}
+                BmpFactory bmpFactory = new BmpFactory();
+                Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, imgDecodableString);
+                if (newImage != null) rawImage = newImage;
 
-			profilePic.setImageBitmap(rawImage);
-		}
+            }
 
-	}
-	
-	public interface OnShowProfilePicScreenListener
-	{
-		public void onShowProfilePicScreen();
-	}
+            profilePic.setImageBitmap(rawImage);
+        }
+
+    }
+
+    public interface OnShowProfilePicScreenListener {
+        public void onShowProfilePicScreen();
+    }
 
 }

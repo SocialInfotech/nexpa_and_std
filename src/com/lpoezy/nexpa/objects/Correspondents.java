@@ -66,7 +66,7 @@ public class Correspondents {
 			
 		} else {
 			
-			throw new ArrayIndexOutOfBoundsException("No correspondents details to save");
+			throw new ArrayIndexOutOfBoundsException("No correspondents details to saveVCard");
 		}
 		
 		db.close();

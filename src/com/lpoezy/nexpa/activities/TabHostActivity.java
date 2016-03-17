@@ -69,6 +69,13 @@ public class TabHostActivity extends TabActivity {
 			mBounded = true;
 
 			mService = ((LocalBinder<XMPPService>) service).getService();
+
+			if(getTabHost().getCurrentTab()==0){
+				XMPPService.OnConnectedToOPenfireListener onConnectedToOPenfireListener = (XMPPService.OnConnectedToOPenfireListener) getCurrentActivity();
+				mService.addconnectedToOperfireListener(onConnectedToOPenfireListener);
+
+			}
+
 		}
 	};
 
@@ -182,7 +189,7 @@ public class TabHostActivity extends TabActivity {
 			int heightValue = 45;
 
 			for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
-				 tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = (int)(heightValue * res.getDisplayMetrics().density);
+				tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = (int)(heightValue * res.getDisplayMetrics().density);
 				tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#D2D7D3"));
 				tabHost.getTabWidget().setDividerDrawable(null);
 
@@ -207,7 +214,7 @@ public class TabHostActivity extends TabActivity {
 				@Override
 				public void onTabChanged(String tabId) {
 
-					L.debug("tabId: " + tabId);
+					//L.debug("tabId: " + tabId);
 					if (tabId.equalsIgnoreCase("home3")) {
 						if (mViewMsgCount.getVisibility() == View.VISIBLE)
 							mViewMsgCount.setVisibility(View.GONE);

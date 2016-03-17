@@ -80,7 +80,7 @@ public class SyncUserProfileService extends Service {
 //
 //					if(userProfile.saveOnline(getApplicationContext())){
 //						userProfile.setSyncedOnline(true);
-//						userProfile.updateOffline(getApplicationContext());
+//						userProfile.saveOffline(getApplicationContext());
 //					}
 //					retry = SECONDS;
 //				}else{

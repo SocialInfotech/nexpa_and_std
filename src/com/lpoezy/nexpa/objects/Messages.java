@@ -71,7 +71,7 @@ public class Messages {
 			
 		} else {
 			
-			throw new ArrayIndexOutOfBoundsException("No messages details to save");
+			throw new ArrayIndexOutOfBoundsException("No messages details to saveVCard");
 		}
 		
 		db.close();
@@ -87,7 +87,7 @@ public class Messages {
 //			
 //		} else {
 //			
-//			throw new ArrayIndexOutOfBoundsException("No messages details to save");
+//			throw new ArrayIndexOutOfBoundsException("No messages details to saveVCard");
 //		}
 		
 		db.close();

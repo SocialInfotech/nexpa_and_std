@@ -19,6 +19,7 @@ import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.NewMessage;
+import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.HttpUtilz;
@@ -38,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class XMPPService extends Service {
-    private static final String DOMAIN = "198.154.106.139";// vps.gigapros.com
+    public static final String DOMAIN = "198.154.106.139";// vps.gigapros.com
     // ||
     // 198.154.106.139
     private static final String USERNAME = "admin";
@@ -56,6 +57,8 @@ public class XMPPService extends Service {
     }
 
     public Chat chat;
+
+
 
     private PendingIntent getNotificationPendingIntent(Correspondent correspondent) {
         // Creates an explicit intent for an Activity in your app
@@ -105,6 +108,7 @@ public class XMPPService extends Service {
 
     private List<OnConnectedToOPenfireListener> connectedToOperfireListeners = new ArrayList<OnConnectedToOPenfireListener>();
     public void addconnectedToOperfireListener(OnConnectedToOPenfireListener observer){
+
         connectedToOperfireListeners.add(observer);
     }
 
@@ -193,6 +197,8 @@ public class XMPPService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+
 
         try {
 
@@ -294,6 +300,8 @@ public class XMPPService extends Service {
         stopSelf();
 
     }
+
+
 
 //    public void login(final String uname, final String password, final OnUpdateScreenListener callback) {
 //

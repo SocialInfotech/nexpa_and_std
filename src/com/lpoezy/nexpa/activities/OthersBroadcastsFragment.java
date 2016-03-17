@@ -227,43 +227,43 @@ public class OthersBroadcastsFragment extends Fragment implements Correspondent.
 		
 		SQLiteHandler db = new SQLiteHandler(getActivity());
 		db.openToRead();
-		
+
 		UserProfile profile = new UserProfile();
-		profile.setId(this.userId);
+		profile.setUsername(mUsername);
 		profile.downloadOffline(getActivity());
-		
+
 		mTvJobTitle.setVisibility(View.GONE);
 		mTvUname.setVisibility(View.GONE);
 		mTvUrl0.setVisibility(View.GONE);
 		mTvUrl1.setVisibility(View.GONE);
 		mTvUrl2.setVisibility(View.GONE);
-		
+
 		if(profile.getProfession()!=null &&!profile.getProfession().equalsIgnoreCase("null") && !profile.getProfession().equals("")){
 			mTvJobTitle.setVisibility(View.VISIBLE);
 			mTvJobTitle.setText(profile.getProfession());
 		}
-		
+
 		if(profile.getUsername()!=null &&!profile.getUsername().equalsIgnoreCase("null") && !profile.getUsername().equals("")){
 			mTvUname.setVisibility(View.VISIBLE);
 			mUsername = profile.getUsername();
 			mTvUname.setText(mUsername);
 		}
-		
+
 		if(profile.getUrl0()!=null &&!profile.getUrl0().equalsIgnoreCase("null") && !profile.getUrl0().equals("")){
 			mTvUrl0.setVisibility(View.VISIBLE);
 			mTvUrl0.setText(profile.getUrl0());
 		}
-		
+
 		if(profile.getUrl1()!=null &&!profile.getUrl1().equalsIgnoreCase("null") && !profile.getUrl1().equals("")){
 			mTvUrl1.setVisibility(View.VISIBLE);
 			mTvUrl1.setText(profile.getUrl1());
 		}
-		
+
 		if(profile.getUrl2()!=null &&!profile.getUrl2().equalsIgnoreCase("null") && !profile.getUrl2().equals("")){
 			mTvUrl2.setVisibility(View.VISIBLE);
 			mTvUrl2.setText(profile.getUrl2());
 		}
-		
+
 		db.close();
 		
 	}

@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.objects.ProfilePicture;
+import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.L;
 import com.lpoezy.nexpa.utility.SystemUtilz;
 import com.lpoezy.nexpa.utility.Utilz;
@@ -59,7 +61,7 @@ public class ProfilePicFragment extends DialogFragment {
 		
 		super.onDestroy();
 		
-		Utilz.saveToSharedPref(getActivity(), ProfilePicture.TEMP_LOC, "");
+		//Utilz.saveToSharedPref(getActivity(), ProfilePicture.DIR, "");
 	}
 
 	@Override
@@ -142,28 +144,19 @@ public class ProfilePicFragment extends DialogFragment {
 			}
 			
 			if(resultCode == Activity.RESULT_OK){
-				//L.debug("ProfilePicFragment, mCurrentPhotoPath: "+mCurrentPhotoPath);
-				Utilz.saveToSharedPref(getActivity(), ProfilePicture.TEMP_LOC, mCurrentPhotoPath);
-				
-				
+
+				L.debug("ProfilePicFragment, mCurrentPhotoPath: "+mCurrentPhotoPath);
+				Utilz.saveToSharedPref(getActivity(), UserProfile.AVATAR_DIR, mCurrentPhotoPath);
+
+
 //				int pos = mCurrentPhotoPath.lastIndexOf("/");
-//				 
+//
 //				String imgDir = mCurrentPhotoPath.substring(0 , pos);
 //				String imgFile = Uri.parse(mCurrentPhotoPath).getLastPathSegment();
 //				L.debug("ProfilePicFragment, imgDir: "+imgDir+", imgFile: "+imgFile+", pos "+pos);
-//				
-//				long userId = -1;
-//				SQLiteHandler db = new SQLiteHandler(getActivity());
-//				db.openToRead();
-//				userId = Long.parseLong(db.getLoggedInID());
-//				db.close();
-//				
-//				long now = System.currentTimeMillis();
-//				
-//				String dateCreated = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
-//				boolean isSyncedOnline = false;
-//				ProfilePicture pic = new ProfilePicture(userId, imgDir, imgFile, dateCreated, isSyncedOnline);
-//				pic.saveOffline(getActivity());
+
+				//ProfilePicture pic = new ProfilePicture(imgDir, imgFile);
+				//pic.saveOffline(getActivity());
 				
 			}
 		

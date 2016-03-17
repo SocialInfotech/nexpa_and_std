@@ -114,7 +114,7 @@ public class ChatMessagesService extends Service {
 //				
 //				if (message.getBody() != null) {
 //					
-//					//save correspondent
+//					//saveVCard correspondent
 //					final String fromName = StringUtils.parseBareAddress(message.getFrom());
 //					L.debug("received msg from "+fromName);
 //					new Thread(new Runnable() {
@@ -126,7 +126,7 @@ public class ChatMessagesService extends Service {
 //							Correspondent correspondent = new Correspondent(senderName);
 //							correspondent.saveOffline(getApplicationContext());
 //							correspondent.downloadCorrespondentIdOffline(getApplicationContext());
-//							//save msg
+//							//saveVCard msg
 //							boolean isLeft = true;
 //							boolean isSuccessful = true;
 //							String body = message.getBody();
@@ -301,12 +301,12 @@ public class ChatMessagesService extends Service {
 //					//
 //					// @Override
 //					// public void run() {
-//					// // save mesage offline
+//					// // saveVCard mesage offline
 //					// // if ChatHistoryActivity is running
 //					//
 //					// boolean success = true;
 //					// //if (!ChatActivity.isRunning) {
-//					// //success = correspondent.save(getApplicationContext(),
+//					// //success = correspondent.saveVCard(getApplicationContext(),
 //					// false);
 //					// correspondent.saveOffline(getApplicationContext(),
 //					// false);
@@ -398,13 +398,13 @@ public class ChatMessagesService extends Service {
 
 	// private void saveMesageOffline(final Correspondent correspondent) {
 	//
-	// //save only the message,
+	// //saveVCard only the message,
 	// //if sender is already exist in db
 	// if(correspondent.isExisting(getApplicationContext())){
 	// correspondent.getConversation().get(0).saveOnline(getApplicationContext(),correspondent.getId());
 	// correspondent.getConversation().get(0).saveOffline(getApplicationContext(),correspondent.getId());
 	//
-	// //save both the sender and the message,
+	// //saveVCard both the sender and the message,
 	// //if sender doesn't exist in db
 	// }else{
 	// correspondent.saveOffline(getApplicationContext(), false);

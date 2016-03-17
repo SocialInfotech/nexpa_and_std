@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -26,6 +29,8 @@ import com.devspark.appmsg.AppMsg;
 import com.devspark.appmsg.AppMsg.Style;
 import com.lpoezy.nexpa.JSON.Profile;
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.LocalBinder;
+import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.openfire.XMPPLogic;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
@@ -135,6 +140,19 @@ public class UserProfileActivity extends AppCompatActivity
 	// true);
 	// }
 	// }
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

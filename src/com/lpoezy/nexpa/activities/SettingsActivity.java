@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -30,12 +32,17 @@ import android.widget.TextView;
 import com.appyvet.rangebar.RangeBar;
 import com.lpoezy.nexpa.JSON.Profile;
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.ProfilePicture;
+import com.lpoezy.nexpa.openfire.XMPPLogic;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.BmpFactory;
 import com.lpoezy.nexpa.utility.L;
 import com.lpoezy.nexpa.utility.NiceDialog;
+import com.lpoezy.nexpa.utility.Utilz;
+
+import org.jivesoftware.smack.XMPPConnection;
 
 public class SettingsActivity extends Activity {
 	RangeBar rbDistance;
@@ -122,12 +129,12 @@ public class SettingsActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// app icon in action bar clicked; goto parent activity.
-			this.finish();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+			case android.R.id.home:
+				// app icon in action bar clicked; goto parent activity.
+				this.finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -142,13 +149,13 @@ public class SettingsActivity extends Activity {
 	protected void onResume() {
 
 		super.onResume();
-		if (dialog != null && dialog.isShowing()) {
-			resetProfilePic();
-		}
+//		if (dialog != null && dialog.isShowing()) {
+//			resetProfilePic();
+//		}
 
 	}
 
-	
+
 
 	@Override
 	protected void onDestroy() {
@@ -158,8 +165,8 @@ public class SettingsActivity extends Activity {
 		db.close();
 		db = null;
 	}
-	
-	
+
+
 	private ProgressDialog pDialog;
 
 	private LinearLayout ln_sync;
@@ -347,26 +354,26 @@ public class SettingsActivity extends Activity {
 			}
 		});
 		//*/
-		
+
 		In_app_purchase = (LinearLayout) findViewById(R.id.In_app_purchase);
 		In_app_purchase.setOnClickListener(new View.OnClickListener() {
-			
-			   @Override
-			   public void onClick(View v) {
-			    AlertDialog.Builder builder = new AlertDialog.Builder(
-			    		SettingsActivity.this);
-			    builder.setTitle("In App Purchases");
-			    builder.setMessage("Premium user is coming soon..");
-			    builder.setPositiveButton("OK",
-			    new DialogInterface.OnClickListener() {
-			     public void onClick(DialogInterface dialog,
-			      int which) {
-			      Log.e("info", "OK");
-			     }
-			    });
-			    builder.show();
-			   }
-			  });
+
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						SettingsActivity.this);
+				builder.setTitle("In App Purchases");
+				builder.setMessage("Premium user is coming soon..");
+				builder.setPositiveButton("OK",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+												int which) {
+								Log.e("info", "OK");
+							}
+						});
+				builder.show();
+			}
+		});
 		
 		/*
 			@Override
@@ -432,25 +439,25 @@ public class SettingsActivity extends Activity {
 		});
 		
 		*/
-		
+
 		ln_signout = (LinearLayout) findViewById(R.id.ln_sign_out);
 		ln_signout.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				
+
 				SessionManager session = new SessionManager(getApplicationContext());
 				if(session.isLoggedIn()){
-					UserProfileActivity.promptYesNoDialog("Quit Nexpa?",
+					promptYesNoDialog("Quit Nexpa?",
 							"Are you sure you want to log off?",
-		   					SettingsActivity.this,
-		   					"DEAC",
-		   					true);
+							SettingsActivity.this,
+							"DEAC",
+							true);
 				}
-				
+
 			}
 		});
-		
+
 //		ln_sync = (LinearLayout) findViewById(R.id.ln_sync);
 //		ln_sync.setOnClickListener(new View.OnClickListener() {
 //			
@@ -523,150 +530,207 @@ public class SettingsActivity extends Activity {
 //			}
 //		});
 
-		ln_settings = (LinearLayout) findViewById(R.id.ln_settings);
-		ln_settings.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View arg0) {
-				// Intent intent = new Intent(UserProfileActivity.this,
-				// UserPersonalActivity.class);
-				// intent.putExtra("user_id", "");
-				dialogSettings = new Dialog(SettingsActivity.this);
-				dialogSettings.requestWindowFeature(Window.FEATURE_NO_TITLE);
-				dialogSettings.setContentView(R.layout.activity_profile_settings);
-
-				edOldp = (EditText) dialogSettings.findViewById(R.id.edOldp);
-				edNewp = (EditText) dialogSettings.findViewById(R.id.edNewp);
-				edVerip = (EditText) dialogSettings.findViewById(R.id.edVerip);
-				btnSavePass = (Button) dialogSettings.findViewById(R.id.btnSavePass);
-				edOldp.setTypeface(Typeface.DEFAULT);
-				edNewp.setTypeface(Typeface.DEFAULT);
-				edVerip.setTypeface(Typeface.DEFAULT);
-
-				session = new SessionManager(getApplicationContext());
-				btnLogout = (Button) dialogSettings.findViewById(R.id.btn_deac);
-				if (!session.isLoggedIn()) {
-					UserProfileActivity.logoutUser(SettingsActivity.this, false, null);
-				} else {
-					// Fetching user details from sqlite
-					// HashMap<String, String> user = db.getUserDetails();
-
-					// String name = user.get("name");
-					// String email = user.get("email");
-
-					// Displaying the user details on the screen
-					// txtName.setText(name);
-					// txtEmail.setText(email);
-
-					// Logout button click event
-
-					nd = new NiceDialog();
-					// btnLogout.setOnClickListener(new OnClickListener() {
-					// @Override
-					// public void onClick(View v) {
-					// promptYesNoDialog("Deactivate Account","You will lose all
-					// Toucan's data on this device but won't remove your data
-					// on our server.\n\nDo you wish to continue?
-					// ",UserProfileActivity.this,"DEAC", false);
-					// }
-					// });
-				}
-
-				btnSavePass.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if (edOldp.getText().toString().trim().length() > 0
-								&& edNewp.getText().toString().trim().length() > 0
-								&& edVerip.getText().toString().trim().length() > 0) {
-							if (edNewp.getText().toString().trim().length() > 7) {
-								if (edOldp.getText().toString().equals(db.getEncryptedPassword())) {
-									if (edVerip.getText().toString().equals(edNewp.getText().toString())) {
-										db.updatePass(edVerip.getText().toString());
-										jsonProfile.updatePasswordOnServer(SettingsActivity.this);
-									} else {
-										NiceDialog.promptDialog("Invalid Password!",
-												"Password doesn't match confirmation.", SettingsActivity.this,
-												"warning");
-									}
-								} else {
-									NiceDialog.promptDialog("Invalid Password!", "Current password did not match.",
-											SettingsActivity.this, "warning");
-
-								}
-							} else {
-								NiceDialog.promptDialog("Weak Password!", "Password should be atleast 8 characters.",
-										SettingsActivity.this, "warning");
-
-							}
-						} else {
-							NiceDialog.promptDialog("Invalid input!",
-									"Please fill-out all fields in order to change your password.",
-									SettingsActivity.this, "warning");
-						}
-					}
-				});
-
-				rad_chat_everyone = (RadioButton) dialogSettings.findViewById(R.id.rad_chat_everyone);
-				rad_chat_friends = (RadioButton) dialogSettings.findViewById(R.id.rad_chat_friends);
-				rad_chat_noone = (RadioButton) dialogSettings.findViewById(R.id.rad_chat_noone);
-				strIndieChat = "";
-
-//				if ((db.getIndiSetChatPrivacy().equals("")) || (db.getIndiSetChatPrivacy().equals("null"))) {
-//					rad_chat_everyone.setChecked(true);
-//				} else if (db.getIndiSetChatPrivacy().equals("NO")) {
-//					rad_chat_noone.setChecked(true);
-//				} else if (db.getIndiSetChatPrivacy().equals("FR")) {
-//					rad_chat_friends.setChecked(true);
-//				} else {
-//					rad_chat_everyone.setChecked(true);
+//		ln_settings = (LinearLayout) findViewById(R.id.ln_settings);
+//		ln_settings.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View arg0) {
+//				// Intent intent = new Intent(UserProfileActivity.this,
+//				// UserPersonalActivity.class);
+//				// intent.putExtra("user_id", "");
+//				dialogSettings = new Dialog(SettingsActivity.this);
+//				dialogSettings.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//				dialogSettings.setContentView(R.layout.activity_profile_settings);
+//
+//				edOldp = (EditText) dialogSettings.findViewById(R.id.edOldp);
+//				edNewp = (EditText) dialogSettings.findViewById(R.id.edNewp);
+//				edVerip = (EditText) dialogSettings.findViewById(R.id.edVerip);
+//				btnSavePass = (Button) dialogSettings.findViewById(R.id.btnSavePass);
+//				edOldp.setTypeface(Typeface.DEFAULT);
+//				edNewp.setTypeface(Typeface.DEFAULT);
+//				edVerip.setTypeface(Typeface.DEFAULT);
+//
+//				session = new SessionManager(getApplicationContext());
+//				btnLogout = (Button) dialogSettings.findViewById(R.id.btn_deac);
+//				if (session.isLoggedIn()) {
+//
+//					//session.setLogin(false);
+//					//logoutUser(SettingsActivity.this);
 //				}
 //
-//				rad_com_receive = (RadioButton) dialogSettings.findViewById(R.id.rad_com_receive);
-//				rad_com_dont_receive = (RadioButton) dialogSettings.findViewById(R.id.rad_com_dont_receive);
-//				strComChat = "";
-//				if ((db.getComSetChatPrivacy().equals("")) || (db.getComSetChatPrivacy().equals("null"))) {
-//					rad_com_receive.setChecked(true);
-//				} else if (db.getComSetChatPrivacy().equals("DO")) {
-//					rad_com_dont_receive.setChecked(true);
-//				} else {
-//					rad_com_receive.setChecked(true);
-//				}
+//				btnSavePass.setOnClickListener(new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						if (edOldp.getText().toString().trim().length() > 0
+//								&& edNewp.getText().toString().trim().length() > 0
+//								&& edVerip.getText().toString().trim().length() > 0) {
+//							if (edNewp.getText().toString().trim().length() > 7) {
+//								if (edOldp.getText().toString().equals(db.getEncryptedPassword())) {
+//									if (edVerip.getText().toString().equals(edNewp.getText().toString())) {
+//										db.updatePass(edVerip.getText().toString());
+//										jsonProfile.updatePasswordOnServer(SettingsActivity.this);
+//									} else {
+//										NiceDialog.promptDialog("Invalid Password!",
+//												"Password doesn't match confirmation.", SettingsActivity.this,
+//												"warning");
+//									}
+//								} else {
+//									NiceDialog.promptDialog("Invalid Password!", "Current password did not match.",
+//											SettingsActivity.this, "warning");
+//
+//								}
+//							} else {
+//								NiceDialog.promptDialog("Weak Password!", "Password should be atleast 8 characters.",
+//										SettingsActivity.this, "warning");
+//
+//							}
+//						} else {
+//							NiceDialog.promptDialog("Invalid input!",
+//									"Please fill-out all fields in order to change your password.",
+//									SettingsActivity.this, "warning");
+//						}
+//					}
+//				});
+//
+//				rad_chat_everyone = (RadioButton) dialogSettings.findViewById(R.id.rad_chat_everyone);
+//				rad_chat_friends = (RadioButton) dialogSettings.findViewById(R.id.rad_chat_friends);
+//				rad_chat_noone = (RadioButton) dialogSettings.findViewById(R.id.rad_chat_noone);
+//				strIndieChat = "";
+//
+////				if ((db.getIndiSetChatPrivacy().equals("")) || (db.getIndiSetChatPrivacy().equals("null"))) {
+////					rad_chat_everyone.setChecked(true);
+////				} else if (db.getIndiSetChatPrivacy().equals("NO")) {
+////					rad_chat_noone.setChecked(true);
+////				} else if (db.getIndiSetChatPrivacy().equals("FR")) {
+////					rad_chat_friends.setChecked(true);
+////				} else {
+////					rad_chat_everyone.setChecked(true);
+////				}
+////
+////				rad_com_receive = (RadioButton) dialogSettings.findViewById(R.id.rad_com_receive);
+////				rad_com_dont_receive = (RadioButton) dialogSettings.findViewById(R.id.rad_com_dont_receive);
+////				strComChat = "";
+////				if ((db.getComSetChatPrivacy().equals("")) || (db.getComSetChatPrivacy().equals("null"))) {
+////					rad_com_receive.setChecked(true);
+////				} else if (db.getComSetChatPrivacy().equals("DO")) {
+////					rad_com_dont_receive.setChecked(true);
+////				} else {
+////					rad_com_receive.setChecked(true);
+////				}
+//
+//				Button dialogButton = (Button) dialogSettings.findViewById(R.id.dialogButtonOK);
+//				dialogButton.setOnClickListener(new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						// Save changes in 'Individual Chat'
+//						if (rad_chat_everyone.isChecked()) {
+//							strIndieChat = "EV";
+//						} else if (rad_chat_friends.isChecked()) {
+//							strIndieChat = "FR";
+//						} else if (rad_chat_noone.isChecked()) {
+//							strIndieChat = "NO";
+//						} else {
+//							strIndieChat = "EV";
+//						}
+//
+//						// Save changes in 'Community Chat'
+//						if (rad_com_receive.isChecked()) {
+//							strComChat = "RE";
+//						} else if (rad_com_dont_receive.isChecked()) {
+//							strComChat = "DO";
+//						} else {
+//							strComChat = "RE";
+//						}
+//						db.updateUserSettings(strIndieChat, strComChat);
+//
+//						dialogSettings.dismiss();
+//					}
+//				});
+//				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//				lp.copyFrom(dialogSettings.getWindow().getAttributes());
+//				lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//				lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//				dialogSettings.show();
+//				dialogSettings.getWindow().setAttributes(lp);
+//			}
+//		});
 
-				Button dialogButton = (Button) dialogSettings.findViewById(R.id.dialogButtonOK);
-				dialogButton.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						// Save changes in 'Individual Chat'
-						if (rad_chat_everyone.isChecked()) {
-							strIndieChat = "EV";
-						} else if (rad_chat_friends.isChecked()) {
-							strIndieChat = "FR";
-						} else if (rad_chat_noone.isChecked()) {
-							strIndieChat = "NO";
-						} else {
-							strIndieChat = "EV";
-						}
+	}
 
-						// Save changes in 'Community Chat'
-						if (rad_com_receive.isChecked()) {
-							strComChat = "RE";
-						} else if (rad_com_dont_receive.isChecked()) {
-							strComChat = "DO";
-						} else {
-							strComChat = "RE";
-						}
-						db.updateUserSettings(strIndieChat, strComChat);
+	public void logoutUser(Context context) {
 
-						dialogSettings.dismiss();
-					}
-				});
-				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-				lp.copyFrom(dialogSettings.getWindow().getAttributes());
-				lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-				lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-				dialogSettings.show();
-				dialogSettings.getWindow().setAttributes(lp);
+		stopService(new Intent(SettingsActivity.this, XMPPService.class));
+
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			L.error(e.getMessage());
+		}
+
+		SessionManager session = new SessionManager(context);
+		SessionManager sm = new SessionManager(SettingsActivity.this);
+		sm.clearSession();
+
+		// Launching the login activity
+		// if(!isExitingApp){
+		Intent intent = new Intent(context, MainSignInActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(intent);
+
+		// }
+		pDialog.dismiss();
+		((Activity) context).finish();
+	}
+
+	private void promptYesNoDialog(final String caption, final String message, final Context cn,
+								   final String fcType, final boolean isExitingApp) {
+
+		final Dialog dialogStatusYN = new Dialog(cn);
+		dialogStatusYN.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialogStatusYN.setContentView(R.layout.dialog_yesno);
+		final Button dialogButton = (Button) dialogStatusYN.findViewById(R.id.dialogButtonYes);
+		final Button dialogButtonNo = (Button) dialogStatusYN.findViewById(R.id.dialogButtonNo);
+		LinearLayout lnHeader = (LinearLayout) dialogStatusYN.findViewById(R.id.lnHeader);
+		TextView edtStatusHead = (TextView) dialogStatusYN.findViewById(R.id.edtStatusHead);
+		TextView edtStatus1 = (TextView) dialogStatusYN.findViewById(R.id.edtStatus);
+
+		edtStatusHead.setText(caption);
+		edtStatus1.setText(message);
+
+		dialogButton.setBackgroundColor(cn.getResources().getColor(R.color.toucan_yellow));
+		dialogButtonNo.setBackgroundColor(cn.getResources().getColor(R.color.toucan_yellow));
+		lnHeader.setBackgroundColor(cn.getResources().getColor(R.color.toucan_yellow));
+
+		dialogButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				pDialog = new ProgressDialog(SettingsActivity.this);
+				pDialog.setCancelable(false);
+				pDialog.setMessage("Logging out ...");
+				pDialog.show();
+
+				logoutUser(SettingsActivity.this);
+
+
+				// dismiss quit toucan dialog
+				dialogStatusYN.dismiss();
+
 			}
 		});
 
+		dialogButtonNo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialogStatusYN.dismiss();
+			}
+		});
+
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+		lp.copyFrom(dialogStatusYN.getWindow().getAttributes());
+		lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+		lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+		dialogStatusYN.show();
+		dialogStatusYN.getWindow().setAttributes(lp);
 	}
 
 	@Override
@@ -675,44 +739,44 @@ public class SettingsActivity extends Activity {
 		inflater.inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	private void resetProfilePic() {
-		ImageView profilePic = (ImageView) dialog.findViewById(R.id.img_profile_pic);
 
-		if (profilePic != null) {
-			//String imgDecodableString = Utilz.getDataFrmSharedPref(SettingsActivity.this, UserProfile.PROFILE_PIC_LOC, "");
-			
-			long userId = -1;
-			SQLiteHandler db = new SQLiteHandler(SettingsActivity.this);
-			db.openToRead();
-			userId = Long.parseLong(db.getLoggedInID());
-			db.close();
-			
-			ProfilePicture pic = new ProfilePicture();
-			//pic.setUserId(userId);
-			pic.downloadOffline(SettingsActivity.this);
-			
-			
-			String imgDecodableString = pic.getImgDir()+"/"+pic.getImgFile();
-			
-			 Bitmap rawImage = BitmapFactory.decodeResource(getResources(),
-				        R.drawable.pic_sample_girl);
-			 
-			
-			if ((pic.getImgDir()!=null && !pic.getImgDir().isEmpty()) 
-					&& (pic.getImgFile()!=null && !pic.getImgFile().isEmpty())) {
-				L.debug("SettingsActivity, imgDecodableString "+imgDecodableString);
-				// Get the dimensions of the View
-	            int targetW = profilePic.getWidth();
-	            int targetH = profilePic.getHeight();
-	            
-	            BmpFactory  bmpFactory = new BmpFactory();
-	        	rawImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, imgDecodableString);
-			}
-			
-			profilePic.setImageBitmap(rawImage);
-		}
-
-	}
+//	private void resetProfilePic() {
+//		ImageView profilePic = (ImageView) dialog.findViewById(R.id.img_profile_pic);
+//
+//		if (profilePic != null) {
+//			//String imgDecodableString = Utilz.getDataFrmSharedPref(SettingsActivity.this, UserProfile.PROFILE_PIC_LOC, "");
+//
+//			long userId = -1;
+//			SQLiteHandler db = new SQLiteHandler(SettingsActivity.this);
+//			db.openToRead();
+//			userId = Long.parseLong(db.getLoggedInID());
+//			db.close();
+//
+//			ProfilePicture pic = new ProfilePicture();
+//			//pic.setUserId(userId);
+//			pic.downloadOffline(SettingsActivity.this);
+//
+//
+//			String imgDecodableString = pic.getImgDir()+"/"+pic.getImgFile();
+//
+//			Bitmap rawImage = BitmapFactory.decodeResource(getResources(),
+//					R.drawable.pic_sample_girl);
+//
+//
+//			if ((pic.getImgDir()!=null && !pic.getImgDir().isEmpty())
+//					&& (pic.getImgFile()!=null && !pic.getImgFile().isEmpty())) {
+//				L.debug("SettingsActivity, imgDecodableString "+imgDecodableString);
+//				// Get the dimensions of the View
+//				int targetW = profilePic.getWidth();
+//				int targetH = profilePic.getHeight();
+//
+//				BmpFactory  bmpFactory = new BmpFactory();
+//				rawImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, imgDecodableString);
+//			}
+//
+//			profilePic.setImageBitmap(rawImage);
+//		}
+//
+//	}
 
 }

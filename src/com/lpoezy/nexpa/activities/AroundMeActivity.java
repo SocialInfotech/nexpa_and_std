@@ -344,35 +344,6 @@ public class AroundMeActivity extends AppCompatActivity
             oldDst = dst;
         }
 
-
-//		adapter.notifyDataSetChanged();
-//
-//		final XMPPConnection connection = XMPPLogic.getInstance().getConnection();
-//
-//		if (connection == null || !connection.isConnected()) {
-//			SQLiteHandler db = new SQLiteHandler(getApplicationContext());
-//			db.openToWrite();
-//
-//			// db.updateBroadcasting(0);
-//			// db.updateBroadcastTicker(0);
-//			/*/
-//			Account ac = new Account();
-//			ac.LogInChatAccount(db.getUsername(), db.getEncryptedPassword(), db.getEmail(), new OnXMPPConnectedListener() {
-//
-//				@Override
-//				public void onXMPPConnected(XMPPConnection con) {
-//
-//					subscriptionRequestListener(con);
-//				}
-//
-//			});
-//			//*/
-//			db.close();
-//		} else {
-//
-//			subscriptionRequestListener(connection);
-//
-//		}
     }
 
 
@@ -853,7 +824,7 @@ public class AroundMeActivity extends AppCompatActivity
 
         Animation in = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_in_r);
         Animation out = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_out_r);
-
+        arr_correspondents.clear();
         for (int j = 0; j < nearbyUsers.size(); j++) {
 
             final String name = nearbyUsers.get(j).getUsername();
@@ -864,13 +835,13 @@ public class AroundMeActivity extends AppCompatActivity
             arr_correspondents.add(j, correspondent);
 
             //check if connected to openfire server
-            if (XMPPService.xmpp.connection.isAuthenticated()) {
-
-                Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
-                String address = name + "@198.154.106.139/Smack";
-                updateUserAvailability(address, roster);
-
-            }
+//            if (XMPPService.xmpp.connection.isAuthenticated()) {
+//
+//                Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
+//                String address = name + "@198.154.106.139/Smack";
+//                updateUserAvailability(address, roster);
+//
+//            }
 
             imageId.add(j, R.drawable.pic_sample_girl);
             availabilty.add(j, "ADDED");
@@ -1210,7 +1181,8 @@ public class AroundMeActivity extends AppCompatActivity
 
     @Override
     public void onConnectedToOpenfire(final XMPPConnection connection) {
-
+        //http://www.igniterealtime.org/builds/smack/docs/4.0.2/documentation/providers.html
+        //http://stackoverflow.com/questions/17485106/asmak-packet-listener-and-custom-iqprovider-not-triggering-called
 
 //        new Thread(new Runnable() {
 //            @Override
@@ -1272,7 +1244,6 @@ public class AroundMeActivity extends AppCompatActivity
 
                 try {
                     roster.createEntry(address, null, null);
-
                     updateUserAvailability(address, roster);
                 } catch (XMPPException e) {
                     L.error(e.getMessage());
@@ -1337,6 +1308,7 @@ public class AroundMeActivity extends AppCompatActivity
 
         }
 
+
         roster.addRosterListener(new RosterListener() {
             // Ignored events public void entriesAdded(Collection<String> addresses) {}
             public void entriesDeleted(Collection<String> addresses) {
@@ -1361,84 +1333,6 @@ public class AroundMeActivity extends AppCompatActivity
 
 
     }
-
-
-    private void subscriptionRequestListener(final XMPPConnection connection) {
-		
-		/*/
-		if(connection.isConnected()){
-			//*
-			connection.addPacketListener(new PacketListener() {
-
-				@Override
-				public void processPacket(Packet packet) {
-					
-					final Presence presence = (Presence) packet;
-			        final String fromId = presence.getFrom();
-			        //final RosterEntry newEntry = connection.getRoster().getEntry(fromId);
-			        final String uname = fromId.split("@")[0];
-			       
-			        Correspondent correspondent = null;
-					for(Correspondent c : arr_correspondents){
-			        	if(c.getUsername().equals(uname)){
-			        		 correspondent = c;
-			        		break;
-			        	}
-			        }
-			       // Correspondent correspondent = arr_correspondents.;
-			        
-					if (presence.getType() == Type.subscribe) {
-						
-						L.debug("subscribe: "+fromId);
-						//approved request
-						Presence subscribed = new Presence(Presence.Type.subscribed);
-						subscribed.setTo(fromId);
-						connection.sendPacket(subscribed);
-						
-					} else if (presence.getType() == Type.unsubscribe) {
-						L.debug("unsubscribe: "+fromId);
-					} else if (presence.getType() == Type.subscribed) {
-						L.debug("subscribed: "+fromId);
-					} else if (presence.getType() == Type.unsubscribed) {
-						L.debug("unsubscribed: "+fromId);
-					} else if (presence.getType() == Type.available) {
-						L.debug("available: "+fromId);
-						
-						 updateCorrespondentsAvailability(correspondent, fromId, connection);
-					} else if (presence.getType() == Type.unavailable) {
-						L.debug("unavailable: "+fromId);
-						
-						//arr_correspondents.add(j, correspondent);
-				        updateCorrespondentsAvailability(correspondent, fromId, connection);
-				        
-					}
-				}
-			}, new PacketTypeFilter(Presence.class));
-			
-		}else{
-			makeNotify("Cannot connect to server", AppMsg.STYLE_ALERT);
-		}
-		
-		//*/
-    }
-
-//    private void tryGridToUpdate() {
-//        mSwipeRefreshLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSwipeRefreshLayout.setRefreshing(true);
-//            }
-//        });
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSwipeRefreshLayout.setRefreshing(true);
-//                getNewLoc();
-//            }
-//        }, 2000);
-//    }
-
 
     @Override
     public void onCorrespondentUpdate() {

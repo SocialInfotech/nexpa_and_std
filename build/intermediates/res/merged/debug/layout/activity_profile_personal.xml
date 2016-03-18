@@ -68,7 +68,7 @@
                         app:siBorderWidth="6dp"
                         app:siBorderColor="@color/flat_silver"
                         app:siSquare="true"/>
-                    
+
                     <!--<ImageView
                         android:id="@+id/img_profile_pic"
                         android:layout_width="50dp"

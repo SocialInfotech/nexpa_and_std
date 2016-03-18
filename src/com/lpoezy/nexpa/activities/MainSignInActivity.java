@@ -219,7 +219,7 @@ public class MainSignInActivity extends Activity {
                         //*/
                         SessionManager sm = new SessionManager(getApplicationContext());
                         sm.setLogin(true);
-
+                        sm.setUsername(uname);
                         Intent act = new Intent(MainSignInActivity.this, TabHostActivity.class);
                         startActivity(act);
                         finish();

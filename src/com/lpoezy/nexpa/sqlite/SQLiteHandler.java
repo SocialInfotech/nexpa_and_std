@@ -1248,7 +1248,7 @@ public class SQLiteHandler {
     }
 
     public String saveOfuser(String username, String plainPassword, String encryptedPassword, String name,
-                           String email, long creationDate, long modificationDate, String gcmResistrationId) {
+                             String email, long creationDate, long modificationDate, String gcmResistrationId) {
 
         ContentValues values = new ContentValues();
 
@@ -1886,17 +1886,19 @@ public class SQLiteHandler {
     }
 
     public String getUsername() {
-        String last;
-        // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + USERNAME + " FROM " + TABLE_OFUSER + " LIMIT 1 ", null);
-        cursor.moveToFirst();
-        try {
-            last = cursor.getString(0);
-        } catch (Exception e) {
-            last = "";
-        }
-        cursor.close();
-        return last;
+//        String last;
+//        // SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + USERNAME + " FROM " + TABLE_OFUSER + " LIMIT 1 ", null);
+//        cursor.moveToFirst();
+//        try {
+//            last = cursor.getString(0);
+//        } catch (Exception e) {
+//            last = "";
+//        }
+//        cursor.close();
+
+        SessionManager sm = new SessionManager(context);
+        return  sm.getUsername();
     }
 
 //	public String getFName() {
@@ -1915,8 +1917,7 @@ public class SQLiteHandler {
     public String getEmail() {
         String last = "";
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + EMAIL + " FROM " + TABLE_OFUSER + " LIMIT 1 ",
-                null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_OFUSER, new String[]{EMAIL}, USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         if (cursor.moveToFirst()) {
             last = cursor.getString(0);
         }
@@ -1928,7 +1929,7 @@ public class SQLiteHandler {
     public String getPlainPassword() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + PLAIN_PASSWORD + " FROM " + TABLE_OFUSER + " LIMIT 1 ", null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_OFUSER, new String[]{PLAIN_PASSWORD}, USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         cursor.moveToFirst();
         try {
             last = cursor.getString(0);
@@ -1943,7 +1944,7 @@ public class SQLiteHandler {
     public String getEncryptedPassword() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + ENCRYPTED_PASSWORD + " FROM " + TABLE_OFUSER + " LIMIT 1 ", null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_OFUSER, new String[]{ENCRYPTED_PASSWORD}, USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         cursor.moveToFirst();
         try {
             last = cursor.getString(0);
@@ -1958,8 +1959,7 @@ public class SQLiteHandler {
     public String getName() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + NAME + " FROM " + TABLE_OFUSER + " LIMIT 1 ",
-                null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_OFUSER, new String[]{NAME}, USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         cursor.moveToFirst();
         last = cursor.getString(0);
         cursor.close();
@@ -1969,7 +1969,7 @@ public class SQLiteHandler {
     public String getGcmRegistrationId() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + GCM_REG_ID + " FROM " + TABLE_OFUSER + " LIMIT 1 ", null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_OFUSER, new String[]{GCM_REG_ID}, USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         cursor.moveToFirst();
         try {
             last = cursor.getString(0);
@@ -2093,8 +2093,7 @@ public class SQLiteHandler {
     public String getLocationLongitude() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery(
-                "select " + LOC_LONGI + " from " + TABLE_LOCATION +  " LIMIT 1 ", null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_LOCATION, new String[]{LOC_LONGI}, LOC_USERNAME+"=?", new String[]{getUsername()},null,null,null);
         try {
             cursor.moveToFirst();
             last = cursor.getString(0);
@@ -2108,8 +2107,7 @@ public class SQLiteHandler {
     public String getLocationLatitude() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery(
-                "select " + LOC_LATI + " from " + TABLE_LOCATION + " LIMIT 1 ", null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_LOCATION, new String[]{LOC_LATI}, LOC_USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         try {
             cursor.moveToFirst();
             last = cursor.getString(0);
@@ -2123,8 +2121,7 @@ public class SQLiteHandler {
     public String getLocationDateUpdate() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery(
-                "select " + LOC_DATE_UPDATE + " from " + TABLE_LOCATION + " LIMIT 1 ", null);
+        Cursor cursor= sqLiteDatabase.query(TABLE_LOCATION, new String[]{LOC_DATE_UPDATE}, LOC_USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         try {
             cursor.moveToFirst();
             last = cursor.getString(0);
@@ -2209,7 +2206,7 @@ public class SQLiteHandler {
     public void deleteUsers() {
         // SQLiteDatabase db = this.getWritableDatabase();
         sqLiteDatabase.delete(TABLE_OFUSER, null, null);
-        sqLiteDatabase.delete(DATABASE_TABLE_3, null, null);
+        sqLiteDatabase.delete(TABLE_USER_PROFILE, null, null);
         sqLiteDatabase.delete(TABLE_LOCATION, null, null);
         // db.close();
         Log.d(TAG, "Deleted all user info from sqlite");

@@ -3,6 +3,9 @@ package com.lpoezy.nexpa.activities;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.utility.L;
 
 import java.util.ArrayList;
 
@@ -66,7 +70,7 @@ public class CustomGrid extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
 
         // TODO Auto-generated method stub
         View grid;
@@ -84,7 +88,7 @@ public class CustomGrid extends BaseAdapter {
         }
 
         TextView textView = (TextView) grid.findViewById(R.id.grid_text);
-        ImageView imageView = (ImageView) grid.findViewById(R.id.grid_image);
+        final ImageView imageView = (ImageView) grid.findViewById(R.id.grid_image);
         ImageView offline = (ImageView) grid.findViewById(R.id.offline);
         //TextView txtAvailView = (TextView) grid.findViewById(R.id.txtAvail);
 
@@ -95,21 +99,37 @@ public class CustomGrid extends BaseAdapter {
 
         int avalability = mCorrespondents.get(position).isAvailable() ? R.drawable.online : R.drawable.offline;
         offline.setImageResource(avalability);
-        Bitmap rawImage = BitmapFactory.decodeResource(mContext.getResources(),
-                R.drawable.pic_sample_girl);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                Bitmap rawImage = BitmapFactory.decodeResource(mContext.getResources(),
+                        R.drawable.pic_sample_girl);
+
+                UserProfile uProfile = new UserProfile();
+                uProfile.setUsername(mCorrespondents.get(position).getUsername());
+                if(XMPPService.xmpp.connection.isConnected() && XMPPService.xmpp.connection.getUser()!=null){
+                    uProfile.loadVCard(XMPPService.xmpp.connection);
+
+                    if (uProfile.getAvatarImg() != null) {
+                        rawImage = uProfile.getAvatarImg();
+                    }
+                }
+                final Bitmap avatar = rawImage;
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        imageView.setImageBitmap(avatar);
+
+                    }
+                });
 
 
-        UserProfile uProfile = new UserProfile();
-        uProfile.setUsername(mCorrespondents.get(position).getUsername());
+            }
+        }).start();
 
-        uProfile.loadVCard(XMPPService.xmpp.connection);
-
-        if (uProfile.getAvatarImg() != null) {
-            rawImage = uProfile.getAvatarImg();
-        }
-
-
-        imageView.setImageBitmap(rawImage);
 
         // txtAvailView.setText(availabilty.get(position));
 

@@ -73,6 +73,15 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
         mTvUrl0 = (TextView)this.findViewById(R.id.tv_url0);
         mTvUrl1 = (TextView)this.findViewById(R.id.tv_url1);
         mTvUrl2 = (TextView)this.findViewById(R.id.tv_url2);
+
+		mTvJobTitle.setVisibility(View.GONE);
+		mTvUname.setVisibility(View.GONE);
+		mTvUrl0.setVisibility(View.GONE);
+		mTvUrl1.setVisibility(View.GONE);
+		mTvUrl2.setVisibility(View.GONE);
+
+		mTvUname.setVisibility(View.VISIBLE);
+		mTvUname.setText(username + " | " + distance);
 		
 
 		btnMessage = (Button) findViewById(R.id.btn_mes);
@@ -131,51 +140,57 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 
 
 	private void updateUI() {
-		new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+
+
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
 
-				UserProfile profile = new UserProfile();
+				final UserProfile profile = new UserProfile();
 				profile.setUsername(username);
 				profile.loadVCard(XMPPService.xmpp.connection);
 
-				mTvJobTitle.setVisibility(View.GONE);
-				mTvUname.setVisibility(View.GONE);
-				mTvUrl0.setVisibility(View.GONE);
-				mTvUrl1.setVisibility(View.GONE);
-				mTvUrl2.setVisibility(View.GONE);
+
+				new Handler(Looper.getMainLooper()).post(new Runnable() {
+					@Override
+					public void run() {
+
+						if (profile.getAvatarImg() != null) {
+							Bitmap rawImage = profile.getAvatarImg();
+							imgProfile.setImageBitmap(rawImage);
+						}
 
 
-				if(profile.getAvatarImg()!=null){
-					Bitmap rawImage = profile.getAvatarImg();
-					imgProfile.setImageBitmap(rawImage);
-				}
+						if (profile.getProfession() != null && !profile.getProfession().equalsIgnoreCase("null") && !profile.getProfession().equals("")) {
+							mTvJobTitle.setVisibility(View.VISIBLE);
+							mTvJobTitle.setText(profile.getProfession());
+						}
 
 
-				if(profile.getProfession()!=null && !profile.getProfession().equalsIgnoreCase("null") && !profile.getProfession().equals("")){
-					mTvJobTitle.setVisibility(View.VISIBLE);
-					mTvJobTitle.setText(profile.getProfession());
-				}
 
-				mTvUname.setVisibility(View.VISIBLE);
-				mTvUname.setText(username+ " | " + distance);
+						if (profile.getUrl0() != null && !profile.getUrl0().equalsIgnoreCase("null") && !profile.getUrl0().equals("")) {
+							mTvUrl0.setVisibility(View.VISIBLE);
+							mTvUrl0.setText(profile.getUrl0());
+						}
 
-				if(profile.getUrl0()!=null &&!profile.getUrl0().equalsIgnoreCase("null") && !profile.getUrl0().equals("")){
-					mTvUrl0.setVisibility(View.VISIBLE);
-					mTvUrl0.setText(profile.getUrl0());
-				}
+						if (profile.getUrl1() != null && !profile.getUrl1().equalsIgnoreCase("null") && !profile.getUrl1().equals("")) {
+							mTvUrl1.setVisibility(View.VISIBLE);
+							mTvUrl1.setText(profile.getUrl1());
+						}
 
-				if(profile.getUrl1()!=null &&!profile.getUrl1().equalsIgnoreCase("null") && !profile.getUrl1().equals("")){
-					mTvUrl1.setVisibility(View.VISIBLE);
-					mTvUrl1.setText(profile.getUrl1());
-				}
+						if (profile.getUrl2() != null && !profile.getUrl2().equalsIgnoreCase("null") && !profile.getUrl2().equals("")) {
+							mTvUrl2.setVisibility(View.VISIBLE);
+							mTvUrl2.setText(profile.getUrl2());
+						}
 
-				if(profile.getUrl2()!=null &&!profile.getUrl2().equalsIgnoreCase("null") && !profile.getUrl2().equals("")){
-					mTvUrl2.setVisibility(View.VISIBLE);
-					mTvUrl2.setText(profile.getUrl2());
-				}
+					}
+				});
 
 			}
-		});
+		}).start();
+
+
+
 	}
 }

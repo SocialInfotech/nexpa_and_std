@@ -56,28 +56,25 @@ public class UserProfile {
         try {
             isSupported = vCardManager.isSupported(connection.getUser());
         } catch (SmackException.NoResponseException e) {
-            L.error(e.getMessage());
+            L.error("loadVCard: "+e.getMessage());
         } catch (XMPPException.XMPPErrorException e) {
-            L.error(e.getMessage());
+            L.error("loadVCard: "+e.getMessage());
         } catch (SmackException.NotConnectedException e) {
-            L.error(e.getMessage());
+            L.error("loadVCard: "+e.getMessage());
         }
 
         if (isSupported) {
-
             VCard loadCard = null;
             try {
 
                 loadCard = vCardManager.loadVCard(this.username + "@" + XMPPService.DOMAIN);
                 //loadCard.load(connection, address); // load someone's VCard
-                L.debug("loading profile");
-
             } catch (SmackException.NoResponseException e) {
-                L.error(e.getMessage());
+                L.error("loadVCard: "+e.getMessage());
             } catch (XMPPException.XMPPErrorException e) {
-                L.error(e.getMessage());
+                L.error("loadVCard: "+e.getMessage());
             } catch (SmackException.NotConnectedException e) {
-                L.error(e.getMessage());
+                L.error("loadVCard: "+e.getMessage());
             }
 
             if (loadCard != null) {
@@ -140,11 +137,11 @@ public class UserProfile {
         try {
             isSupported = vCardManager.isSupported(connection.getUser());
         } catch (SmackException.NoResponseException e) {
-            L.error(e.getMessage());
+            L.error("saveVCard: "+e.getMessage());
         } catch (XMPPException.XMPPErrorException e) {
-            L.error(e.getMessage());
+            L.error("saveVCard: "+e.getMessage());
         } catch (SmackException.NotConnectedException e) {
-            L.error(e.getMessage());
+            L.error("saveVCard: "+e.getMessage());
         }
 
         if (isSupported) {

@@ -14,9 +14,9 @@ import java.io.IOException;
  */
 public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ> {
 
-    private final ListOfCollectionsIQ.OnTestListener callback;
+    private final ListOfCollectionsIQ.OnRetrieveListener callback;
 
-    public ListOfCollectionsIQProvider(ListOfCollectionsIQ.OnTestListener callback) {
+    public ListOfCollectionsIQProvider(ListOfCollectionsIQ.OnRetrieveListener callback) {
         this.callback = callback;
     }
 
@@ -114,7 +114,7 @@ public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ>
             }
         }
 
-        if (callback != null) callback.onTest(listOfCollectionsIQ);
+        if (callback != null) callback.onRetrieve(listOfCollectionsIQ);
 
         return listOfCollectionsIQ;
     }

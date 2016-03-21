@@ -57,9 +57,9 @@ public class ListOfCollectionsIQ extends IQ {
         }
     }
 
-    public interface OnTestListener{
+    public interface OnRetrieveListener {
 
-        public void onTest(ListOfCollectionsIQ list);
+        public void onRetrieve(ListOfCollectionsIQ list);
     }
 }
 

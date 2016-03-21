@@ -34,6 +34,7 @@ import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
+import com.lpoezy.nexpa.objects.CollectionIQ;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Messages;
 import com.lpoezy.nexpa.objects.ProfilePicture;
@@ -402,7 +403,21 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			mBounded = true;
 
 			mService = ((LocalBinder<XMPPService>) service).getService();
-			mService.addMessageListener(ChatActivity.this);
+			//mService.addMessageListener(ChatActivity.this);
+
+			String with = getIntent().getStringExtra("with");
+			String start = getIntent().getStringExtra("start");
+
+			if(with!=null && !with.isEmpty() && start!=null && !start.isEmpty()){
+				mService.retrieveCollectionFrmMsgArchive(with, start, new CollectionIQ.OnRetrieveListener(){
+					@Override
+					public void onRetrieve(CollectionIQ collection) {
+
+					}
+				});
+			}
+
+
 		}
 	};
 

@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.ChatMessage;
+import com.lpoezy.nexpa.objects.CollectionIQ;
 import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
 import com.lpoezy.nexpa.objects.ListOfCollectionsIQProvider;
 import com.lpoezy.nexpa.utility.L;
@@ -269,6 +270,8 @@ public class XMPPManager {
     }
 
 
+
+
     private class ChatManagerListenerImpl implements ChatManagerListener {
         @Override
         public void chatCreated(final org.jivesoftware.smack.chat.Chat chat,
@@ -282,9 +285,23 @@ public class XMPPManager {
 
     }
 
+    public void retrieveCollectionFrmMsgArchive(String with, String start, CollectionIQ.OnRetrieveListener callback) {
+
+        if (connection.isAuthenticated()) {
+            String jid = with+"@198.154.106.139";
+            CollectionIQ collectionIq = new CollectionIQ(jid, start);
+            try {
+                connection.sendStanza(collectionIq);
+            } catch (NotConnectedException e) {
+                L.error("retrieveCollectionFrmMsgArchive: " + e.getMessage());
+            }
+        }else{
+            login();
+        }
+    }
 
 
-    public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnTestListener callback) {
+    public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnRetrieveListener callback) {
 
 
         if (connection.isAuthenticated()) {

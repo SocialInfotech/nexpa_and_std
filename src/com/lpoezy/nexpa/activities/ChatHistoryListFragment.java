@@ -103,26 +103,11 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 			L.debug("=============ChatHistoryList, message received================");
-			updateList();
 
 		}
 
 	};
 
-	// receiving update from correspondent model
-	// private BroadcastReceiver mReceivedCorrespondentUpdate = new
-	// BroadcastReceiver() {
-	//
-	// @Override
-	// public void onReceive(final Context context, final Intent intent) {
-	// L.debug("ChatHistoryList, correspondent update
-	// "+mBuddys.get(0).getProfilePic());
-	//
-	// adapter.notifyDataSetChanged();
-	//
-	// }
-	// };
-	// List<Correspondent> correspondents;
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
@@ -144,21 +129,11 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
 		getActivity().registerReceiver(mReceivedMessage, new IntentFilter(AppConfig.ACTION_RECEIVED_MSG));
 
-		updateList();
 		// getActivity().registerReceiver(mReceivedCorrespondentUpdate, new
 		// IntentFilter(Correspondent.ACTION_UPDATE));
 		// int count = OneComment.getUnReadMsgCountOffline(getActivity());
 		// L.debug("count: "+count+", mBuddys.isEmpty: "+mBuddys.isEmpty());
 
-	}
-
-	private void updateList() {
-		L.debug("ChatHistory, updateList");
-//		mBuddys.clear();
-//		mBuddys.downloadOffline(getActivity());
-//		mBuddys.downloadLatestMsgOffline(getActivity());
-//		onCorrespondentUpdate();
-//		downloadProfilePics(mBuddys);
 	}
 
 	// protected void downloadProfilePics(final List<Correspondent>
@@ -241,97 +216,11 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 		@Override
 		public void onBindViewHolder(ViewHolder vh, int position) {
 			vh.position = position;
-
-			// only use username if fname has no value
-			//String name = mBuddys.get(position).getUsername();
 			String name = collections.get(position).getWith().split("@")[0];
 
 			vh.tvBuddys.setText(name);
 			vh.tvMsg.setText(collections.get(position).getStart());
 			vh.tvMsgDate.setVisibility(View.INVISIBLE);
-
-//			NewMessage msg = mBuddys.get(position).getConversation().get(0);
-//
-//			// only make the text bold if the msg is from a correpondent
-//			boolean isMsgUnread = msg.isUnread();
-//
-//			SQLiteHandler db = new SQLiteHandler(getActivity());
-//			db.openToRead();
-//			// long userId = Long.parseLong(db.getLoggedInID());
-//			String username = db.getUsername();
-//			db.close();
-//
-//			if (isMsgUnread && !username.equals(msg.getSenderName()))
-//				vh.tvMsg.setTypeface(null, Typeface.BOLD); // only text //
-//															// style(only bold)
-//			else
-//				vh.tvMsg.setTypeface(null, Typeface.NORMAL);
-//			//
-//			// // L.debug("update view holder
-//			// // "+mBuddys.get(position).getProfilePic());
-//			Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.pic_sample_girl);
-//			if (mBuddys.get(position).getProfilePic() != null) {
-//
-//				rawImage = mBuddys.get(position).getProfilePic();
-//			}
-
-//			RoundedImageView riv = new RoundedImageView(getActivity());
-//			Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
-//
-//			// android.text.format.DateUtils.isToday(msg.getDate());
-//
-//			DateTime now = new DateTime();
-//
-//			Interval today = new Interval(now.withTimeAtStartOfDay(), now.plusDays(1).withTimeAtStartOfDay());
-//			Interval pastWeek = new Interval(now.minusWeeks(1).withTimeAtStartOfDay(),
-//					now.plusWeeks(1).withTimeAtStartOfDay());
-//			Interval pastMonth = new Interval(now.minusMonths(12).withTimeAtStartOfDay(),
-//					now.plusDays(1).withTimeAtStartOfDay());
-//
-//
-//			DateTime msgDate = new DateTime(msg.getDate());
-//
-//			Calendar c = Calendar.getInstance();
-//			c.setTimeInMillis(msg.getDate());
-//
-//			String msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.dayOfMonth().getAsText()+", "+msgDate.year().getAsText();
-//
-//			if (today.contains(msgDate)) {
-//
-//				String startTime = DateUtils.millisToSimpleDate(msg.getDate(), DateFormatz.DATE_FORMAT_5);
-//				StringTokenizer tk = new StringTokenizer(startTime);
-//				String date = tk.nextToken();
-//				String time = tk.nextToken();
-//
-//				SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-//				SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a");
-//
-//				Date dt;
-//				try {
-//					dt = sdf.parse(time);
-//
-//					msgDateStr = sdfs.format(dt);
-//
-//				} catch (java.text.ParseException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//
-//			} else if (pastWeek.contains(msgDate)) {
-//
-//				msgDateStr = msgDate.dayOfWeek().getAsText();
-//
-//			} else if (pastMonth.contains(msgDate)) {
-//				//msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.year().getAsText();
-//				 msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.dayOfMonth().getAsText();
-//
-//			}
-
-			//vh.tvMsgDate.setText(collections.chats.get(position).getStart());
-
-			//vh.imgProfilePic.setImageBitmap(circImage);
-
-
 
 		}
 
@@ -361,28 +250,16 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
 			@Override
 			public void onClick(View v) {
-
-//				Correspondent buddy = mBuddys.get(position);
-//				// will set all the unread flags,
-//				// of the messages to read
-//				for (NewMessage comment : buddy.getConversation()) {
-//					if (comment.isUnread()) {
-//						comment.setUnread(false);
-//					}
-//				}
-//
-//				// update adapter
-//				notifyDataSetChanged();
-//
-//				listener.onShowChatHistory(buddy);
+				//L.debug("with: "+tvBuddys.getText().toString()+", start: "+tvMsg.getText().toString());
+				mCallback.onShowChatHistory(tvBuddys.getText().toString(), tvMsg.getText().toString());
 			}
 
 		}
 	}
 
 	public interface OnShowChatHistoryListener {
-
-		public void onShowChatHistory(Correspondent buddy);
+		public void onShowChatHistory(String with, String start);
+		//public void onShowChatHistory(Correspondent buddy);
 	}
 
 	@Override

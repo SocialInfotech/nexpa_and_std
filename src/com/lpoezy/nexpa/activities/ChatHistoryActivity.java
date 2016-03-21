@@ -1,9 +1,7 @@
 package com.lpoezy.nexpa.activities;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.activities.ChatHistoryListFragment.OnShowChatHistoryListener;
-import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
-import com.lpoezy.nexpa.utility.L;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -84,9 +82,9 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 		final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
 
 		if(((TabHostActivity) getParent()).isBounded()){
-			((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(new ListOfCollectionsIQ.OnTestListener(){
+			((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(new ListOfCollectionsIQ.OnRetrieveListener(){
 				@Override
-				public void onTest(ListOfCollectionsIQ collections) {
+				public void onRetrieve(ListOfCollectionsIQ collections) {
 					frag.setCollections(collections.chats);
 
 				}
@@ -95,13 +93,13 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 	}
 
 	@Override
-	public void onShowChatHistory(Correspondent buddy) {
+	public void onShowChatHistory(String with, String start) {
 
-//		Intent intentMes = new Intent(this, ChatActivity.class);
-//		intentMes.putExtra("userid", buddy.getId());
-//		intentMes.putExtra("username", buddy.getUsername());
-//
-//		//L.debug("username "+buddy.getUsername()+", email: "+email);
-//		startActivity(intentMes);
+		Intent intentMes = new Intent(this, ChatActivity.class);
+		intentMes.putExtra("with", with);
+		intentMes.putExtra("start", start);
+
+		//L.debug("username "+buddy.getUsername()+", email: "+email);
+		startActivity(intentMes);
 	}
 }

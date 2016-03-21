@@ -17,10 +17,10 @@ import com.lpoezy.nexpa.activities.ChatHistoryActivity;
 import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
+import com.lpoezy.nexpa.objects.CollectionIQ;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
 import com.lpoezy.nexpa.objects.NewMessage;
-import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.HttpUtilz;
@@ -302,8 +302,12 @@ public class XMPPService extends Service {
 
     }
 
-    public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnTestListener callback) {
+    public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnRetrieveListener callback) {
         xmpp.retrieveListOfCollectionsFrmMsgArchive(callback);
+    }
+
+    public void retrieveCollectionFrmMsgArchive(String with, String start, CollectionIQ.OnRetrieveListener callback) {
+        xmpp.retrieveCollectionFrmMsgArchive(with, start, callback);
     }
 
 

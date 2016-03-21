@@ -107,15 +107,6 @@ public class TabHostActivity extends TabActivity {
 		startService(service);
 		bindService(service, mServiceConn, Context.BIND_AUTO_CREATE);
 
-		OfUser user = new OfUser();
-
-		if(!user.hasGcmRegistrationId(TabHostActivity.this)){
-			Intent regGcmService = new Intent(this, RegistrationIntentService.class);
-			startService(regGcmService);
-		}
-
-
-
 	}
 	
 	@Override

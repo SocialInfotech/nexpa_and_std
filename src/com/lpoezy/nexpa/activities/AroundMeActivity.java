@@ -48,16 +48,21 @@ import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Geolocation;
 import com.lpoezy.nexpa.objects.Users;
+import com.lpoezy.nexpa.openfire.Time;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
+import org.jivesoftware.smack.ExceptionCallback;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterListener;
 import org.json.JSONArray;
@@ -1187,13 +1192,49 @@ public class AroundMeActivity extends AppCompatActivity
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
-//                L.debug("=====================================================");
+                L.debug("=====================================================");
 //
 //                ServiceDiscoveryManager sdm = ServiceDiscoveryManager
 //                        .getInstanceFor(connection);
 //
 //                sdm.addFeature("http://jabber.org/protocol/disco#info");
 //                sdm.addFeature("urn:xmpp:archive");
+
+//xTX8b-9
+//                Time iq = new Time();
+//                iq.setType(IQ.Type.get);
+//                //iq.setTo(XMPPService.DOMAIN);
+//        try {
+//            connection.sendStanza(iq);
+//        } catch (SmackException.NotConnectedException e) {
+//
+//        }
+
+//                try {
+//                    connection.sendIqWithResponseCallback(iq,
+//                            new StanzaListener() {
+//
+//                                @Override
+//                                public void processPacket(Stanza arg0)
+//                                        throws SmackException.NotConnectedException {
+//
+//                                    //L.debug("Send IQ with Response, ****** message " + arg0);
+//                                }
+//                            }, new ExceptionCallback() {
+//                                @Override
+//                                public void processException(
+//                                        Exception exception) {
+//                                    exception.printStackTrace();
+//                                    L.error("IO archjieve Exception, " + exception.getMessage());
+//                                }
+//                            });
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(""+e.getMessage());
+//                }
+
+        //I36G1-9
+
+
 //
 //
 //                Time iq = new Time();
@@ -1227,108 +1268,108 @@ public class AroundMeActivity extends AppCompatActivity
 //            }
 //        }).start();
 
-        final Roster roster = Roster.getInstanceFor(connection);
-        if (!nearbyUsers.isEmpty()) {
-
-            for (Geolocation nearByUser : nearbyUsers) {
-                String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
-
-                Presence subscribe = new Presence(Presence.Type.subscribe);
-                subscribe.setTo(address);
-                try {
-                    connection.sendPacket(subscribe);
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-
-                try {
-                    roster.createEntry(address, null, null);
-                    updateUserAvailability(address, roster);
-                } catch (XMPPException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotLoggedInException e) {
-                    L.error(address + ", " + e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                }
-
-
-
-
-                /*/
-                L.debug("saving vcard: "+address);
-                //saveVCard vcard
-                VCard saveCard = new VCard();
-                saveCard.setFirstName(nearByUser.getUsername());
-                saveCard.setEmailHome("foo@fee0.bar");
-                saveCard.setEmailWork("foo@fee1.bar");
-                saveCard.setJabberId(connection.getUser().replace("/Smack", ""));
-
-                VCardManager vCardManager = VCardManager.getInstanceFor(connection);
-                try {
-                    L.debug("isVCArdSupported? "+connection.getUser()+", "+vCardManager.isSupported(connection.getUser()));
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-                try {
-                    vCardManager.saveVCard(saveCard);
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-                //load vcard
-                L.debug("loading vcard: "+address);
-                try {
-
-                    VCard loadCard = vCardManager.loadVCard(address.replace("/Smack", ""));
-                    //loadCard.load(connection, address); // load someone's VCard
-
-                    L.debug("vcard: "+loadCard.getEmailHome());
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-                //*/
-            }
-
-        }
-
-
-        roster.addRosterListener(new RosterListener() {
-            // Ignored events public void entriesAdded(Collection<String> addresses) {}
-            public void entriesDeleted(Collection<String> addresses) {
-            }
-
-            @Override
-            public void entriesAdded(Collection<String> collection) {
-
-            }
-
-            public void entriesUpdated(Collection<String> addresses) {
-            }
-
-            public void presenceChanged(Presence presence) {
-                //L.debug("Presence changed: " + presence.getFrom() + " " + presence);
-                L.debug("Presence changed: " + presence.getFrom());
-                updateUserAvailability(presence.getFrom(), roster);
-
-            }
-        });
+//        final Roster roster = Roster.getInstanceFor(connection);
+//        if (!nearbyUsers.isEmpty()) {
+//
+//            for (Geolocation nearByUser : nearbyUsers) {
+//                String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
+//
+//                Presence subscribe = new Presence(Presence.Type.subscribe);
+//                subscribe.setTo(address);
+//                try {
+//                    connection.sendPacket(subscribe);
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//
+//                try {
+//                    roster.createEntry(address, null, null);
+//                    updateUserAvailability(address, roster);
+//                } catch (XMPPException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NotLoggedInException e) {
+//                    L.error(address + ", " + e.getMessage());
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NoResponseException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//
+//
+//
+//                /*/
+//                L.debug("saving vcard: "+address);
+//                //saveVCard vcard
+//                VCard saveCard = new VCard();
+//                saveCard.setFirstName(nearByUser.getUsername());
+//                saveCard.setEmailHome("foo@fee0.bar");
+//                saveCard.setEmailWork("foo@fee1.bar");
+//                saveCard.setJabberId(connection.getUser().replace("/Smack", ""));
+//
+//                VCardManager vCardManager = VCardManager.getInstanceFor(connection);
+//                try {
+//                    L.debug("isVCArdSupported? "+connection.getUser()+", "+vCardManager.isSupported(connection.getUser()));
+//                } catch (SmackException.NoResponseException e) {
+//                    L.error(e.getMessage());
+//                } catch (XMPPException.XMPPErrorException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//                try {
+//                    vCardManager.saveVCard(saveCard);
+//                } catch (SmackException.NoResponseException e) {
+//                    L.error(e.getMessage());
+//                } catch (XMPPException.XMPPErrorException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//                //load vcard
+//                L.debug("loading vcard: "+address);
+//                try {
+//
+//                    VCard loadCard = vCardManager.loadVCard(address.replace("/Smack", ""));
+//                    //loadCard.load(connection, address); // load someone's VCard
+//
+//                    L.debug("vcard: "+loadCard.getEmailHome());
+//                } catch (SmackException.NoResponseException e) {
+//                    L.error(e.getMessage());
+//                } catch (XMPPException.XMPPErrorException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                }
+//                //*/
+//            }
+//
+//        }
+//
+//
+//        roster.addRosterListener(new RosterListener() {
+//            // Ignored events public void entriesAdded(Collection<String> addresses) {}
+//            public void entriesDeleted(Collection<String> addresses) {
+//            }
+//
+//            @Override
+//            public void entriesAdded(Collection<String> collection) {
+//
+//            }
+//
+//            public void entriesUpdated(Collection<String> addresses) {
+//            }
+//
+//            public void presenceChanged(Presence presence) {
+//                //L.debug("Presence changed: " + presence.getFrom() + " " + presence);
+//                L.debug("Presence changed: " + presence.getFrom());
+//                updateUserAvailability(presence.getFrom(), roster);
+//
+//            }
+//        });
 
 
 

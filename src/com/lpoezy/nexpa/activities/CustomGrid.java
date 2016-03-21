@@ -100,35 +100,35 @@ public class CustomGrid extends BaseAdapter {
         int avalability = mCorrespondents.get(position).isAvailable() ? R.drawable.online : R.drawable.offline;
         offline.setImageResource(avalability);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                Bitmap rawImage = BitmapFactory.decodeResource(mContext.getResources(),
-                        R.drawable.pic_sample_girl);
-
-                UserProfile uProfile = new UserProfile();
-                uProfile.setUsername(mCorrespondents.get(position).getUsername());
-                if(XMPPService.xmpp.connection.isConnected() && XMPPService.xmpp.connection.getUser()!=null){
-                    uProfile.loadVCard(XMPPService.xmpp.connection);
-
-                    if (uProfile.getAvatarImg() != null) {
-                        rawImage = uProfile.getAvatarImg();
-                    }
-                }
-                final Bitmap avatar = rawImage;
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        imageView.setImageBitmap(avatar);
-
-                    }
-                });
-
-
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                Bitmap rawImage = BitmapFactory.decodeResource(mContext.getResources(),
+//                        R.drawable.pic_sample_girl);
+//
+//                UserProfile uProfile = new UserProfile();
+//                uProfile.setUsername(mCorrespondents.get(position).getUsername());
+//                if(XMPPService.xmpp.connection.isConnected() && XMPPService.xmpp.connection.getUser()!=null){
+//                    uProfile.loadVCard(XMPPService.xmpp.connection);
+//
+//                    if (uProfile.getAvatarImg() != null) {
+//                        rawImage = uProfile.getAvatarImg();
+//                    }
+//                }
+//                final Bitmap avatar = rawImage;
+//                new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        imageView.setImageBitmap(avatar);
+//
+//                    }
+//                });
+//
+//
+//            }
+//        }).start();
 
 
         // txtAvailView.setText(availabilty.get(position));

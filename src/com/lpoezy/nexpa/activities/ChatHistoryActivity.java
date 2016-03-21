@@ -2,18 +2,14 @@ package com.lpoezy.nexpa.activities;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.activities.ChatHistoryListFragment.OnShowChatHistoryListener;
 import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.sqlite.SessionManager;
+import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
+import com.lpoezy.nexpa.utility.L;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.widget.TextView;
 
 
@@ -84,16 +80,28 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 		super.onResume();
 		
 		isRunning = true;
+
+		final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
+
+		if(((TabHostActivity) getParent()).isBounded()){
+			((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(new ListOfCollectionsIQ.OnTestListener(){
+				@Override
+				public void onTest(ListOfCollectionsIQ collections) {
+					frag.setCollections(collections.chats);
+
+				}
+			});
+		}
 	}
 
 	@Override
 	public void onShowChatHistory(Correspondent buddy) {
 
-		Intent intentMes = new Intent(this, ChatActivity.class);
-		intentMes.putExtra("userid", buddy.getId());
-		intentMes.putExtra("username", buddy.getUsername());
-		
-		//L.debug("username "+buddy.getUsername()+", email: "+email);
-		startActivity(intentMes);
+//		Intent intentMes = new Intent(this, ChatActivity.class);
+//		intentMes.putExtra("userid", buddy.getId());
+//		intentMes.putExtra("username", buddy.getUsername());
+//
+//		//L.debug("username "+buddy.getUsername()+", email: "+email);
+//		startActivity(intentMes);
 	}
 }

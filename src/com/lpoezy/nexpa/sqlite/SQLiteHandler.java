@@ -1248,7 +1248,7 @@ public class SQLiteHandler {
     }
 
     public String saveOfuser(String username, String plainPassword, String encryptedPassword, String name,
-                             String email, long creationDate, long modificationDate, String gcmResistrationId) {
+                             String email, long creationDate, long modificationDate) {
 
         ContentValues values = new ContentValues();
 
@@ -1259,7 +1259,6 @@ public class SQLiteHandler {
         values.put(EMAIL, email);
         values.put(CREATION_DATE, creationDate);
         values.put(MODIFICATION_DATE, modificationDate);
-        values.put(GCM_REG_ID, gcmResistrationId);
 
         sqLiteDatabase.insertWithOnConflict(TABLE_OFUSER, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 

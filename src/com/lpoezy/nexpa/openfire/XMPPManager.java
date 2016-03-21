@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.ChatMessage;
+import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
+import com.lpoezy.nexpa.objects.ListOfCollectionsIQProvider;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
@@ -27,6 +29,7 @@ import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
+import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.iqregister.AccountManager;
@@ -251,8 +254,8 @@ public class XMPPManager {
             connection.login(loginUser, passwordUser);
 
             Presence presence = new Presence(Presence.Type.available);
-                                presence.setStatus("I'm available");
-                                connection.sendPacket(presence);
+            presence.setStatus("I'm available");
+            connection.sendPacket(presence);
 
 
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
@@ -279,11 +282,38 @@ public class XMPPManager {
 
     }
 
+
+
+    public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnTestListener callback) {
+
+
+        if (connection.isAuthenticated()) {
+            L.debug("==========retrieveListOfCollectionsFrmMsgArchive========================");
+            ListOfCollectionsIQ listOfCollections = new ListOfCollectionsIQ();
+
+            try {
+                connection.sendStanza(listOfCollections);
+
+                ProviderManager.addIQProvider("list", "urn:xmpp:archive", new ListOfCollectionsIQProvider(callback));
+
+            } catch (NotConnectedException e) {
+                L.error("retrieveListOfCollectionsFrmMsgArchive: "+e.getMessage());
+            }
+
+        } else {
+
+            login();
+
+        }
+
+
+    }
+
     public void sendMessage(ChatMessage chatMessage) {
         String body = gson.toJson(chatMessage);
 
         if (!chat_created) {
-            L.debug("to: "+chatMessage.receiver + "@" + "198.154.106.139");
+            L.debug("to: " + chatMessage.receiver + "@" + "198.154.106.139");
             Mychat = ChatManager.getInstanceFor(connection).createChat(
                     chatMessage.receiver + "@"
                             + this.serverAddress,
@@ -480,18 +510,10 @@ public class XMPPManager {
         }
 
         private void processMessage(final ChatMessage chatMessage) {
-             chatMessage.isMine = false;
+            chatMessage.isMine = false;
 
             processMessageCallback.onProcessMessage(chatMessage);
 
-
-//            Chats.chatlist.add(chatMessage);
-//			 new Handler(Looper.getMainLooper()).post(new Runnable() {
-//
-//			 @Override public void run() {
-//			  Chats.chatAdapter.notifyDataSetChanged();
-//
-//			  } });
 
         }
 

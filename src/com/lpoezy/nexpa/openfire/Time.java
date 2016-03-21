@@ -20,14 +20,14 @@ public class Time extends IQ {
     @Override
     protected IQChildElementXmlStringBuilder getIQChildElementBuilder(
             IQChildElementXmlStringBuilder xml) {
-        xml.attribute("with", "momo@198.154.106.139");
+        xml.attribute("with", "leki@198.154.106.139");
 
         xml.rightAngleBracket();
 
         xml.append("<set xmlns='http://jabber.org/protocol/rsm'>");
-        xml.append("<max xmlns='http://jabber.org/protocol/rsm'>30</max></set>");
+        xml.append("<max>30</max></set>");
 
         return xml;
     }
-
+    //rn2dw-9
 }

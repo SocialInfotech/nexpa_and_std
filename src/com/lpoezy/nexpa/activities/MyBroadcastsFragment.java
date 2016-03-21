@@ -38,7 +38,7 @@ public class MyBroadcastsFragment extends Fragment {
 	
 
 	List<Announcement> mAnouncements;
-	//private MyBroascastsAdapter mAdapter;
+	//private MyBroascastsAdapter adapter;
 	private RecyclerView mRvBroadcasts;
 	protected String mUsername;
 	
@@ -93,7 +93,7 @@ public class MyBroadcastsFragment extends Fragment {
 		//mRvChatHistory.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		mAnouncements = new ArrayList<Announcement>();
 		
-		//mAdapter = new MyBroascastsAdapter(getActivity());
+		//adapter = new MyBroascastsAdapter(getActivity());
 		
 		mAdapter = new ParallaxRecyclerAdapter<Announcement>(mAnouncements) {
 			
@@ -234,7 +234,7 @@ public class MyBroadcastsFragment extends Fragment {
 						mAnouncements.addAll(announcements);
 						
 						L.debug("mAnouncements.size "+mAnouncements.size());
-						mAdapter.notifyDataSetChanged();
+						adapter.notifyDataSetChanged();
 					}
 				});
 				

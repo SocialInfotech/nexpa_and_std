@@ -97,7 +97,7 @@ public class OfUser {
     public boolean saveOffline(Context c){
         SQLiteHandler db = new SQLiteHandler(c);
         db.openToWrite();
-        boolean success = db.saveOfuser(username, plainPassword,  encryptedPassword, name, email, creationDate, modificationDate, gcmRegistrationId)!=null?true:false;
+        boolean success = db.saveOfuser(username, plainPassword,  encryptedPassword, name, email, creationDate, modificationDate)!=null?true:false;
         db.close();
 
         return success;
@@ -126,7 +126,6 @@ public class OfUser {
                 this.email = user.getString("email");
                 this.creationDate = Long.parseLong(user.getString("creationDate"));
                 this.modificationDate = Long.parseLong(user.getString("modificationDate"));
-                this.gcmRegistrationId = user.getString("gcmRegistrationId");
 
                 return true;
             }
@@ -163,14 +162,4 @@ public class OfUser {
         db.close();
     }
 
-    public boolean hasGcmRegistrationId(Context c) {
-
-        SQLiteHandler db = new SQLiteHandler(c);
-        db.openToRead();
-        boolean isTrue = db.getEncryptedPassword() != null && !db.getEncryptedPassword().equals("") ? true : false;
-        db.close();
-
-
-        return isTrue;
-    }
 }

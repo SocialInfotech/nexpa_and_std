@@ -18,6 +18,7 @@ import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
+import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
 import com.lpoezy.nexpa.objects.NewMessage;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.openfire.XMPPManager;
@@ -301,6 +302,9 @@ public class XMPPService extends Service {
 
     }
 
+    public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnTestListener callback) {
+        xmpp.retrieveListOfCollectionsFrmMsgArchive(callback);
+    }
 
 
 //    public void login(final String uname, final String password, final OnUpdateScreenListener callback) {

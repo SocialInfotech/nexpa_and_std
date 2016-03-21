@@ -33,7 +33,7 @@ import android.widget.TextView;
 public class OthersBroadcastsFragment extends Fragment implements Correspondent.OnCorrespondentUpdateListener{
 	
 	List<Announcement> mAnouncements;
-	//private MyBroascastsAdapter mAdapter;
+	//private MyBroascastsAdapter adapter;
 	private RecyclerView mRvBroadcasts;
 	protected String mUsername;
 	
@@ -83,7 +83,7 @@ public class OthersBroadcastsFragment extends Fragment implements Correspondent.
 		//mRvChatHistory.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		mAnouncements = new ArrayList<Announcement>();
 		
-		//mAdapter = new MyBroascastsAdapter(getActivity());
+		//adapter = new MyBroascastsAdapter(getActivity());
 		
 		userId = getArguments().getLong(OthersBroadcastActivity.TAG_USER_ID, -1);
 		
@@ -214,7 +214,7 @@ public class OthersBroadcastsFragment extends Fragment implements Correspondent.
 //						mAnouncements.addAll(announcements);
 //						
 //						L.debug("mAnouncements.size "+mAnouncements.size());
-//						mAdapter.notifyDataSetChanged();
+//						adapter.notifyDataSetChanged();
 //					}
 //				});
 //				

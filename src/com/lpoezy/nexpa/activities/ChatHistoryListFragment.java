@@ -1,16 +1,10 @@
 package com.lpoezy.nexpa.activities;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -18,14 +12,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
-import android.net.ParseException;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,13 +28,10 @@ import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Correspondents;
+import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
 import com.lpoezy.nexpa.objects.NewMessage;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
-import com.lpoezy.nexpa.utility.DateUtils;
-import com.lpoezy.nexpa.utility.DateUtils.DateFormatz;
 import com.lpoezy.nexpa.utility.DividerItemDecoration;
 import com.lpoezy.nexpa.utility.L;
-import com.lpoezy.nexpa.utility.RoundedImageView;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 
 public class ChatHistoryListFragment extends Fragment implements Correspondent.OnCorrespondentUpdateListener {
@@ -51,10 +39,15 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 	private OnShowChatHistoryListener mCallback;
 	// private List<Correspondent> mBuddys;
 	private Correspondents mBuddys;
-	private ChatHistoryAdapter mAdapter;
+	public  ChatHistoryAdapter adapter;
+	public List<ListOfCollectionsIQ.Chat> collections = new ArrayList<ListOfCollectionsIQ.Chat>();
+
 	// private SwipeRefreshLayout mSwipeRefreshLayout;
 	private SwipyRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView rvChatHistory;
+
+
+
 
 	public static ChatHistoryListFragment newInstance() {
 		ChatHistoryListFragment fragment = new ChatHistoryListFragment();
@@ -97,8 +90,8 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 		// mBuddys = new ArrayList<Correspondent>();
 		mBuddys = new Correspondents();
 
-		mAdapter = new ChatHistoryAdapter(getActivity(), mCallback);
-		rvChatHistory.setAdapter(mAdapter);
+		adapter = new ChatHistoryAdapter(getActivity(), mCallback);
+		rvChatHistory.setAdapter(adapter);
 
 		return v;
 	}
@@ -125,7 +118,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 	// L.debug("ChatHistoryList, correspondent update
 	// "+mBuddys.get(0).getProfilePic());
 	//
-	// mAdapter.notifyDataSetChanged();
+	// adapter.notifyDataSetChanged();
 	//
 	// }
 	// };
@@ -161,11 +154,11 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
 	private void updateList() {
 		L.debug("ChatHistory, updateList");
-		mBuddys.clear();
-		mBuddys.downloadOffline(getActivity());
-		mBuddys.downloadLatestMsgOffline(getActivity());
-		onCorrespondentUpdate();
-		downloadProfilePics(mBuddys);
+//		mBuddys.clear();
+//		mBuddys.downloadOffline(getActivity());
+//		mBuddys.downloadLatestMsgOffline(getActivity());
+//		onCorrespondentUpdate();
+//		downloadProfilePics(mBuddys);
 	}
 
 	// protected void downloadProfilePics(final List<Correspondent>
@@ -213,6 +206,20 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
 	}
 
+	public void setCollections(List<ListOfCollectionsIQ.Chat> collections) {
+		this.collections.clear();
+
+		this.collections.addAll(collections);
+		new Handler(Looper.getMainLooper()).post(new Runnable() {
+			@Override
+			public void run() {
+
+				adapter.notifyDataSetChanged();
+			}
+		});
+
+	}
+
 	private class ChatHistoryAdapter extends RecyclerView.Adapter<ChatHistoryAdapter.ViewHolder> {
 
 		private LayoutInflater inflater;
@@ -228,7 +235,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 		@Override
 		public int getItemCount() {
 
-			return mBuddys.size();
+			return collections.size();
 		}
 
 		@Override
@@ -236,92 +243,95 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 			vh.position = position;
 
 			// only use username if fname has no value
-			String name = mBuddys.get(position).getUsername();
+			//String name = mBuddys.get(position).getUsername();
+			String name = collections.get(position).getWith().split("@")[0];
 
 			vh.tvBuddys.setText(name);
+			vh.tvMsg.setText(collections.get(position).getStart());
+			vh.tvMsgDate.setVisibility(View.INVISIBLE);
 
-			NewMessage msg = mBuddys.get(position).getConversation().get(0);
+//			NewMessage msg = mBuddys.get(position).getConversation().get(0);
+//
+//			// only make the text bold if the msg is from a correpondent
+//			boolean isMsgUnread = msg.isUnread();
+//
+//			SQLiteHandler db = new SQLiteHandler(getActivity());
+//			db.openToRead();
+//			// long userId = Long.parseLong(db.getLoggedInID());
+//			String username = db.getUsername();
+//			db.close();
+//
+//			if (isMsgUnread && !username.equals(msg.getSenderName()))
+//				vh.tvMsg.setTypeface(null, Typeface.BOLD); // only text //
+//															// style(only bold)
+//			else
+//				vh.tvMsg.setTypeface(null, Typeface.NORMAL);
+//			//
+//			// // L.debug("update view holder
+//			// // "+mBuddys.get(position).getProfilePic());
+//			Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.pic_sample_girl);
+//			if (mBuddys.get(position).getProfilePic() != null) {
+//
+//				rawImage = mBuddys.get(position).getProfilePic();
+//			}
 
-			// only make the text bold if the msg is from a correpondent
-			boolean isMsgUnread = msg.isUnread();
+//			RoundedImageView riv = new RoundedImageView(getActivity());
+//			Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
+//
+//			// android.text.format.DateUtils.isToday(msg.getDate());
+//
+//			DateTime now = new DateTime();
+//
+//			Interval today = new Interval(now.withTimeAtStartOfDay(), now.plusDays(1).withTimeAtStartOfDay());
+//			Interval pastWeek = new Interval(now.minusWeeks(1).withTimeAtStartOfDay(),
+//					now.plusWeeks(1).withTimeAtStartOfDay());
+//			Interval pastMonth = new Interval(now.minusMonths(12).withTimeAtStartOfDay(),
+//					now.plusDays(1).withTimeAtStartOfDay());
+//
+//
+//			DateTime msgDate = new DateTime(msg.getDate());
+//
+//			Calendar c = Calendar.getInstance();
+//			c.setTimeInMillis(msg.getDate());
+//
+//			String msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.dayOfMonth().getAsText()+", "+msgDate.year().getAsText();
+//
+//			if (today.contains(msgDate)) {
+//
+//				String startTime = DateUtils.millisToSimpleDate(msg.getDate(), DateFormatz.DATE_FORMAT_5);
+//				StringTokenizer tk = new StringTokenizer(startTime);
+//				String date = tk.nextToken();
+//				String time = tk.nextToken();
+//
+//				SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+//				SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a");
+//
+//				Date dt;
+//				try {
+//					dt = sdf.parse(time);
+//
+//					msgDateStr = sdfs.format(dt);
+//
+//				} catch (java.text.ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//
+//			} else if (pastWeek.contains(msgDate)) {
+//
+//				msgDateStr = msgDate.dayOfWeek().getAsText();
+//
+//			} else if (pastMonth.contains(msgDate)) {
+//				//msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.year().getAsText();
+//				 msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.dayOfMonth().getAsText();
+//
+//			}
 
-			SQLiteHandler db = new SQLiteHandler(getActivity());
-			db.openToRead();
-			// long userId = Long.parseLong(db.getLoggedInID());
-			String username = db.getUsername();
-			db.close();
+			//vh.tvMsgDate.setText(collections.chats.get(position).getStart());
 
-			if (isMsgUnread && !username.equals(msg.getSenderName()))
-				vh.tvMsg.setTypeface(null, Typeface.BOLD); // only text //
-															// style(only bold)
-			else
-				vh.tvMsg.setTypeface(null, Typeface.NORMAL);
-			//
-			// // L.debug("update view holder
-			// // "+mBuddys.get(position).getProfilePic());
-			Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.pic_sample_girl);
-			if (mBuddys.get(position).getProfilePic() != null) {
+			//vh.imgProfilePic.setImageBitmap(circImage);
 
-				rawImage = mBuddys.get(position).getProfilePic();
-			}
 
-			RoundedImageView riv = new RoundedImageView(getActivity());
-			Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
-
-			// android.text.format.DateUtils.isToday(msg.getDate());
-
-			DateTime now = new DateTime();
-
-			Interval today = new Interval(now.withTimeAtStartOfDay(), now.plusDays(1).withTimeAtStartOfDay());
-			Interval pastWeek = new Interval(now.minusWeeks(1).withTimeAtStartOfDay(),
-					now.plusWeeks(1).withTimeAtStartOfDay());
-			Interval pastMonth = new Interval(now.minusMonths(12).withTimeAtStartOfDay(),
-					now.plusDays(1).withTimeAtStartOfDay());
-			
-
-			DateTime msgDate = new DateTime(msg.getDate());
-			
-			Calendar c = Calendar.getInstance();
-			c.setTimeInMillis(msg.getDate());
-			
-			String msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.dayOfMonth().getAsText()+", "+msgDate.year().getAsText();
-			
-			if (today.contains(msgDate)) {
-
-				String startTime = DateUtils.millisToSimpleDate(msg.getDate(), DateFormatz.DATE_FORMAT_5);
-				StringTokenizer tk = new StringTokenizer(startTime);
-				String date = tk.nextToken();
-				String time = tk.nextToken();
-
-				SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-				SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a");
-
-				Date dt;
-				try {
-					dt = sdf.parse(time);
-
-					msgDateStr = sdfs.format(dt);
-
-				} catch (java.text.ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			} else if (pastWeek.contains(msgDate)) {
-
-				msgDateStr = msgDate.dayOfWeek().getAsText();
-				
-			} else if (pastMonth.contains(msgDate)) {
-				//msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.year().getAsText();
-				 msgDateStr = msgDate.monthOfYear().getAsShortText()+" "+msgDate.dayOfMonth().getAsText();
-				 
-			}
-
-			vh.tvMsgDate.setText(msgDateStr);
-
-			vh.imgProfilePic.setImageBitmap(circImage);
-
-			vh.tvMsg.setText(msg.getBody());
 
 		}
 
@@ -352,19 +362,19 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 			@Override
 			public void onClick(View v) {
 
-				Correspondent buddy = mBuddys.get(position);
-				// will set all the unread flags,
-				// of the messages to read
-				for (NewMessage comment : buddy.getConversation()) {
-					if (comment.isUnread()) {
-						comment.setUnread(false);
-					}
-				}
-
-				// update adapter
-				notifyDataSetChanged();
-
-				listener.onShowChatHistory(buddy);
+//				Correspondent buddy = mBuddys.get(position);
+//				// will set all the unread flags,
+//				// of the messages to read
+//				for (NewMessage comment : buddy.getConversation()) {
+//					if (comment.isUnread()) {
+//						comment.setUnread(false);
+//					}
+//				}
+//
+//				// update adapter
+//				notifyDataSetChanged();
+//
+//				listener.onShowChatHistory(buddy);
 			}
 
 		}
@@ -383,7 +393,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 			@Override
 			public void run() {
 				L.debug("ChatHistoryList, onCorrespondentUpdate");
-				mAdapter.notifyDataSetChanged();
+				adapter.notifyDataSetChanged();
 			}
 		});
 	}

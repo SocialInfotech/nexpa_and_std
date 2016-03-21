@@ -270,7 +270,7 @@ public class SearchPostActivity extends Activity implements OnItemClickListener{
 							mAdapter.changeCursor(crBroadcast);
 						}
 						catch (Exception ex){}
-						//mAdapter.notifyDataSetChanged();
+						//adapter.notifyDataSetChanged();
 						
 						try{
 							((SimpleCursorAdapter) mListView.getAdapter()).notifyDataSetChanged();

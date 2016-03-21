@@ -260,7 +260,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 						//comment.date = date;
 						
 						mComments.add(comment);
-						mAdapter.notifyDataSetChanged();
+						adapter.notifyDataSetChanged();
 						listview.smoothScrollToPosition(mComments.size() - 1);
 						// adapter.add(comment);
 						// listview.setAdapter(adapter);
@@ -297,7 +297,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 						comment.saveMySentMsgOffline(ChatActivity.this);
 						
 						mComments.add(comment);
-						mAdapter.notifyDataSetChanged();
+						adapter.notifyDataSetChanged();
 						listview.smoothScrollToPosition(mComments.size() - 1);
 						
 					}
@@ -371,7 +371,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 					//NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
 					
 					mComments.add(comment);
-					mAdapter.notifyDataSetChanged();
+					adapter.notifyDataSetChanged();
 					listview.smoothScrollToPosition(mComments.size() - 1);
 					
 				}

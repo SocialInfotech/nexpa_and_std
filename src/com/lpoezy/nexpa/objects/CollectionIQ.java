@@ -3,14 +3,21 @@ package com.lpoezy.nexpa.objects;
 
 import org.jivesoftware.smack.packet.IQ;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by HP PAVILION on 3/21/2016.
  */
 public class CollectionIQ extends IQ {
 
 
-    private final String with;
-    private final String start;
+    private  String with;
+    private  String start;
+
+    public List<ChatMessage> chtMessages = new ArrayList<ChatMessage>();
+    public int last;
+    public int count;
 
     public CollectionIQ(String with, String start) {
         super("retrieve", "urn:xmpp:archive");
@@ -18,6 +25,10 @@ public class CollectionIQ extends IQ {
         this.with = with;
         this.start = start;
 
+    }
+
+    public CollectionIQ() {
+        super("retrieve", "urn:xmpp:archive");
     }
 
     @Override

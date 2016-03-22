@@ -207,8 +207,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 					textMessage.setText("");
 
 
-
-					if(mBounded){
+					if (mBounded) {
 						mService.sendMessage(chatMessage);
 
 						chatMsgs.add(chatMessage);
@@ -308,7 +307,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			}
 		});
 		
-		updateList();
+		//updateList();
 
 	}
 
@@ -335,7 +334,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 		
 	}
 
-	// receiving messages will be handle by receivedMessage
+	// receiving chtMessages will be handle by receivedMessage
 	// in ChatMessagesService
 
 	/*/
@@ -409,9 +408,23 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			String start = getIntent().getStringExtra("start");
 
 			if(with!=null && !with.isEmpty() && start!=null && !start.isEmpty()){
+
 				mService.retrieveCollectionFrmMsgArchive(with, start, new CollectionIQ.OnRetrieveListener(){
 					@Override
-					public void onRetrieve(CollectionIQ collection) {
+					public void onRetrieve(final CollectionIQ collection) {
+
+						new Handler(Looper.getMainLooper()).post(new Runnable() {
+							@Override
+							public void run() {
+
+
+								chatMsgs.clear();
+								chatMsgs.addAll(collection.chtMessages);
+
+								L.debug("xxx: "+chatMsgs.size());
+								mAdapter.notifyDataSetChanged();
+							}
+						});
 
 					}
 				});
@@ -451,7 +464,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			unbindService(mServiceConn);
 		}
 
-		// saveVCard messages here,
+		// saveVCard chtMessages here,
 		// and clear all the conversation array
 		// L.debug("ChatActivity, saving msgs... ");
 

@@ -219,7 +219,7 @@ public class TabHostActivity extends TabActivity {
 		//*/
 	}
 	
-	// receiving messages will be handle by receivedMessage
+	// receiving chtMessages will be handle by receivedMessage
 	// in ChatMessagesService
 	private BroadcastReceiver mUpdateMsgCount = new BroadcastReceiver() {
 

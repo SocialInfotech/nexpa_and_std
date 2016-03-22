@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.CollectionIQ;
+import com.lpoezy.nexpa.objects.CollectionIQProvider;
 import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
 import com.lpoezy.nexpa.objects.ListOfCollectionsIQProvider;
 import com.lpoezy.nexpa.utility.L;
@@ -288,10 +289,14 @@ public class XMPPManager {
     public void retrieveCollectionFrmMsgArchive(String with, String start, CollectionIQ.OnRetrieveListener callback) {
 
         if (connection.isAuthenticated()) {
-            String jid = with+"@198.154.106.139";
-            CollectionIQ collectionIq = new CollectionIQ(jid, start);
+            L.debug("==========retrieveCollectionFrmMsgArchive========================");
+           // String jid = with+"@198.154.106.139";
+            CollectionIQ collectionIq = new CollectionIQ(with, start);
             try {
                 connection.sendStanza(collectionIq);
+
+                ProviderManager.addIQProvider("chat", "urn:xmpp:archive", new CollectionIQProvider(callback));
+
             } catch (NotConnectedException e) {
                 L.error("retrieveCollectionFrmMsgArchive: " + e.getMessage());
             }

@@ -93,7 +93,7 @@ public class AroundMeActivity extends AppCompatActivity
     Handler mHandler;
     GridView grid;
     CustomGrid adapter;
-    SQLiteHandler db;
+    //SQLiteHandler db;
     float i = 0;
     ArrayList<String> web = new ArrayList<String>();
     ArrayList<String> availabilty = new ArrayList<String>();
@@ -183,9 +183,16 @@ public class AroundMeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+
         switch (item.getItemId()) {
 
             case R.id.action_distance:
+
+                final SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
+                db.openToRead();
+
+
                 dialogPref = new Dialog(AroundMeActivity.this);
                 dialogPref.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialogPref.setContentView(R.layout.activity_profile_distance_settings);
@@ -267,41 +274,18 @@ public class AroundMeActivity extends AppCompatActivity
                 lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
                 dialogPref.show();
                 dialogPref.getWindow().setAttributes(lp);
+
+                db.close();
                 return true;
 
-		/*
-         * / case R.id.action_distance_test: dialogPref = new
-		 * Dialog(AroundMeActivity.this);
-		 * dialogPref.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		 * dialogPref.setContentView(R.layout.android_profile_distance_tester);
-		 * 
-		 * rbDistance1 = (EditText) dialogPref.findViewById(R.id.rbDistance);
-		 * dst = 100; try { dst = Integer.parseInt(db.getBroadcastDist()); }
-		 * catch (Exception e) { dst = 100; }
-		 * 
-		 * Button dialogButton1 = (Button)
-		 * dialogPref.findViewById(R.id.dialogButtonOK);
-		 * dialogButton1.setOnClickListener(new OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) {
-		 * 
-		 * try { dst = Integer.parseInt(rbDistance1.getText().toString()); }
-		 * catch (Exception e) { dst = 100; } Log.e("dst", dst + " c");
-		 * db.updateBroadcastDist(distTick); tryGridToUpdate();
-		 * dialogPref.dismiss(); } });
-		 * 
-		 * WindowManager.LayoutParams lp1 = new WindowManager.LayoutParams();
-		 * lp1.copyFrom(dialogPref.getWindow().getAttributes()); lp1.width =
-		 * WindowManager.LayoutParams.MATCH_PARENT; lp1.height =
-		 * WindowManager.LayoutParams.WRAP_CONTENT; dialogPref.show();
-		 * dialogPref.getWindow().setAttributes(lp1); return true; //
-		 */
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
         }
+
+
     }
 
     protected void onStart() {
@@ -337,6 +321,8 @@ public class AroundMeActivity extends AppCompatActivity
         super.onResume();
         isRunning = true;
 
+        SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
+        db.openToRead();
         try {
             dst = Integer.parseInt(db.getBroadcastDist());
         } catch (Exception e) {
@@ -348,6 +334,8 @@ public class AroundMeActivity extends AppCompatActivity
             //tryGridToUpdate();
             oldDst = dst;
         }
+
+        db.close();
 
     }
 
@@ -491,8 +479,10 @@ public class AroundMeActivity extends AppCompatActivity
 //                            profilePic.saveOffline(AroundMeActivity.this);
 //                        }
 
-
+                        SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
+                        db.openToWrite();
                         db.insertNearbyUser(uname, latitude, longitude, gps_provider, date_create, date_update, geo_distance);
+                        db.close();
                     }
 
                     updateGrid();
@@ -628,7 +618,7 @@ public class AroundMeActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
 
-        db.close();
+
     }
 
     @Override
@@ -641,11 +631,12 @@ public class AroundMeActivity extends AppCompatActivity
         myToolbar.setLogo(R.drawable.icon_nexpa);
         myToolbar.setTitle("");
 
-        db = new SQLiteHandler(AroundMeActivity.this);
-        db.openToWrite();
-
+//        db = new SQLiteHandler(AroundMeActivity.this);
+//        db.openToWrite();
+        SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
+        db.openToRead();
         mUsername = db.getUsername();
-
+        db.close();
         oldDst = 0;
 //
 //		du = new DateUtils();
@@ -802,6 +793,9 @@ public class AroundMeActivity extends AppCompatActivity
         // us = null;
         //us = new ArrayList<Geolocation>();
 
+        SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
+        db.openToRead();
+
         int dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
 
         try {
@@ -862,7 +856,7 @@ public class AroundMeActivity extends AppCompatActivity
         });
 
 
-
+        db.close();
     }
 
     protected void updateCorrespondentsAvailability(Correspondent correspondent, String address, XMPPConnection connection) {
@@ -897,22 +891,6 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
-    private void requestSubscription(XMPPConnection connection, String address) {
-		/*/
-		//L.error("sending subscription request to address: " + address);
-		Presence subscribe = new Presence(Presence.Type.subscribe);
-		subscribe.setTo(address);
-		connection.sendPacket(subscribe);
-
-		Roster roster = connection.getRoster();
-		try {
-			roster.createEntry(address, null, null);
-		} catch (XMPPException e) {
-			L.error("requestSubscription: " + e);
-		}
-		//*/
-    }
-
     private String displayGridCellName(String fname, String user) {
 
         if (fname.equals("")) {
@@ -930,229 +908,10 @@ public class AroundMeActivity extends AppCompatActivity
         }
     }
 
-    /*/
-    private void SendLocToServer() {
-        String tag_string_req = "getgeo";
-        StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_GETGEO, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                L.error(TAG + " SAVE GEO Response: " + response.toString());
-
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
-                        GetNearbyUsers();
-                        L.error("JSON, User geo stored on mySql");
-                        // finish();
-                    } else {
-
-                        // Error occurred in registration. Get the error
-                        // message
-                        L.error("JSON, Error occurred in registration");
-                        String errorMsg = jObj.getString("error_msg");
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                L.error(TAG + " Error: " + error.getMessage());
-                makeNotify("Cannot connect to server", AppMsg.STYLE_ALERT);
-                // Toast.makeText(getApplicationContext(),error.getMessage(),
-                // Toast.LENGTH_LONG).show();
-                mSwipeRefreshLayout.setRefreshing(false);
-                // hideDialog();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
-
-                ins_user = db.getLoggedInID();
-                ins_latitude = latitude;
-                ins_longitude = longitude;
-                String ins_g_provider = gpsProvider;
-                Date dateNow = new Date();
-
-                String curDate = du.convertDateToString(dateNow);
-
-                params.put("tag", "getgeo");
-                params.put("p_user", ins_user);
-                params.put("p_longitude", ins_longitude + "");
-                params.put("p_latitude", ins_latitude + "");
-                params.put("p_gps_provider", ins_g_provider);
-                params.put("p_date_update", curDate);
-                // params.put("$user_id", longitude +"");
-                // params.put("latitude", latitude +"");
-
-                return params;
-            }
-        };
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-//*/
     private void makeNotify(CharSequence con, Style style) {
         AppMsg.makeText(this, con, style).show();
     }
 
-    /*/
-        private void GetNearbyUsers() {
-
-            L.error(TAG + " GetNearbyUsers");
-            // Tag used to cancel the request
-            String tag_string_req = "collect";
-            StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_NEARBY, new Response.Listener<String>() {
-
-                @Override
-                public void onResponse(String response) {
-                    Log.e(TAG, "GET GEO Response: " + response.toString());
-
-                    try {
-                        JSONObject jObj = new JSONObject(response);
-                        boolean error = jObj.getBoolean("error");
-                        if (!error) {
-                            // User successfully stored in MySQL
-                            // Now store the user in sqlite
-                            Log.e("JSON", "GEO COLLECTED");
-                            // finish();
-
-                            nearby_users = jObj.getJSONArray("geo");
-
-                            existingUsers = db.getExistingOnDBUsers();
-
-                            // JSONObject json = new JSONObject(jsonString);
-                            // JSONArray jArray = jObj.getJSONArray("geo");
-
-                            Log.e("LOG", "*****JARRAY*****" + nearby_users.length());
-                            db.deleteAllPeople();
-                            ///////////////////////
-                            if (nearby_users.length() == 0) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            } else {
-                                for (int i = 0; i < nearby_users.length(); i++) {
-                                    JSONObject c = nearby_users.getJSONObject(i);
-
-
-                                    // Storing each json item in variable
-                                    String id = c.getString(TAG_GEO_PID);
-
-                                    String lname = "";
-
-                                    String status = "";
-                                    String about_me = "";
-                                    String looking_type = "";
-                                    String email_address = c.getString(TAG_GEO_EMAIL);
-
-                                    Date bday = new Date()
-                                    String age = ""
-                                    int distance = Math.round(Float.parseFloat(c.getString(TAG_GEO_DISTANCE)));
-                                    String sex = ""
-
-                                    // user profile
-                                    String userId = c.getString("user_id");
-                                    String uname = c.getString(TAG_GEO_USER);
-                                    String fname = uname;
-                                    String description = c.getString("description");
-                                    String title = c.getString("title");
-                                    String url0 = c.getString("url0");
-                                    String url1 = c.getString("url1");
-                                    String url2 = c.getString("url2");
-                                    String dateUpdated = c.getString("date_updated");
-
-                                    // saveVCard profile of specific users
-                                    UserProfile userProfile = new UserProfile(Long.parseLong(userId), uname, description,
-                                            title, url0, url1, url2, dateUpdated, true);
-
-                                    userProfile.saveOffline(AroundMeActivity.this);
-
-                                    // replace geo id with userid
-                                    id = userId;
-                                    // profile pic info
-                                    String imgDir = c.getString("img_dir");
-                                    String imgFile = c.getString("img_file");
-                                    String dateCreated = c.getString("date_uploaded");
-
-
-                                    if ((imgDir != null && !imgDir.isEmpty() && !imgDir.equalsIgnoreCase("null"))
-                                            && (imgFile != null && !imgFile.isEmpty()
-                                                    && !imgFile.equalsIgnoreCase("null"))) {
-                                        L.error("getting profile picture of userId: " + userId + ", uname: " + uname
-                                                + ", imgDir: " + imgDir + ", imgFile: " + imgFile);
-                                        ProfilePicture profilePic = new ProfilePicture(Long.parseLong(userId), imgDir,
-                                                imgFile, dateCreated, true);
-                                        profilePic.saveOffline(AroundMeActivity.this);
-                                    }
-
-                                    boolean containerContainsContent = org.apache.commons.lang3.StringUtils
-                                            .containsIgnoreCase(existingUsers, "." + id + ".");
-
-
-                                    db.insertNearbyUser(id, uname, distance, fname, lname, age, sex, "",
-                                            "2012-12-12 09:09:09", 0, about_me, looking_type, status, email_address, "1");
-
-
-
-                                }
-
-                                updateGrid("1");
-                            }
-                        } else {
-                            makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Error: " + error.getMessage());
-                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    // hideDialog();
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
-
-                    ins_latitude = latitude;
-                    ins_longitude = longitude;
-
-                    params.put("tag", "collect");
-                    params.put("pid", ins_user);
-                    params.put("longitude", ins_longitude + "");
-                    params.put("latitude", ins_latitude + "");
-
-                    SessionManager sm = new SessionManager(AroundMeActivity.this);
-                    int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
-                    params.put("p_distance_pref", newDistance + "");
-                    params.put("unit", "k");
-
-                    L.error("MAP, " + ins_user + " + " + ins_longitude + " :" + ins_latitude + ": " + newDistance);
-                    // params.put("latitude", latitude +"");
-
-                    return params;
-                }
-            };
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        }
-    //*/
     @Override
     public void onRefresh() {
         // TODO Auto-generated method stub
@@ -1202,7 +961,7 @@ public class AroundMeActivity extends AppCompatActivity
 
 //xTX8b-9
 //                Time iq = new Time();
-//                iq.setType(IQ.Type.get);
+//                iq.setType(IQ.Type.set);
 //                //iq.setTo(XMPPService.DOMAIN);
 //        try {
 //            connection.sendStanza(iq);

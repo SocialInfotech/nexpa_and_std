@@ -63,7 +63,7 @@ public class ChatMessagesService extends Service {
 	}
 
 	// create a connection with xmpp,
-	// and listen to any incoming messages
+	// and listen to any incoming chtMessages
 	private void onReceiveChatMessages() {
 
 //		L.debug("onReceiveChatMessages");
@@ -99,8 +99,8 @@ public class ChatMessagesService extends Service {
 //		}
 	}
 	
-	// will handle all the received messages,
-	// and send messages to all waiting activities via BroadcastReceiver
+	// will handle all the received chtMessages,
+	// and send chtMessages to all waiting activities via BroadcastReceiver
 	
 	
 //	private void addPacketListener(XMPPConnection connection) {
@@ -194,7 +194,7 @@ public class ChatMessagesService extends Service {
 //								L.debug("msg? " + message.getBody());
 //								if (!error) {
 //									
-//									JSONArray msgs = jObj.getJSONArray("messages");
+//									JSONArray msgs = jObj.getJSONArray("chtMessages");
 //									JSONObject msg = msgs.getJSONObject(0);
 //									
 //									String userId = msg.getString("user_id");//from, sender id
@@ -221,7 +221,7 @@ public class ChatMessagesService extends Service {
 //									
 //									// comment.isUnread = true;
 //									correspondent.addMessage(comment);
-//									//marking messages received online is moved,
+//									//marking chtMessages received online is moved,
 //									//to the sync button in the settings screen
 //									//comment.markAsReceivedOnline(getApplicationContext(), Long.parseLong(userId));
 //									boolean success = true;//by pass mark as received
@@ -438,7 +438,7 @@ public class ChatMessagesService extends Service {
 
 		int msgCount = NewMessage.getUnReadMsgCountOffline(getApplicationContext());
 
-		String title = (msgCount > 1) ? " new messages" : " new message";
+		String title = (msgCount > 1) ? " new chtMessages" : " new message";
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle(msgCount + title).setAutoCancel(true).setContentText(correspondent.getUsername());

@@ -87,7 +87,7 @@ public class XMPPService extends Service {
 
         int msgCount = NewMessage.getUnReadMsgCountOffline(getApplicationContext());
 
-        String title = (msgCount > 1) ? " new messages" : " new message";
+        String title = (msgCount > 1) ? " new chtMessages" : " new message";
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(msgCount + title).setAutoCancel(true).setContentText(correspondent.getUsername());

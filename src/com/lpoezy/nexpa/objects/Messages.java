@@ -71,7 +71,7 @@ public class Messages {
 			
 		} else {
 			
-			throw new ArrayIndexOutOfBoundsException("No messages details to saveVCard");
+			throw new ArrayIndexOutOfBoundsException("No chtMessages details to saveVCard");
 		}
 		
 		db.close();
@@ -87,7 +87,7 @@ public class Messages {
 //			
 //		} else {
 //			
-//			throw new ArrayIndexOutOfBoundsException("No messages details to saveVCard");
+//			throw new ArrayIndexOutOfBoundsException("No chtMessages details to saveVCard");
 //		}
 		
 		db.close();
@@ -102,7 +102,7 @@ public class Messages {
 		final String userId = db.getLoggedInID();
 		db.close();
 
-		// will download all the latest messages info online
+		// will download all the latest chtMessages info online
 		HashMap<String, String> postDataParams = new HashMap<String, String>();
 		postDataParams.put("tag", "download_all_msgs_by_uid");
 		postDataParams.put("user_id", userId);
@@ -113,7 +113,7 @@ public class Messages {
 		try {
 			JSONObject result = new JSONObject(webPage);
 			if (!result.getBoolean("error")) {
-				final JSONArray jArr = result.getJSONArray("messages");
+				final JSONArray jArr = result.getJSONArray("chtMessages");
 				
 				if (jArr.length() != 0) {
 					

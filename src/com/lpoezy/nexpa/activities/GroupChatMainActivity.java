@@ -96,7 +96,7 @@ public class GroupChatMainActivity extends Activity {
 	public void setConnection() {
 //		connection = XMPPLogic.getInstance().getConnection();
 //		if (connection != null) {
-//			// Add a packet listener to get messages sent to us
+//			// Add a packet listener to get chtMessages sent to us
 //			PacketFilter filter = new MessageTypeFilter(Message.Type.normal);
 //			connection.addPacketListener(new PacketListener() {
 //				@Override

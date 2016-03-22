@@ -348,7 +348,7 @@ public class OneComment {
 		try {
 			result = new JSONObject(webPage);
 			if (!result.getBoolean("error")) {
-				final JSONArray jArr = result.getJSONArray("messages");
+				final JSONArray jArr = result.getJSONArray("chtMessages");
 				L.debug("jArr.length() " + jArr.length());
 				if (jArr.length() != 0) {
 					
@@ -399,7 +399,7 @@ public class OneComment {
 //									}
 //									
 //									if (message.isUnread) {
-//										// marking messages read online is moved,
+//										// marking chtMessages read online is moved,
 //										// to the sync button in the settings screen
 //										// if (comment.markAsReadOnline(context, id)) {
 //
@@ -429,7 +429,7 @@ public class OneComment {
 							
 							Future<OneComment> f = ecs.take();
 							OneComment msg = f.get();
-							//messages.add(msg);
+							//chtMessages.add(msg);
 							
 							msgsForBulkInsert.add(msg);
 						

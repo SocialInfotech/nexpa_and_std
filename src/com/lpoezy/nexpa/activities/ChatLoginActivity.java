@@ -79,7 +79,7 @@ public class ChatLoginActivity extends Activity{
 	public void setConnection(XMPPConnection connection) {
 //		this.connection = connection;
 //		if (connection != null) {
-//			// Add a packet listener to get messages sent to us
+//			// Add a packet listener to get chtMessages sent to us
 //			PacketFilter filter = new MessageTypeFilter(Message.Type.chat);
 //			connection.addPacketListener(new PacketListener() {
 //				@Override
@@ -90,8 +90,8 @@ public class ChatLoginActivity extends Activity{
 //								.getFrom());
 //						Log.i("XMPPChatDemoActivity", "Text Recieved " + message.getBody()
 //								+ " from " + fromName );
-//						messages.add(fromName + ":");
-//						messages.add(message.getBody());
+//						chtMessages.add(fromName + ":");
+//						chtMessages.add(message.getBody());
 //						// Add the incoming message to the list view
 //						mHandler.post(new Runnable() {
 //							public void run() {

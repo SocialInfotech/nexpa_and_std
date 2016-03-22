@@ -1,6 +1,9 @@
 package com.lpoezy.nexpa.activities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -96,7 +99,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 		return v;
 	}
 
-	// receiving messages will be handle by receivedMessage
+	// receiving chtMessages will be handle by receivedMessage
 	// in ChatMessagesService
 	private BroadcastReceiver mReceivedMessage = new BroadcastReceiver() {
 
@@ -183,8 +186,10 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
 	public void setCollections(List<ListOfCollectionsIQ.Chat> collections) {
 		this.collections.clear();
-
-		this.collections.addAll(collections);
+		for(int i=collections.size()-1;i>=0;i--){
+			this.collections.add(collections.get(i));
+		}
+		//this.collections.addAll(collections);
 		new Handler(Looper.getMainLooper()).post(new Runnable() {
 			@Override
 			public void run() {
@@ -219,8 +224,22 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 			String name = collections.get(position).getWith().split("@")[0];
 
 			vh.tvBuddys.setText(name);
-			vh.tvMsg.setText(collections.get(position).getStart());
-			vh.tvMsgDate.setVisibility(View.INVISIBLE);
+
+			SimpleDateFormat existingUTCFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			SimpleDateFormat requiredFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+			Date getDate = null;
+			try {
+				getDate = existingUTCFormat.parse(collections.get(position).getStart());
+			} catch (ParseException e) {
+				L.error(e.getMessage());
+			}
+			String mydate = requiredFormat.format(getDate);
+
+
+			vh.tvMsg.setText(mydate);
+			//vh.tvMsgDate.setVisibility(View.INVISIBLE);
 
 		}
 
@@ -242,7 +261,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 				super(view);
 				tvBuddys = (TextView) view.findViewById(R.id.tv_buddys_name);
 				tvMsg = (TextView) view.findViewById(R.id.tv_buddys_msg);
-				tvMsgDate = (TextView) view.findViewById(R.id.tv_buddys_msg_date);
+				//tvMsgDate = (TextView) view.findViewById(R.id.tv_buddys_msg_date);
 				imgProfilePic = (ImageView) view.findViewById(R.id.img_profile_pic);
 
 				view.setOnClickListener(this);
@@ -251,7 +270,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 			@Override
 			public void onClick(View v) {
 				//L.debug("with: "+tvBuddys.getText().toString()+", start: "+tvMsg.getText().toString());
-				mCallback.onShowChatHistory(tvBuddys.getText().toString(), tvMsg.getText().toString());
+				mCallback.onShowChatHistory(collections.get(position).getWith(), collections.get(position).getStart());
 			}
 
 		}

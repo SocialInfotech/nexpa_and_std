@@ -1132,7 +1132,7 @@ public class SQLiteHandler {
     }
 
     public List<OneComment> downloadMessagesByIds(String userId, String correspondentId) {
-        L.error("SQLiteHandler, getting messages between " + userId + " and " + correspondentId);
+        L.error("SQLiteHandler, getting chtMessages between " + userId + " and " + correspondentId);
 
         Cursor cursor = sqLiteDatabase.query(TABLE_MESSAGES,
                 new String[]{MSG_SENDER_NAME, MSG_RECEIVER_NAME, MSG_IS_LEFT, MSG_BODY, MSG_SUCCESS, MSG_DATE,
@@ -1157,7 +1157,7 @@ public class SQLiteHandler {
     }
 
     public List<OneComment> downloadMessages(long id) {
-        Log.e("SQLiteHandler", "getting messages");
+        Log.e("SQLiteHandler", "getting chtMessages");
         Cursor cursor = sqLiteDatabase.query(TABLE_MESSAGES,
                 new String[]{MSG_IS_LEFT, MSG_BODY, MSG_SUCCESS, MSG_DATE, MSG_IS_UNREAD},
                 MSG_RECEIVER_NAME + "= '" + id + "'", null, null, null, null);

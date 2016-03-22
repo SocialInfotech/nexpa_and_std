@@ -20,16 +20,25 @@ public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ>
         this.callback = callback;
     }
 
+    //<iq type="result" id="Rl8dP-61" to="leki@198.154.106.139/Smack">
+    // <list xmlns="urn:xmpp:archive"><chat with="momo@198.154.106.139" start="2016-03-22T01:47:25.091Z"/>
+    // <chat with="momo@198.154.106.139" start="2016-03-22T01:47:25.098Z"/>
+    // <chat with="momo@198.154.106.139" start="2016-03-22T01:47:25.110Z"/>
+    // <chat with="momo@198.154.106.139" start="2016-03-22T01:47:25.117Z"/>
+    // <set xmlns="http://jabber.org/protocol/rsm"><first index="0">9</first><last>12</last><count>4</count></set></list></iq>
 
-    //<iq type="result" id="J3inF-11" to="momo@198.154.106.139/Smack">
+
+    //<iq type="result" id="Wy20C-11" to="momo@198.154.106.139/Smack">
     // <list xmlns="urn:xmpp:archive">
     // <chat with="leki@198.154.106.139" start="2016-03-18T09:10:12.311Z"/>
     // <chat with="leki@198.154.106.139" start="2016-03-20T01:53:40.760Z"/>
     // <chat with="leki@198.154.106.139" start="2016-03-20T04:51:43.093Z"/>
     // <chat with="roy@198.154.106.139" start="2016-03-20T06:20:16.982Z"/>
+    // <chat with="leki@198.154.106.139" start="2016-03-21T01:35:36.245Z"/>
+    // <chat with="roy@198.154.106.139" start="2016-03-21T02:42:48.970Z"/>
+    // <chat with="null@198.154.106.139" start="2016-03-21T22:44:46.934Z"/>
     // <set xmlns="http://jabber.org/protocol/rsm">
-    // <first index="0">1</first>
-    // <last>4</last><count>4</count></set></list></iq>
+    // <first index="0">1</first><last>7</last><count>7</count></set></list></iq>
 
 
     @Override
@@ -42,14 +51,14 @@ public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ>
         String last = "";
         String first = "";
         String count = "";
-        outerloop:
 
+        outerloop:
         while (true) {
             int eventType = parser.next();
             switch (eventType) {
                 case XmlPullParser.START_TAG:
                     String elementName = parser.getName();
-                    L.debug("elementName: " + elementName);
+                    //L.debug("elementName: " + elementName);
                     switch (parser.getName()) {
                         case "chat":
 
@@ -57,6 +66,7 @@ public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ>
                             // Initialize the variables from the parsed XML
 
                             with = parser.getAttributeValue("", "with");
+                            L.debug("with: "+with);
                             start = parser.getAttributeValue("", "start");
 
                             break;
@@ -64,22 +74,7 @@ public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ>
                     }
                     break;
 
-//                case XmlPullParser.TEXT:
-//                    L.debug("parser.getName()"+elementName);
-//                    switch (parser.getName()){
-//                        case "first":
-//                            first = parser.getText();
-//                            break;
-//
-//                        case "last":
-//                            last = parser.getText();
-//                            break;
-//
-//                        case "count":
-//                            count = parser.getText();
-//                            break;
-//                    }
-//                    break;
+
                 case XmlPullParser.END_TAG:
 
                     switch (parser.getName()) {

@@ -16,7 +16,7 @@ public class AppConfig {
 	public static String URL_PROFILE = "http://www.lpoezy.com/happn/json/update_profile.php/";
 
 	public static String URL_PROFILE_PIC = "http://www.lpoezy.com/happn/json/get_profile_picture.php";
-	public static final String URL_MSG = "http://www.lpoezy.com/happn/json/messages.php";
+	public static final String URL_MSG = "http://www.lpoezy.com/happn/json/chtMessages.php";
 	public static final String URL_USER_PROFILES = "http://www.lpoezy.com/happn/json/user_profiles.php";
 	public static String URL_SEND_EMAIL = "http://198.154.106.139/~nexpa/json/send_email.php";
 

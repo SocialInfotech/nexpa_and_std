@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\Users\HP PAVILION\Desktop\git\nexpa_v4\nexpa_and_std\src\main\jniLibs"/></dataSet><dataSet config="debug"><source path="C:\Users\HP PAVILION\Desktop\git\nexpa_v4\nexpa_and_std\build-types\debug\jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/administrator/AndroidStudioProjects/nexpa_and_std/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/Users/administrator/AndroidStudioProjects/nexpa_and_std/build-types/debug/jniLibs"/></dataSet></merger>

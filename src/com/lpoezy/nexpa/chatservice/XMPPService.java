@@ -171,7 +171,7 @@ public class XMPPService extends Service {
     public void onCreate() {
         super.onCreate();
         cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
+        L.debug("XMPPService, onCreate");
         String uname, password;
         SQLiteHandler db = new SQLiteHandler(XMPPService.this);
         db.openToRead();
@@ -180,6 +180,8 @@ public class XMPPService extends Service {
         xmpp = XMPPManager.getInstance(XMPPService.this, DOMAIN, uname,
                 password, processMessageCallback, connectedToOperfire);
         xmpp.connect("onCreate");
+
+
         db.close();
         isRunning = true;
     }
@@ -197,24 +199,33 @@ public class XMPPService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
 
-
-
+        L.debug("xmppservice, onDestroy");
         try {
 
-            Presence presence = new Presence(Presence.Type.unavailable);
-            presence.setStatus("I'm unavailable");
-            xmpp.connection.sendPacket(presence);
 
+//            SQLiteHandler db = new SQLiteHandler(getApplicationContext());
+//            db.openToWrite();
+//
+//            db.deleteUsers();
+//            db.close();
             xmpp.disconnect();
-        } catch (NotConnectedException e) {
 
-            L.debug(e.getMessage());
+            xmpp = null;
+
+        } catch (NotConnectedException e) {
+            L.error(e.getMessage());
+        } catch (XMPPErrorException e) {
+            L.error(e.getMessage());
+        } catch (NoResponseException e) {
+            L.error(e.getMessage());
         }
 
 
         isRunning = false;
+
+        super.onDestroy();
+
     }
 
     public static boolean isNetworkConnected() {
@@ -295,12 +306,12 @@ public class XMPPService extends Service {
     }
 
 
-    public void logout(final OnUpdateScreenListener callback) {
-
-
-        stopSelf();
-
-    }
+//    public void logout(final OnUpdateScreenListener callback) {
+//
+//
+//        stopSelf();
+//
+//    }
 
     public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnRetrieveListener callback) {
         xmpp.retrieveListOfCollectionsFrmMsgArchive(callback);

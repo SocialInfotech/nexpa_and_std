@@ -66,7 +66,7 @@ public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ>
                             // Initialize the variables from the parsed XML
 
                             with = parser.getAttributeValue("", "with");
-                            L.debug("with: "+with);
+                            //L.debug("with: "+with);
                             start = parser.getAttributeValue("", "start");
 
                             break;

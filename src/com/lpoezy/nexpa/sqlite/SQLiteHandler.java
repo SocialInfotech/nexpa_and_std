@@ -2208,7 +2208,7 @@ public class SQLiteHandler {
         sqLiteDatabase.delete(TABLE_USER_PROFILE, null, null);
         sqLiteDatabase.delete(TABLE_LOCATION, null, null);
         // db.close();
-        Log.d(TAG, "Deleted all user info from sqlite");
+        L.debug("Deleted all user info from sqlite");
     }
 
     public void deleteMessages() {

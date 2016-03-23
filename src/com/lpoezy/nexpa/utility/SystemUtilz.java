@@ -11,8 +11,11 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
 import android.provider.Settings.Secure;
+import android.text.TextUtils;
 
 public class SystemUtilz {
 
@@ -70,6 +73,30 @@ public class SystemUtilz {
 	public static String getDeviceUniqueId(Context context) {
 
 		return Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+
+	}
+
+
+
+	public static boolean isLocationEnabled(Context context) {
+		int locationMode = 0;
+		String locationProviders;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+			try {
+				locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+			} catch (Settings.SettingNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+		}else{
+			locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+			return !TextUtils.isEmpty(locationProviders);
+		}
+
 
 	}
 

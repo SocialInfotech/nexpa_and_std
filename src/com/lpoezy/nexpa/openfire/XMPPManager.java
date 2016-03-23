@@ -110,7 +110,7 @@ public class XMPPManager {
 
     @SuppressWarnings("deprecation")
     private void initialiseConnection() {
-
+        L.debug("xmpp, initialiseConnection");
         XMPPTCPConnectionConfiguration.Builder config = XMPPTCPConnectionConfiguration.builder();
         config.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
         config.setServiceName(serverAddress);
@@ -126,18 +126,21 @@ public class XMPPManager {
         connection.addConnectionListener(connectionListener);
     }
 
-    public void disconnect() throws NotConnectedException {
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
+    public void disconnect() throws NotConnectedException, XMPPErrorException, NoResponseException {
 
+        Presence presence = new Presence(Presence.Type.unavailable);
+        presence.setStatus("I'm unavailable");
+        connection.sendPacket(presence);
+
+        connection.disconnect();
+        instance = null;
+        connected = false;
+        chat_created = false;
+        loggedin = false;
 
         L.debug("xmpp, Disconnected");
-        connection.disconnect();
 
 
-        //	}
-//		}).start();
     }
 
     public void connect(final String caller) {
@@ -162,6 +165,7 @@ public class XMPPManager {
                 L.debug("Connect() Function " + caller + "=>connecting....");
 
                 try {
+
                     connection.connect();
                     DeliveryReceiptManager dm = DeliveryReceiptManager
                             .getInstanceFor(connection);
@@ -242,7 +246,7 @@ public class XMPPManager {
         map.put("name", uname);
         map.put("password", password);
         map.put("email", email);
-
+        accountManager.deleteAccount();
         accountManager.createAccount(uname, password, map);
 
         L.debug("REGISTER, New user created successfully." + uname + ", "
@@ -263,8 +267,9 @@ public class XMPPManager {
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
         } catch (XMPPException | SmackException | IOException e) {
-            e.printStackTrace();
+            L.error("xxx: "+e.getMessage());
         } catch (Exception e) {
+            L.error("yyy: "+e.getMessage());
         }
 
 
@@ -370,10 +375,11 @@ public class XMPPManager {
         @Override
         public void connected(final XMPPConnection connection) {
 
-            L.debug("xmpp, Connected!");
+
             connected = true;
 
             if (!connection.isAuthenticated()) {
+
                 login();
             }
 

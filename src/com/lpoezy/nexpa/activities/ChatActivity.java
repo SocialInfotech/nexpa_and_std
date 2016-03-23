@@ -402,13 +402,13 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			mBounded = true;
 
 			mService = ((LocalBinder<XMPPService>) service).getService();
-			//mService.addMessageListener(ChatActivity.this);
+			mService.addMessageListener(ChatActivity.this);
 
 			String with = getIntent().getStringExtra("with");
 			String start = getIntent().getStringExtra("start");
 
 			if(with!=null && !with.isEmpty() && start!=null && !start.isEmpty()){
-
+				mCorrespondentName = with.split("@")[0];
 				mService.retrieveCollectionFrmMsgArchive(with, start, new CollectionIQ.OnRetrieveListener(){
 					@Override
 					public void onRetrieve(final CollectionIQ collection) {
@@ -587,6 +587,12 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			return chatMsgs.size();
 		}
 
+		//<iq type="result" id="qvtHC-14" to="momo@198.154.106.139/Smack">
+		// <chat xmlns="urn:xmpp:archive" with="leki@198.154.106.139" start="2016-03-23T00:03:36.282Z">
+		// <from secs="0">
+		// <body>{"body":"ghbnn","senderName":"leki","msgid":"980-27","receiver":"momo","sender":"leki","isMine":true}</body></from>
+		// <from secs="4"><body>{"body":"fghjjj","senderName":"leki","msgid":"784-75","receiver":"momo","sender":"leki","isMine":true}</body></from><set xmlns="http://jabber.org/protocol/rsm"><first index="0">0</first><last>1</last><count>2</count></set></chat></iq>
+
 		@Override
 		public void onBindViewHolder(ViewHolder vh, int pos) {
 
@@ -595,16 +601,17 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			
 			SQLiteHandler db = new SQLiteHandler(getApplicationContext());
 			db.openToRead();
-			
+			boolean isMine = comment.senderName.equals(db.getUsername())?true:false;
 			db.close();
+
 			vh.countryName.setBackgroundResource(R.drawable.bubble_green);
 //			if (comment.isSuccessful()) {
-				vh.countryName.setBackgroundResource(comment.isMine ? R.drawable.bubble_green : R.drawable.bubble_yellow);
+				vh.countryName.setBackgroundResource(isMine ? R.drawable.bubble_green : R.drawable.bubble_yellow);
 //			} else {
 //				vh.countryName.setBackgroundResource(!comment.isLeft() ? R.drawable.bubble_failed : R.drawable.bubble_yellow);
 //			}
-			
-			if (comment.isMine) {
+
+			if (isMine) {
 
 				Bitmap bmp = getUserPic(vh.iv);
 				vh.iv.setImageBitmap(bmp);
@@ -630,7 +637,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
 			}
 
-			vh.wrapper.setGravity(comment.isMine ? Gravity.RIGHT : Gravity.LEFT);
+			vh.wrapper.setGravity(isMine ? Gravity.RIGHT : Gravity.LEFT);
 		}
 
 		@Override
@@ -644,9 +651,9 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
 			Bitmap rawImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.pic_sample_girl);
 			
-			if (mCorrespondent.getProfilePic() != null) {
-				rawImage = mCorrespondent.getProfilePic();
-			}
+//			if (mCorrespondent.getProfilePic() != null) {
+//				rawImage = mCorrespondent.getProfilePic();
+//			}
 
 			RoundedImageView riv = new RoundedImageView(context);
 			Bitmap circImage = riv.getCroppedBitmap(rawImage, 80);

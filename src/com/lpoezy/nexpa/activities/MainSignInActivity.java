@@ -151,7 +151,7 @@ public class MainSignInActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-
+        L.debug(">>>>>>>>>>>>>>>>>>"+XMPPService.isRunning());
 
     }
 
@@ -187,7 +187,7 @@ public class MainSignInActivity extends Activity {
     private void checkLogin(final String uname, final String password) {
 
         final String tag_string_req = "login";
-        pDialog.setMessage("Logging in ...");
+        pDialog.setMessage("Logging in ..."+uname);
         showDialog();
 
 

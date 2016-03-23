@@ -658,7 +658,7 @@ public class SettingsActivity extends Activity {
 	public void logoutUser(Context context) {
 
 		stopService(new Intent(SettingsActivity.this, XMPPService.class));
-
+		//
 
 		try {
 			Thread.sleep(1000);

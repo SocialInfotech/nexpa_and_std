@@ -54,6 +54,7 @@ import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
+import com.lpoezy.nexpa.utility.SystemUtilz;
 
 import org.jivesoftware.smack.ExceptionCallback;
 import org.jivesoftware.smack.SmackException;
@@ -566,12 +567,12 @@ public class AroundMeActivity extends AppCompatActivity
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        L.makeText(this, "onConnectionSuspended",AppMsg.STYLE_ALERT);
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        L.makeText(this, "onConnectionFailed",AppMsg.STYLE_ALERT);
     }
 
     @Override
@@ -638,6 +639,8 @@ public class AroundMeActivity extends AppCompatActivity
         mUsername = db.getUsername();
         db.close();
         oldDst = 0;
+
+
 //
 //		du = new DateUtils();
 //		db = new SQLiteHandler(this);

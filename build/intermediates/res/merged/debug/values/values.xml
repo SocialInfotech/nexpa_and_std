@@ -159,8 +159,8 @@
     <color name="tang_orange">#ee6c21</color>
     <color name="textColor">#FFF</color>
     <color name="toucan_deep_red">#d55552</color>
-    <color name="toucan_green">#03A678</color>
-    <color name="toucan_light_green">#1cae85</color>
+    <color name="toucan_green">#62BFED</color>
+    <color name="toucan_light_green">#85bff3</color>
     <color name="toucan_red">#d25b55</color>
     <color name="toucan_white">#f9fffb</color>
     <color name="toucan_yellow">#fdab19</color>
@@ -1421,7 +1421,7 @@
         <item name="android:scaleType">center</item>
     </style>
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#03A678</item>
+        <item name="android:background">#62BFED</item>
         <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
     </style>
     <style name="MyNoActionBarShadowTheme" parent="AppTheme">

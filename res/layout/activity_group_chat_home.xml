@@ -124,7 +124,7 @@ android:orientation="vertical">
     			android:id="@+id/txt_broad_stat"
     			android:layout_width="0dp"
 			    android:layout_height="wrap_content" android:gravity="center" 
-				android:text="Connecting To Toucan ..." android:textColor="@color/asbestos"
+				android:text="Connecting To Nexpa ..." android:textColor="@color/asbestos"
  				android:layout_weight="1"  android:padding="1dp"/>
 		</LinearLayout>
 	</LinearLayout>

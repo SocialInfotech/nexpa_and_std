@@ -43,8 +43,6 @@ public class CollectionIQ extends IQ {
     </iq>
 
     //*/
-
-
     //<iq id='Ef3QB-14' type='get'>
     // <retrieve xmlns='urn:xmpp:archive'
     // with='momo@198.154.106.139'

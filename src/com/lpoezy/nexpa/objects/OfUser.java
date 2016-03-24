@@ -95,6 +95,9 @@ public class OfUser {
     }
 
     public boolean saveOffline(Context c){
+
+        if(name==null ||name.equals("null")|| email==null || email.equals("null"))return false;
+
         SQLiteHandler db = new SQLiteHandler(c);
         db.openToWrite();
         boolean success = db.saveOfuser(username, plainPassword,  encryptedPassword, name, email, creationDate, modificationDate)!=null?true:false;
@@ -124,8 +127,8 @@ public class OfUser {
                 this.encryptedPassword = user.getString("encryptedPassword");
                 this.name = user.getString("name");
                 this.email = user.getString("email");
-                this.creationDate = Long.parseLong(user.getString("creationDate"));
-                this.modificationDate = Long.parseLong(user.getString("modificationDate"));
+                if(!user.getString("creationDate").equals("null"))this.creationDate = Long.parseLong(user.getString("creationDate"));
+                if(!user.getString("modificationDate").equals("null"))this.modificationDate = Long.parseLong(user.getString("modificationDate"));
 
                 return true;
             }

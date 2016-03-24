@@ -408,7 +408,9 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			String start = getIntent().getStringExtra("start");
 
 			if(with!=null && !with.isEmpty() && start!=null && !start.isEmpty()){
+
 				mCorrespondentName = with.split("@")[0];
+				String newWith = "";
 				mService.retrieveCollectionFrmMsgArchive(with, start, new CollectionIQ.OnRetrieveListener(){
 					@Override
 					public void onRetrieve(final CollectionIQ collection) {
@@ -417,11 +419,8 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 							@Override
 							public void run() {
 
-
 								chatMsgs.clear();
 								chatMsgs.addAll(collection.chtMessages);
-
-								L.debug("xxx: "+chatMsgs.size());
 								mAdapter.notifyDataSetChanged();
 							}
 						});

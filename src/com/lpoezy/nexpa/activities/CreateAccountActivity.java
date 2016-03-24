@@ -97,10 +97,10 @@ public class CreateAccountActivity extends Activity {
 					if (mBounded) {
 						
 						 // Fetch updated Instance ID token and notify of changes
-				        Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
-				        startService(intent);
+				        //Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
+				        //startService(intent);
 						
-						//registerUser(name, email, password);
+						registerUser(name, email, password);
 
 					} else {
 						L.error("service not yet available");

@@ -191,8 +191,7 @@ public class AroundMeActivity extends AppCompatActivity
 
             case R.id.action_distance:
 
-                final SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
-                db.openToRead();
+
 
 
                 dialogPref = new Dialog(AroundMeActivity.this);
@@ -202,13 +201,16 @@ public class AroundMeActivity extends AppCompatActivity
                 rbDistance = (RangeBar) dialogPref.findViewById(R.id.rbDistance);
                 rbDistance.setRangeBarEnabled(false);
 
+                SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
+                db.openToRead();
                 try {
                     dst = Integer.parseInt(db.getBroadcastDist());
                 } catch (Exception e) {
                     dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
                 }
-
                 L.debug("db.getBroadcastDist()" + db.getBroadcastDist());
+                db.close();
+
                 rbDistance.setSeekPinByValue(dst);
 
                 rbDistance.setPinColor(getResources().getColor(R.color.EDWARD));
@@ -228,8 +230,12 @@ public class AroundMeActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v) {
 
-                        db.updateBroadcastDist(distTick);
 
+                        SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
+                        db.openToWrite();
+
+                        db.updateBroadcastDist(distTick);
+                        db.close();
                         try {
                             dst = Integer.parseInt(distTick);
 
@@ -277,7 +283,7 @@ public class AroundMeActivity extends AppCompatActivity
                 dialogPref.show();
                 dialogPref.getWindow().setAttributes(lp);
 
-                db.close();
+
                 return true;
 
             default:
@@ -852,9 +858,15 @@ public class AroundMeActivity extends AppCompatActivity
                         uProfile.setUsername(name);
 
                         uProfile.loadVCard(XMPPService.xmpp.connection);
-                        L.debug("uProfile.getUsername(): " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+                        L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
 
                         updateUserAvatar(name, uProfile.getAvatarImg());
+
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            L.error(e.getMessage());
+                        }
                     }
                 }).start();
 
@@ -972,6 +984,12 @@ public class AroundMeActivity extends AppCompatActivity
                 boolean isAvailable = roster.getPresence(addresss).isAvailable();
                 L.debug(addresss + " isAvailable? " + isAvailable);
                 c.setAvailable(isAvailable);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                   L.error(e.getMessage());
+                }
             }
         }
 
@@ -1107,12 +1125,17 @@ public class AroundMeActivity extends AppCompatActivity
                         uProfile.setUsername(nearByUser.getUsername());
 
                         uProfile.loadVCard(connection);
-                        L.debug("uProfile.getUsername(): " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+                        L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
 
                         updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
+
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                           L.error(e.getMessage());
+                        }
                     }
                 }).start();
-
 
 
 

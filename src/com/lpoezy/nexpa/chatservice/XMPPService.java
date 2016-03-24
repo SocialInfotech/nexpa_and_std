@@ -289,7 +289,9 @@ public class XMPPService extends Service {
 
                     } catch (NoResponseException | NotConnectedException e) {
                         callback.onResumeScreen("User is not, or no longer, connected.");
+                        L.error(e.getMessage());
                     } catch (XMPPErrorException e) {
+                        L.error(e.getMessage());
                         callback.onResumeScreen("User Name already exists, please enter another one.");
                     }
 

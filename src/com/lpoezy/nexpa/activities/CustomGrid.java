@@ -100,6 +100,15 @@ public class CustomGrid extends BaseAdapter {
         int avalability = mCorrespondents.get(position).isAvailable() ? R.drawable.online : R.drawable.offline;
         offline.setImageResource(avalability);
 
+        Bitmap rawImage = BitmapFactory.decodeResource(mContext.getResources(),
+                        R.drawable.pic_sample_girl);
+
+       if(mCorrespondents.get(position).getProfilePic()!=null){
+           rawImage = mCorrespondents.get(position).getProfilePic();
+       }
+
+        imageView.setImageBitmap(rawImage);
+
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {

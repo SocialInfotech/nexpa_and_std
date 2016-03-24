@@ -14,21 +14,30 @@ import com.lpoezy.nexpa.objects.CollectionIQ;
 import com.lpoezy.nexpa.objects.CollectionIQProvider;
 import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
 import com.lpoezy.nexpa.objects.ListOfCollectionsIQProvider;
+import com.lpoezy.nexpa.objects.TestExtensionProvider;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
+import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.XMPPException.XMPPErrorException;
+import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
+import org.jivesoftware.smack.filter.AndFilter;
+import org.jivesoftware.smack.filter.PacketFilter;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.provider.ProviderManager;
@@ -317,11 +326,18 @@ public class XMPPManager {
         if (connection.isAuthenticated()) {
             L.debug("==========retrieveListOfCollectionsFrmMsgArchive========================");
             ListOfCollectionsIQ listOfCollections = new ListOfCollectionsIQ();
+            listOfCollections.setType(IQ.Type.set);
+
+
+
 
             try {
                 connection.sendStanza(listOfCollections);
 
-                ProviderManager.addIQProvider("list", "urn:xmpp:archive", new ListOfCollectionsIQProvider(callback));
+
+                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", new TestExtensionProvider());
+                //ProviderManager.addIQProvider("list", "urn:xmpp:archive", new ListOfCollectionsIQProvider(callback));
+                //ProviderManager.addIQProvider("message", "", new ListOfCollectionsIQProvider(callback));
 
             } catch (NotConnectedException e) {
                 L.error("retrieveListOfCollectionsFrmMsgArchive: "+e.getMessage());

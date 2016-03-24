@@ -18,6 +18,7 @@ public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ>
 
     public ListOfCollectionsIQProvider(ListOfCollectionsIQ.OnRetrieveListener callback) {
         this.callback = callback;
+
     }
 
     //<iq type="result" id="Rl8dP-61" to="leki@198.154.106.139/Smack">
@@ -58,49 +59,37 @@ public class ListOfCollectionsIQProvider extends IQProvider<ListOfCollectionsIQ>
             switch (eventType) {
                 case XmlPullParser.START_TAG:
                     String elementName = parser.getName();
-                    //L.debug("elementName: " + elementName);
-                    switch (parser.getName()) {
-                        case "chat":
-
-
-                            // Initialize the variables from the parsed XML
-
-                            with = parser.getAttributeValue("", "with");
-                            //L.debug("with: "+with);
-                            start = parser.getAttributeValue("", "start");
-
-                            break;
-
-                    }
+                    L.debug("elementName: " + elementName);
+//                    switch (parser.getName()) {
+//                        case "chat":
+//
+//
+//                            // Initialize the variables from the parsed XML
+//
+//                            with = parser.getAttributeValue("", "with");
+//                            //L.debug("with: "+with);
+//                            start = parser.getAttributeValue("", "start");
+//
+//                            break;
+//
+//                    }
                     break;
 
 
                 case XmlPullParser.END_TAG:
 
                     switch (parser.getName()) {
-                        case "chat":
-
-                            ListOfCollectionsIQ.Chat chat = new ListOfCollectionsIQ.Chat();
-                            chat.setWith(with);
-                            chat.setStart(start);
-                            listOfCollectionsIQ.addChat(chat);
-
-                            break;
-
-//                        case "first":
-//                            listOfCollectionsIQ.first = Integer.valueOf(first);
-//                            break;
+//                        case "chat":
 //
-//                        case "last":
-//                            listOfCollectionsIQ.last = Integer.valueOf(last);
-//                            break;
+//                            ListOfCollectionsIQ.Chat chat = new ListOfCollectionsIQ.Chat();
+//                            chat.setWith(with);
+//                            chat.setStart(start);
+//                            listOfCollectionsIQ.addChat(chat);
 //
-//                        case "count":
-//                            listOfCollectionsIQ.count = Integer.valueOf(count);
 //                            break;
 
-
-                        case "list":
+                        case "query":
+                        //case "list":
                             if (parser.getDepth() == initialDepth) {
                                 break outerloop;
                             }

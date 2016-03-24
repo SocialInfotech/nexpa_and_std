@@ -187,7 +187,7 @@ public class MainSignInActivity extends Activity {
     private void checkLogin(final String uname, final String password) {
 
         final String tag_string_req = "login";
-        pDialog.setMessage("Logging in ..."+uname);
+        pDialog.setMessage("Logging in ...");
         showDialog();
 
 
@@ -201,21 +201,18 @@ public class MainSignInActivity extends Activity {
 
                 if (ofuser.downloadOnline()) {
 
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideDialog();
+                        }
+                    });
+
                     if (ofuser.saveOffline(getApplicationContext())) {
 
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideDialog();
-                            }
-                        });
+
                         //XEP-0136
                         //http://stackoverflow.com/questions/6830175/how-can-we-access-archive-messages-into-android-application-from-xmpp-server
-
-
-
-
-
                         //*/
                         SessionManager sm = new SessionManager(getApplicationContext());
                         sm.setLogin(true);
@@ -224,6 +221,8 @@ public class MainSignInActivity extends Activity {
                         startActivity(act);
                         finish();
                         //*/
+                    }else{
+                        L.makeText(MainSignInActivity.this, "Please register first!", AppMsg.STYLE_ALERT);
                     }
 
                 }

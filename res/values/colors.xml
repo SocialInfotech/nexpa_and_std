@@ -9,7 +9,7 @@
     <color name="input_login_hint">#999999</color>
     <color name="input_register">#90C695</color>
     <color name="input_register_2">#e7e7aa</color>
-    <color name="input_register_bg">#91c391</color>
+    <color name="input_register_bg">#99ffff</color>
     <color name="input_register_bg_2">#489060</color>
     <color name="input_register_hint">#5e7856</color>
     <color name="input_register_hint_2">#e7e7aa</color>

@@ -49,22 +49,16 @@ import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Geolocation;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.objects.Users;
-import com.lpoezy.nexpa.openfire.Time;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
-import com.lpoezy.nexpa.utility.SystemUtilz;
 
-import org.jivesoftware.smack.ExceptionCallback;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterListener;
 import org.json.JSONArray;
@@ -409,7 +403,8 @@ public class AroundMeActivity extends AppCompatActivity
                 final String spec = AppConfig.URL_GEO;
                 String webpage = HttpUtilz.makeRequest(spec, postDataParams);
 
-                //L.debug(webpage);
+                L.debug(webpage);
+
                 updateUI(webpage);
 
 
@@ -496,7 +491,8 @@ public class AroundMeActivity extends AppCompatActivity
                     updateGrid();
                 }
             } else {
-                makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
+                //makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
+                L.makeText(AroundMeActivity.this, "Error occurred while collecting users", AppMsg.STYLE_ALERT);
             }
         } catch (JSONException e) {
             e.printStackTrace();

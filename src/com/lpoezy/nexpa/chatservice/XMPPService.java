@@ -17,9 +17,7 @@ import com.lpoezy.nexpa.activities.ChatHistoryActivity;
 import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
-import com.lpoezy.nexpa.objects.CollectionIQ;
 import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
 import com.lpoezy.nexpa.objects.NewMessage;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
@@ -31,7 +29,6 @@ import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException.XMPPErrorException;
 import org.jivesoftware.smack.chat.Chat;
-import org.jivesoftware.smack.packet.Presence;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,7 +55,6 @@ public class XMPPService extends Service {
     }
 
     public Chat chat;
-
 
 
     private PendingIntent getNotificationPendingIntent(Correspondent correspondent) {
@@ -108,7 +104,8 @@ public class XMPPService extends Service {
     }
 
     private List<OnConnectedToOPenfireListener> connectedToOperfireListeners = new ArrayList<OnConnectedToOPenfireListener>();
-    public void addconnectedToOperfireListener(OnConnectedToOPenfireListener observer){
+
+    public void addconnectedToOperfireListener(OnConnectedToOPenfireListener observer) {
 
         connectedToOperfireListeners.add(observer);
     }
@@ -118,7 +115,7 @@ public class XMPPService extends Service {
         public void onConnectedToOpenfire(XMPPConnection connection) {
 
 
-            for(OnConnectedToOPenfireListener observer: connectedToOperfireListeners){
+            for (OnConnectedToOPenfireListener observer : connectedToOperfireListeners) {
                 observer.onConnectedToOpenfire(connection);
             }
 
@@ -126,13 +123,11 @@ public class XMPPService extends Service {
     };
 
 
-
-
     private List<OnProcessMessage> chatMessagesListeners = new ArrayList<OnProcessMessage>();
-    public void addMessageListener(OnProcessMessage observer){
+
+    public void addMessageListener(OnProcessMessage observer) {
         chatMessagesListeners.add(observer);
     }
-
 
 
     private OnProcessMessage processMessageCallback = new OnProcessMessage() {
@@ -150,9 +145,9 @@ public class XMPPService extends Service {
                 //sendNotification(correspondent);
 
             } else {
-                    for(OnProcessMessage observer: chatMessagesListeners){
-                        observer.onProcessMessage(chatMessage);
-                    }
+                for (OnProcessMessage observer : chatMessagesListeners) {
+                    observer.onProcessMessage(chatMessage);
+                }
                 // send broadcast
 //                Intent broadcast = new Intent(AppConfig.ACTION_RECEIVED_MSG);
 //                broadcast.putExtra("username", chatMessage.sender);
@@ -315,12 +310,21 @@ public class XMPPService extends Service {
 //
 //    }
 
-    public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnRetrieveListener callback) {
-        xmpp.retrieveListOfCollectionsFrmMsgArchive(callback);
+
+    public void retrieveListOfCollectionsFrmMsgArchive(final OnUpdateScreenListener callback) {
+
+
+        xmpp.retrieveListOfCollectionsFrmMsgArchive(null, callback, null);
+
+
     }
 
-    public void retrieveCollectionFrmMsgArchive(String with, String start, CollectionIQ.OnRetrieveListener callback) {
-        xmpp.retrieveCollectionFrmMsgArchive(with, start, callback);
+    public void retrieveCollectionFrmMsgArchive(final String with, final ChatActivity.OnRetrieveMessageArchiveListener callback) {
+
+
+        xmpp.retrieveListOfCollectionsFrmMsgArchive(with, null, callback);
+
+
     }
 
 

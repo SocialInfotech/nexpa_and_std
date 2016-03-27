@@ -39,7 +39,7 @@ public class ListOfCollectionsIQ extends IQ {
     //http://stackoverflow.com/questions/29282498/smack-xep-313-implementation
     @Override
     protected IQChildElementXmlStringBuilder getIQChildElementBuilder(IQChildElementXmlStringBuilder xml) {
-        //xml.attribute("with", "roy@198.154.106.139");
+
         xml.rightAngleBracket();
         //xml.append("<set xmlns='http://jabber.org/protocol/rsm'>");
        // xml.append("<max>30</max></set>");
@@ -48,9 +48,9 @@ public class ListOfCollectionsIQ extends IQ {
        // xml.append("<value>urn:xmpp:mam:0</value></field>");
        // xml.append("<field var=\"with\" type=\"roy@198.154.106.139\"/>");
        // xml.append("</x>");
-       // xml.append("<set xmlns='http://jabber.org/protocol/rsm'>");
-       // xml.append("<max>30</max><before/>");
-       // xml.append("</set>");
+        xml.append("<set xmlns='http://jabber.org/protocol/rsm'>");
+        xml.append("<max>30</max><before/>");
+        xml.append("</set>");
         return xml;
     }
 

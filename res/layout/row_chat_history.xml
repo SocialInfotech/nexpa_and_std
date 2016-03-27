@@ -58,7 +58,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
-       <!-- <FrameLayout
+       <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent" >
 
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:text="Large Text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-        </FrameLayout>-->
+        </FrameLayout>
     </LinearLayout>
 
 </RelativeLayout>

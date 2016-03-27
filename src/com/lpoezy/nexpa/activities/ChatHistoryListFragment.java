@@ -1,14 +1,5 @@
 package com.lpoezy.nexpa.activities;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
@@ -16,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,17 +19,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
+import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Correspondents;
-import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
-import com.lpoezy.nexpa.objects.NewMessage;
-import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.objects.MessageElement;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.DividerItemDecoration;
 import com.lpoezy.nexpa.utility.L;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ChatHistoryListFragment extends Fragment implements Correspondent.OnCorrespondentUpdateListener {
 
@@ -47,11 +43,22 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
     // private List<Correspondent> mBuddys;
     private Correspondents mBuddys;
     public ChatHistoryAdapter adapter;
-    public List<ListOfCollectionsIQ.Chat> collections = new ArrayList<ListOfCollectionsIQ.Chat>();
+    //public List<ListOfCollectionsIQ.Chat> collections = new ArrayList<ListOfCollectionsIQ.Chat>();
 
     // private SwipeRefreshLayout mSwipeRefreshLayout;
     private SwipyRefreshLayout mSwipeRefreshLayout;
     private RecyclerView rvChatHistory;
+
+    private List<LatestMessage> mLatestMsgs;
+
+    private class LatestMessage {
+        public String stamp;
+        public Bitmap avatar;
+        public ChatMessage chat;
+
+        public LatestMessage() {
+        }
+    }
 
 
     public static ChatHistoryListFragment newInstance() {
@@ -94,6 +101,8 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
         rvChatHistory.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         // mBuddys = new ArrayList<Correspondent>();
+        mLatestMsgs = new ArrayList<LatestMessage>();
+
         mBuddys = new Correspondents();
 
         adapter = new ChatHistoryAdapter(getActivity(), mCallback);
@@ -122,13 +131,9 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
         getActivity().unregisterReceiver(mReceivedMessage);
         // getActivity().unregisterReceiver(mReceivedCorrespondentUpdate);
 
-        // for (int i = 0; i < mBuddys.size(); i++) {
-        // Correspondent correspondent = mBuddys.get(i);
-        // correspondent.removeListener(this);
-        // }
+
     }
 
-    private List<Bitmap> avatars = new ArrayList<Bitmap>();
 
     @Override
     public void onResume() {
@@ -145,140 +150,73 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
     }
 
-    // protected void downloadProfilePics(final List<Correspondent>
-    // correspondents) {
-    protected void downloadProfilePics(final Correspondents correspondents) {
+    public void updateUI() {
 
-        new Thread(new Runnable() {
+        //get collections from offline db
 
-            @Override
-            public void run() {
+        SQLiteHandler db = new SQLiteHandler(getActivity());
+        db.openToRead();
+        List<MessageElement> msgs = db.downloadMsgArchive();
+        Gson gson = new Gson();
+        if (msgs != null && !msgs.isEmpty()) {
 
-                final int MAX_THREAD = 5;
-                int n = correspondents.size() < MAX_THREAD && correspondents.size() != 0 ? correspondents.size()
-                        : MAX_THREAD;
-                ExecutorService exec = Executors.newFixedThreadPool(n);
-                // L.debug("correspondents.size() "+correspondents.size());
-                for (int i = 0; i < correspondents.size(); i++) {
+            mLatestMsgs.clear();
 
-                    final Correspondent correspondent = correspondents.get(i);
-                    // L.debug("xxxxxxxxxx correspondent
-                    // username"+correspondent.getUsername()+"xxxxxxx");
-                    correspondent.addListener(ChatHistoryListFragment.this);
+            for (MessageElement msg : msgs) {
+                final LatestMessage lMsg = new LatestMessage();
+                lMsg.stamp = msg.getStamp();
+                lMsg.chat = gson.fromJson(
+                        msg.getBody(), ChatMessage.class);
 
-                    exec.execute(new Runnable() {
+/*/
+                   new Thread(new Runnable() {
+                       @Override
+                       public void run() {
 
-                        @Override
-                        public void run() {
-                            correspondent.downloadCorrespondentIdOffline(getActivity());
-                            long userId = correspondent.getId();
-                            correspondent.downloadProfilePicOnline(getActivity(), userId);
+                           if (XMPPService.xmpp.connection.isConnected() && XMPPService.xmpp.connection.getUser() != null) {
 
-                        }
-                    });
 
-                }
-                exec.shutdown();
-                try {
-                    exec.awaitTermination(1, TimeUnit.MINUTES);
-                } catch (InterruptedException e) {
+                               UserProfile uProfile = new UserProfile();
+                               uProfile.setUsername(lMsg.chat.sender);
+                               uProfile.loadVCard(XMPPService.xmpp.connection);
 
-                }
+                               if (uProfile.getAvatarImg() != null) {
+                                   lMsg.avatar = uProfile.getAvatarImg();
+                                   resetAdapter();
+                               }
+
+                               try {
+                                   Thread.sleep(500);
+                               } catch (InterruptedException e) {
+                                   L.error(e.getMessage());
+                               }
+                           }
+
+
+                       }
+                   }).start();
+//*/
+
+
+                mLatestMsgs.add(lMsg);
 
             }
-        }).start();
+        }
 
+
+        db.close();
+
+        resetAdapter();
     }
 
-    public void setCollections(final List<ListOfCollectionsIQ.Chat> collections) {
-        this.collections.clear();
-        for (int i = collections.size() - 1; i >= 0; i--) {
-            this.collections.add(collections.get(i));
-        }
-        //this.collections.addAll(collections);
+    private void resetAdapter() {
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-
                 adapter.notifyDataSetChanged();
             }
         });
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(),
-//                        R.drawable.pic_sample_girl);
-//
-//
-//                UserProfile uProfile = new UserProfile();
-//                uProfile.setUsername(name);
-//
-//                if (XMPPService.xmpp.connection.isConnected() && XMPPService.xmpp.connection.getUser() != null) {
-//
-//                    uProfile.loadVCard(XMPPService.xmpp.connection);
-//
-//
-//                    L.debug("name: "+name+", desc: "+uProfile.getDescription()+", rawImage: "+rawImage);
-//                    if (uProfile.getAvatarImg() != null) {
-//                        rawImage = uProfile.getAvatarImg();
-//                    }
-//
-//                    final Bitmap finalRawImage = rawImage;
-//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            //adapter.notifyDataSetChanged();
-//
-//                            vh.imgProfilePic.setImageBitmap(finalRawImage);
-//
-//                        }
-//                    });
-//                }
-//            }
-//        }).start();
-
-
-
-
-//        L.debug("collections: " + collections.size());
-//        for (int i = 0; i < collections.size(); i++) {
-//            final String uname = collections.get(i).getWith().split("@")[0];
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                    Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(),
-//                            R.drawable.pic_sample_girl);
-//
-//
-//                    UserProfile uProfile = new UserProfile();
-//                    uProfile.setUsername(uname);
-//
-//                    if (XMPPService.xmpp.connection.isConnected() && XMPPService.xmpp.connection.getUser() != null) {
-//
-//                        uProfile.loadVCard(XMPPService.xmpp.connection);
-//
-//                        rawImage = uProfile.getAvatarImg();
-//                        L.debug("uname: "+uname+", desc: "+uProfile.getDescription()+", rawImage: "+rawImage);
-//                        if (rawImage != null) avatars.add(rawImage);
-//
-//
-//                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                adapter.notifyDataSetChanged();
-//
-//                            }
-//                        });
-//                    }
-//                }
-//            }).start();
-//
-//        }
-
-
     }
 
     private class ChatHistoryAdapter extends RecyclerView.Adapter<ChatHistoryAdapter.ViewHolder> {
@@ -298,15 +236,23 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
         @Override
         public int getItemCount() {
 
-            return collections.size();
+            return mLatestMsgs.size();
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder vh, final int position) {
             vh.position = position;
-            final String name = collections.get(position).getWith().split("@")[0];
 
-            vh.tvBuddys.setText(name);
+            SQLiteHandler db = new SQLiteHandler(getActivity());
+            db.openToRead();
+
+            String uname = db.getUsername();
+            db.close();
+
+
+            //final String name = mLatestMsgs.get(position).chat.sender;
+
+            vh.tvBuddys.setText(uname.equals(mLatestMsgs.get(position).chat.sender) ? mLatestMsgs.get(position).chat.receiver : mLatestMsgs.get(position).chat.sender);
 
             SimpleDateFormat existingUTCFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             SimpleDateFormat requiredFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -314,19 +260,19 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
             Date getDate = null;
             try {
-                getDate = existingUTCFormat.parse(collections.get(position).getStart());
+                getDate = existingUTCFormat.parse(mLatestMsgs.get(position).stamp);
             } catch (ParseException e) {
                 L.error(e.getMessage());
             }
             String mydate = requiredFormat.format(getDate);
 
 
-            vh.tvMsg.setText(mydate);
+            vh.tvMsg.setText(mLatestMsgs.get(position).chat.body);
+            vh.tvMsgDate.setText(mydate);
 
-            //vh.tvMsgDate.setVisibility(View.INVISIBLE);
-//            if (avatars.size() > 0) {
-//                vh.imgProfilePic.setImageBitmap(avatars.get(position));
-//            }
+            if (mLatestMsgs.get(position).avatar != null) {
+                vh.imgProfilePic.setImageBitmap(mLatestMsgs.get(position).avatar);
+            }
 
 
         }
@@ -349,7 +295,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
                 super(view);
                 tvBuddys = (TextView) view.findViewById(R.id.tv_buddys_name);
                 tvMsg = (TextView) view.findViewById(R.id.tv_buddys_msg);
-                //tvMsgDate = (TextView) view.findViewById(R.id.tv_buddys_msg_date);
+                tvMsgDate = (TextView) view.findViewById(R.id.tv_buddys_msg_date);
                 imgProfilePic = (ImageView) view.findViewById(R.id.img_profile_pic);
 
                 view.setOnClickListener(this);
@@ -358,14 +304,14 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
             @Override
             public void onClick(View v) {
                 //L.debug("with: "+tvBuddys.getText().toString()+", start: "+tvMsg.getText().toString());
-                mCallback.onShowChatHistory(collections.get(position).getWith(), collections.get(position).getStart());
+                mCallback.onShowChatHistory(mLatestMsgs.get(position).chat.receiver);
             }
 
         }
     }
 
     public interface OnShowChatHistoryListener {
-        public void onShowChatHistory(String with, String start);
+        public void onShowChatHistory(String with);
         //public void onShowChatHistory(Correspondent buddy);
     }
 

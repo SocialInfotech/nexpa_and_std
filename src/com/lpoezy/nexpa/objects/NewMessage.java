@@ -1,7 +1,5 @@
 package com.lpoezy.nexpa.objects;
 
-import java.util.Map;
-
 import android.content.Context;
 import android.database.Cursor;
 
@@ -158,15 +156,15 @@ public class NewMessage {
 		SQLiteHandler db = new SQLiteHandler(context);
 		db.openToRead();
 		
-		Map<String, String> map = db.downloadLatestMessageOf(username);
-		this.senderName = map.get(SQLiteHandler.MSG_SENDER_NAME);
-		this.receiverName = map.get(SQLiteHandler.MSG_RECEIVER_NAME);
-		this.body = map.get(SQLiteHandler.MSG_BODY);
-		this.isLeft = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.MSG_IS_LEFT));
-		this.isSuccessful = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.MSG_SUCCESS));
-		this.isUnread = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.MSG_IS_UNREAD));
-		this.date = Long.parseLong(map.get(SQLiteHandler.MSG_DATE));
-		this.isSyncedOnline =StringFormattingUtils.getBoolean(map.get(SQLiteHandler.MSG_IS_SYNCED_ONLINE));
+//		Map<String, String> map = db.downloadLatestMessageOf(username);
+//		this.senderName = map.get(SQLiteHandler.MSG_SENDER_NAME);
+//		this.receiverName = map.get(SQLiteHandler.MSG_RECEIVER_NAME);
+//		this.body = map.get(SQLiteHandler.MSG_BODY);
+//		this.isLeft = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.MSG_IS_LEFT));
+//		this.isSuccessful = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.MSG_SUCCESS));
+//		this.isUnread = StringFormattingUtils.getBoolean(map.get(SQLiteHandler.MSG_IS_UNREAD));
+//		this.date = Long.parseLong(map.get(SQLiteHandler.MSG_DATE));
+//		this.isSyncedOnline =StringFormattingUtils.getBoolean(map.get(SQLiteHandler.MSG_IS_SYNCED_ONLINE));
 		
 		db.close();
 	}

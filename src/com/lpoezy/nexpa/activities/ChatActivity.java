@@ -34,7 +34,6 @@ import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
-import com.lpoezy.nexpa.objects.CollectionIQ;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Messages;
 import com.lpoezy.nexpa.objects.ProfilePicture;
@@ -405,29 +404,30 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			mService.addMessageListener(ChatActivity.this);
 
 			String with = getIntent().getStringExtra("with");
-			String start = getIntent().getStringExtra("start");
 
-			if(with!=null && !with.isEmpty() && start!=null && !start.isEmpty()){
-
+			if(with!=null && !with.isEmpty()){
 				mCorrespondentName = with.split("@")[0];
-				String newWith = "";
-				mService.retrieveCollectionFrmMsgArchive(with, start, new CollectionIQ.OnRetrieveListener(){
-					@Override
-					public void onRetrieve(final CollectionIQ collection) {
-
-						new Handler(Looper.getMainLooper()).post(new Runnable() {
-							@Override
-							public void run() {
-
-								chatMsgs.clear();
-								chatMsgs.addAll(collection.chtMessages);
-								mAdapter.notifyDataSetChanged();
-							}
-						});
-
-					}
-				});
 			}
+
+			final String newWith = mCorrespondentName+"@198.154.106.139";
+			mService.retrieveCollectionFrmMsgArchive(newWith, new OnRetrieveMessageArchiveListener() {
+				@Override
+				public void onRetrieveMessageArchive(final List<ChatMessage> conversation) {
+
+					new Handler(Looper.getMainLooper()).post(new Runnable() {
+						@Override
+						public void run() {
+
+							chatMsgs.clear();
+							chatMsgs.addAll(conversation);
+							mAdapter.notifyDataSetChanged();
+						}
+					});
+
+
+
+				}
+			});
 
 
 		}
@@ -703,6 +703,10 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 			}
 		});
 		
+	}
+
+	public interface OnRetrieveMessageArchiveListener{
+		public void onRetrieveMessageArchive(List<ChatMessage> conversation);
 	}
 
 }

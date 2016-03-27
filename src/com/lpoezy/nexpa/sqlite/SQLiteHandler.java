@@ -15,6 +15,7 @@ import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Favorite;
 import com.lpoezy.nexpa.objects.Geolocation;
+import com.lpoezy.nexpa.objects.MessageElement;
 import com.lpoezy.nexpa.objects.NewMessage;
 import com.lpoezy.nexpa.openfire.Account;
 import com.lpoezy.nexpa.utility.DateUtils;
@@ -47,14 +48,13 @@ public class SQLiteHandler {
 
     //uname, latitude, longitude, gps_provider, date_create, date_update, geo_distance
     private static final String TABLE_GPS = "geolocation";
-    private static final String GPS_USERNAME= "username";
+    private static final String GPS_USERNAME = "username";
     private static final String GPS_LAT = "latitude";
     private static final String GPS_LONG = "longitude";
     private static final String GPS_PROV = "gps_provider";
     private static final String GPS_DATE_CREATE = "date_create";
     private static final String GPS_DATE_UPDATE = "date_update";
     private static final String GPS_DISTANCE = "distance";
-
 
 
     private static final String TABLE_LOGIN = "user";
@@ -128,6 +128,15 @@ public class SQLiteHandler {
     public static final String MSG_IS_UNREAD = "is_unread";
     public static final String MSG_DATE_RECEIVED = "date_received";
 
+    public static final String TABLE_MSG_ARCHIVE = "message_archive";
+    public static final String MAM_STAMP = "stamp";
+    public static final String MAM_TO = "_to";
+    public static final String MAM_TYPE = "type";
+    public static final String MAM_FROM = "_from";
+    public static final String MAM_BODY = "body";
+    public static final String MAM_THREAD = "thread";
+
+
     private static final String DATABASE_TABLE_2 = "profile";
     public static final String PROFILE_ID = "_id";
     public static final String PROFILE_USER_ID = "user_id";
@@ -197,16 +206,20 @@ public class SQLiteHandler {
             // db.execSQL(SCRIPT_CREATE_DATABASE);
 
             String CREATE_OFUSER_TABLE = "CREATE TABLE " + TABLE_OFUSER + "(" + USERNAME + " TEXT UNIQUE, "
-                    + PLAIN_PASSWORD + " TEXT, "+ ENCRYPTED_PASSWORD + " TEXT, " + NAME + " TEXT, " + EMAIL + " TEXT, "
-                    + CREATION_DATE + " CHAR(15), " + MODIFICATION_DATE + " CHAR(15), "+GCM_REG_ID+" TEXT);";
+                    + PLAIN_PASSWORD + " TEXT, " + ENCRYPTED_PASSWORD + " TEXT, " + NAME + " TEXT, " + EMAIL + " TEXT, "
+                    + CREATION_DATE + " CHAR(15), " + MODIFICATION_DATE + " CHAR(15), " + GCM_REG_ID + " TEXT);";
             db.execSQL(CREATE_OFUSER_TABLE);
 
 
             String CREATE_GPS_TABLE = "CREATE TABLE " + TABLE_GPS + "(" + GPS_USERNAME + " TEXT UNIQUE, "
                     + GPS_LAT + " REAL, " + GPS_LONG + " REAL, " + GPS_PROV + " TEXT, "
-                    + GPS_DATE_CREATE + " CHAR(15), " + GPS_DATE_UPDATE + " CHAR(15), "+GPS_DISTANCE+" INTEGER);";
+                    + GPS_DATE_CREATE + " CHAR(15), " + GPS_DATE_UPDATE + " CHAR(15), " + GPS_DISTANCE + " INTEGER);";
             db.execSQL(CREATE_GPS_TABLE);
 
+            String CREATE_MAM_TABLE = "CREATE TABLE " + TABLE_MSG_ARCHIVE + "(" + MAM_STAMP + " TEXT, "
+                    + MAM_TO + " TEXT, " + MAM_TYPE + " TEXT, " + MAM_FROM + " TEXT, "
+                    + MAM_BODY + " TEXT, " + MAM_THREAD + " TEXT);";
+            db.execSQL(CREATE_MAM_TABLE);
 
 
 //            String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -219,9 +232,9 @@ public class SQLiteHandler {
 //                    + KEY_LAST_UPDATE + " TEXT );";
 //            db.execSQL(CREATE_LOGIN_TABLE);
 
-            String CREATE_TABLE_USER_PROFILE = "CREATE TABLE " + TABLE_USER_PROFILE + "(" +USER_PROFILE_USERNAME + " TEXT UNIQUE, "
+            String CREATE_TABLE_USER_PROFILE = "CREATE TABLE " + TABLE_USER_PROFILE + "(" + USER_PROFILE_USERNAME + " TEXT UNIQUE, "
                     + USER_PROFILE_DESCRIPTION + " TEXT, " + USER_PROFILE_PROFESSION + " TEXT, " + USER_PROFILE_URL0
-                    + " TEXT, " + USER_PROFILE_URL1 + " TEXT, " + USER_PROFILE_URL2 + " TEXT, "+USER_PROFILE_AVATAR_DIR+" TEXT);";
+                    + " TEXT, " + USER_PROFILE_URL1 + " TEXT, " + USER_PROFILE_URL2 + " TEXT, " + USER_PROFILE_AVATAR_DIR + " TEXT);";
             db.execSQL(CREATE_TABLE_USER_PROFILE);
 
             // String CREATE_TABLE_CORRESPONDENTS = "CREATE TABLE " +
@@ -284,8 +297,8 @@ public class SQLiteHandler {
             db.execSQL(DATABASE_CREATE_3);
 
             String CREATE_TABLE_LOC = "create table " + TABLE_LOCATION + "(" + LOC_USERNAME
-                    + " TEXT UNIQUE, " + LOC_LONGI + " float," + LOC_LATI + " float, "+GPS_PROVIDER+" TEXT, "
-                    + LOC_DATE_CREATE + " CHAR(15), "+LOC_DATE_UPDATE+" CHAR(15));";
+                    + " TEXT UNIQUE, " + LOC_LONGI + " float," + LOC_LATI + " float, " + GPS_PROVIDER + " TEXT, "
+                    + LOC_DATE_CREATE + " CHAR(15), " + LOC_DATE_UPDATE + " CHAR(15));";
             db.execSQL(CREATE_TABLE_LOC);
 
             String DATABASE_CREATE_5 = "create table " + DATABASE_TABLE_5 + "(" + OPTION_ID
@@ -457,7 +470,7 @@ public class SQLiteHandler {
         sqLiteDatabase.update(DATABASE_TABLE_3, contentValues, BROAD_ID + "=" + val, null);
     }
     /*
-	 * public Cursor getAllBroadCast(){
+     * public Cursor getAllBroadCast(){
 	 * 
 	 * 
 	 * }
@@ -469,8 +482,8 @@ public class SQLiteHandler {
         // sqLiteDatabase.close();
         Log.d(TAG, "Deleted all user info from sqlite");
     }
-	/*
-	 * @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int
+    /*
+     * @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int
 	 * newVersion) { db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
 	 * onCreate(db); }
 	 */
@@ -786,45 +799,45 @@ public class SQLiteHandler {
         return map;
     }
 
-    public Map<String, String> downloadLatestMessageOf(String username) {
-        L.debug("SQLiteHandler, downloadLatestMessageOf : " + username);
-        String table = TABLE_MESSAGES;
-        String[] columns = new String[]{MSG_SENDER_NAME, MSG_RECEIVER_NAME, MSG_IS_LEFT, MSG_BODY, MSG_SUCCESS,
-                MSG_DATE, MSG_IS_UNREAD, MSG_IS_SYNCED_ONLINE};
-        String selection = MSG_SENDER_NAME + " = '" + username + "' OR " + MSG_RECEIVER_NAME + " = '" + username + "'";
-
-        // String[] selectionArgs = new String[]{username};
-        Cursor c = sqLiteDatabase.query(table, columns, selection, null, null, null, MSG_DATE + " DESC");
-
-        Map<String, String> map = new HashMap<String, String>();
-
-        if (c.moveToFirst()) {
-
-            String sendername = c.getString(c.getColumnIndex(MSG_SENDER_NAME));
-            String receivername = c.getString(c.getColumnIndex(MSG_RECEIVER_NAME));
-            String left = c.getString(c.getColumnIndex(MSG_IS_LEFT));
-            String body = c.getString(c.getColumnIndex(MSG_BODY));
-            String success = c.getString(c.getColumnIndex(MSG_SUCCESS));
-            String date = c.getString(c.getColumnIndex(MSG_DATE));
-            String isUnread = c.getString(c.getColumnIndex(MSG_IS_UNREAD));
-            String isSyncedOnline = c.getString(c.getColumnIndex(MSG_IS_SYNCED_ONLINE));
-
-            map.put(MSG_SENDER_NAME, sendername);
-            map.put(MSG_RECEIVER_NAME, receivername);
-            map.put(MSG_IS_LEFT, left);
-            map.put(MSG_BODY, body);
-            map.put(MSG_SUCCESS, success);
-            map.put(MSG_DATE, date);
-            map.put(MSG_IS_UNREAD, isUnread);
-            map.put(MSG_IS_SYNCED_ONLINE, isSyncedOnline);
-
-            L.debug("SQLiteHandler, sendername: " + sendername + ", receivername: " + receivername);
-        }
-
-        c.close();
-
-        return map;
-    }
+//    public Map<String, String> downloadLatestMessageOf(String username) {
+//        L.debug("SQLiteHandler, downloadLatestMessageOf : " + username);
+//        String table = TABLE_MESSAGES;
+//        String[] columns = new String[]{MSG_SENDER_NAME, MSG_RECEIVER_NAME, MSG_IS_LEFT, MSG_BODY, MSG_SUCCESS,
+//                MSG_DATE, MSG_IS_UNREAD, MSG_IS_SYNCED_ONLINE};
+//        String selection = MSG_SENDER_NAME + " = '" + username + "' OR " + MSG_RECEIVER_NAME + " = '" + username + "'";
+//
+//        // String[] selectionArgs = new String[]{username};
+//        Cursor c = sqLiteDatabase.query(table, columns, selection, null, null, null, MSG_DATE + " DESC");
+//
+//        Map<String, String> map = new HashMap<String, String>();
+//
+//        if (c.moveToFirst()) {
+//
+//            String sendername = c.getString(c.getColumnIndex(MSG_SENDER_NAME));
+//            String receivername = c.getString(c.getColumnIndex(MSG_RECEIVER_NAME));
+//            String left = c.getString(c.getColumnIndex(MSG_IS_LEFT));
+//            String body = c.getString(c.getColumnIndex(MSG_BODY));
+//            String success = c.getString(c.getColumnIndex(MSG_SUCCESS));
+//            String date = c.getString(c.getColumnIndex(MSG_DATE));
+//            String isUnread = c.getString(c.getColumnIndex(MSG_IS_UNREAD));
+//            String isSyncedOnline = c.getString(c.getColumnIndex(MSG_IS_SYNCED_ONLINE));
+//
+//            map.put(MSG_SENDER_NAME, sendername);
+//            map.put(MSG_RECEIVER_NAME, receivername);
+//            map.put(MSG_IS_LEFT, left);
+//            map.put(MSG_BODY, body);
+//            map.put(MSG_SUCCESS, success);
+//            map.put(MSG_DATE, date);
+//            map.put(MSG_IS_UNREAD, isUnread);
+//            map.put(MSG_IS_SYNCED_ONLINE, isSyncedOnline);
+//
+//            L.debug("SQLiteHandler, sendername: " + sendername + ", receivername: " + receivername);
+//        }
+//
+//        c.close();
+//
+//        return map;
+//    }
 
     public Map<String, String> downloadLatestMsgOffline(long receiverId, long senderId) {
 
@@ -1262,7 +1275,7 @@ public class SQLiteHandler {
 
         sqLiteDatabase.insertWithOnConflict(TABLE_OFUSER, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
-        L.debug("saved username info "+getUsername()+", "+getEncryptedPassword());
+        L.debug("saved username info " + getUsername() + ", " + getEncryptedPassword());
         return getUsername();
 
 
@@ -1279,6 +1292,120 @@ public class SQLiteHandler {
         L.debug(TAG + " new correspondent inserted into sqlite: " + username);
         return id;
     }
+
+
+    public List<String> getCorrespondents() {
+        String username = getUsername()+"@198.154.106.139";
+        List<String> correspondents = new ArrayList<String>();
+        Cursor c = sqLiteDatabase.query(true, TABLE_MSG_ARCHIVE, new String[]{MAM_TO, MAM_FROM}, null, null, null, null, MAM_STAMP + " DESC", null);
+        if (c.moveToFirst()) {
+
+            do {
+                String correspondent = c.getString(c.getColumnIndex(MAM_FROM));
+
+                if(correspondent.equals(username)){
+                    correspondent = c.getString(c.getColumnIndex(MAM_TO));
+                }
+
+
+                if(correspondents.indexOf(correspondent)==-1){
+                    //L.debug("correspondent: "+correspondent);
+                    correspondents.add(correspondent);
+                }
+
+            } while (c.moveToNext());
+        }
+
+        c.close();
+
+        return correspondents;
+
+    }
+
+
+    public MessageElement downloadLatestMessageOf(String jid) {
+        L.debug("SQLiteHandler, downloadLatestMessageOf : " + jid);
+        String table = TABLE_MSG_ARCHIVE;
+        String[] columns = new String[]{MAM_STAMP, MAM_TO, MAM_TYPE, MAM_FROM, MAM_BODY,
+                MAM_THREAD};
+        String selection = MAM_TO + " = '" + jid + "' OR " + MAM_FROM + " = '" + jid + "'";
+
+        // String[] selectionArgs = new String[]{username};
+        Cursor c = sqLiteDatabase.query(table, columns, selection, null, null, null, MAM_STAMP + " DESC");
+
+
+        MessageElement msg = null;
+        if (c.moveToFirst()) {
+
+            String stamp = c.getString(c.getColumnIndex(MAM_STAMP));
+            String to = c.getString(c.getColumnIndex(MAM_TO));
+            String type = c.getString(c.getColumnIndex(MAM_TYPE));
+            String from = c.getString(c.getColumnIndex(MAM_FROM));
+            String body = c.getString(c.getColumnIndex(MAM_BODY));
+            String thread = c.getString(c.getColumnIndex(MAM_THREAD));
+
+            msg = new MessageElement(stamp, to, type, from, body, thread);
+
+
+        }
+
+        c.close();
+
+        return msg;
+    }
+
+    public List<MessageElement> downloadMsgArchive() {
+
+        //get correspondents
+        List<String> correspondents = getCorrespondents();
+
+        List<MessageElement> msgs = new ArrayList<MessageElement>();
+        if (!correspondents.isEmpty()) {
+            for (String jid : correspondents) {
+
+                MessageElement msg = downloadLatestMessageOf(jid);
+                msgs.add(msg);
+                //L.debug("from: " + msg.getFrom() + ", body: " + msg.getBody()+", stamp: "+msg.getStamp());
+            }
+        }
+
+        return msgs;
+    }
+
+    public void deleteMsgArchive(){
+        sqLiteDatabase.delete(TABLE_MSG_ARCHIVE, null,null);
+    }
+
+    public void saveMsgArchive(List<MessageElement> messages) {
+        //L.debug("SQLiteHandler, saveMultipleCorrespondents " + messages.size());
+
+        String sql = "INSERT INTO " + TABLE_MSG_ARCHIVE + "(" + MAM_STAMP + ", " + MAM_TO + ","
+                + MAM_TYPE + "," + MAM_FROM + "," + MAM_BODY + ", " + MAM_THREAD + ") VALUES(?,?,?,?,?,?);";
+        // L.debug(sql);
+        sqLiteDatabase.beginTransaction();
+        SQLiteStatement statement = sqLiteDatabase.compileStatement(sql);
+
+        for (int i = 0; i < messages.size(); i++) {
+            if(messages.get(i).getType()==null)continue;
+            statement.clearBindings();
+
+            //L.debug("saving... to: "+messages.get(i).getTo()+", from: "+messages.get(i).getFrom()+", body: "+messages.get(i).getBody());
+            statement.bindString(1, messages.get(i).getStamp());
+            statement.bindString(2, messages.get(i).getTo().replace("/Smack", ""));
+            statement.bindString(3, messages.get(i).getType());
+            statement.bindString(4, messages.get(i).getFrom().replace("/Smack", ""));
+            statement.bindString(5, messages.get(i).getBody());
+            statement.bindString(6, messages.get(i).getThread());
+
+            statement.execute();
+
+        }
+
+        sqLiteDatabase.setTransactionSuccessful();
+        sqLiteDatabase.endTransaction();
+
+    }
+
 
     public void saveMultipleMsgs(List<NewMessage> messages) {
         L.debug("SQLiteHandler, saveMultipleCorrespondents " + messages.size());
@@ -1495,7 +1622,7 @@ public class SQLiteHandler {
 
         sqLiteDatabase.insertWithOnConflict(TABLE_GPS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         // db.close();
-        Log.e(TAG, "Nearby user inserted into sqlite: "  + username);
+        Log.e(TAG, "Nearby user inserted into sqlite: " + username);
     }
 
 //    public void insertLocation(String username, float longitude, float latitude) {
@@ -1897,7 +2024,7 @@ public class SQLiteHandler {
 //        cursor.close();
 
         SessionManager sm = new SessionManager(context);
-        return  sm.getUsername();
+        return sm.getUsername();
     }
 
 //	public String getFName() {
@@ -2092,7 +2219,7 @@ public class SQLiteHandler {
     public String getLocationLongitude() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.query(TABLE_LOCATION, new String[]{LOC_LONGI}, LOC_USERNAME+"=?", new String[]{getUsername()},null,null,null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_LOCATION, new String[]{LOC_LONGI}, LOC_USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         try {
             cursor.moveToFirst();
             last = cursor.getString(0);
@@ -2120,7 +2247,7 @@ public class SQLiteHandler {
     public String getLocationDateUpdate() {
         String last;
         // SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor= sqLiteDatabase.query(TABLE_LOCATION, new String[]{LOC_DATE_UPDATE}, LOC_USERNAME + "=?", new String[]{getUsername()}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_LOCATION, new String[]{LOC_DATE_UPDATE}, LOC_USERNAME + "=?", new String[]{getUsername()}, null, null, null);
         try {
             cursor.moveToFirst();
             last = cursor.getString(0);
@@ -2137,7 +2264,7 @@ public class SQLiteHandler {
 
         //String selectQuery = "SELECT * FROM " + TABLE_GPS + " WHERE "+GPS_USERNAME+" <> "+getUsername();
         // SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.query(TABLE_GPS, new String[]{GPS_USERNAME, GPS_LONG, GPS_LAT, GPS_PROV, GPS_DATE_CREATE, GPS_DATE_UPDATE, GPS_DISTANCE}, GPS_USERNAME+"<>?",new String[]{getUsername()},null, null,null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_GPS, new String[]{GPS_USERNAME, GPS_LONG, GPS_LAT, GPS_PROV, GPS_DATE_CREATE, GPS_DATE_UPDATE, GPS_DISTANCE}, GPS_USERNAME + "<>?", new String[]{getUsername()}, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {

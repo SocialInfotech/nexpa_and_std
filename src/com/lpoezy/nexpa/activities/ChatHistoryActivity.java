@@ -1,7 +1,4 @@
 package com.lpoezy.nexpa.activities;
-import com.lpoezy.nexpa.R;
-import com.lpoezy.nexpa.activities.ChatHistoryListFragment.OnShowChatHistoryListener;
-import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -9,6 +6,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+
+import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.activities.ChatHistoryListFragment.OnShowChatHistoryListener;
+import com.lpoezy.nexpa.chatservice.XMPPService;
+import com.lpoezy.nexpa.objects.MessageElement;
+
+import java.util.List;
 
 
 public class ChatHistoryActivity extends AppCompatActivity implements OnShowChatHistoryListener{
@@ -82,24 +86,40 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 		final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
 
 		if(((TabHostActivity) getParent()).isBounded()){
-			((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(new ListOfCollectionsIQ.OnRetrieveListener(){
+//			((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(new ListOfCollectionsIQ.OnRetrieveListener(){
+//				@Override
+//				public void onRetrieve(ListOfCollectionsIQ collections) {
+//					frag.setCollections(collections.chats);
+//
+//				}
+//			});
+
+			((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(new XMPPService.OnUpdateScreenListener(){
 				@Override
-				public void onRetrieve(ListOfCollectionsIQ collections) {
-					frag.setCollections(collections.chats);
+				public void onResumeScreen(String errorMsg) {
+
+				}
+
+				@Override
+				public void onUpdateScreen() {
+					frag.updateUI();
 
 				}
 			});
+
 		}
 	}
 
 	@Override
-	public void onShowChatHistory(String with, String start) {
+	public void onShowChatHistory(String with) {
 
 		Intent intentMes = new Intent(this, ChatActivity.class);
-		intentMes.putExtra("with", with);
-		intentMes.putExtra("start", start);
+		intentMes.putExtra("with", with+"@198.154.106.139");
+		//intentMes.putExtra("start", start);
 
 		//L.debug("username "+buddy.getUsername()+", email: "+email);
 		startActivity(intentMes);
 	}
+
+
 }

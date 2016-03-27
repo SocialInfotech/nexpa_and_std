@@ -80,7 +80,7 @@
 		    android:textColorHint="@color/input_login_hint" />
 		
 		<!-- Login Button -->
-		<Button android:id="@+id/btnLogin" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20dip" android:background="@color/btn_login_bg" android:text="@string/btn_login" android:textColor="@color/btn_login" />
+		<Button android:id="@+id/btnLogin" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20dip" android:background="@color/toucan_green" android:text="@string/btn_login" android:textColor="@color/textColor" />
 		<!-- Link to Login Screen -->
 		
 		<TextView android:id="@+id/username" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_margin="10dp" android:textSize="16sp" />

@@ -8,36 +8,30 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.lpoezy.nexpa.activities.ChatActivity;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.ChatMessage;
-import com.lpoezy.nexpa.objects.CollectionIQ;
-import com.lpoezy.nexpa.objects.CollectionIQProvider;
-import com.lpoezy.nexpa.objects.ListOfCollectionsIQ;
-import com.lpoezy.nexpa.objects.ListOfCollectionsIQProvider;
-import com.lpoezy.nexpa.objects.TestExtensionProvider;
+import com.lpoezy.nexpa.objects.MAMExtensionProvider;
+import com.lpoezy.nexpa.objects.MessageArchiveAllIQ;
+import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
+import com.lpoezy.nexpa.objects.MessageElement;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
-import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
-import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.XMPPException.XMPPErrorException;
-import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
-import org.jivesoftware.smack.filter.AndFilter;
-import org.jivesoftware.smack.filter.PacketFilter;
-import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.provider.ProviderManager;
@@ -49,7 +43,9 @@ import org.jivesoftware.smackx.receipts.DeliveryReceiptManager.AutoReceiptMode;
 import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class XMPPManager {
@@ -276,15 +272,13 @@ public class XMPPManager {
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
         } catch (XMPPException | SmackException | IOException e) {
-            L.error("xxx: "+e.getMessage());
+            L.error("xxx: " + e.getMessage());
         } catch (Exception e) {
-            L.error("yyy: "+e.getMessage());
+            L.error("yyy: " + e.getMessage());
         }
 
 
     }
-
-
 
 
     private class ChatManagerListenerImpl implements ChatManagerListener {
@@ -300,49 +294,141 @@ public class XMPPManager {
 
     }
 
-    public void retrieveCollectionFrmMsgArchive(String with, String start, CollectionIQ.OnRetrieveListener callback) {
+    public void retrieveCollectionFrmMsgArchive(final String with, final ChatActivity.OnRetrieveMessageArchiveListener callback) {
 
         if (connection.isAuthenticated()) {
             L.debug("==========retrieveCollectionFrmMsgArchive========================");
-           // String jid = with+"@198.154.106.139";
-            CollectionIQ collectionIq = new CollectionIQ(with, start);
+
+            MessageArchiveWithIQ collectionIq = new MessageArchiveWithIQ(with);
+            collectionIq.setType(IQ.Type.set);
             try {
+
+
                 connection.sendStanza(collectionIq);
 
-                ProviderManager.addIQProvider("chat", "urn:xmpp:archive", new CollectionIQProvider(callback));
+
+//                MAMExtensionProviderWith prov = new MAMExtensionProviderWith();
+//                prov.addOnParseListener(new MAMExtensionProviderWith.OnTest() {
+//                    @Override
+//                    public void onTest() {
+//                        L.debug("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+//                    }
+//                });
+//                prov.addOnParseListener(new MessageElement.OnParseCompleteListener() {
+//                    @Override
+//                    public void onParseComplete(List<MessageElement> msgs, int first, int last, int count) {
+//                        L.debug("onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
+//                        List<ChatMessage> conversation = new ArrayList<ChatMessage>();
+//                        if (msgs != null && !msgs.isEmpty()) {
+//
+//
+//                            SQLiteHandler db = new SQLiteHandler(context);
+//                            db.openToRead();
+//                            for (int i = msgs.size() - 1; i >= 0; i--) {
+//                                ChatMessage chat = gson.fromJson(msgs.get(i).getBody(), ChatMessage.class);
+//
+//                                if (chat.receiver.equals(db.getUsername())) {
+//                                    chat.isMine = false;
+//                                }
+//
+//                                conversation.add(chat);
+//                            }
+//
+//                            db.close();
+//                        }
+//
+//                        if (callback != null) {
+//                            callback.onRetrieveMessageArchive(conversation);
+//                        }
+//
+//
+//                    }
+//                });
+
+                //ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", prov);
 
             } catch (NotConnectedException e) {
                 L.error("retrieveCollectionFrmMsgArchive: " + e.getMessage());
             }
-        }else{
+        } else {
             login();
         }
     }
 
 
-    public void retrieveListOfCollectionsFrmMsgArchive(ListOfCollectionsIQ.OnRetrieveListener callback) {
-
+    public void retrieveListOfCollectionsFrmMsgArchive(final String with, final XMPPService.OnUpdateScreenListener callback0, final ChatActivity.OnRetrieveMessageArchiveListener callback1) {
 
         if (connection.isAuthenticated()) {
-            L.debug("==========retrieveListOfCollectionsFrmMsgArchive========================");
-            ListOfCollectionsIQ listOfCollections = new ListOfCollectionsIQ();
-            listOfCollections.setType(IQ.Type.set);
+            L.debug("==========retrieveListOfCollectionsFrmMsgArchive========================"+with);
 
-
-
+            IQ mam = null;
+            if (with == null) {
+                mam = new MessageArchiveAllIQ();
+            } else {
+                mam = new MessageArchiveWithIQ(with);
+            }
+            mam.setType(IQ.Type.set);
 
             try {
-                connection.sendStanza(listOfCollections);
+                connection.sendStanza(mam);
+
+                MAMExtensionProvider prov = new MAMExtensionProvider(with,
+                        new MessageElement.OnParseCompleteListener() {
+
+                    @Override
+                    public void onParseComplete(List<MessageElement> msgs, int first, int last, int count, String with) {
 
 
-                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", new TestExtensionProvider());
-                //ProviderManager.addIQProvider("list", "urn:xmpp:archive", new ListOfCollectionsIQProvider(callback));
-                //ProviderManager.addIQProvider("message", "", new ListOfCollectionsIQProvider(callback));
+                        L.debug("onParseComplete: first: " + first + ", last: " + last + ", count: " + count+", with: "+with);
+                        List<ChatMessage> conversation = new ArrayList<ChatMessage>();
+                        if (msgs != null && !msgs.isEmpty()) {
+
+
+                            SQLiteHandler db = new SQLiteHandler(context);
+                            db.openToWrite();
+                            if (with == null) {
+                                //save messages to offline db
+
+
+                                db.deleteMsgArchive();
+                                db.saveMsgArchive(msgs);
+
+                            } else {
+
+                                for (int i = msgs.size() - 1; i >= 0; i--) {
+                                    ChatMessage chat = gson.fromJson(msgs.get(i).getBody(), ChatMessage.class);
+
+                                    if (chat.receiver.equals(db.getUsername())) {
+                                        chat.isMine = false;
+                                    }
+
+                                    conversation.add(chat);
+                                }
+
+                            }
+                            db.close();
+                        }
+
+                        if (callback0 != null) {
+                            callback0.onUpdateScreen();
+
+                        }
+
+                        if (callback1 != null) {
+                            callback1.onRetrieveMessageArchive(conversation);
+                        }
+                    }
+                });
+
+
+                ProviderManager.removeExtensionProvider("result", "urn:xmpp:mam:0");
+                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", prov);
+
 
             } catch (NotConnectedException e) {
-                L.error("retrieveListOfCollectionsFrmMsgArchive: "+e.getMessage());
+                L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
             }
-
+            //ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", new MAMExtensionProvider());
         } else {
 
             login();

@@ -1,3 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="04de44f90606c77f3b28cf44861f306290505aac">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-maps-8.4.0_0758bcb2d7e5577b37edb96922d384188db3999f.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\gson-2.2.4.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\gson-2.2.4_030d9333955990225138be89d5a8300d169817d8.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.1.1_6013e054477a4f51e05b6c4400fcae594592b77c.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2d7fe76982677315c4dc4edfb459c8ca718a9d4c">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-gcm-8.4.0_ffecea5f02464eba46bb787c14f5bd2e42c140e7.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-measurement\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="613298b7aa012f121ce542881c0a599ebd8078f2">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-measurement-8.4.0_1cf5f1f27a0c378b3d1241a24fc52302a1d82e5c.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-im-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2245aac70ff47195c61711a15a790e65c43c5c6a">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-im-4.1.5_bfc8fee38b08659e8e4734937b4573d24031adf7.jar" />
+    </item>
+    <item
+        jar="C:\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\23.1.1\support-annotations-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\support-annotations-23.1.1_cd60eda5b48a53aa4e2bf0a1a79c87f86b70d6da.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.appyvet\materialrangebar\1.3\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8eb551963af29c7faacd640a4e74a8e9e698ab90">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.appyvet-materialrangebar-1.3_bc863524cba797837c4233334db5ccd3d4c9fae6.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\.gradle\caches\modules-2\files-2.1\joda-time\joda-time\2.9.2\36d6e77a419cb455e6fd5909f6f96b168e21e9d0\joda-time-2.9.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="36d6e77a419cb455e6fd5909f6f96b168e21e9d0">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\joda-time-2.9.2_cf120ee92eb406cfe3d69363aee4cac08247ed6a.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-8.4.0_4419d07c15b72476c7432fc32f955c21de343da1.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.github.johnkil.android-appmsg\appmsg\1.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="398ec51345409df9e36a1de1a81f2b3ad5234bfb">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.github.johnkil.android-appmsg-appmsg-1.2.0_41bcf5c90a1132989565a2bb3621cbc94a7ec553.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-tcp-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1c988c338c25e3b4531a2261ac880f46a25d3f79">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-tcp-4.1.5_9ba2c94162f71e8d1cc9cf7912e660eb72a8149e.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3\3.4\5fe28b9518e58819180a43a850fbc0dd24b7c050\commons-lang3-3.4.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5fe28b9518e58819180a43a850fbc0dd24b7c050">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\commons-lang3-3.4_8cf3f44362b8ae4fc7c90f742bbee134a883be8d.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-android-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="780e9a850108b15f53b70271f9d7e4513cd9e57b">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-android-4.1.5_1157b483b1ac8a29706a58ed2ebd6061aa7864dc.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a8412b654dab86d57bf90683367488211c8a81f1">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-location-8.4.0_4e272169b4561d0f72143c5d4352b8b3fb9de961.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\minidns-0.1.7.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="993582d1455b93a5723d2af4b39d8679735b3550">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\minidns-0.1.7_ee3a2fb06cc9da48ddfbba1ee200c4de69d6711b.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.github.nirhart\parallaxscroll\1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2574796fab3c6145ca6170821badd305f5e03669">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.github.nirhart-parallaxscroll-1.0_79a43f15d324be8effd1b445c054943e4a398f71.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-8.4.0_d83f49f395ed5dc66a819e45bcd97e0b4f3e99c1.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-experimental-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c6ee99cc1a1e676ae178774ba6bc8730753160da">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-experimental-4.1.5_411399e8d184f986e845bab6b349b638bbe0c658.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-android-extensions-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="9c52e550cc679a3b30289d397707ee988a61b9b5">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-android-extensions-4.1.5_da1fa9ef45a6e92083515aef8a31cb9cb1e074e6.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.github.siyamed\android-shape-imageview\0.9.3\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ee07783aa59eefdeacc107abf472f45f60272302">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.github.siyamed-android-shape-imageview-0.9.3_eda66a79d16e7ad28c250b575fdd09b7a1bbe851.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\.gradle\caches\modules-2\files-2.1\eu.the4thfloor.volley\com.android.volley\2015.05.28\b0b08cc0ac897e596abe6b263a9507cba875b705\com.android.volley-2015.05.28.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b0b08cc0ac897e596abe6b263a9507cba875b705">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.volley-2015.05.28_209f170334907c0b78a66c2e44631c1999a5b8b6.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-resolver-minidns-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e52322db22b14ac0a98ae63d5bdccde582b26e8c">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-resolver-minidns-4.1.5_f19aa3b11be90dc157bbf265ce2130b9973fe017.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.1.1_03571904ed68cebf3567f06c353dc33982b17aed.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-extensions-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d2a55a29b761ca02cfc9c06a5e1a548ead68abd2">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-extensions-4.1.5_f008e706e889a0670b8476a5d4f57cb707e29ea1.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.1\jars\libs\internal_impl-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\internal_impl-23.1.1_5e34ccc4c8029371168c0f8fdfc5598a9ae8bad6.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-sasl-provided-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b41c37cd16b10aabc4d97f34f212ad02949aa3f1">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-sasl-provided-4.1.5_a177099287fe2c64a8bf041f655154b47d2b15c3.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\libs\smack-core-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4e896af64e8be5c1aa12d9db95353e1987ef4d84">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-core-4.1.5_c1475ec93991ec555a504c5480278dd1ac95557c.jar" />
+    </item>
+    <item
+        jar="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="C:\Users\ldonios\git\nexpa_v5\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.1.1_19f4847d1255a057fc3a081a550a0497d1447292.jar" />
+    </item>
+
+</items>

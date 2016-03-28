@@ -318,72 +318,6 @@ public class XMPPManager {
 
     }
 
-    public void retrieveCollectionFrmMsgArchive(final String with, final ChatActivity.OnRetrieveMessageArchiveListener callback) {
-
-        if (connection.isAuthenticated()) {
-            L.debug("==========retrieveCollectionFrmMsgArchive========================");
-
-
-
-            MessageArchiveWithIQ collectionIq = new MessageArchiveWithIQ(with);
-            collectionIq.setType(IQ.Type.set);
-            try {
-
-
-                connection.sendStanza(collectionIq);
-
-
-
-
-//                MAMExtensionProviderWith prov = new MAMExtensionProviderWith();
-//                prov.addOnParseListener(new MAMExtensionProviderWith.OnTest() {
-//                    @Override
-//                    public void onTest() {
-//                        L.debug("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-//                    }
-//                });
-//                prov.addOnParseListener(new MessageElement.OnParseCompleteListener() {
-//                    @Override
-//                    public void onParseComplete(List<MessageElement> msgs, int first, int last, int count) {
-//                        L.debug("onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
-//                        List<ChatMessage> conversation = new ArrayList<ChatMessage>();
-//                        if (msgs != null && !msgs.isEmpty()) {
-//
-//
-//                            SQLiteHandler db = new SQLiteHandler(context);
-//                            db.openToRead();
-//                            for (int i = msgs.size() - 1; i >= 0; i--) {
-//                                ChatMessage chat = gson.fromJson(msgs.get(i).getBody(), ChatMessage.class);
-//
-//                                if (chat.receiver.equals(db.getUsername())) {
-//                                    chat.isMine = false;
-//                                }
-//
-//                                conversation.add(chat);
-//                            }
-//
-//                            db.close();
-//                        }
-//
-//                        if (callback != null) {
-//                            callback.onRetrieveMessageArchive(conversation);
-//                        }
-//
-//
-//                    }
-//                });
-
-                //ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", prov);
-
-            } catch (NotConnectedException e) {
-                L.error("retrieveCollectionFrmMsgArchive: " + e.getMessage());
-            }
-        } else {
-            login();
-        }
-    }
-
-
     public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
 
         if (connection.isAuthenticated()) {
@@ -397,8 +331,6 @@ public class XMPPManager {
             try {
 
                 connection.sendStanza(mam);
-
-
 
                 ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", new MAMExtensionProvider(
                         new MessageElement.OnParseCompleteListener() {

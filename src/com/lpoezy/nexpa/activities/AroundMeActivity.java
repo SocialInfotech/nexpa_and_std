@@ -541,8 +541,9 @@ public class AroundMeActivity extends AppCompatActivity
 
             L.debug("last loc latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             L.debug("last loc long: " + String.valueOf(mCurrentLocation.getLongitude()));
-
-            downloadNearbyUsersOnline();
+            if(nearbyUsers.isEmpty()) {
+                downloadNearbyUsersOnline();
+            }
 
             sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
@@ -575,7 +576,7 @@ public class AroundMeActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        L.makeText(this, "onConnectionFailed",AppMsg.STYLE_ALERT);
+        L.makeText(this, "onConnectionFailed", AppMsg.STYLE_ALERT);
     }
 
     @Override

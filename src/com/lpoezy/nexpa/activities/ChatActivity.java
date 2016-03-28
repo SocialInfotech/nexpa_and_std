@@ -403,7 +403,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mBounded = true;
-
+            L.debug("ChatACtivity, onServiceConnected");
             mService = ((LocalBinder<XMPPService>) service).getService();
             mService.addMessageListener(ChatActivity.this);
 
@@ -430,7 +430,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
         for(MessageElement msg : msgs){
 
-            //L.debug("to: "+msg.getTo()+", body: "+msg.getBody()+", from: "+msg.getFrom());
+            L.debug("to: "+msg.getTo()+", body: "+msg.getBody()+", from: "+msg.getFrom());
             ChatMessage chat = gson.fromJson(msg.getBody(), ChatMessage.class);
             chatMsgs.add(chat);
         }

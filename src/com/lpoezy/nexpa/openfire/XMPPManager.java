@@ -1,6 +1,7 @@
 package com.lpoezy.nexpa.openfire;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +16,7 @@ import com.lpoezy.nexpa.objects.MAMExtensionProvider;
 import com.lpoezy.nexpa.objects.MessageArchiveAllIQ;
 import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
 import com.lpoezy.nexpa.objects.MessageElement;
+import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.L;
 
@@ -127,6 +129,7 @@ public class XMPPManager {
         XMPPTCPConnection.setUseStreamManagementDefault(true);
 
         connection = new XMPPTCPConnection(config.build());
+        //connection.setPacketReplyTimeout(30000);
         XMPPConnectionListener connectionListener = new XMPPConnectionListener();
         connection.addConnectionListener(connectionListener);
     }
@@ -280,6 +283,27 @@ public class XMPPManager {
 
     }
 
+    public void notifyMAMObservers(List<MessageElement> msgs, int first, int last, int count) {
+        for (MessageElement.OnParseCompleteListener ob : mObservers) {
+           // L.debug("notifyMAMObservers...");
+            ob.onParseComplete(msgs, first, last, count);
+
+        }
+    }
+
+
+    private List<MessageElement.OnParseCompleteListener> mObservers = new ArrayList<MessageElement.OnParseCompleteListener>();
+
+    public void removeMAMObserver(MessageElement.OnParseCompleteListener observer) {
+        mObservers.remove(observer);
+    }
+
+    public void addMAMObserver(MessageElement.OnParseCompleteListener observer) {
+
+        L.debug("adding mam observer");
+        mObservers.add(observer);
+    }
+
 
     private class ChatManagerListenerImpl implements ChatManagerListener {
         @Override
@@ -299,12 +323,16 @@ public class XMPPManager {
         if (connection.isAuthenticated()) {
             L.debug("==========retrieveCollectionFrmMsgArchive========================");
 
+
+
             MessageArchiveWithIQ collectionIq = new MessageArchiveWithIQ(with);
             collectionIq.setType(IQ.Type.set);
             try {
 
 
                 connection.sendStanza(collectionIq);
+
+
 
 
 //                MAMExtensionProviderWith prov = new MAMExtensionProviderWith();
@@ -356,79 +384,41 @@ public class XMPPManager {
     }
 
 
-    public void retrieveListOfCollectionsFrmMsgArchive(final String with, final XMPPService.OnUpdateScreenListener callback0, final ChatActivity.OnRetrieveMessageArchiveListener callback1) {
+    public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
 
         if (connection.isAuthenticated()) {
-            L.debug("==========retrieveListOfCollectionsFrmMsgArchive========================"+with);
+            L.debug("==========retrieveListOfCollectionsFrmMsgArchive========================");
 
-            IQ mam = null;
-            if (with == null) {
-                mam = new MessageArchiveAllIQ();
-            } else {
-                mam = new MessageArchiveWithIQ(with);
-            }
+
+
+            MessageArchiveWithIQ mam = new MessageArchiveWithIQ(with);
             mam.setType(IQ.Type.set);
 
             try {
+
                 connection.sendStanza(mam);
 
-                MAMExtensionProvider prov = new MAMExtensionProvider(with,
+
+
+                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", new MAMExtensionProvider(
                         new MessageElement.OnParseCompleteListener() {
 
-                    @Override
-                    public void onParseComplete(List<MessageElement> msgs, int first, int last, int count, String with) {
+                            @Override
+                            public void onParseComplete(List<MessageElement> msgs, int first, int last, int count) {
 
-
-                        L.debug("onParseComplete: first: " + first + ", last: " + last + ", count: " + count+", with: "+with);
-                        List<ChatMessage> conversation = new ArrayList<ChatMessage>();
-                        if (msgs != null && !msgs.isEmpty()) {
-
-
-                            SQLiteHandler db = new SQLiteHandler(context);
-                            db.openToWrite();
-                            if (with == null) {
-                                //save messages to offline db
-
-
-                                db.deleteMsgArchive();
-                                db.saveMsgArchive(msgs);
-
-                            } else {
-
-                                for (int i = msgs.size() - 1; i >= 0; i--) {
-                                    ChatMessage chat = gson.fromJson(msgs.get(i).getBody(), ChatMessage.class);
-
-                                    if (chat.receiver.equals(db.getUsername())) {
-                                        chat.isMine = false;
-                                    }
-
-                                    conversation.add(chat);
-                                }
+                                L.debug("msgs: "+msgs.size()+", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
+                                notifyMAMObservers(msgs, first, last, count);
 
                             }
-                            db.close();
-                        }
-
-                        if (callback0 != null) {
-                            callback0.onUpdateScreen();
-
-                        }
-
-                        if (callback1 != null) {
-                            callback1.onRetrieveMessageArchive(conversation);
-                        }
-                    }
-                });
+                        }));
 
 
-                ProviderManager.removeExtensionProvider("result", "urn:xmpp:mam:0");
-                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", prov);
 
 
             } catch (NotConnectedException e) {
                 L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
             }
-            //ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", new MAMExtensionProvider());
+
         } else {
 
             login();

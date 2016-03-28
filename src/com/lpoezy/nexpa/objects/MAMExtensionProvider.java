@@ -1,6 +1,8 @@
 package com.lpoezy.nexpa.objects;
 
 
+import com.lpoezy.nexpa.utility.L;
+
 import org.jivesoftware.smackx.bytestreams.ibb.packet.DataPacketExtension;
 import org.jivesoftware.smackx.bytestreams.ibb.provider.DataPacketProvider;
 import org.xmlpull.v1.XmlPullParser;
@@ -17,10 +19,10 @@ import java.util.List;
 public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProvider {
 
     private MessageElement.OnParseCompleteListener mCallback;
-    private String with;
 
-    public MAMExtensionProvider(String with, MessageElement.OnParseCompleteListener callback) {
-        this.with = with;
+
+    public MAMExtensionProvider(MessageElement.OnParseCompleteListener callback) {
+
         mCallback = callback;
     }
 
@@ -45,6 +47,8 @@ public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProv
         int last = 0;
         int count = 0;
 
+        boolean isAdded = false;
+
         List<MessageElement> msgs = new ArrayList<MessageElement>();
 
         while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
@@ -59,6 +63,7 @@ public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProv
                     switch (parser.getName()) {
 
                         case "result":
+
                             break;
 
                         case "fin":
@@ -72,11 +77,13 @@ public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProv
                             break;
 
                         case "message":
+
+                            isAdded = false;
                             to = parser.getAttributeValue("", "to");
                             type = parser.getAttributeValue("", "type");
                             from = parser.getAttributeValue("", "from");
 
-                            // L.debug("to: "+to+", type: "+type+", from: "+from);
+                             //L.debug("to: "+to+", type: "+type+", from: "+from);
 
                             break;
 
@@ -114,16 +121,30 @@ public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProv
                     switch (parser.getName()) {
 
                         case "fin":
-
-                            if(mCallback!=null)mCallback.onParseComplete(msgs, first, last, count, with);
+                           // L.debug("mCallback: "+mCallback);
+                            if(mCallback!=null){
+                                mCallback.onParseComplete(msgs, first, last, count);
+                                msgs.clear();
+                            }
                             break;
 
                         case "message":
-                            MessageElement msg = new MessageElement(
-                                    stamp, to, type,
-                                    from, body, thread
-                            );
-                            msgs.add(msg);
+
+
+
+
+                            if(type!=null && !isAdded){
+
+                                MessageElement msg = new MessageElement(
+                                        stamp, to, type,
+                                        from, body, thread
+                                );
+
+                                msgs.add(msg);
+                                isAdded = true;
+                                //L.debug(msgs.size()+", to: " + to + ", type: " + type + ", from: " + from);
+                            }
+
 
                             break;
 

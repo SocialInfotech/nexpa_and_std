@@ -51,7 +51,7 @@ public class MessageElement {
 
     public interface OnParseCompleteListener {
 
-        public void onParseComplete(List<MessageElement> msgs, int first, int last, int count, String with);
+        public void onParseComplete(List<MessageElement> msgs, int first, int last, int count);
 
     }
 

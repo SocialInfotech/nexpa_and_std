@@ -850,13 +850,15 @@ public class AroundMeActivity extends AppCompatActivity
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        UserProfile uProfile = new UserProfile();
+                        final UserProfile uProfile = new UserProfile();
                         uProfile.setUsername(name);
 
                         uProfile.loadVCard(XMPPService.xmpp.connection);
+
                         L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
 
                         updateUserAvatar(name, uProfile.getAvatarImg());
+
 
                         try {
                             Thread.sleep(500);
@@ -1006,85 +1008,6 @@ public class AroundMeActivity extends AppCompatActivity
         //http://www.igniterealtime.org/builds/smack/docs/4.0.2/documentation/providers.html
         //http://stackoverflow.com/questions/17485106/asmak-packet-listener-and-custom-iqprovider-not-triggering-called
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-                L.debug("=====================================================");
-//
-//                ServiceDiscoveryManager sdm = ServiceDiscoveryManager
-//                        .getInstanceFor(connection);
-//
-//                sdm.addFeature("http://jabber.org/protocol/disco#info");
-//                sdm.addFeature("urn:xmpp:archive");
-
-//xTX8b-9
-//                Time iq = new Time();
-//                iq.setType(IQ.Type.set);
-//                //iq.setTo(XMPPService.DOMAIN);
-//        try {
-//            connection.sendStanza(iq);
-//        } catch (SmackException.NotConnectedException e) {
-//
-//        }
-
-//                try {
-//                    connection.sendIqWithResponseCallback(iq,
-//                            new StanzaListener() {
-//
-//                                @Override
-//                                public void processPacket(Stanza arg0)
-//                                        throws SmackException.NotConnectedException {
-//
-//                                    //L.debug("Send IQ with Response, ****** message " + arg0);
-//                                }
-//                            }, new ExceptionCallback() {
-//                                @Override
-//                                public void processException(
-//                                        Exception exception) {
-//                                    exception.printStackTrace();
-//                                    L.error("IO archjieve Exception, " + exception.getMessage());
-//                                }
-//                            });
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(""+e.getMessage());
-//                }
-
-        //I36G1-9
-
-
-//
-//
-//                Time iq = new Time();
-//                iq.setType(IQ.Type.get);
-//                //iq.setTo(XMPPService.DOMAIN);
-//
-//                try {
-//                    connection.sendIqWithResponseCallback(iq,
-//                            new StanzaListener() {
-//
-//                                @Override
-//                                public void processPacket(Stanza arg0)
-//                                        throws SmackException.NotConnectedException {
-//
-//                                    L.debug("Send IQ with Response, ****** message "
-//                                            + arg0);
-//                                }
-//                            }, new ExceptionCallback() {
-//                                @Override
-//                                public void processException(
-//                                        Exception exception) {
-//                                    exception.printStackTrace();
-//                                    L.error("IO archjieve Exception, "
-//                                            + exception.getMessage());
-//                                }
-//                            });
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(""+e.getMessage());
-//                }
-//
-//            }
-//        }).start();
-
         final Roster roster = Roster.getInstanceFor(connection);
         if (!nearbyUsers.isEmpty()) {
 
@@ -1117,10 +1040,12 @@ public class AroundMeActivity extends AppCompatActivity
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        UserProfile uProfile = new UserProfile();
+
+                        final UserProfile uProfile = new UserProfile();
                         uProfile.setUsername(nearByUser.getUsername());
 
                         uProfile.loadVCard(connection);
+
                         L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
 
                         updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
@@ -1128,8 +1053,9 @@ public class AroundMeActivity extends AppCompatActivity
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
-                           L.error(e.getMessage());
+                            L.error(e.getMessage());
                         }
+
                     }
                 }).start();
 

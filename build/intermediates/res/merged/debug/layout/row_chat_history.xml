@@ -15,22 +15,13 @@
             android:layout_marginRight="16dp" >
 
 
-            <com.github.siyamed.shapeimageview.CircularImageView
+           <com.github.siyamed.shapeimageview.CircularImageView
                 android:id="@+id/img_profile_pic"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 app:siBorderWidth="3dp"
                 android:src="@drawable/pic_sample_girl"
                 app:siBorderColor="@color/flat_silver"/>
-
-
-          <!--  <ImageView
-                android:id="@+id/img_profile_pic"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:src="@drawable/pic_sample_girl" />-->
 
         </FrameLayout>
 

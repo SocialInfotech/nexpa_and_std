@@ -1297,7 +1297,7 @@ public class SQLiteHandler {
     public List<String> getCorrespondents() {
         String username = getUsername()+"@198.154.106.139";
         List<String> correspondents = new ArrayList<String>();
-        Cursor c = sqLiteDatabase.query(true, TABLE_MSG_ARCHIVE, new String[]{MAM_TO, MAM_FROM}, null, null, null, null, MAM_STAMP + " DESC", null);
+        Cursor c = sqLiteDatabase.query(TABLE_MSG_ARCHIVE, new String[]{MAM_TO, MAM_FROM}, null, null, null, null, MAM_STAMP + " DESC");
         if (c.moveToFirst()) {
 
             do {
@@ -1307,7 +1307,7 @@ public class SQLiteHandler {
                     correspondent = c.getString(c.getColumnIndex(MAM_TO));
                 }
 
-
+                //L.debug("correspondent: "+correspondent);
                 if(correspondents.indexOf(correspondent)==-1){
                     //L.debug("correspondent: "+correspondent);
                     correspondents.add(correspondent);
@@ -1324,7 +1324,7 @@ public class SQLiteHandler {
 
 
     public MessageElement downloadLatestMessageOf(String jid) {
-        L.debug("SQLiteHandler, downloadLatestMessageOf : " + jid);
+       L.debug("SQLiteHandler, downloadLatestMessageOf : " + jid);
         String table = TABLE_MSG_ARCHIVE;
         String[] columns = new String[]{MAM_STAMP, MAM_TO, MAM_TYPE, MAM_FROM, MAM_BODY,
                 MAM_THREAD};
@@ -1365,7 +1365,7 @@ public class SQLiteHandler {
 
                 MessageElement msg = downloadLatestMessageOf(jid);
                 msgs.add(msg);
-                //L.debug("from: " + msg.getFrom() + ", body: " + msg.getBody()+", stamp: "+msg.getStamp());
+                L.debug("from: " + msg.getFrom() + ", to: " + msg.getTo()+", body: "+msg.getBody());
             }
         }
 
@@ -1377,7 +1377,7 @@ public class SQLiteHandler {
     }
 
     public void saveMsgArchive(List<MessageElement> messages) {
-        //L.debug("SQLiteHandler, saveMultipleCorrespondents " + messages.size());
+        L.debug("SQLiteHandler, saveMultipleCorrespondents " + messages.size());
 
         String sql = "INSERT INTO " + TABLE_MSG_ARCHIVE + "(" + MAM_STAMP + ", " + MAM_TO + ","
                 + MAM_TYPE + "," + MAM_FROM + "," + MAM_BODY + ", " + MAM_THREAD + ") VALUES(?,?,?,?,?,?);";
@@ -1389,7 +1389,7 @@ public class SQLiteHandler {
             if(messages.get(i).getType()==null)continue;
             statement.clearBindings();
 
-            //L.debug("saving... to: "+messages.get(i).getTo()+", from: "+messages.get(i).getFrom()+", body: "+messages.get(i).getBody());
+            L.debug("saving... to: "+messages.get(i).getTo()+", from: "+messages.get(i).getFrom()+", body: "+messages.get(i).getBody());
             statement.bindString(1, messages.get(i).getStamp());
             statement.bindString(2, messages.get(i).getTo().replace("/Smack", ""));
             statement.bindString(3, messages.get(i).getType());

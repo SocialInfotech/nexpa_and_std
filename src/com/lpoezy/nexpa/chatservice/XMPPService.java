@@ -6,7 +6,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -18,7 +20,10 @@ import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
+import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
+import com.lpoezy.nexpa.objects.MessageElement;
 import com.lpoezy.nexpa.objects.NewMessage;
+import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.HttpUtilz;
@@ -223,12 +228,22 @@ public class XMPPService extends Service {
 
     }
 
+
+
     public static boolean isNetworkConnected() {
         return cm.getActiveNetworkInfo() != null;
     }
 
     public static boolean isRunning() {
         return isRunning;
+    }
+
+    public void removeMAMObserver(MessageElement.OnParseCompleteListener observer){
+        xmpp.removeMAMObserver(observer);
+    }
+
+    public void addMAMObserver(MessageElement.OnParseCompleteListener observer){
+        xmpp.addMAMObserver(observer);
     }
 
     public void resetPassword(final String email,
@@ -311,21 +326,24 @@ public class XMPPService extends Service {
 //    }
 
 
-    public void retrieveListOfCollectionsFrmMsgArchive(final OnUpdateScreenListener callback) {
+    public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                xmpp.retrieveListOfCollectionsFrmMsgArchive(with);
+            }
+        }).start();
 
-        xmpp.retrieveListOfCollectionsFrmMsgArchive(null, callback, null);
-
-
-    }
-
-    public void retrieveCollectionFrmMsgArchive(final String with, final ChatActivity.OnRetrieveMessageArchiveListener callback) {
-
-
-        xmpp.retrieveListOfCollectionsFrmMsgArchive(with, null, callback);
 
 
     }
+
+//    public void retrieveCollectionFrmMsgArchive(final String with) {
+//
+//        xmpp.retrieveListOfCollectionsFrmMsgArchive(with);
+//
+//    }
 
 
 //    public void login(final String uname, final String password, final OnUpdateScreenListener callback) {

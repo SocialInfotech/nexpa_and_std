@@ -21,11 +21,13 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Correspondents;
 import com.lpoezy.nexpa.objects.MessageElement;
+import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.DividerItemDecoration;
 import com.lpoezy.nexpa.utility.L;
@@ -36,6 +38,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ChatHistoryListFragment extends Fragment implements Correspondent.OnCorrespondentUpdateListener {
 
@@ -154,7 +160,29 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
         //get collections from offline db
 
-        SQLiteHandler db = new SQLiteHandler(getActivity());
+//        if (XMPPService.xmpp.connection.isAuthenticated()) {
+//
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    final UserProfile uProfile = new UserProfile();
+//                    uProfile.setUsername("roy");
+//                    uProfile.loadVCard(XMPPService.xmpp.connection);
+//
+//
+//                    final Bitmap avatar = uProfile.getAvatarImg();
+//                    L.debug("avatar: " + avatar + "," + uProfile.getProfession());
+//                    //lMsg.avatar = avatar;
+//
+//                    // resetAdapter();
+//
+//                }
+//            }).start();
+//
+//        }
+
+
+        final SQLiteHandler db = new SQLiteHandler(getActivity());
         db.openToRead();
         List<MessageElement> msgs = db.downloadMsgArchive();
         Gson gson = new Gson();
@@ -163,50 +191,22 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
             mLatestMsgs.clear();
 
             for (MessageElement msg : msgs) {
+
                 final LatestMessage lMsg = new LatestMessage();
                 lMsg.stamp = msg.getStamp();
                 lMsg.chat = gson.fromJson(
                         msg.getBody(), ChatMessage.class);
 
-/*/
-                   new Thread(new Runnable() {
-                       @Override
-                       public void run() {
-
-                           if (XMPPService.xmpp.connection.isConnected() && XMPPService.xmpp.connection.getUser() != null) {
-
-
-                               UserProfile uProfile = new UserProfile();
-                               uProfile.setUsername(lMsg.chat.sender);
-                               uProfile.loadVCard(XMPPService.xmpp.connection);
-
-                               if (uProfile.getAvatarImg() != null) {
-                                   lMsg.avatar = uProfile.getAvatarImg();
-                                   resetAdapter();
-                               }
-
-                               try {
-                                   Thread.sleep(500);
-                               } catch (InterruptedException e) {
-                                   L.error(e.getMessage());
-                               }
-                           }
-
-
-                       }
-                   }).start();
-//*/
-
-
                 mLatestMsgs.add(lMsg);
+
 
             }
         }
 
-
         db.close();
-
         resetAdapter();
+
+
     }
 
     private void resetAdapter() {
@@ -270,6 +270,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
             vh.tvMsg.setText(mLatestMsgs.get(position).chat.body);
             vh.tvMsgDate.setText(mydate);
 
+
             if (mLatestMsgs.get(position).avatar != null) {
                 vh.imgProfilePic.setImageBitmap(mLatestMsgs.get(position).avatar);
             }
@@ -304,7 +305,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
             @Override
             public void onClick(View v) {
                 //L.debug("with: "+tvBuddys.getText().toString()+", start: "+tvMsg.getText().toString());
-                mCallback.onShowChatHistory(mLatestMsgs.get(position).chat.receiver);
+                mCallback.onShowChatHistory(tvBuddys.getText().toString());
             }
 
         }

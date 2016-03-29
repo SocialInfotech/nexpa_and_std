@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/libs/smack-android-4.1.5.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.igniterealtime.smack/smack-android/4.1.5/d4c86f5f6fa62332ceb2f56025ba5ef3474def00/smack-android-4.1.5-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/libs/minidns-0.1.7.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.measite.minidns/minidns/0.1.7/25dd87ae88d63e25383237f202133f3965de9b8e/minidns-0.1.7-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

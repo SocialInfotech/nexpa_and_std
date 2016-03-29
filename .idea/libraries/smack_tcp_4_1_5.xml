@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/libs/smack-tcp-4.1.5.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.igniterealtime.smack/smack-tcp/4.1.5/cf5128b2d288fb386d7d9132323250ed6fbfe751/smack-tcp-4.1.5-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

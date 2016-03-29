@@ -2,26 +2,22 @@ package com.lpoezy.nexpa.activities;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.activities.ChatHistoryListFragment.OnShowChatHistoryListener;
-import com.lpoezy.nexpa.chatservice.XMPPService;
-import com.lpoezy.nexpa.objects.MessageElement;
-import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.objects.MessageResultElement;
+import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.L;
 
 import java.util.List;
 
 
-public class ChatHistoryActivity extends AppCompatActivity implements OnShowChatHistoryListener, MessageElement.OnParseCompleteListener {
+public class ChatHistoryActivity extends AppCompatActivity implements OnShowChatHistoryListener, OnRetrieveMessageArchiveListener {
 
     public static boolean isRunning;
 
@@ -87,8 +83,35 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
     }
 
     @Override
-    public void onParseComplete(final List<MessageElement> msgs, final int first, final int last, final int count) {
+    protected void onResume() {
 
+        super.onResume();
+
+        isRunning = true;
+
+        L.debug("ChatHistoryACtivity, onREsume");
+
+        if (((TabHostActivity) getParent()).isBounded()) {
+            ((TabHostActivity) getParent()).getService().addMAMObserver(this);
+
+            ((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(null);
+
+        }
+    }
+
+    @Override
+    public void onShowChatHistory(String with) {
+
+        Intent intentMes = new Intent(this, ChatActivity.class);
+        intentMes.putExtra("with", with + "@198.154.106.139");
+        startActivity(intentMes);
+
+
+    }
+
+
+    @Override
+    public void onRetrieveMessageArchive(List<MessageResultElement> msgs, int first, int last, int count) {
 
         if (msgs != null && !msgs.isEmpty()) {
             L.debug("ChatHistoryActivity, onParseComplete");
@@ -106,41 +129,5 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
         final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
         frag.updateUI();
 
-
     }
-
-
-
-    @Override
-    protected void onResume() {
-
-        super.onResume();
-
-        isRunning = true;
-
-        L.debug("ChatHistoryACtivity, onREsume");
-
-        //final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
-
-        if (((TabHostActivity) getParent()).isBounded()) {
-            ((TabHostActivity) getParent()).getService().addMAMObserver(this);
-
-            ((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(null);
-
-
-
-        }
-    }
-
-    @Override
-    public void onShowChatHistory(String with) {
-
-        Intent intentMes = new Intent(this, ChatActivity.class);
-        intentMes.putExtra("with", with + "@198.154.106.139");
-        startActivity(intentMes);
-
-
-    }
-
-
 }

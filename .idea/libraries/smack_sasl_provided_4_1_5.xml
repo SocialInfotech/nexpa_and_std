@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/libs/smack-sasl-provided-4.1.5.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.igniterealtime.smack/smack-sasl-provided/4.1.5/c943ee63cafb9477abbf735d472af7ee3cb9e92c/smack-sasl-provided-4.1.5-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

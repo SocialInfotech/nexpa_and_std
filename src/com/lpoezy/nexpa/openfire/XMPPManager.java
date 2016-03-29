@@ -1,7 +1,6 @@
 package com.lpoezy.nexpa.openfire;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,15 +8,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.lpoezy.nexpa.activities.ChatActivity;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.MAMExtensionProvider;
-import com.lpoezy.nexpa.objects.MessageArchiveAllIQ;
+import com.lpoezy.nexpa.objects.MAMFinExtensionProvider;
 import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
-import com.lpoezy.nexpa.objects.MessageElement;
-import com.lpoezy.nexpa.objects.UserProfile;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
+import com.lpoezy.nexpa.objects.MessageResultElement;
+import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
@@ -265,11 +262,13 @@ public class XMPPManager {
     public void login() {
 
         try {
+
+
             connection.login(loginUser, passwordUser);
 
             Presence presence = new Presence(Presence.Type.available);
             presence.setStatus("I'm available");
-            connection.sendPacket(presence);
+            connection.sendStanza(presence);
 
 
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
@@ -283,24 +282,23 @@ public class XMPPManager {
 
     }
 
-    public void notifyMAMObservers(List<MessageElement> msgs, int first, int last, int count) {
-        for (MessageElement.OnParseCompleteListener ob : mObservers) {
+    public void notifyMAMObservers(List<MessageResultElement> msgs, int first, int last, int count) {
+        for (OnRetrieveMessageArchiveListener ob : mObservers) {
            // L.debug("notifyMAMObservers...");
-            ob.onParseComplete(msgs, first, last, count);
+            ob.onRetrieveMessageArchive(msgs, first, last, count);
 
         }
     }
 
 
-    private List<MessageElement.OnParseCompleteListener> mObservers = new ArrayList<MessageElement.OnParseCompleteListener>();
+    private List<OnRetrieveMessageArchiveListener> mObservers = new ArrayList<OnRetrieveMessageArchiveListener>();
 
-    public void removeMAMObserver(MessageElement.OnParseCompleteListener observer) {
+    public void removeMAMObserver(OnRetrieveMessageArchiveListener observer) {
         mObservers.remove(observer);
     }
 
-    public void addMAMObserver(MessageElement.OnParseCompleteListener observer) {
+    public void addMAMObserver(OnRetrieveMessageArchiveListener observer) {
 
-        L.debug("adding mam observer");
         mObservers.add(observer);
     }
 
@@ -332,23 +330,42 @@ public class XMPPManager {
 
                 connection.sendStanza(mam);
 
-                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0", new MAMExtensionProvider(
-                        new MessageElement.OnParseCompleteListener() {
+                final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
+
+                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
+                        new MAMExtensionProvider(
+                        new MessageResultElement.OnParseCompleteListener() {
 
                             @Override
-                            public void onParseComplete(List<MessageElement> msgs, int first, int last, int count) {
+                            public void onParseComplete(MessageResultElement msg) {
 
-                                L.debug("msgs: "+msgs.size()+", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
-                                notifyMAMObservers(msgs, first, last, count);
+                                //L.debug("msgs: "+msgs.size()+", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
 
+                                msgElements.add(msg);
                             }
-                        }));
+                        }
+                        ));
+
+                ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
+                        new MAMFinExtensionProvider(
+                                new MAMFinExtensionProvider.OnParseCompleteListener() {
+
+                                    @Override
+                                    public void onParseComplete(final int first, final int last, final int count) {
+
+                                        L.debug("msgs: "+msgElements.size()+", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
+                                        notifyMAMObservers(msgElements, first, last, count);
+
+                                    }
+                                }
+                        ));
 
 
 
 
             } catch (NotConnectedException e) {
                 L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
+
             }
 
         } else {
@@ -383,7 +400,7 @@ public class XMPPManager {
 
             } else {
 
-                login();
+                 login();
             }
         } catch (NotConnectedException e) {
             L.error("xmpp.SendMessage(), msg Not sent!-Not Connected!");
@@ -425,6 +442,8 @@ public class XMPPManager {
 
                     }
                 });
+
+
             Log.d("xmpp", "ConnectionCLosed!");
             connected = false;
             chat_created = false;
@@ -500,11 +519,14 @@ public class XMPPManager {
 
             chat_created = false;
             loggedin = false;
+
+
         }
 
         @Override
         public void authenticated(XMPPConnection arg0, boolean arg1) {
-            L.debug("xmpp, Authenticated! " + connection.getUser());
+
+            L.debug("xmpp, Authenticated!");
             loggedin = true;
 
             ChatManager.getInstanceFor(connection).addChatListener(
@@ -549,7 +571,7 @@ public class XMPPManager {
         public void processMessage(final org.jivesoftware.smack.chat.Chat chat,
                                    final Message message) {
             L.debug("MyXMPP_MESSAGE_LISTENER, Xmpp message received: '"
-                    + message);
+                    + message.getType()+", "+message.getBody());
 
             if (message.getType() == Message.Type.chat
                     && message.getBody() != null) {

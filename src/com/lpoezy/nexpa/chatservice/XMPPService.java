@@ -6,9 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
-import android.os.HandlerThread;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -20,10 +18,9 @@ import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
-import com.lpoezy.nexpa.objects.MessageElement;
+import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.NewMessage;
-import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.HttpUtilz;
@@ -181,7 +178,6 @@ public class XMPPService extends Service {
                 password, processMessageCallback, connectedToOperfire);
         xmpp.connect("onCreate");
 
-
         db.close();
         isRunning = true;
     }
@@ -238,11 +234,11 @@ public class XMPPService extends Service {
         return isRunning;
     }
 
-    public void removeMAMObserver(MessageElement.OnParseCompleteListener observer){
+    public void removeMAMObserver(OnRetrieveMessageArchiveListener observer){
         xmpp.removeMAMObserver(observer);
     }
 
-    public void addMAMObserver(MessageElement.OnParseCompleteListener observer){
+    public void addMAMObserver(OnRetrieveMessageArchiveListener observer){
         xmpp.addMAMObserver(observer);
     }
 

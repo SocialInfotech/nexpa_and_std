@@ -36,9 +36,11 @@ import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.objects.MessageElement;
+import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.Messages;
+import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.objects.ProfilePicture;
+import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.BmpFactory;
 import com.lpoezy.nexpa.utility.L;
@@ -51,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ChatActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener, XMPPService.OnProcessMessage, MessageElement.OnParseCompleteListener {
+public class ChatActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener, XMPPService.OnProcessMessage, OnRetrieveMessageArchiveListener {
     private com.lpoezy.nexpa.chatservice.ChatAdapterActivity adapter;
 
     public boolean isMine;
@@ -221,119 +223,10 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
                     }
 
                     db.close();
-//					chatAdapter.add(chatMessage);
-//					chatAdapter.notifyDataSetChanged();
-//					MainActivity activity = ((MainActivity) getActivity());
-//					activity.getmService().xmpp.sendMessage(chatMessage);
+
                 }
-
-				/*/
-                if(!text.isEmpty()){
-					
-					textMessage.setText("");
-					
-					final Message msg = new Message(to, Message.Type.chat);
-					msg.setBody(text);
-
-					connection = XMPPLogic.getInstance().getConnection();
-					
-					String senderName = "";
-					String receiverName = mCorrespondentName;
-					String body = text;
-					boolean isLeft = false;
-					boolean isSuccessful = false;
-					boolean isUnread = true;
-					boolean isSyncedOnline = false;
-					long date = System.currentTimeMillis();
-					
-					Correspondent correspondent = new Correspondent(receiverName);
-					correspondent.saveOffline(ChatActivity.this);
-					
-					if ((connection == null) || (!connection.isConnected())) {
-						
-						L.debug("XMPPChatDemoActivity, reconnecting...");
-
-						isSuccessful = false;
-						
-						NewMessage comment = new NewMessage(
-						, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
-						comment.saveMySentMsgOffline(ChatActivity.this);
-						//long now = System.currentTimeMillis();
-						//String date = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
-						//comment.date = date;
-						
-						mComments.add(comment);
-						adapter.notifyDataSetChanged();
-						listview.smoothScrollToPosition(mComments.size() - 1);
-						// adapter.add(comment);
-						// listview.setAdapter(adapter);
-						//mCorrespondent.addMessage(comment);
-
-						if (!isReconnecting) {
-							isReconnecting = true;
-							Account ac = new Account();
-							SQLiteHandler db = new SQLiteHandler(getApplicationContext());
-							db.openToWrite();
-
-							ac.LogInChatAccount(db.getUsername(), db.getEncryptedPassword(), db.getEmail(),
-									new OnXMPPConnectedListener() {
-
-								@Override
-								public void onXMPPConnected(XMPPConnection connection) {
-
-									isReconnecting = false;
-
-								}
-							});
-
-							db.close();
-						}
-
-					}
-
-					else {
-						L.debug("XMPPChatDemoActivity, Sending text " + text + " to " + to);
-						//connection.sendPacket(msg);
-					
-						isSuccessful = true;
-						NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
-						comment.saveMySentMsgOffline(ChatActivity.this);
-						
-						mComments.add(comment);
-						adapter.notifyDataSetChanged();
-						listview.smoothScrollToPosition(mComments.size() - 1);
-						
-					}
-					
-				}
-				//*/
             }
         });
-
-        //updateList();
-
-    }
-
-    protected void updateList() {
-
-        final long userId = getIntent().getLongExtra("userid", -1);
-        final String username = getIntent().getStringExtra("username");
-
-        mCorrespondent = new Correspondent(username);
-        mCorrespondent.addListener(this);
-        mComments.downloadMyOfflineConversationWith(ChatActivity.this, mCorrespondentName);
-
-        //mCorrespondent.downloadOfflineMessagesByIds(ChatActivity.this, Long.parseLong(db.getLoggedInID()), userId);
-
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                mCorrespondent.downloadProfilePicOnline(ChatActivity.this, userId);
-
-            }
-        }).start();
 
     }
 
@@ -422,27 +315,6 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
         }
     };
 
-    public void onParseComplete(final List<MessageElement> msgs, final int first, final int last, final int count) {
-
-        chatMsgs.clear();
-
-        Gson gson = new Gson();
-
-        for(MessageElement msg : msgs){
-
-            L.debug("to: "+msg.getTo()+", body: "+msg.getBody()+", from: "+msg.getFrom());
-            ChatMessage chat = gson.fromJson(msg.getBody(), ChatMessage.class);
-            chatMsgs.add(chat);
-        }
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
     @Override
     protected void onResume() {
 
@@ -512,22 +384,73 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             @Override
             public void run() {
 
-
-                //if(!chatMessage.sender.equals(mCorrespondentName))return;
-
-
-                // mCorrespondentId = userId;
-                //mCorrespondent.setId(userId);
-                //L.debug("msg received from ..." + senderName);
-                // final String username =
-                // intentMes.getStringExtra("username");
-
-
                 //NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
                 chatMsgs.add(chatMessage);
                 //mComments.add(comment);
                 mAdapter.notifyDataSetChanged();
                 listview.smoothScrollToPosition(chatMsgs.size() - 1);
+            }
+        });
+    }
+
+    private Bitmap mCorrespondentAvatar;
+
+    @Override
+    public void onRetrieveMessageArchive(List<MessageResultElement> msgs, int first, int last, int count) {
+
+        if(XMPPService.xmpp.loggedin){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    final UserProfile cProfile = new UserProfile();
+                    cProfile.setUsername(mCorrespondentName);
+
+                    cProfile.loadVCard(XMPPService.xmpp.connection);
+
+                    // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+
+                    if(cProfile.getAvatarImg()!=null){
+                        mCorrespondentAvatar = cProfile.getAvatarImg();
+
+                        resetAdapter();
+                    }
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        L.error(e.getMessage());
+                    }
+                }
+            }).start();
+        }
+
+        L.debug("ChatActivity, onParseComplete");
+        chatMsgs.clear();
+
+
+
+        Gson gson = new Gson();
+
+        for (MessageResultElement msg : msgs) {
+
+            L.debug("to: " + msg.getTo() + ", body: " + msg.getBody() + ", from: " + msg.getFrom());
+            ChatMessage chat = gson.fromJson(msg.getBody(), ChatMessage.class);
+            chatMsgs.add(chat);
+        }
+
+        resetAdapter();
+
+
+
+    }
+
+    private void resetAdapter() {
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -539,16 +462,16 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
             RelativeLayout wrapper;
             TextView countryName;
-            ImageView iv;
+            com.github.siyamed.shapeimageview.CircularImageView iv;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 wrapper = (RelativeLayout) itemView.findViewById(R.id.wrapper);
                 // countryName = (TextView) itemView.findViewById(R.id.comment);
 
-                iv = new ImageView(context);
+                iv = new com.github.siyamed.shapeimageview.CircularImageView(context);
                 iv.setId(R.id.img_1);
-                RelativeLayout.LayoutParams layoutParams0 = new RelativeLayout.LayoutParams(50, 50);
+                RelativeLayout.LayoutParams layoutParams0 = new RelativeLayout.LayoutParams(75, 75);
                 wrapper.addView(iv, layoutParams0);
 
                 countryName = new TextView(context);
@@ -621,11 +544,11 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 //			} else {
 //				vh.countryName.setBackgroundResource(!comment.isLeft() ? R.drawable.bubble_failed : R.drawable.bubble_yellow);
 //			}
-
+            Bitmap rawImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.pic_sample_girl);
             if (isMine) {
 
                 Bitmap bmp = getUserPic(vh.iv);
-                vh.iv.setImageBitmap(bmp);
+                vh.iv.setImageBitmap(rawImage);
                 // will remove previously added rule to this view
                 ((RelativeLayout.LayoutParams) vh.countryName.getLayoutParams()).addRule(RelativeLayout.RIGHT_OF, 0);
                 // add new rule for the layout to implement
@@ -635,8 +558,11 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             } else {
 
 
-                Bitmap bmp = getCorrespondentPic();
-                vh.iv.setImageBitmap(bmp);
+                if(mCorrespondentAvatar!=null) {
+                    rawImage = mCorrespondentAvatar;
+                }
+
+                vh.iv.setImageBitmap(rawImage);
 
                 // will remove previously added rule to this view
                 ((RelativeLayout.LayoutParams) vh.iv.getLayoutParams()).addRule(RelativeLayout.RIGHT_OF, 0);
@@ -655,20 +581,6 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
             View itemView = inflater.inflate(R.layout.listitem, root, false);
             return new ViewHolder(itemView);
-        }
-
-        private Bitmap getCorrespondentPic() {
-
-            Bitmap rawImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.pic_sample_girl);
-
-//			if (mCorrespondent.getProfilePic() != null) {
-//				rawImage = mCorrespondent.getProfilePic();
-//			}
-
-            RoundedImageView riv = new RoundedImageView(context);
-            Bitmap circImage = riv.getCroppedBitmap(rawImage, 80);
-
-            return circImage;
         }
 
         private Bitmap userPic;
@@ -716,8 +628,8 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
     }
 
-    public interface OnRetrieveMessageArchiveListener {
-        public void onRetrieveMessageArchive(List<ChatMessage> conversation);
-    }
+//    public interface OnRetrieveMessageArchiveListener {
+//        public void onRetrieveMessageArchive(List<ChatMessage> conversation);
+//    }
 
 }

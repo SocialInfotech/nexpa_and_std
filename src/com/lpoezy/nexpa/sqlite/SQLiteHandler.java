@@ -15,7 +15,7 @@ import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Favorite;
 import com.lpoezy.nexpa.objects.Geolocation;
-import com.lpoezy.nexpa.objects.MessageElement;
+import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.NewMessage;
 import com.lpoezy.nexpa.openfire.Account;
 import com.lpoezy.nexpa.utility.DateUtils;
@@ -1323,7 +1323,7 @@ public class SQLiteHandler {
     }
 
 
-    public MessageElement downloadLatestMessageOf(String jid) {
+    public MessageResultElement downloadLatestMessageOf(String jid) {
        L.debug("SQLiteHandler, downloadLatestMessageOf : " + jid);
         String table = TABLE_MSG_ARCHIVE;
         String[] columns = new String[]{MAM_STAMP, MAM_TO, MAM_TYPE, MAM_FROM, MAM_BODY,
@@ -1334,7 +1334,7 @@ public class SQLiteHandler {
         Cursor c = sqLiteDatabase.query(table, columns, selection, null, null, null, MAM_STAMP + " DESC");
 
 
-        MessageElement msg = null;
+        MessageResultElement msg = null;
         if (c.moveToFirst()) {
 
             String stamp = c.getString(c.getColumnIndex(MAM_STAMP));
@@ -1344,7 +1344,7 @@ public class SQLiteHandler {
             String body = c.getString(c.getColumnIndex(MAM_BODY));
             String thread = c.getString(c.getColumnIndex(MAM_THREAD));
 
-            msg = new MessageElement(stamp, to, type, from, body, thread);
+            msg = new MessageResultElement(stamp, to, type, from, body, thread);
 
 
         }
@@ -1354,16 +1354,16 @@ public class SQLiteHandler {
         return msg;
     }
 
-    public List<MessageElement> downloadMsgArchive() {
+    public List<MessageResultElement> downloadMsgArchive() {
 
         //get correspondents
         List<String> correspondents = getCorrespondents();
 
-        List<MessageElement> msgs = new ArrayList<MessageElement>();
+        List<MessageResultElement> msgs = new ArrayList<MessageResultElement>();
         if (!correspondents.isEmpty()) {
             for (String jid : correspondents) {
 
-                MessageElement msg = downloadLatestMessageOf(jid);
+                MessageResultElement msg = downloadLatestMessageOf(jid);
                 msgs.add(msg);
                 L.debug("from: " + msg.getFrom() + ", to: " + msg.getTo()+", body: "+msg.getBody());
             }
@@ -1376,7 +1376,7 @@ public class SQLiteHandler {
         sqLiteDatabase.delete(TABLE_MSG_ARCHIVE, null,null);
     }
 
-    public void saveMsgArchive(List<MessageElement> messages) {
+    public void saveMsgArchive(List<MessageResultElement> messages) {
         L.debug("SQLiteHandler, saveMultipleCorrespondents " + messages.size());
 
         String sql = "INSERT INTO " + TABLE_MSG_ARCHIVE + "(" + MAM_STAMP + ", " + MAM_TO + ","
@@ -1389,7 +1389,7 @@ public class SQLiteHandler {
             if(messages.get(i).getType()==null)continue;
             statement.clearBindings();
 
-            L.debug("saving... to: "+messages.get(i).getTo()+", from: "+messages.get(i).getFrom()+", body: "+messages.get(i).getBody());
+            //L.debug("saving... to: "+messages.get(i).getTo()+", from: "+messages.get(i).getFrom()+", body: "+messages.get(i).getBody());
             statement.bindString(1, messages.get(i).getStamp());
             statement.bindString(2, messages.get(i).getTo().replace("/Smack", ""));
             statement.bindString(3, messages.get(i).getType());
@@ -1408,7 +1408,7 @@ public class SQLiteHandler {
 
 
     public void saveMultipleMsgs(List<NewMessage> messages) {
-        L.debug("SQLiteHandler, saveMultipleCorrespondents " + messages.size());
+        //L.debug("SQLiteHandler, saveMultipleCorrespondents " + messages.size());
 
         String sql = "INSERT INTO " + TABLE_MESSAGES + "(" + MSG_SENDER_NAME + ", " + MSG_RECEIVER_NAME + ","
                 + MSG_IS_LEFT + "," + MSG_BODY + "," + MSG_SUCCESS + "," + MSG_DATE + "," + MSG_IS_SYNCED_ONLINE + ","

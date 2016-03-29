@@ -841,7 +841,7 @@ public class AroundMeActivity extends AppCompatActivity
             arr_correspondents.add(j, correspondent);
 
             //check if connected to openfire server
-            if (XMPPService.xmpp.connection.isAuthenticated()) {
+            if (XMPPService.xmpp.loggedin) {
 
                 Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
                 String address = name + "@198.154.106.139/Smack";

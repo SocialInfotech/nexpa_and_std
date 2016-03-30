@@ -9,15 +9,18 @@ import android.widget.TextView;
 
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.activities.ChatHistoryListFragment.OnShowChatHistoryListener;
+import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.L;
 
+import org.jivesoftware.smack.XMPPConnection;
+
 import java.util.List;
 
 
-public class ChatHistoryActivity extends AppCompatActivity implements OnShowChatHistoryListener, OnRetrieveMessageArchiveListener {
+public class ChatHistoryActivity extends AppCompatActivity implements OnShowChatHistoryListener, OnRetrieveMessageArchiveListener, XMPPService.OnConnectedToOPenfireListener, XMPPService.OnServiceConnectedListener {
 
     public static boolean isRunning;
 
@@ -73,7 +76,7 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
     protected void onPause() {
 
 
-        if (((TabHostActivity) getParent()).isBounded()) {
+        if (((TabHostActivity) getParent()).getService()!=null) {
             ((TabHostActivity) getParent()).getService().removeMAMObserver(this);
         }
 
@@ -93,7 +96,7 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 
         if (((TabHostActivity) getParent()).isBounded()) {
             ((TabHostActivity) getParent()).getService().addMAMObserver(this);
-
+            ((TabHostActivity)getParent()).getService().addconnectedToOperfireListener(this);
             ((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(null);
 
         }
@@ -105,7 +108,6 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
         Intent intentMes = new Intent(this, ChatActivity.class);
         intentMes.putExtra("with", with + "@198.154.106.139");
         startActivity(intentMes);
-
 
     }
 
@@ -129,5 +131,36 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
         final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
         frag.updateUI();
 
+    }
+
+    @Override
+    public void onConnectedToOpenfire(XMPPConnection connection) {
+
+        L.debug("ChatHistory, onConnectedToOpenfire");
+        final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
+
+        if(frag.getmLatestMsgs().isEmpty() && mBounded){
+
+            ((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(null);
+
+        }
+
+    }
+    private XMPPService mService;
+    private boolean mBounded;
+    @Override
+    public void OnServiceConnected(XMPPService service) {
+        mService = service;
+        mBounded = true;
+        service.addMAMObserver(this);
+        service.addconnectedToOperfireListener(this);
+        service.retrieveListOfCollectionsFrmMsgArchive(null);
+
+    }
+
+    @Override
+    public void OnServiceDisconnected() {
+        mService = null;
+        mBounded = false;
     }
 }

@@ -156,16 +156,16 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_gender.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\custom_row_view.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\custom_row_view.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_big_media_narrow.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\notification_template_big_media_narrow.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\layoutmain.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\layout\\layoutmain.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_big_media_narrow.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\notification_template_big_media_narrow.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\custom_row_view.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\custom_row_view.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_people.xml",
@@ -176,44 +176,44 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\notification_template_part_time.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_search_post.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_search_post.xml"
-    },
-    {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\place_autocomplete_item_powered_by_google.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-location\\8.4.0\\res\\layout\\place_autocomplete_item_powered_by_google.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_profile_status.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_profile_status.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_search_post.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_search_post.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_create_account.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\layout\\activity_create_account.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\abc_search_dropdown_item_icons_2line.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_search_dropdown_item_icons_2line.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\toolbar.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\toolbar.xml"
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_profile_status.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_profile_status.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_lines.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\notification_template_lines.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_userprofile_header.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_userprofile_header.xml"
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\toolbar.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\toolbar.xml"
+    },
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\abc_search_dropdown_item_icons_2line.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_search_dropdown_item_icons_2line.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_gender.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\layout\\activity_gender.xml"
     },
     {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_settings.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_settings.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_gender.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\layout\\activity_gender.xml"
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_userprofile_header.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_userprofile_header.xml"
     },
     {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\abc_activity_chooser_view.xml",

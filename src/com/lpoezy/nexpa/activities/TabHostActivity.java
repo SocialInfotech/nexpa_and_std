@@ -61,6 +61,14 @@ public class TabHostActivity extends TabActivity {
 		public void onServiceDisconnected(ComponentName name) {
 			mBounded = false;
 			mService = null;
+
+//			if(getTabHost().getCurrentTab()==0){
+//				XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) getCurrentActivity();
+//
+//				onServiceConnectedListener.OnServiceDisconnected();
+//
+//			}
+
 		}
 
 		@SuppressWarnings("unchecked")
@@ -70,11 +78,12 @@ public class TabHostActivity extends TabActivity {
 
 			mService = ((LocalBinder<XMPPService>) service).getService();
 
-			if(getTabHost().getCurrentTab()==0){
-				XMPPService.OnConnectedToOPenfireListener onConnectedToOPenfireListener = (XMPPService.OnConnectedToOPenfireListener) getCurrentActivity();
-				mService.addconnectedToOperfireListener(onConnectedToOPenfireListener);
-
-			}
+//			if(getTabHost().getCurrentTab()==0){
+//				XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) getCurrentActivity();
+//
+//				onServiceConnectedListener.OnServiceConnected(mService);
+//
+//			}
 
 		}
 	};

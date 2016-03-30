@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class XMPPService extends Service {
@@ -115,11 +116,15 @@ public class XMPPService extends Service {
     private OnConnectedToOPenfireListener connectedToOperfire = new OnConnectedToOPenfireListener() {
         @Override
         public void onConnectedToOpenfire(XMPPConnection connection) {
+            L.debug("XMPPService, onConnectedToOpenfire");
+            Iterator<OnConnectedToOPenfireListener> iter = connectedToOperfireListeners.iterator();
 
+            while(iter.hasNext()){
 
-            for (OnConnectedToOPenfireListener observer : connectedToOperfireListeners) {
+                OnConnectedToOPenfireListener observer = iter.next();
                 observer.onConnectedToOpenfire(connection);
             }
+
 
         }
     };
@@ -441,6 +446,11 @@ public class XMPPService extends Service {
 
     public interface OnConnectedToOPenfireListener {
         public void onConnectedToOpenfire(XMPPConnection connection);
+    }
+
+    public interface OnServiceConnectedListener {
+        public void OnServiceConnected(XMPPService service);
+        public void OnServiceDisconnected();
     }
 
 }

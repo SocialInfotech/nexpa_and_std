@@ -339,6 +339,8 @@ public class AroundMeActivity extends AppCompatActivity
 
         db.close();
 
+
+
     }
 
 
@@ -450,37 +452,6 @@ public class AroundMeActivity extends AppCompatActivity
                         String date_create = c.getString("date_create");
                         String date_update = c.getString("date_update");
                         String geo_distance = c.getString("geo_distance");
-
-//                        String description = c.getString("description");
-//                        String title = c.getString("title");
-//                        String url0 = c.getString("url0");
-//                        String url1 = c.getString("url1");
-//                        String url2 = c.getString("url2");
-//                        String dateUpdated = c.getString("date_updated");
-//
-//                        // saveVCard profile of specific users
-//                        UserProfile userProfile = new UserProfile(uname, description,
-//                                title, url0, url1, url2);
-//
-//                        userProfile.saveOffline(AroundMeActivity.this);
-
-                        // replace geo id with userid
-
-                        // profile pic info
-//                        String imgDir = c.getString("img_dir");
-//                        String imgFile = c.getString("img_file");
-//                        String dateCreated = c.getString("date_uploaded");
-//
-//
-//                        if ((imgDir != null && !imgDir.isEmpty() && !imgDir.equalsIgnoreCase("null"))
-//                                && (imgFile != null && !imgFile.isEmpty()
-//                                && !imgFile.equalsIgnoreCase("null"))) {
-//                            L.error("getting profile picture of uname: " + uname
-//                                    + ", imgDir: " + imgDir + ", imgFile: " + imgFile);
-//                            ProfilePicture profilePic = new ProfilePicture(uname, imgDir,
-//                                    imgFile, dateCreated, true);
-//                            profilePic.saveOffline(AroundMeActivity.this);
-//                        }
 
                         SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
                         db.openToWrite();
@@ -735,65 +706,6 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
-    private void getNewLoc() {
-
-//		String dtUpdate = db.getLocationDateUpdate();
-//		L.error("AroundMeActivity, getNewLoc dtUpdate: " + dtUpdate);
-//		if ((dtUpdate == "") || (du.hoursAgo(dtUpdate))) {
-//
-//			L.error("LOCATION INTELLIGENCE, Update needed...");
-//
-//			LocationResult locationResult = new LocationResult() {
-//
-//				@Override
-//				public void gotLocation(Location location) {
-//
-//					if (location != null) {
-//
-//						ftLatitude = (float) location.getLatitude() /*-33.8788025f*/;
-//						ftLongitude = (float) location
-//								.getLongitude() /* 151.2120050f */;
-//						latitude = ftLatitude;
-//						longitude = ftLongitude;
-//						db.insertLocation(username, longitude, latitude);
-//						SendLocToServer();
-//
-//					} else {
-//						// Looper.prepare();
-//
-//						try {
-//
-//							mHandler.sendEmptyMessage(1);
-//						} catch (Exception e) {
-//							Log.e("FAIL", "FAILED A:LL");
-//						}
-//						// makeNotify("Failed To Retrieve GPS Location",
-//						// AppMsg.STYLE_INFO);
-//						// mSwipeRefreshLayout.setRefreshing(false);
-//					}
-//				}
-//			};
-//
-//			PackageManager packMan = getPackageManager();
-//			hasGps = packMan.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
-//
-//			MyLocation myLocation = new MyLocation();
-//			boolean availLoc = myLocation.getLocation(this, locationResult);
-//			if (availLoc == false) {
-//				makeNotify("GPS Services Unavailable", AppMsg.STYLE_ALERT);
-//				mSwipeRefreshLayout.setRefreshing(false);
-//			}
-//		} else {
-//			L.error("LOCATION INTELLIGENCE, Getting db location...");
-//			ftLatitude = Float.parseFloat(db.getLocationLatitude()) /*-33.8788025f*/;
-//			ftLongitude = Float
-//					.parseFloat(db.getLocationLongitude()) /* 151.2120050f */;
-//			latitude = ftLatitude;
-//			longitude = ftLongitude;
-//			SendLocToServer();
-//		}
-    }
-
     private void updateGrid() {
 
 
@@ -1006,112 +918,63 @@ public class AroundMeActivity extends AppCompatActivity
 
     @Override
     public void onConnectedToOpenfire(final XMPPConnection connection) {
-        //http://www.igniterealtime.org/builds/smack/docs/4.0.2/documentation/providers.html
-        //http://stackoverflow.com/questions/17485106/asmak-packet-listener-and-custom-iqprovider-not-triggering-called
 
-        final Roster roster = Roster.getInstanceFor(connection);
-        if (!nearbyUsers.isEmpty()) {
+        L.debug("AroundMe, onConnectedToOpenfire");
 
-            for (final Geolocation nearByUser : nearbyUsers) {
-                final String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
-
-                Presence subscribe = new Presence(Presence.Type.subscribe);
-                subscribe.setTo(address);
-                try {
-                    connection.sendPacket(subscribe);
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-
-                try {
-                    roster.createEntry(address, null, null);
-                    updateUserAvailability(address, roster);
-                } catch (XMPPException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotLoggedInException e) {
-                    L.error(address + ", " + e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                }
-
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        final UserProfile uProfile = new UserProfile();
-                        uProfile.setUsername(nearByUser.getUsername());
-
-                        uProfile.loadVCard(connection);
-
-                        L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
-
-                        updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
-
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            L.error(e.getMessage());
-                        }
-
-                    }
-                }).start();
-
-
-
-
-                /*/
-                L.debug("saving vcard: "+address);
-                //saveVCard vcard
-                VCard saveCard = new VCard();
-                saveCard.setFirstName(nearByUser.getUsername());
-                saveCard.setEmailHome("foo@fee0.bar");
-                saveCard.setEmailWork("foo@fee1.bar");
-                saveCard.setJabberId(connection.getUser().replace("/Smack", ""));
-
-                VCardManager vCardManager = VCardManager.getInstanceFor(connection);
-                try {
-                    L.debug("isVCArdSupported? "+connection.getUser()+", "+vCardManager.isSupported(connection.getUser()));
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-                try {
-                    vCardManager.saveVCard(saveCard);
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-                //load vcard
-                L.debug("loading vcard: "+address);
-                try {
-
-                    VCard loadCard = vCardManager.loadVCard(address.replace("/Smack", ""));
-                    //loadCard.load(connection, address); // load someone's VCard
-
-                    L.debug("vcard: "+loadCard.getEmailHome());
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-                //*/
-            }
-
-        }
+       final Roster roster = Roster.getInstanceFor(connection);
+//        if (!nearbyUsers.isEmpty()) {
+//
+//            for (final Geolocation nearByUser : nearbyUsers) {
+//
+//                final String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
+//
+//                Presence subscribe = new Presence(Presence.Type.subscribe);
+//                subscribe.setTo(address);
+//                try {
+//                    connection.sendPacket(subscribe);
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//                try {
+//                    roster.createEntry(address, null, null);
+//                    updateUserAvailability(address, roster);
+//                } catch (XMPPException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NotLoggedInException e) {
+//                    L.error(address + ", " + e.getMessage());
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NoResponseException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        final UserProfile uProfile = new UserProfile();
+//                        uProfile.setUsername(nearByUser.getUsername());
+//
+//                        uProfile.loadVCard(connection);
+//
+//                        //L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+//
+//                        updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
+//
+//                        try {
+//                            Thread.sleep(500);
+//                        } catch (InterruptedException e) {
+//                            L.error(e.getMessage());
+//                        }
+//
+//                    }
+//                }).start();
+//
+//            }
+//
+//        }
 //
 //
         roster.addRosterListener(new RosterListener() {

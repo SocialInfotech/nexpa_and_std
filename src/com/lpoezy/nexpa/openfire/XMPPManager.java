@@ -20,6 +20,7 @@ import com.lpoezy.nexpa.utility.L;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
@@ -126,7 +127,11 @@ public class XMPPManager {
         XMPPTCPConnection.setUseStreamManagementDefault(true);
 
         connection = new XMPPTCPConnection(config.build());
-        //connection.setPacketReplyTimeout(30000);
+        ReconnectionManager connManager = ReconnectionManager.getInstanceFor(connection);
+        connManager.enableAutomaticReconnection();
+
+        //L.debug("isAutomaticReconnectEnabled: " + ReconnectionManager.getInstanceFor(connection).isAutomaticReconnectEnabled());
+
         XMPPConnectionListener connectionListener = new XMPPConnectionListener();
         connection.addConnectionListener(connectionListener);
     }
@@ -274,7 +279,7 @@ public class XMPPManager {
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
         } catch (XMPPException | SmackException | IOException e) {
-            L.error("xxx: " + e.getMessage());
+            L.error("xxx: connection.isConnected? "+connection.isConnected()+", " + e.getMessage());
         } catch (Exception e) {
             L.error("yyy: " + e.getMessage());
         }
@@ -353,7 +358,7 @@ public class XMPPManager {
                                     @Override
                                     public void onParseComplete(final int first, final int last, final int count) {
 
-                                        L.debug("msgs: "+msgElements.size()+", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
+                                        //L.debug("msgs: "+msgElements.size()+", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
                                         notifyMAMObservers(msgElements, first, last, count);
 
                                     }

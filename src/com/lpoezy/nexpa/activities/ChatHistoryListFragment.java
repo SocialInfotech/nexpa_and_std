@@ -53,6 +53,10 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
     private List<LatestMessage> mLatestMsgs;
 
+    public List<LatestMessage> getmLatestMsgs() {
+        return mLatestMsgs;
+    }
+
     private class LatestMessage {
         public String stamp;
         public Bitmap avatar;
@@ -153,6 +157,9 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
     }
 
     public void updateUI() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
         //get collections from offline db
         final SQLiteHandler db = new SQLiteHandler(getActivity());
@@ -171,7 +178,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
                         msg.getBody(), ChatMessage.class);
 
 
-                if(XMPPService.xmpp.loggedin){
+                if (XMPPService.xmpp.loggedin) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -184,9 +191,9 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
                             uProfile.loadVCard(XMPPService.xmpp.connection);
 
-                           // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+                            // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
 
-                            if(uProfile.getAvatarImg()!=null){
+                            if (uProfile.getAvatarImg() != null) {
                                 lMsg.avatar = uProfile.getAvatarImg();
 
                                 resetAdapter();
@@ -202,7 +209,6 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
                 }
 
 
-
                 mLatestMsgs.add(lMsg);
 
 
@@ -211,6 +217,9 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
         db.close();
         resetAdapter();
+
+//            }
+//        }).start();
 
 
     }
@@ -247,39 +256,46 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
         @Override
         public void onBindViewHolder(final ViewHolder vh, final int position) {
-            vh.position = position;
 
-            SQLiteHandler db = new SQLiteHandler(getActivity());
-            db.openToRead();
-
-            String uname = db.getUsername();
-            db.close();
-
-
-            //final String name = mLatestMsgs.get(position).chat.sender;
-
-            vh.tvBuddys.setText(uname.equals(mLatestMsgs.get(position).chat.sender) ? mLatestMsgs.get(position).chat.receiver : mLatestMsgs.get(position).chat.sender);
-
-            SimpleDateFormat existingUTCFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            SimpleDateFormat requiredFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
-            Date getDate = null;
             try {
-                getDate = existingUTCFormat.parse(mLatestMsgs.get(position).stamp);
-            } catch (ParseException e) {
+
+                SQLiteHandler db = new SQLiteHandler(getActivity());
+                db.openToRead();
+
+                String uname = db.getUsername();
+                db.close();
+
+
+                //final String name = mLatestMsgs.get(position).chat.sender;
+
+                vh.tvBuddys.setText(uname.equals(mLatestMsgs.get(position).chat.sender) ? mLatestMsgs.get(position).chat.receiver : mLatestMsgs.get(position).chat.sender);
+
+                SimpleDateFormat existingUTCFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                SimpleDateFormat requiredFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+                Date getDate = null;
+                try {
+                    getDate = existingUTCFormat.parse(mLatestMsgs.get(position).stamp);
+                } catch (ParseException e) {
+                    L.error(e.getMessage());
+                }
+                String mydate = requiredFormat.format(getDate);
+
+
+                vh.tvMsg.setText(mLatestMsgs.get(position).chat.body);
+                vh.tvMsgDate.setText(mydate);
+
+
+                if (mLatestMsgs.get(position).avatar != null) {
+                    vh.imgProfilePic.setImageBitmap(mLatestMsgs.get(position).avatar);
+                }
+
+            } catch (IndexOutOfBoundsException e) {
                 L.error(e.getMessage());
             }
-            String mydate = requiredFormat.format(getDate);
 
-
-            vh.tvMsg.setText(mLatestMsgs.get(position).chat.body);
-            vh.tvMsgDate.setText(mydate);
-
-
-            if (mLatestMsgs.get(position).avatar != null) {
-                vh.imgProfilePic.setImageBitmap(mLatestMsgs.get(position).avatar);
-            }
+            vh.position = position;
 
 
         }

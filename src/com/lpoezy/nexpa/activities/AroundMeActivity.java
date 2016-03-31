@@ -752,8 +752,14 @@ public class AroundMeActivity extends AppCompatActivity
 
             arr_correspondents.add(j, correspondent);
 
-            //check if connected to openfire server
-            if (XMPPService.xmpp.loggedin) {
+
+            if(!XMPPService.xmpp.connected){
+
+                ((TabHostActivity) getParent()).getService().xmpp.connect("onCreate");
+
+            }else if(!XMPPService.xmpp.loggedin){
+                ((TabHostActivity) getParent()).getService().xmpp.login();
+            }else{
 
                 Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
                 String address = name + "@198.154.106.139/Smack";
@@ -763,6 +769,7 @@ public class AroundMeActivity extends AppCompatActivity
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+
                         final UserProfile uProfile = new UserProfile();
                         uProfile.setUsername(name);
 
@@ -773,14 +780,9 @@ public class AroundMeActivity extends AppCompatActivity
                         updateUserAvatar(name, uProfile.getAvatarImg());
 
 
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            L.error(e.getMessage());
-                        }
+
                     }
                 }).start();
-
 
             }
 
@@ -896,11 +898,6 @@ public class AroundMeActivity extends AppCompatActivity
                 L.debug(addresss + " isAvailable? " + isAvailable);
                 c.setAvailable(isAvailable);
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                   L.error(e.getMessage());
-                }
             }
         }
 
@@ -922,59 +919,53 @@ public class AroundMeActivity extends AppCompatActivity
         L.debug("AroundMe, onConnectedToOpenfire");
 
        final Roster roster = Roster.getInstanceFor(connection);
-//        if (!nearbyUsers.isEmpty()) {
-//
-//            for (final Geolocation nearByUser : nearbyUsers) {
-//
-//                final String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
-//
-//                Presence subscribe = new Presence(Presence.Type.subscribe);
-//                subscribe.setTo(address);
-//                try {
-//                    connection.sendPacket(subscribe);
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(e.getMessage());
-//                }
-//
-//                try {
-//                    roster.createEntry(address, null, null);
-//                    updateUserAvailability(address, roster);
-//                } catch (XMPPException e) {
-//                    L.error(e.getMessage());
-//                } catch (SmackException.NotLoggedInException e) {
-//                    L.error(address + ", " + e.getMessage());
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(e.getMessage());
-//                } catch (SmackException.NoResponseException e) {
-//                    L.error(e.getMessage());
-//                }
-//
-//
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        final UserProfile uProfile = new UserProfile();
-//                        uProfile.setUsername(nearByUser.getUsername());
-//
-//                        uProfile.loadVCard(connection);
-//
-//                        //L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
-//
-//                        updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
-//
-//                        try {
-//                            Thread.sleep(500);
-//                        } catch (InterruptedException e) {
-//                            L.error(e.getMessage());
-//                        }
-//
-//                    }
-//                }).start();
-//
-//            }
-//
-//        }
+        if (!nearbyUsers.isEmpty()) {
+
+            for (final Geolocation nearByUser : nearbyUsers) {
+
+                final String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
+
+                Presence subscribe = new Presence(Presence.Type.subscribe);
+                subscribe.setTo(address);
+                try {
+                    connection.sendPacket(subscribe);
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                }
+
+                try {
+                    roster.createEntry(address, null, null);
+                    updateUserAvailability(address, roster);
+                } catch (XMPPException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NotLoggedInException e) {
+                    L.error(address + ", " + e.getMessage());
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NoResponseException e) {
+                    L.error(e.getMessage());
+                }
+
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final UserProfile uProfile = new UserProfile();
+                        uProfile.setUsername(nearByUser.getUsername());
+
+                        uProfile.loadVCard(connection);
+
+                        //L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+
+                        updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
+
+                    }
+                }).start();
+
+            }
+
+        }
 //
 //
         roster.addRosterListener(new RosterListener() {

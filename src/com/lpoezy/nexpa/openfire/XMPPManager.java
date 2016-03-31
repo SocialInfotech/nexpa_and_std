@@ -129,7 +129,8 @@ public class XMPPManager {
         connection = new XMPPTCPConnection(config.build());
         ReconnectionManager connManager = ReconnectionManager.getInstanceFor(connection);
         connManager.enableAutomaticReconnection();
-
+        //connManager.setFixedDelay(10);
+        //connManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
         //L.debug("isAutomaticReconnectEnabled: " + ReconnectionManager.getInstanceFor(connection).isAutomaticReconnectEnabled());
 
         XMPPConnectionListener connectionListener = new XMPPConnectionListener();
@@ -502,7 +503,12 @@ public class XMPPManager {
 
             chat_created = false;
             loggedin = false;
+
+
+
         }
+
+
 
         @Override
         public void reconnectionSuccessful() {
@@ -566,6 +572,8 @@ public class XMPPManager {
                 });
         }
     }
+
+
 
     private class MMessageListener implements ChatMessageListener {
 

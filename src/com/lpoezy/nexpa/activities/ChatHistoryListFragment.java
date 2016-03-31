@@ -199,11 +199,6 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
                                 resetAdapter();
                             }
 
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                L.error(e.getMessage());
-                            }
                         }
                     }).start();
                 }

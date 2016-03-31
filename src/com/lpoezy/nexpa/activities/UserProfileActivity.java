@@ -41,7 +41,7 @@ import com.lpoezy.nexpa.utility.Utilz;
 import org.jivesoftware.smack.XMPPConnection;
 
 public class UserProfileActivity extends AppCompatActivity
-		implements EditProfileFragment.OnShowProfilePicScreenListener {
+		implements EditProfileFragment.OnShowProfilePicScreenListener, XMPPService.OnServiceConnectedListener {
 	RangeBar rbDistance;
 
 	NiceDialog nd;
@@ -188,6 +188,15 @@ public class UserProfileActivity extends AppCompatActivity
 
 	private static ProgressDialog pDialog;
 
+	@Override
+	public void OnServiceConnected(XMPPService service) {
+
+	}
+
+	@Override
+	public void OnServiceDisconnected() {
+
+	}
 
 
 	public interface onUserIsLoggedOutListener {

@@ -19,6 +19,7 @@ import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.NewMessage;
+import com.lpoezy.nexpa.objects.OfUser;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
@@ -299,27 +300,42 @@ public class XMPPService extends Service {
             public void run() {
 
 
-                if (xmpp.connection.isConnected()) {
+                OfUser ofuser = new OfUser();
+                ofuser.setUsername(uname);
+                ofuser.setEmail(email);
+                ofuser.setPlainPassword(password);
 
-                    try {
-                        xmpp.register(uname, password, email);
+                if(ofuser.createUser()){
 
-                        callback.onUpdateScreen();
-
-                    } catch (NoResponseException | NotConnectedException e) {
-                        callback.onResumeScreen("User is not, or no longer, connected.");
-                        L.error(e.getMessage());
-                    } catch (XMPPErrorException e) {
-                        L.error(e.getMessage());
-                        callback.onResumeScreen("User Name already exists, please enter another one.");
-                    }
+                    callback.onUpdateScreen();
 
                 } else {
 
-                    L.error("Not connected to openfire server!!!");
-                    callback.onResumeScreen("Not connected to openfire server!!!");
-
+                    callback.onResumeScreen("User Name already exists, please enter another one.");
                 }
+
+
+//                if (xmpp.connection.isConnected()) {
+//
+//                    try {
+//                        xmpp.register(uname, password, email);
+//
+//                        callback.onUpdateScreen();
+//
+//                    } catch (NoResponseException | NotConnectedException e) {
+//                        callback.onResumeScreen("User is not, or no longer, connected.");
+//                        L.error(e.getMessage());
+//                    } catch (XMPPErrorException e) {
+//                        L.error(e.getMessage());
+//                        callback.onResumeScreen("User Name already exists, please enter another one.");
+//                    }
+//
+//                } else {
+//
+//                    L.error("Not connected to openfire server!!!");
+//                    callback.onResumeScreen("Not connected to openfire server!!!");
+//
+//                }
 
             }
         }).start();

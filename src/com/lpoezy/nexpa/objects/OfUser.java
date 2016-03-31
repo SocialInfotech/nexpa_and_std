@@ -106,6 +106,44 @@ public class OfUser {
         return success;
     }
 
+    public boolean createUser(){
+
+        HashMap<String, String> postDataParams = new HashMap<String, String>();
+
+        postDataParams.put("tag", "create_ofuser");
+        postDataParams.put("username", this.username);
+        postDataParams.put("email", this.email);
+        postDataParams.put("password", this.plainPassword);
+
+
+        final String spec = AppConfig.URL_OFUSER;
+        String webPage = HttpUtilz.makeRequest(spec, postDataParams);
+
+        L.debug("createUser: " + webPage);
+        JSONObject result = null;
+
+        try {
+            result = new JSONObject(webPage);
+
+            if(!result.getBoolean("error")){
+//                JSONObject user = result.getJSONObject("user");
+//                this.encryptedPassword = user.getString("encryptedPassword");
+//                this.name = user.getString("name");
+//                this.email = user.getString("email");
+//                if(!user.getString("creationDate").equals("null"))this.creationDate = Long.parseLong(user.getString("creationDate"));
+//                if(!user.getString("modificationDate").equals("null"))this.modificationDate = Long.parseLong(user.getString("modificationDate"));
+
+                return true;
+            }
+
+        } catch (JSONException e) {
+            L.error(e.getMessage());
+        }
+
+        return false;
+
+    }
+
     public boolean downloadOnline()  {
 
         HashMap<String, String> postDataParams = new HashMap<String, String>();

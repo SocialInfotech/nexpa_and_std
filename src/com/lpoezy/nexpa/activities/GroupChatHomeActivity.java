@@ -48,7 +48,7 @@ import org.jivesoftware.smackx.xdata.packet.DataForm;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupChatHomeActivity extends AppCompatActivity {
+public class GroupChatHomeActivity extends AppCompatActivity implements XMPPService.OnServiceConnectedListener {
 
     Button btnStartChat;
     Button btnCancel;
@@ -131,7 +131,7 @@ public class GroupChatHomeActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.listview);
 
-        //animFade =  AnimationUtils.loadAnimation(GroupChatHomeActivity.this, R.anim.anim_fade_in_r);
+        animFade =  AnimationUtils.loadAnimation(GroupChatHomeActivity.this, R.anim.anim_fade_in_r);
 
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -150,56 +150,52 @@ public class GroupChatHomeActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-
-                // Create a pubsub manager using an existing XMPPConnection
-                PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
-
-                LeafNode node = null;
-                try {
-                    node = mgr.getNode("testNode");
-
-                    ConfigureForm configureForm = new ConfigureForm(DataForm.Type.submit);
-                    configureForm.setAccessModel(AccessModel.open);
-                    configureForm.setDeliverPayloads(false);
-                    configureForm.setNotifyRetract(true);
-                    configureForm.setPersistentItems(true);
-                    configureForm.setPublishModel(PublishModel.open);
-
-                    node.sendConfigurationForm(configureForm);
-
-                    // Publish an Item with payload
-//                    node.send(new PayloadItem(null,
-//                            new SimplePayload("book", "pubsub:test:book", "<book xmlns='pubsub:test:book'>text book</book>")));
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-
-                node.addItemEventListener(new ItemEventCoordinator());
-                try {
-                    node.subscribe("kato@198.154.106.139");
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    e.printStackTrace();
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//
+//                // Create a pubsub manager using an existing XMPPConnection
+//                PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
+//
+//                LeafNode node = null;
+//                try {
+//                    node = mgr.getNode("testNode");
+//
+//                    ConfigureForm configureForm = new ConfigureForm(DataForm.Type.submit);
+//                    configureForm.setAccessModel(AccessModel.open);
+//                    configureForm.setDeliverPayloads(false);
+//                    configureForm.setNotifyRetract(true);
+//                    configureForm.setPersistentItems(true);
+//                    configureForm.setPublishModel(PublishModel.open);
+//
+//                    node.sendConfigurationForm(configureForm);
+//
+//                    // Publish an Item with payload
+////                    node.send(new PayloadItem(null,
+////                            new SimplePayload("book", "pubsub:test:book", "<book xmlns='pubsub:test:book'>text book</book>")));
+//                } catch (SmackException.NoResponseException e) {
+//                    L.error(e.getMessage());
+//                } catch (XMPPException.XMPPErrorException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//
+//                node.addItemEventListener(new ItemEventCoordinator());
+//                try {
+//                    node.subscribe("kato@198.154.106.139");
+//                } catch (SmackException.NoResponseException e) {
+//                    L.error(e.getMessage());
+//                } catch (XMPPException.XMPPErrorException e) {
+//                    e.printStackTrace();
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//            }
+//        }).start();
 
     }
 
@@ -222,6 +218,16 @@ public class GroupChatHomeActivity extends AppCompatActivity {
         });
     }
     String locationName = "";
+
+    @Override
+    public void OnServiceConnected(XMPPService service) {
+
+    }
+
+    @Override
+    public void OnServiceDisconnected() {
+
+    }
 
 
     class ItemEventCoordinator  implements ItemEventListener {

@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,12 +27,21 @@ import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Correspondents;
+import com.lpoezy.nexpa.objects.MAMExtensionProvider;
+import com.lpoezy.nexpa.objects.MAMFinExtensionProvider;
+import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
 import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.DividerItemDecoration;
 import com.lpoezy.nexpa.utility.L;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
+
+import org.jivesoftware.smack.AbstractXMPPConnection;
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.provider.ProviderManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -111,11 +121,127 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
         mBuddys = new Correspondents();
 
+        mSwipeRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.niagara, R.color.buttercup, R.color.niagara);
+        mSwipeRefreshLayout.setBackgroundColor(getResources().getColor(R.color.carrara));
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                onSwipeToRefresh();
+
+
+            }
+        });
+
+        onSwipeToRefresh();
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+
         adapter = new ChatHistoryAdapter(getActivity(), mCallback);
         rvChatHistory.setAdapter(adapter);
 
         return v;
     }
+
+    private void onSwipeToRefresh() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                if (!XMPPService.xmpp.connection.isConnected()) {
+                    //XMPPService.xmpp.connect("onCreate");
+
+
+                } else if(!XMPPService.xmpp.connection.isAuthenticated()){
+                    XMPPService.xmpp.login();
+                }else{
+                    retrivedMessageArchive();
+                }
+
+                mSwipeRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 500);
+            }
+        }).start();
+
+    }
+
+    private void retrivedMessageArchive() {
+
+
+        AbstractXMPPConnection connection = XMPPService.xmpp.connection;
+
+
+        MessageArchiveWithIQ mam = new MessageArchiveWithIQ(null);
+        mam.setType(IQ.Type.set);
+        try {
+            connection.sendStanza(mam);
+        } catch (SmackException.NotConnectedException e) {
+            L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
+
+        }
+
+        final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
+
+        ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
+                new MAMExtensionProvider(
+                        new MessageResultElement.OnParseCompleteListener() {
+
+                            @Override
+                            public void onParseComplete(MessageResultElement msg) {
+
+                                //L.debug("msgs: "+msgs.size());
+
+                                msgElements.add(msg);
+                            }
+                        }
+                ));
+
+        ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
+                new MAMFinExtensionProvider(
+                        new MAMFinExtensionProvider.OnParseCompleteListener() {
+
+                            @Override
+                            public void onParseComplete(final int first, final int last, final int count) {
+
+                                if (msgElements != null && !msgElements.isEmpty()) {
+                                    L.debug("ChatHistoryActivity, onParseComplete");
+
+                                    SQLiteHandler db = new SQLiteHandler(getActivity());
+                                    db.openToWrite();
+
+                                    //save messages to offline db
+                                    db.deleteMsgArchive();
+                                    db.saveMsgArchive(msgElements);
+
+                                    db.close();
+                                }
+
+                                updateUI();
+
+                                mSwipeRefreshLayout.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mSwipeRefreshLayout.setRefreshing(false);
+                                    }
+                                }, 500);
+
+                            }
+                        }
+                ));
+
+
+    }
+
 
     // receiving chtMessages will be handle by receivedMessage
     // in ChatMessagesService

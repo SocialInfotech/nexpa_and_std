@@ -10,17 +10,26 @@ import android.widget.TextView;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.activities.ChatHistoryListFragment.OnShowChatHistoryListener;
 import com.lpoezy.nexpa.chatservice.XMPPService;
+import com.lpoezy.nexpa.objects.MAMExtensionProvider;
+import com.lpoezy.nexpa.objects.MAMFinExtensionProvider;
+import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
 import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.L;
 
+import org.jivesoftware.smack.AbstractXMPPConnection;
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.provider.ProviderManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class ChatHistoryActivity extends AppCompatActivity implements OnShowChatHistoryListener, OnRetrieveMessageArchiveListener, XMPPService.OnConnectedToOPenfireListener, XMPPService.OnServiceConnectedListener {
+public class ChatHistoryActivity extends AppCompatActivity implements OnShowChatHistoryListener, OnRetrieveMessageArchiveListener, XMPPManager.OnConnectedToOPenfireListener, XMPPService.OnServiceConnectedListener {
 
     public static boolean isRunning;
 
@@ -77,7 +86,9 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 
 
         if (((TabHostActivity) getParent()).getService()!=null) {
-            ((TabHostActivity) getParent()).getService().removeMAMObserver(this);
+            //((TabHostActivity) getParent()).getService().removeMAMObserver(this);
+            //((TabHostActivity) getParent()).getService().removeOnConnectedToOpenfireObserver(this);
+
         }
 
         super.onPause();
@@ -95,11 +106,73 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
         L.debug("ChatHistoryACtivity, onREsume");
 
         if (((TabHostActivity) getParent()).isBounded()) {
-            ((TabHostActivity) getParent()).getService().addMAMObserver(this);
-            ((TabHostActivity)getParent()).getService().addconnectedToOperfireListener(this);
-            ((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(null);
+            L.debug("ChatHistoryACtivity, isBounded");
+            //((TabHostActivity) getParent()).getService().addMAMObserver(this);
+            //((TabHostActivity)getParent()).getService().addOnConnectedToOpenfireObserver(this);
+            //((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(null);
 
         }
+        
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                AbstractXMPPConnection connection = XMPPService.xmpp.connection;
+//
+//                if(connection.isAuthenticated()) {
+//                    MessageArchiveWithIQ mam = new MessageArchiveWithIQ(null);
+//                    mam.setType(IQ.Type.set);
+//                    try {
+//                        connection.sendStanza(mam);
+//                    } catch (SmackException.NotConnectedException e) {
+//                        L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
+//
+//                    }
+//
+//                    final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
+//
+//                    ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
+//                            new MAMExtensionProvider(
+//                                    new MessageResultElement.OnParseCompleteListener() {
+//
+//                                        @Override
+//                                        public void onParseComplete(MessageResultElement msg) {
+//
+//                                            //L.debug("msgs: "+msgs.size());
+//
+//                                            msgElements.add(msg);
+//                                        }
+//                                    }
+//                            ));
+//
+//                    ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
+//                            new MAMFinExtensionProvider(
+//                                    new MAMFinExtensionProvider.OnParseCompleteListener() {
+//
+//                                        @Override
+//                                        public void onParseComplete(final int first, final int last, final int count) {
+//
+//                                            L.debug("msgs: " + msgElements.size() + ", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
+//                                            //notifyMAMListeners(msgElements, first, last, count);
+//                                            onRetrieveMessageArchive(msgElements, first, last, count);
+//
+//                                            final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
+//                                            frag.updateUI();
+//
+//                                        }
+//                                    }
+//                            ));
+//                }else if(!connection.isConnected()){
+//                    XMPPService.xmpp.connect("onCreate");
+//                }else{
+//                    XMPPService.xmpp.login();
+//                }
+//
+//
+//
+//
+//            }
+//        }).start();
     }
 
     @Override
@@ -115,52 +188,32 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
     @Override
     public void onRetrieveMessageArchive(List<MessageResultElement> msgs, int first, int last, int count) {
 
-        if (msgs != null && !msgs.isEmpty()) {
-            L.debug("ChatHistoryActivity, onParseComplete");
-
-            SQLiteHandler db = new SQLiteHandler(ChatHistoryActivity.this);
-            db.openToWrite();
-
-            //save messages to offline db
-            db.deleteMsgArchive();
-            db.saveMsgArchive(msgs);
-
-            db.close();
-        }
-
-        final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
-        frag.updateUI();
-
     }
 
     @Override
     public void onConnectedToOpenfire(XMPPConnection connection) {
 
-        L.debug("ChatHistory, onConnectedToOpenfire");
-        final ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
-
-        if(frag.getmLatestMsgs().isEmpty() && mBounded){
-
-            ((TabHostActivity) getParent()).getService().retrieveListOfCollectionsFrmMsgArchive(null);
-
-        }
-
     }
+
+
     private XMPPService mService;
     private boolean mBounded;
     @Override
     public void OnServiceConnected(XMPPService service) {
+
         mService = service;
         mBounded = true;
-        service.addMAMObserver(this);
-        service.addconnectedToOperfireListener(this);
-        service.retrieveListOfCollectionsFrmMsgArchive(null);
+        mService.addMAMObserver(this);
+        mService.addOnConnectedToOpenfireObserver(ChatHistoryActivity.this);
 
     }
 
     @Override
     public void OnServiceDisconnected() {
+
         mService = null;
         mBounded = false;
+
+
     }
 }

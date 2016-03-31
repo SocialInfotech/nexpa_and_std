@@ -49,6 +49,7 @@ import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Geolocation;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.objects.Users;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
@@ -76,7 +77,7 @@ public class AroundMeActivity extends AppCompatActivity
         implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener,
-        XMPPService.OnConnectedToOPenfireListener {
+        XMPPManager.OnConnectedToOPenfireListener, XMPPService.OnServiceConnectedListener {
     private static final String TAG = AroundMeActivity.class.getSimpleName();
     private static final String REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY";
     private static final String LOCATION_KEY = "LOCATION_KEY";
@@ -184,8 +185,6 @@ public class AroundMeActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.action_distance:
-
-
 
 
                 dialogPref = new Dialog(AroundMeActivity.this);
@@ -338,8 +337,6 @@ public class AroundMeActivity extends AppCompatActivity
         }
 
         db.close();
-
-
 
     }
 
@@ -512,7 +509,7 @@ public class AroundMeActivity extends AppCompatActivity
 
             L.debug("last loc latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             L.debug("last loc long: " + String.valueOf(mCurrentLocation.getLongitude()));
-            if(nearbyUsers.isEmpty()) {
+            if (nearbyUsers.isEmpty()) {
                 downloadNearbyUsersOnline();
             }
 
@@ -542,7 +539,7 @@ public class AroundMeActivity extends AppCompatActivity
 
     @Override
     public void onConnectionSuspended(int i) {
-        L.makeText(this, "onConnectionSuspended",AppMsg.STYLE_ALERT);
+        L.makeText(this, "onConnectionSuspended", AppMsg.STYLE_ALERT);
     }
 
     @Override
@@ -707,7 +704,7 @@ public class AroundMeActivity extends AppCompatActivity
     }
 
     private void updateGrid() {
-
+        L.debug("updateGrid");
 
         // us = null;
         //us = new ArrayList<Geolocation>();
@@ -743,6 +740,10 @@ public class AroundMeActivity extends AppCompatActivity
         Animation in = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_in_r);
         Animation out = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_out_r);
         arr_correspondents.clear();
+
+
+        final Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
+
         for (int j = 0; j < nearbyUsers.size(); j++) {
 
             final String name = nearbyUsers.get(j).getUsername();
@@ -753,44 +754,53 @@ public class AroundMeActivity extends AppCompatActivity
             arr_correspondents.add(j, correspondent);
 
 
-            if(!XMPPService.xmpp.connected){
-
-                ((TabHostActivity) getParent()).getService().xmpp.connect("onCreate");
-
-            }else if(!XMPPService.xmpp.loggedin){
-                ((TabHostActivity) getParent()).getService().xmpp.login();
-            }else{
-
-                Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
-                String address = name + "@198.154.106.139/Smack";
-                updateUserAvailability(address, roster);
+            String address = name + "@198.154.106.139/Smack";
+            updateUserAvailability(address, roster);
 
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
-                        final UserProfile uProfile = new UserProfile();
-                        uProfile.setUsername(name);
+                    final UserProfile uProfile = new UserProfile();
+                    uProfile.setUsername(name);
 
-                        uProfile.loadVCard(XMPPService.xmpp.connection);
+                    uProfile.loadVCard(XMPPService.xmpp.connection);
 
-                        L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+                    L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
 
-                        updateUserAvatar(name, uProfile.getAvatarImg());
+                    updateUserAvatar(name, uProfile.getAvatarImg());
 
 
-
-                    }
-                }).start();
-
-            }
+                }
+            }).start();
 
 
             imageId.add(j, R.drawable.pic_sample_girl);
             availabilty.add(j, "ADDED");
             web.add(j, name);
         }
+
+        roster.addRosterListener(new RosterListener() {
+            // Ignored events public void entriesAdded(Collection<String> addresses) {}
+            public void entriesDeleted(Collection<String> addresses) {
+            }
+
+            @Override
+            public void entriesAdded(Collection<String> collection) {
+
+            }
+
+            public void entriesUpdated(Collection<String> addresses) {
+            }
+
+            public void presenceChanged(Presence presence) {
+                //L.debug("Presence changed: " + presence.getFrom() + " " + presence);
+                L.debug("Presence changed: " + presence.getFrom());
+                updateUserAvailability(presence.getFrom(), roster);
+
+            }
+        });
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -904,8 +914,6 @@ public class AroundMeActivity extends AppCompatActivity
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-
-
                 adapter.notifyDataSetChanged();
             }
         });
@@ -916,79 +924,56 @@ public class AroundMeActivity extends AppCompatActivity
     @Override
     public void onConnectedToOpenfire(final XMPPConnection connection) {
 
-        L.debug("AroundMe, onConnectedToOpenfire");
-
-       final Roster roster = Roster.getInstanceFor(connection);
-        if (!nearbyUsers.isEmpty()) {
-
-            for (final Geolocation nearByUser : nearbyUsers) {
-
-                final String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
-
-                Presence subscribe = new Presence(Presence.Type.subscribe);
-                subscribe.setTo(address);
-                try {
-                    connection.sendPacket(subscribe);
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-                try {
-                    roster.createEntry(address, null, null);
-                    updateUserAvailability(address, roster);
-                } catch (XMPPException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotLoggedInException e) {
-                    L.error(address + ", " + e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                }
-
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        final UserProfile uProfile = new UserProfile();
-                        uProfile.setUsername(nearByUser.getUsername());
-
-                        uProfile.loadVCard(connection);
-
-                        //L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
-
-                        updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
-
-                    }
-                }).start();
-
-            }
-
-        }
+//        if (((TabHostActivity) getParent()).getTabHost().getCurrentTab() != 0) return;
+//
+//        final Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
+//        if (!nearbyUsers.isEmpty()) {
+//
+//            for (final Geolocation nearByUser : nearbyUsers) {
+//
+//                final String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
+//
+//                Presence subscribe = new Presence(Presence.Type.subscribe);
+//                subscribe.setTo(address);
+//                try {
+//                    connection.sendPacket(subscribe);
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                }
+//
+//                try {
+//                    roster.createEntry(address, null, null);
+//                    updateUserAvailability(address, roster);
+//                } catch (XMPPException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NotLoggedInException e) {
+//                    L.error(address + ", " + e.getMessage());
+//                } catch (SmackException.NotConnectedException e) {
+//                    L.error(e.getMessage());
+//                } catch (SmackException.NoResponseException e) {
+//                    L.error(e.getMessage());
+//                }
 //
 //
-        roster.addRosterListener(new RosterListener() {
-            // Ignored events public void entriesAdded(Collection<String> addresses) {}
-            public void entriesDeleted(Collection<String> addresses) {
-            }
-
-            @Override
-            public void entriesAdded(Collection<String> collection) {
-
-            }
-
-            public void entriesUpdated(Collection<String> addresses) {
-            }
-
-            public void presenceChanged(Presence presence) {
-                //L.debug("Presence changed: " + presence.getFrom() + " " + presence);
-                L.debug("Presence changed: " + presence.getFrom());
-                updateUserAvailability(presence.getFrom(), roster);
-
-            }
-        });
-
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        final UserProfile uProfile = new UserProfile();
+//                        uProfile.setUsername(nearByUser.getUsername());
+//
+//                        uProfile.loadVCard(XMPPService.xmpp.connection);
+//
+//                        //L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+//
+//                        updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
+//
+//                    }
+//                }).start();
+//
+//            }
+//
+//        }
 
 
     }
@@ -1003,5 +988,23 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
+    private XMPPService mService;
+    private boolean mBounded;
 
+    @Override
+    public void OnServiceConnected(XMPPService service) {
+        mService = service;
+        mBounded = true;
+
+        mService.addOnConnectedToOpenfireObserver(AroundMeActivity.this);
+
+    }
+
+    @Override
+    public void OnServiceDisconnected() {
+        mService = null;
+        mBounded = false;
+
+        mService.removeOnConnectedToOpenfireObserver(AroundMeActivity.this);
+    }
 }

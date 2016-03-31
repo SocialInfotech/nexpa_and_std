@@ -4,8 +4,6 @@
       <root url="jar://$PROJECT_DIR$/libs/smack-resolver-minidns-4.1.5.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.igniterealtime.smack/smack-resolver-minidns/4.1.5/114dea8d8bb811c0c80712d2ced93c1a2ea963/smack-resolver-minidns-4.1.5-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

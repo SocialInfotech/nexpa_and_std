@@ -52,7 +52,7 @@ public class XMPPManager {
 
     public static boolean connected = false;
     private final XMPPService.OnProcessMessage processMessageCallback;
-    private final XMPPService.OnConnectedToOPenfireListener connectedToOperfire;
+
     public boolean loggedin = false;
     public static boolean isconnecting = false;
     public static boolean isToasted = true;
@@ -67,22 +67,21 @@ public class XMPPManager {
     public static boolean instanceCreated = false;
 
     public XMPPManager(XMPPService context, String serverAdress,
-                       String logiUser, String passwordser, XMPPService.OnProcessMessage processMessageCallback, XMPPService.OnConnectedToOPenfireListener connectedToOperfire) {
+                       String logiUser, String passwordser, XMPPService.OnProcessMessage processMessageCallback) {
         this.serverAddress = serverAdress;
         this.loginUser = logiUser;
         this.passwordUser = passwordser;
         this.context = context;
         this.processMessageCallback = processMessageCallback;
-        this.connectedToOperfire = connectedToOperfire;
         init();
 
     }
 
     public static XMPPManager getInstance(XMPPService context, String server,
-                                          String user, String pass, XMPPService.OnProcessMessage processMessageCallback, XMPPService.OnConnectedToOPenfireListener connectedToOperfire) {
+                                          String user, String pass, XMPPService.OnProcessMessage processMessageCallback) {
 
         if (instance == null) {
-            instance = new XMPPManager(context, server, user, pass, processMessageCallback, connectedToOperfire);
+            instance = new XMPPManager(context, server, user, pass, processMessageCallback);
             instanceCreated = true;
         }
         return instance;
@@ -128,8 +127,9 @@ public class XMPPManager {
 
         connection = new XMPPTCPConnection(config.build());
         ReconnectionManager connManager = ReconnectionManager.getInstanceFor(connection);
-        connManager.enableAutomaticReconnection();
-        //connManager.setFixedDelay(10);
+//        connManager.enableAutomaticReconnection();
+//        connManager.setFixedDelay(10);
+//        connManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.FIXED_DELAY);
         //connManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
         //L.debug("isAutomaticReconnectEnabled: " + ReconnectionManager.getInstanceFor(connection).isAutomaticReconnectEnabled());
 
@@ -159,6 +159,8 @@ public class XMPPManager {
         AsyncTask<Void, Void, Boolean> connectionThread = new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected synchronized Boolean doInBackground(Void... arg0) {
+
+
                 if (connection.isConnected())
                     return false;
                 isconnecting = true;
@@ -191,6 +193,7 @@ public class XMPPManager {
                         }
                     });
                     connected = true;
+                    login();
 
                 } catch (IOException e) {
                     if (isToasted)
@@ -241,6 +244,8 @@ public class XMPPManager {
                             "XMPPException: " + e.getMessage());
 
                 }
+
+
                 return isconnecting = false;
             }
         };
@@ -280,7 +285,7 @@ public class XMPPManager {
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
         } catch (XMPPException | SmackException | IOException e) {
-            L.error("xxx: connection.isConnected? "+connection.isConnected()+", " + e.getMessage());
+            L.error("xxx: connection.isConnected? " + connection.isConnected() + ", " + e.getMessage());
         } catch (Exception e) {
             L.error("yyy: " + e.getMessage());
         }
@@ -288,24 +293,47 @@ public class XMPPManager {
 
     }
 
-    public void notifyMAMObservers(List<MessageResultElement> msgs, int first, int last, int count) {
-        for (OnRetrieveMessageArchiveListener ob : mObservers) {
-           // L.debug("notifyMAMObservers...");
+    public void notifyConnectedToOPenfireListeners(XMPPConnection connection) {
+        for (OnConnectedToOPenfireListener ob : mOnConnectedToOPenfireListeners) {
+            L.debug("notifyConnectedToOPenfireListeners...");
+            ob.onConnectedToOpenfire(connection);
+
+        }
+    }
+
+    public interface OnConnectedToOPenfireListener {
+        public void onConnectedToOpenfire(XMPPConnection connection);
+    }
+
+    private List<OnConnectedToOPenfireListener> mOnConnectedToOPenfireListeners = new ArrayList<OnConnectedToOPenfireListener>();
+
+    public void removeConnectedToOPenfireListeners(OnConnectedToOPenfireListener observer) {
+        mOnConnectedToOPenfireListeners.remove(observer);
+    }
+
+    public void addConnectedToOPenfireListeners(OnConnectedToOPenfireListener observer) {
+
+        mOnConnectedToOPenfireListeners.add(observer);
+    }
+
+    public void notifyMAMListeners(List<MessageResultElement> msgs, int first, int last, int count) {
+        for (OnRetrieveMessageArchiveListener ob : mOnRetrievedMAMListeners) {
+            // L.debug("notifyMAMListeners...");
             ob.onRetrieveMessageArchive(msgs, first, last, count);
 
         }
     }
 
 
-    private List<OnRetrieveMessageArchiveListener> mObservers = new ArrayList<OnRetrieveMessageArchiveListener>();
+    private List<OnRetrieveMessageArchiveListener> mOnRetrievedMAMListeners = new ArrayList<OnRetrieveMessageArchiveListener>();
 
-    public void removeMAMObserver(OnRetrieveMessageArchiveListener observer) {
-        mObservers.remove(observer);
+    public void removeMAMListeners(OnRetrieveMessageArchiveListener observer) {
+        mOnRetrievedMAMListeners.remove(observer);
     }
 
-    public void addMAMObserver(OnRetrieveMessageArchiveListener observer) {
+    public void addMAMListeners(OnRetrieveMessageArchiveListener observer) {
 
-        mObservers.add(observer);
+        mOnRetrievedMAMListeners.add(observer);
     }
 
 
@@ -323,61 +351,49 @@ public class XMPPManager {
     }
 
     public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
+        L.debug("retrieveListOfCollectionsFrmMsgArchive");
 
-        if (connection.isAuthenticated()) {
-            L.debug("==========retrieveListOfCollectionsFrmMsgArchive========================");
-
-
-
+        if(connection.isAuthenticated()) {
             MessageArchiveWithIQ mam = new MessageArchiveWithIQ(with);
             mam.setType(IQ.Type.set);
-
             try {
-
                 connection.sendStanza(mam);
-
-                final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
-
-                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
-                        new MAMExtensionProvider(
-                        new MessageResultElement.OnParseCompleteListener() {
-
-                            @Override
-                            public void onParseComplete(MessageResultElement msg) {
-
-                                //L.debug("msgs: "+msgs.size()+", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
-
-                                msgElements.add(msg);
-                            }
-                        }
-                        ));
-
-                ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
-                        new MAMFinExtensionProvider(
-                                new MAMFinExtensionProvider.OnParseCompleteListener() {
-
-                                    @Override
-                                    public void onParseComplete(final int first, final int last, final int count) {
-
-                                        //L.debug("msgs: "+msgElements.size()+", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
-                                        notifyMAMObservers(msgElements, first, last, count);
-
-                                    }
-                                }
-                        ));
-
-
-
-
             } catch (NotConnectedException e) {
                 L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
 
             }
 
-        } else {
+            final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
 
+            ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
+                    new MAMExtensionProvider(
+                            new MessageResultElement.OnParseCompleteListener() {
+
+                                @Override
+                                public void onParseComplete(MessageResultElement msg) {
+
+                                    //L.debug("msgs: "+msgs.size());
+
+                                    msgElements.add(msg);
+                                }
+                            }
+                    ));
+
+            ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
+                    new MAMFinExtensionProvider(
+                            new MAMFinExtensionProvider.OnParseCompleteListener() {
+
+                                @Override
+                                public void onParseComplete(final int first, final int last, final int count) {
+
+                                    L.debug("msgs: " + msgElements.size() + ", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
+                                    notifyMAMListeners(msgElements, first, last, count);
+
+                                }
+                            }
+                    ));
+        }else{
             login();
-
         }
 
 
@@ -406,7 +422,7 @@ public class XMPPManager {
 
             } else {
 
-                 login();
+                login();
             }
         } catch (NotConnectedException e) {
             L.error("xmpp.SendMessage(), msg Not sent!-Not Connected!");
@@ -420,17 +436,18 @@ public class XMPPManager {
 
     public class XMPPConnectionListener implements ConnectionListener {
         @Override
-        public void connected(final XMPPConnection connection) {
+        public void connected(final XMPPConnection conn) {
 
-
+            L.debug("isConnected");
             connected = true;
+            connection = (AbstractXMPPConnection) conn;
 
-            if (!connection.isAuthenticated()) {
+//            if (!connection.isAuthenticated()) {
+//
+//                login();
+//            }
 
-                login();
-            }
 
-            connectedToOperfire.onConnectedToOpenfire(connection);
         }
 
         @Override
@@ -505,9 +522,7 @@ public class XMPPManager {
             loggedin = false;
 
 
-
         }
-
 
 
         @Override
@@ -535,7 +550,7 @@ public class XMPPManager {
         }
 
         @Override
-        public void authenticated(XMPPConnection arg0, boolean arg1) {
+        public void authenticated(XMPPConnection arg, boolean arg1) {
 
             L.debug("xmpp, Authenticated!");
             loggedin = true;
@@ -570,9 +585,10 @@ public class XMPPManager {
 
                     }
                 });
+
+            notifyConnectedToOPenfireListeners(connection);
         }
     }
-
 
 
     private class MMessageListener implements ChatMessageListener {
@@ -584,7 +600,7 @@ public class XMPPManager {
         public void processMessage(final org.jivesoftware.smack.chat.Chat chat,
                                    final Message message) {
             L.debug("MyXMPP_MESSAGE_LISTENER, Xmpp message received: '"
-                    + message.getType()+", "+message.getBody());
+                    + message.getType() + ", " + message.getBody());
 
             if (message.getType() == Message.Type.chat
                     && message.getBody() != null) {

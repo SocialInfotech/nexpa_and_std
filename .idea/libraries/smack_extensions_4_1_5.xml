@@ -4,8 +4,6 @@
       <root url="jar://$PROJECT_DIR$/libs/smack-extensions-4.1.5.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.igniterealtime.smack/smack-extensions/4.1.5/c4eb0808d08540c961d57f57af0678fe53ffe43a/smack-extensions-4.1.5-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

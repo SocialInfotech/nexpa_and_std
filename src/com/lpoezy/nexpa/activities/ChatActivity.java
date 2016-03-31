@@ -40,9 +40,11 @@ import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.Messages;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.L;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.jivesoftware.smack.XMPPConnection;
 
@@ -50,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ChatActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener, XMPPService.OnProcessMessage, OnRetrieveMessageArchiveListener, XMPPService.OnConnectedToOPenfireListener {
+public class ChatActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener, XMPPService.OnProcessMessage, OnRetrieveMessageArchiveListener, XMPPManager.OnConnectedToOPenfireListener {
     private com.lpoezy.nexpa.chatservice.ChatAdapterActivity adapter;
 
     public boolean isMine;
@@ -225,6 +227,30 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             }
         });
 
+
+        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.niagara, R.color.buttercup, R.color.niagara);
+        mSwipeRefreshLayout.setBackgroundColor(getResources().getColor(R.color.carrara));
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+
+                if(mBounded){
+                    retriveChatMessages();
+
+                }
+            }
+        });
+
+
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+
     }
 
     @Override
@@ -253,11 +279,21 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             mService.addMessageListener(ChatActivity.this);
 
             retriveChatMessages();
-            mService.addconnectedToOperfireListener(ChatActivity.this);
+            mService.addOnConnectedToOpenfireObserver(ChatActivity.this);
             mService.addMAMObserver(ChatActivity.this);
 
         }
     };
+
+    private void dissmissSwipeToRefresh(){
+
+        mSwipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 500);
+    }
 
     private void retriveChatMessages() {
 
@@ -267,9 +303,18 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             mCorrespondentName = with.split("@")[0];
         }
 
-
         final String newWith = mCorrespondentName + "@198.154.106.139";
-        mService.retrieveListOfCollectionsFrmMsgArchive(newWith);
+
+        if (!mService.xmpp.connection.isConnected()) {
+            dissmissSwipeToRefresh();
+            mService.xmpp.connect("onCreate");
+        } else if (!mService.xmpp.connection.isAuthenticated()) {
+            mService.xmpp.login();
+            dissmissSwipeToRefresh();
+        } else {
+            mService.retrieveListOfCollectionsFrmMsgArchive(newWith);
+        }
+
     }
 
     @Override
@@ -301,29 +346,11 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
         if (mService != null) {
 
             mService.removeMAMObserver(ChatActivity.this);
-
+            mService.removeOnConnectedToOpenfireObserver(ChatActivity.this);
             unbindService(mServiceConn);
         }
 
-        // saveVCard chtMessages here,
-        // and clear all the conversation array
-        // L.debug("ChatActivity, saving msgs... ");
-
-        // mCorrespondent.saveOffline(ChatActivity.this, true);
-        // mCorrespondent.saveVCard(ChatActivity.this, true);
-
         if (isFinishing()) {
-
-//			new Thread(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					// TODO Auto-generated method stub
-//					
-//					mCorrespondent.saveOnline(ChatActivity.this, true);
-//					
-//				}
-//			}).start();
 
 
             // will make sure that the othe activities/fragments,
@@ -346,6 +373,9 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
                 //mComments.add(comment);
                 mAdapter.notifyDataSetChanged();
                 listview.smoothScrollToPosition(mChatMsgs.size() - 1);
+
+
+
             }
         });
     }
@@ -355,6 +385,16 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
     @Override
     public void onRetrieveMessageArchive(List<MessageResultElement> msgs, int first, int last, int count) {
+
+
+        mSwipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 500);
+
+
 
         if (XMPPService.xmpp.loggedin) {
 
@@ -445,11 +485,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
     @Override
     public void onConnectedToOpenfire(XMPPConnection connection) {
 
-        if(mChatMsgs.isEmpty() && mBounded){
 
-            retriveChatMessages();
-
-        }
 
     }
 

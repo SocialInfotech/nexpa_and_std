@@ -18,7 +18,6 @@ import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
-import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.NewMessage;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.openfire.XMPPManager;
@@ -106,28 +105,28 @@ public class XMPPService extends Service {
 
     }
 
-    private List<OnConnectedToOPenfireListener> connectedToOperfireListeners = new ArrayList<OnConnectedToOPenfireListener>();
-
-    public void addconnectedToOperfireListener(OnConnectedToOPenfireListener observer) {
-
-        connectedToOperfireListeners.add(observer);
-    }
-
-    private OnConnectedToOPenfireListener connectedToOperfire = new OnConnectedToOPenfireListener() {
-        @Override
-        public void onConnectedToOpenfire(XMPPConnection connection) {
-            L.debug("XMPPService, onConnectedToOpenfire");
-            Iterator<OnConnectedToOPenfireListener> iter = connectedToOperfireListeners.iterator();
-
-            while(iter.hasNext()){
-
-                OnConnectedToOPenfireListener observer = iter.next();
-                observer.onConnectedToOpenfire(connection);
-            }
-
-
-        }
-    };
+//    private List<OnConnectedToOPenfireListener> connectedToOperfireListeners = new ArrayList<OnConnectedToOPenfireListener>();
+//
+//    public void addconnectedToOperfireListener(OnConnectedToOPenfireListener observer) {
+//
+//        connectedToOperfireListeners.add(observer);
+//    }
+//
+//    private OnConnectedToOPenfireListener connectedToOperfire = new OnConnectedToOPenfireListener() {
+//        @Override
+//        public void onConnectedToOpenfire(XMPPConnection connection) {
+//            L.debug("XMPPService, onConnectedToOpenfire");
+//            Iterator<OnConnectedToOPenfireListener> iter = connectedToOperfireListeners.iterator();
+//
+//            while(iter.hasNext()){
+//
+//                OnConnectedToOPenfireListener observer = iter.next();
+//                observer.onConnectedToOpenfire(connection);
+//            }
+//
+//
+//        }
+//    };
 
 
     private List<OnProcessMessage> chatMessagesListeners = new ArrayList<OnProcessMessage>();
@@ -180,7 +179,7 @@ public class XMPPService extends Service {
         uname = db.getUsername();
         password = db.getPlainPassword();
         xmpp = XMPPManager.getInstance(XMPPService.this, DOMAIN, uname,
-                password, processMessageCallback, connectedToOperfire);
+                password, processMessageCallback);
         xmpp.connect("onCreate");
 
         db.close();
@@ -230,7 +229,6 @@ public class XMPPService extends Service {
     }
 
 
-
     public static boolean isNetworkConnected() {
         return cm.getActiveNetworkInfo() != null;
     }
@@ -239,12 +237,22 @@ public class XMPPService extends Service {
         return isRunning;
     }
 
-    public void removeMAMObserver(OnRetrieveMessageArchiveListener observer){
-        xmpp.removeMAMObserver(observer);
+
+    public void removeOnConnectedToOpenfireObserver(XMPPManager.OnConnectedToOPenfireListener observer) {
+        xmpp.removeConnectedToOPenfireListeners(observer);
     }
 
-    public void addMAMObserver(OnRetrieveMessageArchiveListener observer){
-        xmpp.addMAMObserver(observer);
+    public void addOnConnectedToOpenfireObserver(XMPPManager.OnConnectedToOPenfireListener observer) {
+        xmpp.addConnectedToOPenfireListeners(observer);
+    }
+
+
+    public void removeMAMObserver(OnRetrieveMessageArchiveListener observer) {
+        xmpp.removeMAMListeners(observer);
+    }
+
+    public void addMAMObserver(OnRetrieveMessageArchiveListener observer) {
+        xmpp.addMAMListeners(observer);
     }
 
     public void resetPassword(final String email,
@@ -332,10 +340,14 @@ public class XMPPService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
+
                 xmpp.retrieveListOfCollectionsFrmMsgArchive(with);
+
+
+
             }
         }).start();
-
 
 
     }
@@ -444,13 +456,11 @@ public class XMPPService extends Service {
         public void onProcessMessage(ChatMessage chatMessage);
     }
 
-    public interface OnConnectedToOPenfireListener {
-        public void onConnectedToOpenfire(XMPPConnection connection);
-    }
-
     public interface OnServiceConnectedListener {
         public void OnServiceConnected(XMPPService service);
+
         public void OnServiceDisconnected();
     }
+
 
 }

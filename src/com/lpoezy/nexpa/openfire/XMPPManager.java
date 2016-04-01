@@ -193,7 +193,7 @@ public class XMPPManager {
                         }
                     });
                     connected = true;
-                    login();
+
 
                 } catch (IOException e) {
                     if (isToasted)
@@ -442,10 +442,10 @@ public class XMPPManager {
             connected = true;
             connection = (AbstractXMPPConnection) conn;
 
-//            if (!connection.isAuthenticated()) {
-//
-//                login();
-//            }
+            if (!connection.isAuthenticated()) {
+
+                login();
+            }
 
 
         }
@@ -600,10 +600,9 @@ public class XMPPManager {
         public void processMessage(final org.jivesoftware.smack.chat.Chat chat,
                                    final Message message) {
 
-            if(message.getType().equals("normal"))return;
 
-            L.debug("MyXMPP_MESSAGE_LISTENER, Xmpp message received: '"
-                    + message.getBody());
+
+            L.debug("MyXMPP_MESSAGE_LISTENER, Xmpp message received: '" + message.getBody());
 
             if (message.getType() == Message.Type.chat
                     && message.getBody() != null) {

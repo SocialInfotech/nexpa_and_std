@@ -599,8 +599,11 @@ public class XMPPManager {
         @Override
         public void processMessage(final org.jivesoftware.smack.chat.Chat chat,
                                    final Message message) {
+
+            if(message.getType().equals("normal"))return;
+
             L.debug("MyXMPP_MESSAGE_LISTENER, Xmpp message received: '"
-                    + message.getType() + ", " + message.getBody());
+                    + message.getBody());
 
             if (message.getType() == Message.Type.chat
                     && message.getBody() != null) {

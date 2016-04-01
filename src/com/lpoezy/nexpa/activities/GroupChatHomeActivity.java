@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -104,6 +105,58 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     @Override
     protected void onResume() {
         super.onResume();
+//*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+                db.openToRead();
+                // Create a pubsub manager using an existing XMPPConnection
+                PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
+
+                LeafNode node = null;
+                try {
+
+                    //node = mgr.getNode(db.getUsername()+"-broadcast");
+
+                    ConfigureForm form = new ConfigureForm(DataForm.Type.form.submit);
+                    form.setAccessModel(AccessModel.open);
+                    form.setDeliverPayloads(false);
+                    form.setNotifyRetract(true);
+                    form.setPersistentItems(true);
+                    form.setPublishModel(PublishModel.open);
+
+                    node = (LeafNode) mgr.createNode(db.getUsername() + "-broadcast", form);
+
+                } catch (SmackException.NoResponseException e) {
+                    L.error(e.getMessage());
+                } catch (XMPPException.XMPPErrorException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                }
+
+                try {
+                    node = mgr.getNode(db.getUsername() + "-broadcast");
+
+                    node.addItemEventListener(new ItemEventCoordinator());
+
+                    node.subscribe(db.getUsername() + "@198.154.106.139");
+                } catch (SmackException.NoResponseException e) {
+                    L.error(e.getMessage());
+                } catch (XMPPException.XMPPErrorException e) {
+                    L.error(e.getMessage());
+                } catch (SmackException.NotConnectedException e) {
+                    L.error(e.getMessage());
+                }
+
+
+                db.close();
+            }
+        }).start();
+//*/
+
 
     }
 
@@ -128,10 +181,9 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         txtConnection = (TextView) findViewById(R.id.txt_broad_stat);
 
 
-
         mListView = (ListView) findViewById(R.id.listview);
 
-        animFade =  AnimationUtils.loadAnimation(GroupChatHomeActivity.this, R.anim.anim_fade_in_r);
+        animFade = AnimationUtils.loadAnimation(GroupChatHomeActivity.this, R.anim.anim_fade_in_r);
 
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -140,62 +192,14 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         dialogBroadcast.getWindow().setAttributes(lp);
 
-        lnBroadcastMini.setOnClickListener(new View.OnClickListener() {@Override
-                                                                       public void onClick(View arg0) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInputFromWindow(lnBroadcast.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
-            openBroadcastDialog();
-        }
+        lnBroadcastMini.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInputFromWindow(lnBroadcast.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+                openBroadcastDialog();
+            }
         });
-
-
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//
-//                // Create a pubsub manager using an existing XMPPConnection
-//                PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
-//
-//                LeafNode node = null;
-//                try {
-//                    node = mgr.getNode("testNode");
-//
-//                    ConfigureForm configureForm = new ConfigureForm(DataForm.Type.submit);
-//                    configureForm.setAccessModel(AccessModel.open);
-//                    configureForm.setDeliverPayloads(false);
-//                    configureForm.setNotifyRetract(true);
-//                    configureForm.setPersistentItems(true);
-//                    configureForm.setPublishModel(PublishModel.open);
-//
-//                    node.sendConfigurationForm(configureForm);
-//
-//                    // Publish an Item with payload
-////                    node.send(new PayloadItem(null,
-////                            new SimplePayload("book", "pubsub:test:book", "<book xmlns='pubsub:test:book'>text book</book>")));
-//                } catch (SmackException.NoResponseException e) {
-//                    L.error(e.getMessage());
-//                } catch (XMPPException.XMPPErrorException e) {
-//                    L.error(e.getMessage());
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(e.getMessage());
-//                }
-//
-//
-//                node.addItemEventListener(new ItemEventCoordinator());
-//                try {
-//                    node.subscribe("kato@198.154.106.139");
-//                } catch (SmackException.NoResponseException e) {
-//                    L.error(e.getMessage());
-//                } catch (XMPPException.XMPPErrorException e) {
-//                    e.printStackTrace();
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(e.getMessage());
-//                }
-//
-//            }
-//        }).start();
 
     }
 
@@ -204,7 +208,29 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         dialogBroadcast.show();
         btnStartChat = (Button) dialogBroadcast.findViewById(R.id.btnStartLocChat);
         btnStartChat.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(final View view) {
+                final String msgToBroadcast = edBroad.getText().toString();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean msgSent = broadcastMessage(msgToBroadcast);
+
+                        if (msgSent) {
+
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                                    dialogBroadcast.dismiss();
+
+                                }
+                            });
+                        }
+                    }
+                }).start();
 
 
             }
@@ -217,6 +243,42 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             }
         });
     }
+
+    private boolean broadcastMessage(String msgToBroadcast) {
+        SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+        db.openToRead();
+        PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
+
+        LeafNode node = null;
+        try {
+            node = mgr.getNode(db.getUsername() + "-broadcast");
+
+//            ConfigureForm configureForm = new ConfigureForm(DataForm.Type.submit);
+//            configureForm.setAccessModel(AccessModel.open);
+//            configureForm.setDeliverPayloads(false);
+//            configureForm.setNotifyRetract(true);
+//            configureForm.setPersistentItems(true);
+//            configureForm.setPublishModel(PublishModel.open);
+//
+//            node.sendConfigurationForm(configureForm);
+
+            // Publish an Item with payload
+            node.send(new PayloadItem(null,
+                    new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<broadcast xmlns='pubsub:nexpa:broadcast'>" + msgToBroadcast + "</broadcast>")));
+
+            return true;
+
+        } catch (SmackException.NoResponseException e) {
+            L.error(e.getMessage());
+        } catch (XMPPException.XMPPErrorException e) {
+            L.error(e.getMessage());
+        } catch (SmackException.NotConnectedException e) {
+            L.error(e.getMessage());
+        }
+        db.close();
+        return false;
+    }
+
     String locationName = "";
 
     @Override
@@ -230,12 +292,11 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     }
 
 
-    class ItemEventCoordinator  implements ItemEventListener {
+    class ItemEventCoordinator implements ItemEventListener {
 
         @Override
         public void handlePublishedItems(ItemPublishEvent items) {
             L.debug("Item count: " + items);
-
 
 
         }

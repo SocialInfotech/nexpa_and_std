@@ -1,163 +1,7 @@
 [
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_popup_exit.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_out_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_shake.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_shake.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_out_r.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_fade_out_r.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_slow_b.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_scroll_slow_b.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\down_from_top.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\down_from_top.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_in_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_slow_b.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_scroll_slow_b.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_popup_exit.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\up_from_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\up_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_appear.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_appear.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_appear.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_appear.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_slow.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_scroll_slow.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_fade_in.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_in.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_fade_in.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_in_repeating.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_fade_in_repeating.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_in_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_popup_enter.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_popup_exit.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\down_from_top.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\down_from_top.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_in_r.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_fade_in_r.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_fade_out.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_in_top.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_b.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_scroll_b.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_in_repeating.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_fade_in_repeating.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_in_top.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_popup_enter.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_scroll.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_b.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_scroll_b.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\up_from_bottom.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\up_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_leave.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_leave.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_in_repeating.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_fade_in_repeating.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_enter.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_enter.xml"
-    },
-    {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_out_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_slow.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_scroll_slow.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
@@ -172,8 +16,8 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_fade_out.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_slow_b.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_scroll_slow_b.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_out_r.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_fade_out_r.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
@@ -188,44 +32,28 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_fade_in.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_popup_enter.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_in_bottom.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_fade_in.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_slow_b.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_scroll_slow_b.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_out_top.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\up_from_bottom.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\up_from_bottom.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_in_r.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_fade_in_r.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_slow.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_scroll_slow.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_b.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_scroll_b.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_shake.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_shake.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_out_top.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_in.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_fade_in.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_leave.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_leave.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_enter.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_enter.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_in_repeating.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_fade_in_repeating.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll.xml",
@@ -236,16 +64,8 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_appear.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_in_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_out_r.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_fade_out_r.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_slow.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_scroll_slow.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_popup_exit.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
@@ -256,47 +76,27 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_leave.xml"
     },
     {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\down_from_top.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\down_from_top.xml"
+    },
+    {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_enter.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_enter.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\down_from_top.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\down_from_top.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_slide_out_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\up_from_bottom.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\up_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_enter_right.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_enter_right.xml"
-    },
-    {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_scroll.xml"
-    },
-    {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_fade_out.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_shake.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_shake.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_enter_right.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_enter_right.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_popup_enter.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_fade_out_r.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\anim\\anim_fade_out_r.xml"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\anim\\anim_scroll_b.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\anim\\anim_scroll_b.xml"
     }
 ]

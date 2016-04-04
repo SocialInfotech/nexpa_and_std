@@ -14,7 +14,9 @@ import com.lpoezy.nexpa.objects.MAMExtensionProvider;
 import com.lpoezy.nexpa.objects.MAMFinExtensionProvider;
 import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
 import com.lpoezy.nexpa.objects.MessageResultElement;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
@@ -51,7 +53,7 @@ import java.util.Map;
 public class XMPPManager {
 
     public static boolean connected = false;
-    private final XMPPService.OnProcessMessage processMessageCallback;
+    //private final XMPPService.OnProcessMessage processMessageCallback;
 
     public boolean loggedin = false;
     public static boolean isconnecting = false;
@@ -62,26 +64,33 @@ public class XMPPManager {
     public static String loginUser;
     public static String passwordUser;
     Gson gson;
-    XMPPService context;
+    Context context;
     public static XMPPManager instance = null;
     public static boolean instanceCreated = false;
+    public List<OnExecutePendingTaskListener> pendingTasks;
 
-    public XMPPManager(XMPPService context, String serverAdress,
-                       String logiUser, String passwordser, XMPPService.OnProcessMessage processMessageCallback) {
-        this.serverAddress = serverAdress;
-        this.loginUser = logiUser;
-        this.passwordUser = passwordser;
+
+    public XMPPManager(Context context) {
+
+        String uname, password;
+        SQLiteHandler db = new SQLiteHandler(context);
+        db.openToRead();
+
+
+        //this.serverAddress = serverAdress;
+        this.loginUser = db.getUsername();
+        this.passwordUser = db.getPlainPassword();
+        this.serverAddress = XMPPService.DOMAIN;
         this.context = context;
-        this.processMessageCallback = processMessageCallback;
+        //this.processMessageCallback = processMessageCallback;
         init();
-
+        db.close();
     }
 
-    public static XMPPManager getInstance(XMPPService context, String server,
-                                          String user, String pass, XMPPService.OnProcessMessage processMessageCallback) {
+    public static XMPPManager getInstance(Context context) {
 
         if (instance == null) {
-            instance = new XMPPManager(context, server, user, pass, processMessageCallback);
+            instance = new XMPPManager(context);
             instanceCreated = true;
         }
         return instance;
@@ -108,6 +117,7 @@ public class XMPPManager {
         gson = new Gson();
         mMessageListener = new MMessageListener(context);
         mChatManagerListener = new ChatManagerListenerImpl();
+        pendingTasks = new ArrayList<OnExecutePendingTaskListener>();
         initialiseConnection();
 
     }
@@ -127,8 +137,10 @@ public class XMPPManager {
 
         connection = new XMPPTCPConnection(config.build());
         ReconnectionManager connManager = ReconnectionManager.getInstanceFor(connection);
+        connManager.disableAutomaticReconnection();
+
 //        connManager.enableAutomaticReconnection();
-//        connManager.setFixedDelay(10);
+//        connManager.setFixedDelay(5);
 //        connManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.FIXED_DELAY);
         //connManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
         //L.debug("isAutomaticReconnectEnabled: " + ReconnectionManager.getInstanceFor(connection).isAutomaticReconnectEnabled());
@@ -159,7 +171,6 @@ public class XMPPManager {
         AsyncTask<Void, Void, Boolean> connectionThread = new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected synchronized Boolean doInBackground(Void... arg0) {
-
 
                 if (connection.isConnected())
                     return false;
@@ -240,7 +251,7 @@ public class XMPPManager {
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                    Log.e("connect(" + caller + ")",
+                    L.error("connect(" + caller + ")" +
                             "XMPPException: " + e.getMessage());
 
                 }
@@ -314,6 +325,7 @@ public class XMPPManager {
     public void addConnectedToOPenfireListeners(OnConnectedToOPenfireListener observer) {
 
         mOnConnectedToOPenfireListeners.add(observer);
+
     }
 
     public void notifyMAMListeners(List<MessageResultElement> msgs, int first, int last, int count) {
@@ -353,7 +365,7 @@ public class XMPPManager {
     public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
         L.debug("retrieveListOfCollectionsFrmMsgArchive");
 
-        if(connection.isAuthenticated()) {
+        if (connection.isAuthenticated()) {
             MessageArchiveWithIQ mam = new MessageArchiveWithIQ(with);
             mam.setType(IQ.Type.set);
             try {
@@ -392,7 +404,7 @@ public class XMPPManager {
                                 }
                             }
                     ));
-        }else{
+        } else {
             login();
         }
 
@@ -438,11 +450,10 @@ public class XMPPManager {
         @Override
         public void connected(final XMPPConnection conn) {
 
-            L.debug("isConnected");
+            L.debug("xmpp, Connected");
             connected = true;
-            connection = (AbstractXMPPConnection) conn;
 
-            if (!connection.isAuthenticated()) {
+            if (!conn.isAuthenticated() && conn.getUser() == null) {
 
                 login();
             }
@@ -486,7 +497,7 @@ public class XMPPManager {
 
                     }
                 });
-            Log.d("xmpp", "ConnectionClosedOn Error!");
+            L.error("xmpp, ConnectionClosedOn Error! " + arg0.getMessage());
             connected = false;
 
             chat_created = false;
@@ -550,12 +561,12 @@ public class XMPPManager {
         }
 
         @Override
-        public void authenticated(XMPPConnection arg, boolean arg1) {
+        public void authenticated(XMPPConnection conn, boolean arg1) {
 
             L.debug("xmpp, Authenticated!");
             loggedin = true;
 
-            ChatManager.getInstanceFor(connection).addChatListener(
+            ChatManager.getInstanceFor(conn).addChatListener(
                     mChatManagerListener);
 
             chat_created = false;
@@ -586,7 +597,10 @@ public class XMPPManager {
                     }
                 });
 
-            notifyConnectedToOPenfireListeners(connection);
+            for (int i = pendingTasks.size() - 1; i >= 0; i--) {
+                pendingTasks.get(i).onExecutePendingTask();
+                pendingTasks.remove(i);
+            }
         }
     }
 
@@ -599,7 +613,6 @@ public class XMPPManager {
         @Override
         public void processMessage(final org.jivesoftware.smack.chat.Chat chat,
                                    final Message message) {
-
 
 
             L.debug("MyXMPP_MESSAGE_LISTENER, Xmpp message received: '" + message.getBody());
@@ -617,7 +630,7 @@ public class XMPPManager {
         private void processMessage(final ChatMessage chatMessage) {
             chatMessage.isMine = false;
 
-            processMessageCallback.onProcessMessage(chatMessage);
+            //processMessageCallback.onProcessMessage(chatMessage);
 
 
         }

@@ -31,7 +31,9 @@ import com.lpoezy.nexpa.objects.MAMExtensionProvider;
 import com.lpoezy.nexpa.objects.MAMFinExtensionProvider;
 import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
 import com.lpoezy.nexpa.objects.MessageResultElement;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.DividerItemDecoration;
 import com.lpoezy.nexpa.utility.L;
@@ -49,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ChatHistoryListFragment extends Fragment implements Correspondent.OnCorrespondentUpdateListener {
+public class ChatHistoryListFragment extends Fragment implements Correspondent.OnCorrespondentUpdateListener, XMPPService.OnServiceConnectedListener {
 
     private OnShowChatHistoryListener mCallback;
     // private List<Correspondent> mBuddys;
@@ -65,6 +67,26 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
     public List<LatestMessage> getmLatestMsgs() {
         return mLatestMsgs;
+    }
+
+    protected XMPPService mService;
+    protected boolean mBounded;
+    @Override
+    public void OnServiceConnected(XMPPService service) {
+
+        mService = service;
+        mBounded = true;
+
+
+    }
+
+    @Override
+    public void OnServiceDisconnected() {
+
+        mService = null;
+        mBounded = false;
+
+
     }
 
     private class LatestMessage {
@@ -133,14 +155,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
             }
         });
 
-        onSwipeToRefresh();
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
 
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
 
         adapter = new ChatHistoryAdapter(getActivity(), mCallback);
         rvChatHistory.setAdapter(adapter);
@@ -150,97 +165,119 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
     private void onSwipeToRefresh() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        if (mBounded) {
+            mService.onExecutePendingTask(new OnRetrieveMessageArchive());
+        }
 
-                if (!XMPPService.xmpp.connection.isConnected()) {
-                    //XMPPService.xmpp.connect("onCreate");
+    }
 
+    private class OnRetrieveMessageArchive implements OnExecutePendingTaskListener {
 
-                } else if(!XMPPService.xmpp.connection.isAuthenticated()){
-                    XMPPService.xmpp.login();
-                }else{
-                    retrivedMessageArchive();
-                }
+        @Override
+        public void onExecutePendingTask() {
+
+            if (!XMPPService.xmpp.connection.isConnected()) {
 
                 mSwipeRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }, 500);
+
+                XMPPManager.getInstance(getActivity()).instance = null;
+
+                XMPPService.xmpp = XMPPManager.getInstance(getActivity());
+
+                XMPPService.xmpp.connect("onCreate");
+
+            } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+                mSwipeRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 500);
+
+                XMPPService.xmpp.login();
+            } else {
+
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        MessageArchiveWithIQ mam = new MessageArchiveWithIQ(null);
+                        mam.setType(IQ.Type.set);
+                        try {
+                            XMPPService.xmpp.connection.sendStanza(mam);
+                        } catch (SmackException.NotConnectedException e) {
+                            L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
+
+                        }
+
+                        final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
+
+                        ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
+                                new MAMExtensionProvider(
+                                        new MessageResultElement.OnParseCompleteListener() {
+
+                                            @Override
+                                            public void onParseComplete(MessageResultElement msg) {
+
+                                                //L.debug("msgs: "+msgs.size());
+
+                                                msgElements.add(msg);
+                                            }
+                                        }
+                                ));
+
+                        ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
+                                new MAMFinExtensionProvider(
+                                        new MAMFinExtensionProvider.OnParseCompleteListener() {
+
+                                            @Override
+                                            public void onParseComplete(final int first, final int last, final int count) {
+
+                                                if (msgElements != null && !msgElements.isEmpty()) {
+                                                    L.debug("ChatHistoryActivity, onParseComplete");
+
+                                                    SQLiteHandler db = new SQLiteHandler(getActivity());
+                                                    db.openToWrite();
+
+                                                    //save messages to offline db
+                                                    db.deleteMsgArchive();
+                                                    db.saveMsgArchive(msgElements);
+
+                                                    db.close();
+                                                }
+
+                                                updateUI();
+
+                                                mSwipeRefreshLayout.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        mSwipeRefreshLayout.setRefreshing(false);
+                                                    }
+                                                }, 500);
+
+                                            }
+                                        }
+                                ));
+
+                    }
+                }).start();
+
+
             }
-        }).start();
-
-    }
-
-    private void retrivedMessageArchive() {
-
-
-        AbstractXMPPConnection connection = XMPPService.xmpp.connection;
-
-
-        MessageArchiveWithIQ mam = new MessageArchiveWithIQ(null);
-        mam.setType(IQ.Type.set);
-        try {
-            connection.sendStanza(mam);
-        } catch (SmackException.NotConnectedException e) {
-            L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
 
         }
-
-        final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
-
-        ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
-                new MAMExtensionProvider(
-                        new MessageResultElement.OnParseCompleteListener() {
-
-                            @Override
-                            public void onParseComplete(MessageResultElement msg) {
-
-                                //L.debug("msgs: "+msgs.size());
-
-                                msgElements.add(msg);
-                            }
-                        }
-                ));
-
-        ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
-                new MAMFinExtensionProvider(
-                        new MAMFinExtensionProvider.OnParseCompleteListener() {
-
-                            @Override
-                            public void onParseComplete(final int first, final int last, final int count) {
-
-                                if (msgElements != null && !msgElements.isEmpty()) {
-                                    L.debug("ChatHistoryActivity, onParseComplete");
-
-                                    SQLiteHandler db = new SQLiteHandler(getActivity());
-                                    db.openToWrite();
-
-                                    //save messages to offline db
-                                    db.deleteMsgArchive();
-                                    db.saveMsgArchive(msgElements);
-
-                                    db.close();
-                                }
-
-                                updateUI();
-
-                                mSwipeRefreshLayout.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mSwipeRefreshLayout.setRefreshing(false);
-                                    }
-                                }, 500);
-
-                            }
-                        }
-                ));
-
-
     }
+
 
 
     // receiving chtMessages will be handle by receivedMessage
@@ -269,10 +306,19 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
     @Override
     public void onResume() {
-        L.debug("ChatHistory, onResume");
+        L.debug("ChatHistoryList, onResume");
         super.onResume();
 
         getActivity().registerReceiver(mReceivedMessage, new IntentFilter(AppConfig.ACTION_RECEIVED_MSG));
+
+        onSwipeToRefresh();
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
 
         // getActivity().registerReceiver(mReceivedCorrespondentUpdate, new
         // IntentFilter(Correspondent.ACTION_UPDATE));

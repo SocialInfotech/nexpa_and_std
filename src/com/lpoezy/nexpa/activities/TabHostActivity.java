@@ -78,18 +78,10 @@ public class TabHostActivity extends TabActivity {
 
 			mService = ((LocalBinder<XMPPService>) service).getService();
 
-			//if(getTabHost().getCurrentTab()==0){
-				//XMPPService.OnConnectedToOPenfireListener onConnectedToOPenfireListener = (XMPPService.OnConnectedToOPenfireListener) getCurrentActivity();
-				//mService.addconnectedToOperfireListener(onConnectedToOPenfireListener);
+			XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) getCurrentActivity();
+			onServiceConnectedListener.OnServiceConnected(mService);
 
-			//}
 
-			//if(getTabHost().getCurrentTab()==0){
-				XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) getCurrentActivity();
-
-				onServiceConnectedListener.OnServiceConnected(mService);
-
-			//}
 
 		}
 	};
@@ -98,23 +90,8 @@ public class TabHostActivity extends TabActivity {
 	protected void onResume() {
 		
 		super.onResume();
-		
 		L.debug("TabHost, onResume");
-		
-		//start chat service here and syncdata service,
-		//this will only be stop when the user deactivated/cancel their account
-//		Intent msgService = new Intent(this, ChatMessagesService.class);
-//		startService(msgService);
-//		
-//		Intent syncDataService = new Intent(this, SyncDataService.class);
-//		startService(syncDataService);
-//		
-//		Intent syncProfileService = new Intent(this, SyncUserProfileService.class);
-//		startService(syncProfileService);
-//		
-//		Intent syncProfilePictureService = new Intent(this, SyncProfilePictureService.class);
-//		startService(syncProfilePictureService);
-//		
+
 //		registerReceiver(mUpdateMsgCount, new IntentFilter(AppConfig.ACTION_RECEIVED_MSG));
 //		isRunning = true;
 
@@ -134,7 +111,6 @@ public class TabHostActivity extends TabActivity {
 		L.debug("TabHost, onPause");
 
 		if (mServiceConn != null) {
-
 			unbindService(mServiceConn);
 		}
 		

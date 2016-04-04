@@ -47,6 +47,7 @@ import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Geolocation;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.objects.Users;
 import com.lpoezy.nexpa.openfire.XMPPManager;
@@ -56,9 +57,7 @@ import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
-import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterListener;
@@ -238,7 +237,10 @@ public class AroundMeActivity extends AppCompatActivity
                             dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
                         }
 
-                        downloadNearbyUsersOnline();
+                        if(mBounded){
+                            mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+                        }
+                        //downloadNearbyUsersOnline();
                         dialogPref.dismiss();
                     }
                 });
@@ -338,6 +340,10 @@ public class AroundMeActivity extends AppCompatActivity
 
         db.close();
 
+        if(mBounded){
+
+        }
+
     }
 
 
@@ -370,47 +376,85 @@ public class AroundMeActivity extends AppCompatActivity
         mRequestingLocationUpdates = true;
     }
 
-    private void downloadNearbyUsersOnline() {
+    private class OnDownloadNearbyUsersOnline implements OnExecutePendingTaskListener {
+
+        @Override
+        public void onExecutePendingTask() {
+
+            //mSwipeRefreshLayout.setRefreshing(true);
+
+            if (!XMPPService.xmpp.connection.isConnected()) {
+
+                mSwipeRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 500);
+
+                XMPPManager.getInstance(AroundMeActivity.this).instance = null;
+
+                XMPPService.xmpp = XMPPManager.getInstance(AroundMeActivity.this);
+
+                XMPPService.xmpp.connect("onCreate");
+
+            } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+                mSwipeRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 500);
+
+                XMPPService.xmpp.login();
+            } else {
+
+                //*
+                if (mCurrentLocation == null) {
+                    L.error("mCurrentLocation is null!!!");
+                    return;
+                }
+
+                L.debug("AroundMe, downloadNearbyUsersOnline");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        HashMap<String, String> postDataParams = new HashMap<String, String>();
+
+                        SessionManager sm = new SessionManager(AroundMeActivity.this);
+                        int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
+
+                        postDataParams.put("tag", "download_nearby_users");
+                        postDataParams.put("username", mUsername);
+                        postDataParams.put("longitude", mCurrentLocation.getLongitude() + "");
+                        postDataParams.put("latitude", mCurrentLocation.getLatitude() + "");
+
+                        postDataParams.put("dist", newDistance + "");
+                        postDataParams.put("unit", "k");
 
 
-        if (mCurrentLocation == null) {
-            L.error("mCurrentLocation is null!!!");
-            return;
-        }
-        L.debug("Geolocation, downloadNearbyUsersOnline");
-        mSwipeRefreshLayout.setRefreshing(true);
+                        final String spec = AppConfig.URL_GEO;
+                        String webpage = HttpUtilz.makeRequest(spec, postDataParams);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+                        L.debug(webpage);
 
-                HashMap<String, String> postDataParams = new HashMap<String, String>();
+                        updateUI(webpage);
 
 
-                SessionManager sm = new SessionManager(AroundMeActivity.this);
-                int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
-
-                postDataParams.put("tag", "download_nearby_users");
-                postDataParams.put("username", mUsername);
-                postDataParams.put("longitude", mCurrentLocation.getLongitude() + "");
-                postDataParams.put("latitude", mCurrentLocation.getLatitude() + "");
-
-                postDataParams.put("dist", newDistance + "");
-                postDataParams.put("unit", "k");
-
-
-                final String spec = AppConfig.URL_GEO;
-                String webpage = HttpUtilz.makeRequest(spec, postDataParams);
-
-                L.debug(webpage);
-
-                updateUI(webpage);
-
-
+                    }
+                }).start();
+                //*/
             }
-        }).start();
 
+        }
     }
+
+    ;
+
 
     private void updateUI(final String webpage) {
 
@@ -509,8 +553,11 @@ public class AroundMeActivity extends AppCompatActivity
 
             L.debug("last loc latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             L.debug("last loc long: " + String.valueOf(mCurrentLocation.getLongitude()));
-            if (nearbyUsers.isEmpty()) {
-                downloadNearbyUsersOnline();
+            if (nearbyUsers.isEmpty() && mBounded) {
+
+                mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+
+                //downloadNearbyUsersOnline();
             }
 
             sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -631,8 +678,10 @@ public class AroundMeActivity extends AppCompatActivity
                     @Override
                     public void run() {
 
-
-                        downloadNearbyUsersOnline();
+                        if (mBounded) {
+                            mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+                        }
+                        //downloadNearbyUsersOnline();
                     }
                 }, 500);
             }
@@ -814,38 +863,6 @@ public class AroundMeActivity extends AppCompatActivity
         db.close();
     }
 
-    protected void updateCorrespondentsAvailability(Correspondent correspondent, String address, XMPPConnection connection) {
-        if (connection.isConnected()) {
-
-			/*/
-            boolean isAvailable = connection.getRoster().getPresence(address).isAvailable();
-			correspondent.setAvailable(isAvailable);
-			mSwipeRefreshLayout.post(new Runnable() {
-				
-				@Override
-				public void run() {
-					adapter.notifyDataSetChanged();
-					mSwipeRefreshLayout.setRefreshing(false);
-					
-				}
-			});
-			//*/
-        } else {
-
-            mSwipeRefreshLayout.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    makeNotify("Cannot connect to server", AppMsg.STYLE_ALERT);
-
-                }
-            });
-
-        }
-
-
-    }
-
     private String displayGridCellName(String fname, String user) {
 
         if (fname.equals("")) {
@@ -996,7 +1013,7 @@ public class AroundMeActivity extends AppCompatActivity
         mService = service;
         mBounded = true;
 
-        mService.addOnConnectedToOpenfireObserver(AroundMeActivity.this);
+        mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
 
     }
 
@@ -1005,6 +1022,6 @@ public class AroundMeActivity extends AppCompatActivity
         mService = null;
         mBounded = false;
 
-        mService.removeOnConnectedToOpenfireObserver(AroundMeActivity.this);
+
     }
 }

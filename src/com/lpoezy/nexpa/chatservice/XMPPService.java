@@ -14,21 +14,21 @@ import android.support.v4.app.TaskStackBuilder;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.activities.ChatActivity;
 import com.lpoezy.nexpa.activities.ChatHistoryActivity;
+import com.lpoezy.nexpa.activities.ChatHistoryListFragment;
 import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.NewMessage;
 import com.lpoezy.nexpa.objects.OfUser;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.openfire.XMPPManager;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException.XMPPErrorException;
 import org.jivesoftware.smack.chat.Chat;
 import org.json.JSONException;
@@ -36,7 +36,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class XMPPService extends Service {
@@ -169,21 +168,22 @@ public class XMPPService extends Service {
         }
     };
 
+
     @Override
     public void onCreate() {
         super.onCreate();
         cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         L.debug("XMPPService, onCreate");
-        String uname, password;
-        SQLiteHandler db = new SQLiteHandler(XMPPService.this);
-        db.openToRead();
-        uname = db.getUsername();
-        password = db.getPlainPassword();
-        xmpp = XMPPManager.getInstance(XMPPService.this, DOMAIN, uname,
-                password, processMessageCallback);
+//        String uname, password;
+//        SQLiteHandler db = new SQLiteHandler(XMPPService.this);
+//        db.openToRead();
+//        uname = db.getUsername();
+//        password = db.getPlainPassword();
+        xmpp = XMPPManager.getInstance(XMPPService.this);
         xmpp.connect("onCreate");
 
-        db.close();
+
+        //db.close();
         isRunning = true;
     }
 
@@ -305,7 +305,7 @@ public class XMPPService extends Service {
                 ofuser.setEmail(email);
                 ofuser.setPlainPassword(password);
 
-                if(ofuser.createUser()){
+                if (ofuser.createUser()) {
 
                     callback.onUpdateScreen();
 
@@ -361,12 +361,23 @@ public class XMPPService extends Service {
                 xmpp.retrieveListOfCollectionsFrmMsgArchive(with);
 
 
-
             }
         }).start();
 
 
     }
+
+
+    public void onExecutePendingTask(OnExecutePendingTaskListener task) {
+
+        task.onExecutePendingTask();
+
+        if (!xmpp.connection.isConnected() || !xmpp.connection.isAuthenticated()) {
+            xmpp.pendingTasks.add(task);
+        }
+
+    }
+
 
 //    public void retrieveCollectionFrmMsgArchive(final String with) {
 //

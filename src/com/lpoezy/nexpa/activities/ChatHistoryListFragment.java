@@ -178,13 +178,13 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
             if (!XMPPService.xmpp.connection.isConnected()) {
 
-                mSwipeRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 500);
+//                mSwipeRefreshLayout.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        mSwipeRefreshLayout.setRefreshing(false);
+//                    }
+//                }, 500);
 
                 XMPPManager.getInstance(getActivity()).instance = null;
 
@@ -194,13 +194,13 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
             } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
 
-                mSwipeRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 500);
+//                mSwipeRefreshLayout.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        mSwipeRefreshLayout.setRefreshing(false);
+//                    }
+//                }, 500);
 
                 XMPPService.xmpp.login();
             } else {

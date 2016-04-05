@@ -385,13 +385,13 @@ public class AroundMeActivity extends AppCompatActivity
 
             if (!XMPPService.xmpp.connection.isConnected()) {
 
-                mSwipeRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 500);
+//                mSwipeRefreshLayout.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        mSwipeRefreshLayout.setRefreshing(false);
+//                    }
+//                }, 500);
 
                 XMPPManager.getInstance(AroundMeActivity.this).instance = null;
 
@@ -401,13 +401,13 @@ public class AroundMeActivity extends AppCompatActivity
 
             } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
 
-                mSwipeRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 500);
+//                mSwipeRefreshLayout.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        mSwipeRefreshLayout.setRefreshing(false);
+//                    }
+//                }, 500);
 
                 XMPPService.xmpp.login();
             } else {
@@ -553,7 +553,7 @@ public class AroundMeActivity extends AppCompatActivity
 
             L.debug("last loc latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             L.debug("last loc long: " + String.valueOf(mCurrentLocation.getLongitude()));
-            if (nearbyUsers.isEmpty() && mBounded) {
+            if (mBounded) {
 
                 mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
 

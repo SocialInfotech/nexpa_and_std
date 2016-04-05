@@ -23,16 +23,42 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
+import com.lpoezy.nexpa.objects.PubSubBroadcastStreamer;
 import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.parallaxrecyclerview.ParallaxRecyclerAdapter;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.BmpFactory;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.L;
+import com.novoda.sexp.SimpleEasyXmlParser;
+import com.novoda.sexp.Streamer;
+import com.novoda.sexp.finder.ElementFinder;
+import com.novoda.sexp.finder.ElementFinderFactory;
+
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smackx.disco.packet.DiscoverItems;
+import org.jivesoftware.smackx.pubsub.AccessModel;
+import org.jivesoftware.smackx.pubsub.ConfigureForm;
+import org.jivesoftware.smackx.pubsub.Item;
+import org.jivesoftware.smackx.pubsub.ItemPublishEvent;
+import org.jivesoftware.smackx.pubsub.LeafNode;
+import org.jivesoftware.smackx.pubsub.PayloadItem;
+import org.jivesoftware.smackx.pubsub.PubSubManager;
+import org.jivesoftware.smackx.pubsub.PublishModel;
+import org.jivesoftware.smackx.pubsub.Subscription;
+import org.jivesoftware.smackx.pubsub.listener.ItemEventListener;
+import org.jivesoftware.smackx.xdata.FormField;
+import org.jivesoftware.smackx.xdata.packet.DataForm;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -198,12 +224,166 @@ public class MyBroadcastsFragment extends Fragment {
         getActivity().unregisterReceiver(mActionUserProfileUpdatedReceived);
     }
 
+//    class ItemEventCoordinator implements ItemEventListener {
+//
+//        @Override
+//        public void handlePublishedItems(ItemPublishEvent items) {
+//            L.debug("Item count: " + items);
+//
+//
+//        }
+//    }
+
+    private class RetrieveMyOwnBroadcast implements OnExecutePendingTaskListener{
+        @Override
+        public void onExecutePendingTask() {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (!XMPPService.xmpp.connection.isConnected()) {
+
+                        XMPPManager.getInstance(getActivity()).instance = null;
+
+                        XMPPService.xmpp = XMPPManager.getInstance(getActivity());
+
+                        XMPPService.xmpp.connect("onCreate");
+
+                    } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+                        XMPPService.xmpp.login();
+                    } else {
+
+                        SQLiteHandler db = new SQLiteHandler(getActivity());
+                        db.openToRead();
+                        // Create a pubsub manager using an existing XMPPConnection
+                        PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
+
+                        LeafNode node = null;
+//                        try {
+//
+//                            //node = mgr.getNode(db.getUsername()+"-broadcast");
+//                            ConfigureForm form = new ConfigureForm(DataForm.Type.form.submit);
+//                            form.setAccessModel(AccessModel.open);
+//                            form.setDeliverPayloads(false);
+//                            form.setNotifyRetract(true);
+//                            form.setPersistentItems(true);
+//                            form.setPublishModel(PublishModel.open);
+//
+//                            node = (LeafNode) mgr.createNode(db.getUsername() + "-broadcast", form);
+//
+//                        } catch (SmackException.NoResponseException e) {
+//                            L.error(e.getMessage());
+//                        } catch (XMPPException.XMPPErrorException e) {
+//                            L.error(e.getMessage());
+//                        } catch (SmackException.NotConnectedException e) {
+//                            L.error(e.getMessage());
+//                        }
+
+
+
+//                        <iq type='get'
+//                        from='francisco@denmark.lit/barracks'
+//                        to='pubsub.shakespeare.lit'
+//                        id='items2'>
+//                        <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+//                        <items node='princely_musings' max_items='2'/>
+//                        </pubsub>
+//                        </iq>
+
+                        //<iq to='pubsub.198.154.106.139' id='bg406-27' type='get'>
+                        // <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+                        // <items node='kato-broadcast' max_items='25'/>
+                        // </pubsub></iq>
+
+                        try {
+
+                            node = mgr.getNode(db.getUsername() + "-broadcast");
+
+                            //node.subscribe(db.getUsername() + "@198.154.106.139");
+                            List<Subscription> subs = node.getSubscriptions();
+                            String mySubid = null;
+                            mUsername = XMPPService.xmpp.connection.getUser().split("@")[0];
+                            for(int i = 0; i < subs.size(); i++)
+                            {
+                                //L.debug(XMPPService.xmpp.connection.getUser()+", "+subs.get(i).getJid()+": "+subs.get(i).getId());
+                                if(subs.get(i).getJid().split("@")[0].equals(mUsername)){
+                                    mySubid = subs.get(i).getId();
+                                    break;
+                                }
+
+                            }
+
+                            //<iq to='pubsub.198.154.106.139' id='C8D1I-40' type='get'>
+                            // <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+                            // <items node='kato-broadcast' subid='2INFMa1a1wnpfqI1lN02OtB547dukzDk4i73BdFC' max_items='100'/>
+                            // </pubsub>
+                            // </iq>
+
+                            //ee0bfce2-46ac-4914-8e47-0e55f785a6085
+
+                            //L.debug("mySubid: "+mySubid);
+                            Collection<PayloadItem<Item>> eventItems = node.getItems(100, mySubid);
+
+                            ElementFinderFactory factory = SimpleEasyXmlParser.getElementFinderFactory();
+                            ElementFinder<String> elementFinder = factory.getStringFinder();
+                            Streamer<String> broadcastStreamer = new PubSubBroadcastStreamer(elementFinder, "broadcast");
+
+                            List<Announcement>announcements = new  ArrayList<Announcement>();
+                            for(Item item : eventItems) {
+
+                                String broadcast = SimpleEasyXmlParser.parse(item.toXML(), broadcastStreamer);
+                                //L.debug("broadcast: " + broadcast);
+
+                                Announcement announcement = new Announcement();
+                                announcement.setMessage(broadcast);
+                            }
+
+
+                            mAnouncements.clear();
+                            mAnouncements.addAll(announcements);
+
+                            L.debug("mAnouncements.size " + mAnouncements.size());
+
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
+
+
+                        } catch (SmackException.NoResponseException e) {
+                            L.error(e.getMessage());
+                        } catch (XMPPException.XMPPErrorException e) {
+                            L.error(e.getMessage());
+                        } catch (SmackException.NotConnectedException e) {
+                            L.error(e.getMessage());
+                        }
+
+
+                        db.close();
+
+
+
+                    }
+
+                }
+            }).start();
+
+        }
+    };
+
     @Override
     public void onResume() {
         L.debug("MyBroadcastFragment, onResume");
         super.onResume();
 
         getActivity().registerReceiver(mActionUserProfileUpdatedReceived, new IntentFilter(AppConfig.ACTION_USER_PROFILE_UPDATED));
+
+        RetrieveMyOwnBroadcast retrieveMyOwnBroadcast = new RetrieveMyOwnBroadcast();
+        retrieveMyOwnBroadcast.onExecutePendingTask();
 
         //resetProfilePic();
         updateUI();
@@ -239,6 +419,11 @@ public class MyBroadcastsFragment extends Fragment {
 			}
 		}).start();
 		//*/
+
+
+
+
+
     }
 
 
@@ -255,7 +440,6 @@ public class MyBroadcastsFragment extends Fragment {
                 final UserProfile profile = new UserProfile();
                 profile.setUsername(db.getUsername());
                 profile.downloadOffline(getActivity());
-
 
                  Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(),
                         R.drawable.pic_sample_girl);
@@ -325,123 +509,6 @@ public class MyBroadcastsFragment extends Fragment {
         }).start();
 
     }
-
-//	private void resetProfilePic(){
-//
-//        Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(),
-//        R.drawable.pic_sample_girl);
-//
-//        if(imgDecodableString!=null && !imgDecodableString.isEmpty()){
-//
-//        	// Get the dimensions of the View
-//            int targetW = mImgProfile.getWidth();
-//            int targetH = mImgProfile.getHeight();
-//
-//            BmpFactory  bmpFactory = new BmpFactory();
-//
-//        	Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, imgDecodableString);
-//
-//        	if(newImage!=null)rawImage = newImage;
-//        }
-//
-//        L.debug("imgDecodableString "+imgDecodableString+", rawImage "+rawImage);
-//        RoundedImageView riv = new RoundedImageView(getActivity());
-//        Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
-//        mImgProfile.setImageBitmap(circImage);
-//       // mImgProfile.setImageBitmap(rawImage);
-//	}
-
-//	private class MyBroascastsAdapter extends RecyclerView.Adapter<MyBroascastsAdapter.ViewHolder>{
-//		
-//
-//
-//		private LayoutInflater inflater;
-//		
-//
-//		public MyBroascastsAdapter(Context context) {
-//			
-//			this.inflater = LayoutInflater.from(context);
-//			
-//		}
-//
-//		@Override
-//		public int getItemCount() {
-//			
-//			return mAnouncements.size();
-//		}
-//
-//		@Override
-//		public void onBindViewHolder(ViewHolder vh, int position) {
-//
-//			Announcement ann = mAnouncements.get(position);
-//			
-//			vh.tvBroadMsg.setText(ann.getMessage());
-//			vh.tvReply.setText("REACHED " + ann.getReach());
-//			vh.ImgReply.setBackgroundResource(R.drawable.btn_reach);
-//			vh.tvBroadFrm.setText(mUsername);
-//			
-//			DateUtils du = new DateUtils();
-//			String dateFormatted = du.getMinAgo(ann.getDate());
-//			
-//			vh.tvDateBroad.setText(dateFormatted);
-//			 
-//			vh.tvLocLocal.setVisibility(View.GONE);
-//			
-//			if(ann.getLocLocal()!=null && !ann.getLocLocal().isEmpty())
-//			{
-//				String strLoc = "near "+ ann.getLocLocal();
-//				
-//				vh.tvLocLocal.setText(strLoc);
-//				vh.tvLocLocal.setVisibility(TextView.VISIBLE);
-//			}
-//			
-//			LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-//                    0, LayoutParams.WRAP_CONTENT , 1.2f);
-//			vh.btnReply.setLayoutParams(param);
-//			
-//			
-//			
-//		}
-//
-//		@Override
-//		public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
-//			
-//			View itemView = inflater.inflate(R.layout.list_broadcast, parent, false);
-//			return new ViewHolder(itemView);
-//		} 
-//		
-//		class ViewHolder extends RecyclerView.ViewHolder{
-//
-//			 TextView tvBroadId;
-//			 TextView tvBroadFrm;
-//			 TextView tvDateBroad;
-//			 TextView tvLocLocal;
-//			 TextView tvBroadMsg;
-//			 TextView tvReach;
-//			 TextView tvReply;
-//			 ImageView ImgReply;
-//			 LinearLayout btnReply;
-//			 TextView tvBroadFrmRaw;
-//
-//			public ViewHolder(View itemView) {
-//				super(itemView);
-//				
-//				tvBroadId = (TextView) itemView.findViewById(R.id.broad_id);
-//				tvBroadFrm = (TextView) itemView.findViewById(R.id.broad_from);
-//				tvDateBroad = (TextView) itemView.findViewById(R.id.date_broad);
-//				tvLocLocal = (TextView) itemView.findViewById(R.id.location_local);
-//				tvBroadMsg = (TextView) itemView.findViewById(R.id.broad_message);
-//				tvReach = (TextView) itemView.findViewById(R.id.reach);
-//				tvReply = (TextView) itemView.findViewById(R.id.txtReply);
-//				ImgReply = (ImageView) itemView.findViewById(R.id.imgReply);
-//				btnReply = (LinearLayout) itemView.findViewById(R.id.btnReply);
-//				tvBroadFrmRaw = (TextView) itemView.findViewById(R.id.broad_from_raw);
-//				
-//			
-//			}
-//			
-//		}
-//	}
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 

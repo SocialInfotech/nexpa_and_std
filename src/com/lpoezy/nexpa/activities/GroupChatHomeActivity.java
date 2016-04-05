@@ -122,7 +122,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
                     ConfigureForm form = new ConfigureForm(DataForm.Type.form.submit);
                     form.setAccessModel(AccessModel.open);
-                    form.setDeliverPayloads(false);
+                    form.setDeliverPayloads(true);
                     form.setNotifyRetract(true);
                     form.setPersistentItems(true);
                     form.setPublishModel(PublishModel.open);

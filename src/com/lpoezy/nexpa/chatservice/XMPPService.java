@@ -129,44 +129,44 @@ public class XMPPService extends Service {
 //    };
 
 
-    private List<OnProcessMessage> chatMessagesListeners = new ArrayList<OnProcessMessage>();
-
-    public void addMessageListener(OnProcessMessage observer) {
-        chatMessagesListeners.add(observer);
-    }
-
-
-    private OnProcessMessage processMessageCallback = new OnProcessMessage() {
-
-        @Override
-        public void onProcessMessage(ChatMessage chatMessage) {
-
-
-            if (!TabHostActivity.isRunning && !ChatHistoryActivity.isRunning
-                    && !ChatActivity.isRunning) {
-
-                L.debug("sending nottification!");
-
-                // send notification
-                //sendNotification(correspondent);
-
-            } else {
-                for (OnProcessMessage observer : chatMessagesListeners) {
-                    observer.onProcessMessage(chatMessage);
-                }
-                // send broadcast
-//                Intent broadcast = new Intent(AppConfig.ACTION_RECEIVED_MSG);
-//                broadcast.putExtra("username", chatMessage.sender);
-//                broadcast.putExtra("msg", chatMessage.body);
+//    private List<OnProcessMessage> chatMessagesListeners = new ArrayList<OnProcessMessage>();
 //
-//                L.debug("sending broadcast!");
-//                sendBroadcast(broadcast);
-
-            }
-
-
-        }
-    };
+//    public void addMessageListener(OnProcessMessage observer) {
+//        chatMessagesListeners.add(observer);
+//    }
+//
+//
+//    private OnProcessMessage processMessageCallback = new OnProcessMessage() {
+//
+//        @Override
+//        public void onProcessMessage(ChatMessage chatMessage) {
+//
+//
+//            if (!TabHostActivity.isRunning && !ChatHistoryActivity.isRunning
+//                    && !ChatActivity.isRunning) {
+//
+//                L.debug("sending nottification!");
+//
+//                // send notification
+//                //sendNotification(correspondent);
+//
+//            } else {
+//                for (OnProcessMessage observer : chatMessagesListeners) {
+//                    observer.onProcessMessage(chatMessage);
+//                }
+//                // send broadcast
+////                Intent broadcast = new Intent(AppConfig.ACTION_RECEIVED_MSG);
+////                broadcast.putExtra("username", chatMessage.sender);
+////                broadcast.putExtra("msg", chatMessage.body);
+////
+////                L.debug("sending broadcast!");
+////                sendBroadcast(broadcast);
+//
+//            }
+//
+//
+//        }
+//    };
 
 
     @Override
@@ -351,21 +351,21 @@ public class XMPPService extends Service {
 //    }
 
 
-    public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-
-                xmpp.retrieveListOfCollectionsFrmMsgArchive(with);
-
-
-            }
-        }).start();
-
-
-    }
+//    public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//
+//                xmpp.retrieveListOfCollectionsFrmMsgArchive(with);
+//
+//
+//            }
+//        }).start();
+//
+//
+//    }
 
 
     public void onExecutePendingTask(OnExecutePendingTaskListener task) {
@@ -479,9 +479,7 @@ public class XMPPService extends Service {
         public void onUpdateScreen();
     }
 
-    public interface OnProcessMessage {
-        public void onProcessMessage(ChatMessage chatMessage);
-    }
+
 
     public interface OnServiceConnectedListener {
         public void OnServiceConnected(XMPPService service);

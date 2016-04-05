@@ -44,7 +44,7 @@ public class MAMFinExtensionProvider extends DataPacketProvider.PacketExtensionP
                 case XmlPullParser.START_TAG:
                     String elementName = parser.getName();
 
-                    L.debug("elementName: " + elementName);
+                    //L.debug("elementName: " + elementName);
                     switch (parser.getName()) {
 
                         case "first":

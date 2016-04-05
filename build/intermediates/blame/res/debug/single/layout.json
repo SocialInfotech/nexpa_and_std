@@ -324,12 +324,12 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\notification_template_part_chronometer.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\abc_activity_chooser_view_list_item.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_activity_chooser_view_list_item.xml"
-    },
-    {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\list_broadcast.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\layout\\list_broadcast.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\abc_activity_chooser_view_list_item.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_activity_chooser_view_list_item.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\dialog_info.xml",

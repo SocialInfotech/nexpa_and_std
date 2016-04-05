@@ -36,8 +36,12 @@ import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
+import com.lpoezy.nexpa.objects.MAMExtensionProvider;
+import com.lpoezy.nexpa.objects.MAMFinExtensionProvider;
+import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
 import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.Messages;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.openfire.XMPPManager;
@@ -46,13 +50,16 @@ import com.lpoezy.nexpa.utility.L;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.provider.ProviderManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ChatActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener, XMPPService.OnProcessMessage, OnRetrieveMessageArchiveListener, XMPPManager.OnConnectedToOPenfireListener {
+public class ChatActivity extends Activity implements Correspondent.OnCorrespondentUpdateListener, XMPPManager.OnConnectedToOPenfireListener {
     private com.lpoezy.nexpa.chatservice.ChatAdapterActivity adapter;
 
     public boolean isMine;
@@ -235,7 +242,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
 
-                if(mBounded){
+                if (mBounded) {
                     retriveChatMessages();
 
                 }
@@ -276,16 +283,12 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             mBounded = true;
             L.debug("ChatACtivity, onServiceConnected");
             mService = ((LocalBinder<XMPPService>) service).getService();
-            mService.addMessageListener(ChatActivity.this);
 
             retriveChatMessages();
-            mService.addOnConnectedToOpenfireObserver(ChatActivity.this);
-            mService.addMAMObserver(ChatActivity.this);
-
         }
     };
 
-    private void dissmissSwipeToRefresh(){
+    private void dissmissSwipeToRefresh() {
 
         mSwipeRefreshLayout.postDelayed(new Runnable() {
             @Override
@@ -294,6 +297,164 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             }
         }, 500);
     }
+
+    private class OnRetrieveChatMessagesWith implements OnExecutePendingTaskListener {
+        private final String with;
+
+        public OnRetrieveChatMessagesWith(String with) {
+            this.with = with;
+        }
+
+        @Override
+        public void onExecutePendingTask() {
+            L.debug("OnRetrieveChatMessagesWith: "+this.with);
+
+            if (!XMPPService.xmpp.connection.isConnected()) {
+
+                dissmissSwipeToRefresh();
+
+                XMPPManager.getInstance(ChatActivity.this).instance = null;
+
+                XMPPService.xmpp = XMPPManager.getInstance(ChatActivity.this);
+
+                XMPPService.xmpp.connect("onCreate");
+
+            } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+                dissmissSwipeToRefresh();
+
+                XMPPService.xmpp.login();
+            } else {
+
+                XMPPService.xmpp.addOnProcessMessageListener(new OnProcessMessage(){
+                    @Override
+                    public void onProcessMessage(final ChatMessage chatMessage) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
+                                mChatMsgs.add(chatMessage);
+                                //mComments.add(comment);
+                                mAdapter.notifyDataSetChanged();
+                                listview.smoothScrollToPosition(mChatMsgs.size() - 1);
+
+
+                            }
+                        });
+                    }
+                });
+
+                MessageArchiveWithIQ mam = new MessageArchiveWithIQ(this.with);
+                mam.setType(IQ.Type.set);
+                try {
+                    XMPPService.xmpp.connection.sendStanza(mam);
+                } catch (SmackException.NotConnectedException e) {
+                    L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
+
+                }
+
+                final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
+
+                ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
+                        new MAMExtensionProvider(
+                                new MessageResultElement.OnParseCompleteListener() {
+
+                                    @Override
+                                    public void onParseComplete(MessageResultElement msg) {
+
+                                        //L.debug("msgs: "+msgElements.size());
+
+                                        msgElements.add(msg);
+                                    }
+                                }
+                        ));
+
+                ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
+                        new MAMFinExtensionProvider(
+                                new MAMFinExtensionProvider.OnParseCompleteListener() {
+
+                                    @Override
+                                    public void onParseComplete(final int first, final int last, final int count) {
+
+                                       // L.debug("msgs: " + msgElements.size() + ", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
+                                        mSwipeRefreshLayout.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mSwipeRefreshLayout.setRefreshing(false);
+                                            }
+                                        }, 500);
+
+
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                SQLiteHandler db = new SQLiteHandler(ChatActivity.this);
+                                                db.openToRead();
+                                                final UserProfile uProfile = new UserProfile();
+                                                uProfile.setUsername(db.getUsername());
+
+                                                uProfile.loadVCard(XMPPService.xmpp.connection);
+
+                                                // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+                                                L.debug(uProfile.getUsername()+", "+uProfile.getAvatarImg());
+                                                if (uProfile.getAvatarImg() != null) {
+                                                    mUserAvatar = uProfile.getAvatarImg();
+
+                                                    resetAdapter();
+                                                }
+                                                db.close();
+
+                                            }
+                                        }).start();
+
+
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                final UserProfile cProfile = new UserProfile();
+                                                cProfile.setUsername(mCorrespondentName);
+
+                                                cProfile.loadVCard(XMPPService.xmpp.connection);
+
+                                                // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+
+                                                if (cProfile.getAvatarImg() != null) {
+                                                    mCorrespondentAvatar = cProfile.getAvatarImg();
+
+                                                    resetAdapter();
+                                                }
+
+                                            }
+                                        }).start();
+
+
+                                        L.debug("ChatActivity, onParseComplete");
+                                        mChatMsgs.clear();
+
+
+                                        Gson gson = new Gson();
+
+                                        for (MessageResultElement msg : msgElements) {
+
+                                            L.debug("to: " + msg.getTo() + ", body: " + msg.getBody() + ", from: " + msg.getFrom());
+                                            ChatMessage chat = gson.fromJson(msg.getBody(), ChatMessage.class);
+                                            mChatMsgs.add(chat);
+                                        }
+
+                                        resetAdapter();
+
+                                    }
+                                }
+                        ));
+            }
+
+        }
+    }
+
+    ;
 
     private void retriveChatMessages() {
 
@@ -305,15 +466,11 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
         final String newWith = mCorrespondentName + "@198.154.106.139";
 
-        if (!mService.xmpp.connection.isConnected()) {
-            dissmissSwipeToRefresh();
-            mService.xmpp.connect("onCreate");
-        } else if (!mService.xmpp.connection.isAuthenticated()) {
-            mService.xmpp.login();
-            dissmissSwipeToRefresh();
-        } else {
-            mService.retrieveListOfCollectionsFrmMsgArchive(newWith);
-        }
+
+
+        //mService.retrieveListOfCollectionsFrmMsgArchive(newWith);
+        mService.onExecutePendingTask(new OnRetrieveChatMessagesWith(newWith));
+
 
     }
 
@@ -345,8 +502,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
         if (mService != null) {
 
-            mService.removeMAMObserver(ChatActivity.this);
-            mService.removeOnConnectedToOpenfireObserver(ChatActivity.this);
+
             unbindService(mServiceConn);
         }
 
@@ -362,115 +518,99 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
         }
     }
 
-    @Override
-    public void onProcessMessage(final ChatMessage chatMessage) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
 
-                //NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
-                mChatMsgs.add(chatMessage);
-                //mComments.add(comment);
-                mAdapter.notifyDataSetChanged();
-                listview.smoothScrollToPosition(mChatMsgs.size() - 1);
-
-
-
-            }
-        });
-    }
 
     private Bitmap mCorrespondentAvatar;
     private Bitmap mUserAvatar;
 
-    @Override
-    public void onRetrieveMessageArchive(List<MessageResultElement> msgs, int first, int last, int count) {
-
-
-        mSwipeRefreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }, 500);
-
-
-
-        if (XMPPService.xmpp.loggedin) {
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    SQLiteHandler db = new SQLiteHandler(ChatActivity.this);
-                    db.openToRead();
-                    final UserProfile uProfile = new UserProfile();
-                    uProfile.setUsername(db.getUsername());
-
-                    uProfile.loadVCard(XMPPService.xmpp.connection);
-
-                    // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
-
-                    if (uProfile.getAvatarImg() != null) {
-                        mUserAvatar = uProfile.getAvatarImg();
-
-                        resetAdapter();
-                    }
-                    db.close();
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        L.error(e.getMessage());
-                    }
-
-
-                }
-            }).start();
-
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    final UserProfile cProfile = new UserProfile();
-                    cProfile.setUsername(mCorrespondentName);
-
-                    cProfile.loadVCard(XMPPService.xmpp.connection);
-
-                    // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
-
-                    if (cProfile.getAvatarImg() != null) {
-                        mCorrespondentAvatar = cProfile.getAvatarImg();
-
-                        resetAdapter();
-                    }
-
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        L.error(e.getMessage());
-                    }
-                }
-            }).start();
-        }
-
-        L.debug("ChatActivity, onParseComplete");
-        mChatMsgs.clear();
-
-
-        Gson gson = new Gson();
-
-        for (MessageResultElement msg : msgs) {
-
-            L.debug("to: " + msg.getTo() + ", body: " + msg.getBody() + ", from: " + msg.getFrom());
-            ChatMessage chat = gson.fromJson(msg.getBody(), ChatMessage.class);
-            mChatMsgs.add(chat);
-        }
-
-        resetAdapter();
-
-
-    }
+//    @Override
+//    public void onRetrieveMessageArchive(List<MessageResultElement> msgs, int first, int last, int count) {
+//
+//
+//        mSwipeRefreshLayout.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSwipeRefreshLayout.setRefreshing(false);
+//            }
+//        }, 500);
+//
+//
+//
+//        if (XMPPService.xmpp.loggedin) {
+//
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    SQLiteHandler db = new SQLiteHandler(ChatActivity.this);
+//                    db.openToRead();
+//                    final UserProfile uProfile = new UserProfile();
+//                    uProfile.setUsername(db.getUsername());
+//
+//                    uProfile.loadVCard(XMPPService.xmpp.connection);
+//
+//                    // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+//
+//                    if (uProfile.getAvatarImg() != null) {
+//                        mUserAvatar = uProfile.getAvatarImg();
+//
+//                        resetAdapter();
+//                    }
+//                    db.close();
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        L.error(e.getMessage());
+//                    }
+//
+//
+//                }
+//            }).start();
+//
+//
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    final UserProfile cProfile = new UserProfile();
+//                    cProfile.setUsername(mCorrespondentName);
+//
+//                    cProfile.loadVCard(XMPPService.xmpp.connection);
+//
+//                    // L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+//
+//                    if (cProfile.getAvatarImg() != null) {
+//                        mCorrespondentAvatar = cProfile.getAvatarImg();
+//
+//                        resetAdapter();
+//                    }
+//
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        L.error(e.getMessage());
+//                    }
+//                }
+//            }).start();
+//        }
+//
+//        L.debug("ChatActivity, onParseComplete");
+//        mChatMsgs.clear();
+//
+//
+//        Gson gson = new Gson();
+//
+//        for (MessageResultElement msg : msgs) {
+//
+//            L.debug("to: " + msg.getTo() + ", body: " + msg.getBody() + ", from: " + msg.getFrom());
+//            ChatMessage chat = gson.fromJson(msg.getBody(), ChatMessage.class);
+//            mChatMsgs.add(chat);
+//        }
+//
+//        resetAdapter();
+//
+//
+//    }
 
     private void resetAdapter() {
 
@@ -484,7 +624,6 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
     @Override
     public void onConnectedToOpenfire(XMPPConnection connection) {
-
 
 
     }
@@ -555,11 +694,6 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             return mChatMsgs.size();
         }
 
-        //<iq type="result" id="qvtHC-14" to="momo@198.154.106.139/Smack">
-        // <chat xmlns="urn:xmpp:archive" with="leki@198.154.106.139" start="2016-03-23T00:03:36.282Z">
-        // <from secs="0">
-        // <body>{"body":"ghbnn","senderName":"leki","msgid":"980-27","receiver":"momo","sender":"leki","isMine":true}</body></from>
-        // <from secs="4"><body>{"body":"fghjjj","senderName":"leki","msgid":"784-75","receiver":"momo","sender":"leki","isMine":true}</body></from><set xmlns="http://jabber.org/protocol/rsm"><first index="0">0</first><last>1</last><count>2</count></set></chat></iq>
 
         @Override
         public void onBindViewHolder(ViewHolder vh, int pos) {
@@ -640,6 +774,10 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             }
         });
 
+    }
+
+    public interface OnProcessMessage {
+        public void onProcessMessage(ChatMessage chatMessage);
     }
 
 //    public interface OnRetrieveMessageArchiveListener {

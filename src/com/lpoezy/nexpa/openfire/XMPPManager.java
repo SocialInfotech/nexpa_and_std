@@ -8,11 +8,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.lpoezy.nexpa.activities.ChatActivity;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.ChatMessage;
-import com.lpoezy.nexpa.objects.MAMExtensionProvider;
-import com.lpoezy.nexpa.objects.MAMFinExtensionProvider;
-import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
 import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
@@ -32,11 +30,9 @@ import org.jivesoftware.smack.XMPPException.XMPPErrorException;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
-import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
-import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.iqregister.AccountManager;
@@ -283,9 +279,8 @@ public class XMPPManager {
 
     public void login() {
 
+
         try {
-
-
             connection.login(loginUser, passwordUser);
 
             Presence presence = new Presence(Presence.Type.available);
@@ -295,11 +290,18 @@ public class XMPPManager {
 
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
-        } catch (XMPPException | SmackException | IOException e) {
-            L.error("xxx: connection.isConnected? " + connection.isConnected() + ", " + e.getMessage());
-        } catch (Exception e) {
-            L.error("yyy: " + e.getMessage());
+
+        } catch (XMPPException e) {
+            L.error(e.getMessage());
+        } catch (SmackException e) {
+            L.error(e.getMessage());
+        } catch (IOException e) {
+            L.error(e.getMessage());
         }
+
+
+
+
 
 
     }
@@ -310,6 +312,10 @@ public class XMPPManager {
             ob.onConnectedToOpenfire(connection);
 
         }
+    }
+    ChatActivity.OnProcessMessage mProcessMessageListener;
+    public void addOnProcessMessageListener(ChatActivity.OnProcessMessage processMessageListener) {
+        mProcessMessageListener = processMessageListener;
     }
 
     public interface OnConnectedToOPenfireListener {
@@ -362,54 +368,62 @@ public class XMPPManager {
 
     }
 
-    public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
-        L.debug("retrieveListOfCollectionsFrmMsgArchive");
-
-        if (connection.isAuthenticated()) {
-            MessageArchiveWithIQ mam = new MessageArchiveWithIQ(with);
-            mam.setType(IQ.Type.set);
-            try {
-                connection.sendStanza(mam);
-            } catch (NotConnectedException e) {
-                L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
-
-            }
-
-            final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
-
-            ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
-                    new MAMExtensionProvider(
-                            new MessageResultElement.OnParseCompleteListener() {
-
-                                @Override
-                                public void onParseComplete(MessageResultElement msg) {
-
-                                    //L.debug("msgs: "+msgs.size());
-
-                                    msgElements.add(msg);
-                                }
-                            }
-                    ));
-
-            ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
-                    new MAMFinExtensionProvider(
-                            new MAMFinExtensionProvider.OnParseCompleteListener() {
-
-                                @Override
-                                public void onParseComplete(final int first, final int last, final int count) {
-
-                                    L.debug("msgs: " + msgElements.size() + ", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
-                                    notifyMAMListeners(msgElements, first, last, count);
-
-                                }
-                            }
-                    ));
-        } else {
-            login();
-        }
-
-
-    }
+//    public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
+//        L.debug("retrieveListOfCollectionsFrmMsgArchive");
+//
+//        if (connection.isAuthenticated()) {
+//            MessageArchiveWithIQ mam = new MessageArchiveWithIQ(with);
+//            mam.setType(IQ.Type.set);
+//            try {
+//                connection.sendStanza(mam);
+//            } catch (NotConnectedException e) {
+//                L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
+//
+//            }
+//
+//            final List<MessageResultElement> msgElements = new ArrayList<MessageResultElement>();
+//
+//            ProviderManager.addExtensionProvider("result", "urn:xmpp:mam:0",
+//                    new MAMExtensionProvider(
+//                            new MessageResultElement.OnParseCompleteListener() {
+//
+//                                @Override
+//                                public void onParseComplete(MessageResultElement msg) {
+//
+//                                    //L.debug("msgs: "+msgs.size());
+//
+//                                    msgElements.add(msg);
+//                                }
+//                            }
+//                    ));
+//
+//            ProviderManager.addExtensionProvider("fin", "urn:xmpp:mam:0",
+//                    new MAMFinExtensionProvider(
+//                            new MAMFinExtensionProvider.OnParseCompleteListener() {
+//
+//                                @Override
+//                                public void onParseComplete(final int first, final int last, final int count) {
+//
+//                                    L.debug("msgs: " + msgElements.size() + ", onParseComplete: first: " + first + ", last: " + last + ", count: " + count);
+//                                    notifyMAMListeners(msgElements, first, last, count);
+//
+//                                }
+//                            }
+//                    ));
+//        } else {
+//            try {
+//                login();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } catch (XMPPException e) {
+//                e.printStackTrace();
+//            } catch (SmackException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//
+//    }
 
     public void sendMessage(ChatMessage chatMessage) {
         String body = gson.toJson(chatMessage);
@@ -629,9 +643,7 @@ public class XMPPManager {
 
         private void processMessage(final ChatMessage chatMessage) {
             chatMessage.isMine = false;
-
-            //processMessageCallback.onProcessMessage(chatMessage);
-
+            mProcessMessageListener.onProcessMessage(chatMessage);
 
         }
 

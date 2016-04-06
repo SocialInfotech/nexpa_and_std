@@ -27,7 +27,6 @@ import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
-import com.lpoezy.nexpa.objects.PubSubBroadcastStreamer;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.parallaxrecyclerview.ParallaxRecyclerAdapter;
@@ -35,28 +34,20 @@ import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.BmpFactory;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.L;
-import com.novoda.sexp.SimpleEasyXmlParser;
-import com.novoda.sexp.Streamer;
-import com.novoda.sexp.finder.ElementFinder;
-import com.novoda.sexp.finder.ElementFinderFactory;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smackx.disco.packet.DiscoverItems;
-import org.jivesoftware.smackx.pubsub.AccessModel;
-import org.jivesoftware.smackx.pubsub.ConfigureForm;
 import org.jivesoftware.smackx.pubsub.Item;
-import org.jivesoftware.smackx.pubsub.ItemPublishEvent;
 import org.jivesoftware.smackx.pubsub.LeafNode;
 import org.jivesoftware.smackx.pubsub.PayloadItem;
 import org.jivesoftware.smackx.pubsub.PubSubManager;
-import org.jivesoftware.smackx.pubsub.PublishModel;
 import org.jivesoftware.smackx.pubsub.Subscription;
-import org.jivesoftware.smackx.pubsub.listener.ItemEventListener;
-import org.jivesoftware.smackx.xdata.FormField;
-import org.jivesoftware.smackx.xdata.packet.DataForm;
-import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -133,15 +124,17 @@ public class MyBroadcastsFragment extends Fragment {
 
                 ViewHolder vh = (ViewHolder) viewHolder;
 
-                vh.tvBroadMsg.setText(ann.getMessage());
+                vh.tvBroadMsg.setText(ann.getBody());
                 vh.tvReply.setText("REACHED " + ann.getReach());
                 vh.ImgReply.setBackgroundResource(R.drawable.btn_reach);
                 vh.tvBroadFrm.setText(mUsername);
 
                 DateUtils du = new DateUtils();
-                String dateFormatted = du.getMinAgo(ann.getDate());
-
-                vh.tvDateBroad.setText(dateFormatted);
+                String dateFormatted="";
+                if(ann.getDate()!=null&& !ann.getDate().isEmpty()){
+                     dateFormatted = du.getMinAgo(ann.getDate());
+                    vh.tvDateBroad.setText(dateFormatted);
+                }
 
                 vh.tvLocLocal.setVisibility(View.GONE);
 
@@ -274,28 +267,16 @@ public class MyBroadcastsFragment extends Fragment {
 //                            node = (LeafNode) mgr.createNode(db.getUsername() + "-broadcast", form);
 //
 //                        } catch (SmackException.NoResponseException e) {
-//                            L.error(e.getMessage());
+//                            L.error(e.getBody());
 //                        } catch (XMPPException.XMPPErrorException e) {
-//                            L.error(e.getMessage());
+//                            L.error(e.getBody());
 //                        } catch (SmackException.NotConnectedException e) {
-//                            L.error(e.getMessage());
+//                            L.error(e.getBody());
 //                        }
 
 
 
-//                        <iq type='get'
-//                        from='francisco@denmark.lit/barracks'
-//                        to='pubsub.shakespeare.lit'
-//                        id='items2'>
-//                        <pubsub xmlns='http://jabber.org/protocol/pubsub'>
-//                        <items node='princely_musings' max_items='2'/>
-//                        </pubsub>
-//                        </iq>
 
-                        //<iq to='pubsub.198.154.106.139' id='bg406-27' type='get'>
-                        // <pubsub xmlns='http://jabber.org/protocol/pubsub'>
-                        // <items node='kato-broadcast' max_items='25'/>
-                        // </pubsub></iq>
 
                         try {
 
@@ -315,29 +296,56 @@ public class MyBroadcastsFragment extends Fragment {
 
                             }
 
-                            //<iq to='pubsub.198.154.106.139' id='C8D1I-40' type='get'>
-                            // <pubsub xmlns='http://jabber.org/protocol/pubsub'>
-                            // <items node='kato-broadcast' subid='2INFMa1a1wnpfqI1lN02OtB547dukzDk4i73BdFC' max_items='100'/>
-                            // </pubsub>
-                            // </iq>
-
-                            //ee0bfce2-46ac-4914-8e47-0e55f785a6085
 
                             //L.debug("mySubid: "+mySubid);
                             Collection<PayloadItem<Item>> eventItems = node.getItems(100, mySubid);
 
-                            ElementFinderFactory factory = SimpleEasyXmlParser.getElementFinderFactory();
-                            ElementFinder<String> elementFinder = factory.getStringFinder();
-                            Streamer<String> broadcastStreamer = new PubSubBroadcastStreamer(elementFinder, "broadcast");
+                            String XML =
+                                    "<item id='ee0bfce2-46ac-4914-8e47-0e55f785a6089'><broadcast xmlns='pubsub:nexpa:broadcast'>fggggffhhffhhh</broadcast></item>";
+                            //<item id='ee0bfce2-46ac-4914-8e47-0e55f785a6089'><broadcast xmlns='pubsub:nexpa:broadcast'>fggggffhhffhhh</broadcast></item>
+
 
                             List<Announcement>announcements = new  ArrayList<Announcement>();
                             for(Item item : eventItems) {
 
-                                String broadcast = SimpleEasyXmlParser.parse(item.toXML(), broadcastStreamer);
-                                //L.debug("broadcast: " + broadcast);
 
-                                Announcement announcement = new Announcement();
-                                announcement.setMessage(broadcast);
+                                XmlPullParserFactory factory = null;
+                                try {
+                                    factory = XmlPullParserFactory.newInstance();
+
+                                    factory.setNamespaceAware(true);
+                                    XmlPullParser xpp = factory.newPullParser();
+
+                                    xpp.setInput( new StringReader( item.toXML()) );
+                                    int eventType = xpp.getEventType();
+                                    while (eventType != XmlPullParser.END_DOCUMENT) {
+                                        if(eventType == XmlPullParser.START_DOCUMENT) {
+                                            L.debug("Start document");
+                                        } else if(eventType == XmlPullParser.START_TAG) {
+                                            //L.debug("Start tag " + xpp.getName());
+                                        } else if(eventType == XmlPullParser.END_TAG) {
+                                            //L.debug("End tag " + xpp.getName());
+                                        } else if(eventType == XmlPullParser.TEXT) {
+                                            L.debug("Text " + xpp.getText());
+
+                                            Announcement announcement = new Announcement();
+                                            announcement.setBody(xpp.getText());
+                                            announcements.add(announcement);
+
+                                        }
+                                        eventType = xpp.next();
+                                    }
+                                    L.debug("End document");
+
+
+                                } catch (XmlPullParserException e) {
+                                    L.error(e.getMessage());
+                                } catch (IOException e) {
+                                    L.error(e.getMessage());
+                                }
+
+
+
                             }
 
 

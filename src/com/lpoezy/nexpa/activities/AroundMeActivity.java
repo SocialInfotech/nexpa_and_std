@@ -37,6 +37,8 @@ import com.appyvet.rangebar.RangeBar;
 import com.devspark.appmsg.AppMsg;
 import com.devspark.appmsg.AppMsg.Style;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.ErrorDialogFragment;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -81,6 +83,7 @@ public class AroundMeActivity extends AppCompatActivity
     private static final String REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY";
     private static final String LOCATION_KEY = "LOCATION_KEY";
     private static final String LAST_UPDATED_TIME_STRING_KEY = "LAST_UPDATED_TIME_STRING_KEY";
+    private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = -1;
     // Button btnUpdate;
     LocationManager locationManager;
     // MyLocationListener locationListener;
@@ -237,7 +240,7 @@ public class AroundMeActivity extends AppCompatActivity
                             dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
                         }
 
-                        if(mBounded){
+                        if (mBounded) {
                             mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
                         }
                         //downloadNearbyUsersOnline();
@@ -293,7 +296,9 @@ public class AroundMeActivity extends AppCompatActivity
 
     protected void onStart() {
 
-        mGoogleApiClient.connect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
 
         super.onStart();
     }
@@ -340,7 +345,7 @@ public class AroundMeActivity extends AppCompatActivity
 
         db.close();
 
-        if(mBounded){
+        if (mBounded) {
 
         }
 
@@ -385,13 +390,6 @@ public class AroundMeActivity extends AppCompatActivity
 
             if (!XMPPService.xmpp.connection.isConnected()) {
 
-//                mSwipeRefreshLayout.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        mSwipeRefreshLayout.setRefreshing(false);
-//                    }
-//                }, 500);
 
                 XMPPManager.getInstance(AroundMeActivity.this).instance = null;
 
@@ -400,14 +398,6 @@ public class AroundMeActivity extends AppCompatActivity
                 XMPPService.xmpp.connect("onCreate");
 
             } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
-
-//                mSwipeRefreshLayout.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        mSwipeRefreshLayout.setRefreshing(false);
-//                    }
-//                }, 500);
 
                 XMPPService.xmpp.login();
             } else {
@@ -443,7 +433,6 @@ public class AroundMeActivity extends AppCompatActivity
                         L.debug(webpage);
 
                         updateUI(webpage);
-
 
                     }
                 }).start();
@@ -591,7 +580,27 @@ public class AroundMeActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        L.makeText(this, "onConnectionFailed", AppMsg.STYLE_ALERT);
+
+        // Get the error dialog from Google Play services
+        Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
+                connectionResult.getErrorCode(),
+                this,
+                CONNECTION_FAILURE_RESOLUTION_REQUEST);
+
+        // If Google Play services can provide an error dialog
+        if (errorDialog != null) {
+            // Create a new DialogFragment for the error dialog
+            ErrorDialogFragment errorFragment = ErrorDialogFragment.newInstance(errorDialog);
+                    /*new ErrorDialogFragment()*/
+            ;
+            // Set the dialog in the DialogFragment
+            //errorFragment.setDialog(errorDialog);
+            // Show the error dialog in the DialogFragment
+            errorFragment.show(getFragmentManager(),
+                    "Location Updates");
+        }
+
+
     }
 
     @Override
@@ -955,20 +964,20 @@ public class AroundMeActivity extends AppCompatActivity
 //                try {
 //                    connection.sendPacket(subscribe);
 //                } catch (SmackException.NotConnectedException e) {
-//                    L.error(e.getMessage());
+//                    L.error(e.getBody());
 //                }
 //
 //                try {
 //                    roster.createEntry(address, null, null);
 //                    updateUserAvailability(address, roster);
 //                } catch (XMPPException e) {
-//                    L.error(e.getMessage());
+//                    L.error(e.getBody());
 //                } catch (SmackException.NotLoggedInException e) {
-//                    L.error(address + ", " + e.getMessage());
+//                    L.error(address + ", " + e.getBody());
 //                } catch (SmackException.NotConnectedException e) {
-//                    L.error(e.getMessage());
+//                    L.error(e.getBody());
 //                } catch (SmackException.NoResponseException e) {
-//                    L.error(e.getMessage());
+//                    L.error(e.getBody());
 //                }
 //
 //

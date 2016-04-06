@@ -1664,10 +1664,10 @@ public class SQLiteHandler {
                 int reach = c.getInt(c.getColumnIndex(BROADCAST_REACH));
                 int status = c.getInt(c.getColumnIndex(BROADCAST_STATUS));
 
-                Announcement ann = new Announcement(id, type, from, message, date, locLongitude, locLatitude, locLocal,
-                        reach, status);
-
-                announcements.add(ann);
+//                Announcement ann = new Announcement(from, message, date, locLocal,
+//                        reach);
+//
+//                announcements.add(ann);
 
             } while (c.moveToNext());
         }
@@ -1700,10 +1700,10 @@ public class SQLiteHandler {
                 int reach = c.getInt(c.getColumnIndex(BROADCAST_REACH));
                 int status = c.getInt(c.getColumnIndex(BROADCAST_STATUS));
 
-                Announcement ann = new Announcement(id, type, from, message, date, locLongitude, locLatitude, locLocal,
-                        reach, status);
-
-                announcements.add(ann);
+//                Announcement ann = new Announcement(from, message, date, locLocal,
+//                        reach);
+//
+//                announcements.add(ann);
 
             } while (c.moveToNext());
         }

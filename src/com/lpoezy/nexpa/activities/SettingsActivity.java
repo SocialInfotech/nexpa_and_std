@@ -235,7 +235,7 @@ public class SettingsActivity extends Activity {
 						
 						pDialog = new ProgressDialog(SettingsActivity.this);
 						pDialog.setCancelable(false);
-						pDialog.setMessage("Saving ...");
+						pDialog.setBody("Saving ...");
 						pDialog.show();
 						final String imgDecodableString = Utilz.getDataFrmSharedPref(SettingsActivity.this, ProfilePicture.LOC, "");
 						
@@ -474,7 +474,7 @@ public class SettingsActivity extends Activity {
 //				
 //				pDialog = new ProgressDialog(SettingsActivity.this);
 //				pDialog.setCancelable(false);
-//				pDialog.setMessage("Syncing ...");
+//				pDialog.setBody("Syncing ...");
 //				pDialog.show();
 //				
 //				new Thread(new Runnable() {

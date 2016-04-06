@@ -396,6 +396,7 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="edt_broadcast">Enter Broadcast Message</string>
     <string name="gcm_defaultSenderId">983540022072</string>
+    <string name="google_api_key">AIzaSyAtckbwEu0nJaMUlAj0ptLszozghH23Nyo</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_world">Nexpa</string>
     <string name="hint_email">Email</string>

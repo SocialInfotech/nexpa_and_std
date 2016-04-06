@@ -377,7 +377,7 @@ public class XMPPManager {
 //            try {
 //                connection.sendStanza(mam);
 //            } catch (NotConnectedException e) {
-//                L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getMessage());
+//                L.error("retrieveListOfCollectionsFrmMsgArchive: " + e.getBody());
 //
 //            }
 //

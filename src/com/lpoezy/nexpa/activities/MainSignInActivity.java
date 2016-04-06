@@ -151,7 +151,8 @@ public class MainSignInActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        L.debug(">>>>>>>>>>>>>>>>>>"+XMPPService.isRunning());
+        L.debug(">>>>>>>>>>>>>>>>>>" + XMPPService.isRunning());
+
 
     }
 

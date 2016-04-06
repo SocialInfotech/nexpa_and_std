@@ -267,7 +267,7 @@ public class PeopleActivity extends ListActivity implements OnRefreshListener {
         protected void onPreExecute() {
             super.onPreExecute();
            // pDialog = new ProgressDialog(NewProductActivity.this);
-           // pDialog.setMessage("Creating Product..");
+           // pDialog.setBody("Creating Product..");
           //  pDialog.setIndeterminate(false);
         //    pDialog.setCancelable(true);
           //  pDialog.show();

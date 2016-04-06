@@ -99,7 +99,7 @@ public class OthersBroadcastsFragment extends Fragment implements Correspondent.
 				
 				ViewHolder vh = (ViewHolder)viewHolder;
 				
-				vh .tvBroadMsg.setText(ann.getMessage());
+				vh .tvBroadMsg.setText(ann.getBody());
 				vh.tvReply.setText("REACHED " + ann.getReach());
 				vh.tvReply.setVisibility(View.INVISIBLE);
 				vh.ImgReply.setBackgroundResource(R.drawable.btn_reach);
@@ -317,7 +317,7 @@ private void resetProfilePic(){
 //
 //			Announcement ann = mAnouncements.get(position);
 //			
-//			vh.tvBroadMsg.setText(ann.getMessage());
+//			vh.tvBroadMsg.setText(ann.getBody());
 //			vh.tvReply.setText("REACHED " + ann.getReach());
 //			vh.ImgReply.setBackgroundResource(R.drawable.btn_reach);
 //			vh.tvBroadFrm.setText(mUsername);

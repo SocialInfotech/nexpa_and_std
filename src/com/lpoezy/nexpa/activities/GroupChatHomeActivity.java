@@ -3,6 +3,8 @@ package com.lpoezy.nexpa.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,31 +25,30 @@ import android.widget.TextView;
 
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
+import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.StanzaFilter;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smackx.disco.packet.DiscoverItems;
+import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smackx.pubsub.AccessModel;
 import org.jivesoftware.smackx.pubsub.ConfigureForm;
-import org.jivesoftware.smackx.pubsub.Item;
 import org.jivesoftware.smackx.pubsub.ItemPublishEvent;
 import org.jivesoftware.smackx.pubsub.LeafNode;
-import org.jivesoftware.smackx.pubsub.Node;
 import org.jivesoftware.smackx.pubsub.PayloadItem;
 import org.jivesoftware.smackx.pubsub.PubSubManager;
 import org.jivesoftware.smackx.pubsub.PublishModel;
 import org.jivesoftware.smackx.pubsub.SimplePayload;
-import org.jivesoftware.smackx.pubsub.Subscription;
 import org.jivesoftware.smackx.pubsub.listener.ItemEventListener;
-import org.jivesoftware.smackx.xdata.Form;
+import org.jivesoftware.smackx.time.packet.Time;
 import org.jivesoftware.smackx.xdata.packet.DataForm;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 public class GroupChatHomeActivity extends AppCompatActivity implements XMPPService.OnServiceConnectedListener {
 
@@ -201,7 +202,23 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             }
         });
 
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        String errorMessage = "";
+
+
+
     }
+
+    public static final int SUCCESS_RESULT = 0;
+    public static final int FAILURE_RESULT = 1;
+    public static final String PACKAGE_NAME =
+            "com.lpoezy.nexpa";
+    public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
+    public static final String RESULT_DATA_KEY = PACKAGE_NAME +
+            ".RESULT_DATA_KEY";
+    public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
+            ".LOCATION_DATA_EXTRA";
 
     private void openBroadcastDialog() {
         edBroad.setText("");
@@ -244,7 +261,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         });
     }
 
-    private boolean broadcastMessage(String msgToBroadcast) {
+    private boolean broadcastMessage(final String msgToBroadcast) {
         SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
         db.openToRead();
         PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
@@ -252,6 +269,42 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         LeafNode node = null;
         try {
             node = mgr.getNode(db.getUsername() + "-broadcast");
+
+            final String from, body, date, locLocal;
+            int reach = 0;
+            final long[] dateTime = new long[1];
+            Time time = new Time();
+            try {
+                XMPPService.xmpp.connection.sendStanza(time);
+
+                XMPPService.xmpp.connection.addSyncStanzaListener(new StanzaListener() {
+                    @Override
+                    public void processPacket(Stanza stanza) throws SmackException.NotConnectedException {
+
+                        dateTime[0] = ((Time)stanza).getTime().getTime();
+                    }
+                }, new StanzaFilter() {
+                    @Override
+                    public boolean accept(Stanza stanza) {
+
+                        if(stanza.toString().contains("urn:xmpp:time"))
+                            return true;
+                        return false;
+                    }
+                });
+
+                L.debug("time: " + time.getTime());
+            } catch (SmackException.NotConnectedException e) {
+                e.printStackTrace();
+            }
+            from = db.getUsername();
+            body = msgToBroadcast;
+            date = Long.toString(dateTime[0]);
+            locLocal = "";
+            reach = 1;
+
+
+            Announcement ann = new Announcement(from, body, date, locLocal, reach);
 
 //            ConfigureForm configureForm = new ConfigureForm(DataForm.Type.submit);
 //            configureForm.setAccessModel(AccessModel.open);

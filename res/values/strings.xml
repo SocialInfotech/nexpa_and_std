@@ -119,5 +119,6 @@
     
     <!-- gcm -->
     <string name="gcm_defaultSenderId">983540022072</string>
+    <string name="google_api_key">AIzaSyAtckbwEu0nJaMUlAj0ptLszozghH23Nyo</string>
 
 </resources>

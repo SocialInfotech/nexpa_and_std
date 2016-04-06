@@ -324,9 +324,9 @@ public class XMPPService extends Service {
 //
 //                    } catch (NoResponseException | NotConnectedException e) {
 //                        callback.onResumeScreen("User is not, or no longer, connected.");
-//                        L.error(e.getMessage());
+//                        L.error(e.getBody());
 //                    } catch (XMPPErrorException e) {
-//                        L.error(e.getMessage());
+//                        L.error(e.getBody());
 //                        callback.onResumeScreen("User Name already exists, please enter another one.");
 //                    }
 //
@@ -401,7 +401,7 @@ public class XMPPService extends Service {
 //                    ofuser.downloadOnline();
 //
 //                } catch (JSONException e) {
-//                    L.error("" + e.getMessage());
+//                    L.error("" + e.getBody());
 //                }
 //
 //                if (ofuser.saveOffline(getApplicationContext())) {
@@ -440,7 +440,7 @@ public class XMPPService extends Service {
 ////												Exception exception) {
 ////											exception.printStackTrace();
 ////											L.error("IO archjieve Exception, "
-////													+ exception.getMessage());
+////													+ exception.getBody());
 ////										}
 ////									});
 //

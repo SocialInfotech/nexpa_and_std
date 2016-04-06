@@ -560,7 +560,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 //                    try {
 //                        Thread.sleep(500);
 //                    } catch (InterruptedException e) {
-//                        L.error(e.getMessage());
+//                        L.error(e.getBody());
 //                    }
 //
 //
@@ -588,7 +588,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 //                    try {
 //                        Thread.sleep(500);
 //                    } catch (InterruptedException e) {
-//                        L.error(e.getMessage());
+//                        L.error(e.getBody());
 //                    }
 //                }
 //            }).start();

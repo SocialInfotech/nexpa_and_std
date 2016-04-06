@@ -16,12 +16,12 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\drawable-hdpi\\ic_tab_map.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_scrubber_control_off_mtrl_alpha.png",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-hdpi\\abc_scrubber_control_off_mtrl_alpha.png"
-    },
-    {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ab_share_pack_mtrl_alpha.9.png",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-hdpi\\abc_ab_share_pack_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_scrubber_control_off_mtrl_alpha.png",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-hdpi\\abc_scrubber_control_off_mtrl_alpha.png"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\bubble_green.9.png",
@@ -40,12 +40,12 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\drawable-hdpi\\btn_radio_off_disabled_holo_light.png"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btn_gender.png",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\drawable-hdpi\\btn_gender.png"
-    },
-    {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\powered_by_google_light.png",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-location\\8.4.0\\res\\drawable-hdpi\\powered_by_google_light.png"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btn_gender.png",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\drawable-hdpi\\btn_gender.png"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\appicon.png",
@@ -68,16 +68,16 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\drawable-hdpi\\tab_chat_ch.png"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\common_plus_signin_btn_text_dark_disabled.9.png",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\8.4.0\\res\\drawable-hdpi\\common_plus_signin_btn_text_dark_disabled.9.png"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btn_ok.png",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\drawable-hdpi\\btn_ok.png"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_commit_search_api_mtrl_alpha.png",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-hdpi\\abc_ic_commit_search_api_mtrl_alpha.png"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btn_ok.png",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\drawable-hdpi\\btn_ok.png"
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\common_plus_signin_btn_text_dark_disabled.9.png",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\8.4.0\\res\\drawable-hdpi\\common_plus_signin_btn_text_dark_disabled.9.png"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_action_tab_icon_aroundme_pressed.png",

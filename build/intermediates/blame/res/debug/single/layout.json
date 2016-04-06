@@ -152,12 +152,12 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_list_menu_item_icon.xml"
     },
     {
-        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_around_me.xml",
-        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\layout\\activity_around_me.xml"
-    },
-    {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\broadcast_distance_settings.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\layout\\broadcast_distance_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_around_me.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\res\\layout\\activity_around_me.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v6\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_multichoice_material.xml",

@@ -124,6 +124,6 @@
     <string name="no_address_found">No address found!</string>
     <string name="address_found">Address found!</string>
     <string name="no_geocoder_available">No geocoder available!</string>
-    <string name="your_profile">Your Profile</string>
+    <string name="your_profile">YOUR PROFILE</string>
 
 </resources>

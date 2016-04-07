@@ -171,6 +171,10 @@ public class TabHostActivity extends TabActivity {
 			// "", res.getDrawable(R.drawable.ic_tab_people)
 			spec = tabHost.newTabSpec("home")
 					.setIndicator(getTabIndicator(this, res.getDrawable(R.drawable.ic_tab_people))).setContent(intent);
+			//.setIndicator("Home1", getResources().getDrawable(R.drawable.ic_tab_people)).setContent(intent);
+
+						//spec.setContent(intent);
+			          // spec.setIndicator("Home");
 			tabHost.addTab(spec);
 			// "", res.getDrawable(R.drawable.ic_tab_chat)
 			intent = new Intent().setClass(TabHostActivity.this, ChatHistoryActivity.class);
@@ -192,7 +196,7 @@ public class TabHostActivity extends TabActivity {
 
 			tabHost.setCurrentTab(0);
 			tabHost.setup();
-			int heightValue = 45;
+			int heightValue = 50;
 
 			for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
 				tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = (int)(heightValue * res.getDisplayMetrics().density);

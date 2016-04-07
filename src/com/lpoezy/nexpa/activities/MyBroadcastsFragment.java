@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
@@ -304,7 +305,7 @@ public class MyBroadcastsFragment extends Fragment {
                                     "<item id='ee0bfce2-46ac-4914-8e47-0e55f785a6089'><broadcast xmlns='pubsub:nexpa:broadcast'>fggggffhhffhhh</broadcast></item>";
                             //<item id='ee0bfce2-46ac-4914-8e47-0e55f785a6089'><broadcast xmlns='pubsub:nexpa:broadcast'>fggggffhhffhhh</broadcast></item>
 
-
+                            Gson gson = new Gson();
                             List<Announcement>announcements = new  ArrayList<Announcement>();
                             for(Item item : eventItems) {
 
@@ -328,8 +329,7 @@ public class MyBroadcastsFragment extends Fragment {
                                         } else if(eventType == XmlPullParser.TEXT) {
                                             L.debug("Text " + xpp.getText());
 
-                                            Announcement announcement = new Announcement();
-                                            announcement.setBody(xpp.getText());
+                                            Announcement announcement = gson.fromJson(xpp.getText(), Announcement.class);
                                             announcements.add(announcement);
 
                                         }
@@ -348,7 +348,6 @@ public class MyBroadcastsFragment extends Fragment {
 
                             }
 
-
                             mAnouncements.clear();
                             mAnouncements.addAll(announcements);
 
@@ -360,7 +359,6 @@ public class MyBroadcastsFragment extends Fragment {
                                     mAdapter.notifyDataSetChanged();
                                 }
                             });
-
 
                         } catch (SmackException.NoResponseException e) {
                             L.error(e.getMessage());

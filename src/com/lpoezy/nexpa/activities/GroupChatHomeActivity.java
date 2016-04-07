@@ -1,15 +1,21 @@
 package com.lpoezy.nexpa.activities;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -18,15 +24,29 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.appyvet.rangebar.RangeBar;
+import com.devspark.appmsg.AppMsg;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.ErrorDialogFragment;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
+import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
+import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.L;
 
@@ -44,14 +64,22 @@ import org.jivesoftware.smackx.pubsub.PayloadItem;
 import org.jivesoftware.smackx.pubsub.PubSubManager;
 import org.jivesoftware.smackx.pubsub.PublishModel;
 import org.jivesoftware.smackx.pubsub.SimplePayload;
+import org.jivesoftware.smackx.pubsub.Subscription;
 import org.jivesoftware.smackx.pubsub.listener.ItemEventListener;
 import org.jivesoftware.smackx.time.packet.Time;
 import org.jivesoftware.smackx.xdata.packet.DataForm;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-public class GroupChatHomeActivity extends AppCompatActivity implements XMPPService.OnServiceConnectedListener {
+public class GroupChatHomeActivity extends AppCompatActivity implements XMPPService.OnServiceConnectedListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = -1;
+    private static final String REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY";
+    private static final String LOCATION_KEY = "LOCATION_KEY";
     Button btnStartChat;
     Button btnCancel;
     Button dialogButtonOK;
@@ -96,11 +124,48 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     int broadCount;
     int limit_listen_maker;
 
+    private GoogleApiClient mGoogleApiClient;
+    private Location mCurrentLocation;
+    private boolean mRequestingLocationUpdates;
+    private LocationRequest mLocationRequest;
+    private String mAddress;
+    private ImageView btnDistance;
+    private Dialog dialogPref;
+    private RangeBar rbDistance;
+    private int dst;
+    private String distTick;
+
+    @Override
+    protected void onStop() {
+        if(mGoogleApiClient!=null && mGoogleApiClient.isConnected()){
+            mGoogleApiClient.disconnect();
+        }
+
+        super.onStop();
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+
+        mRequestingLocationUpdates = false;
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("WINDOW", "PAUSED ");
+
+        stopLocationUpdates();
+    }
+
+    @Override
+    protected void onStart() {
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+
+        super.onStart();
     }
 
     @Override
@@ -157,9 +222,13 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             }
         }).start();
 //*/
-
+        if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
 
     }
+
+    private Gson mGson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,11 +246,12 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         dialogBroadcast.setContentView(R.layout.activity_group_chat_main);
         edBroad = (EditText) dialogBroadcast.findViewById(R.id.txtBroadcast);
         btnCancel = (Button) dialogBroadcast.findViewById(R.id.btnClose);
+        btnDistance = (ImageView) findViewById(R.id.img_here);
         //btnRefresher = (Button) findViewById(R.id.btnOptions);
         //btnOptions = (Button) findViewById(R.id.btnOptions);
         txtConnection = (TextView) findViewById(R.id.txt_broad_stat);
 
-
+        mGson = new Gson();
         mListView = (ListView) findViewById(R.id.listview);
 
         animFade = AnimationUtils.loadAnimation(GroupChatHomeActivity.this, R.anim.anim_fade_in_r);
@@ -199,15 +269,133 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.toggleSoftInputFromWindow(lnBroadcast.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
                 openBroadcastDialog();
+
             }
         });
 
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
-        String errorMessage = "";
+        btnDistance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                dialogPref = new Dialog(GroupChatHomeActivity.this);
+                dialogPref.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialogPref.setContentView(R.layout.activity_profile_distance_settings);
+
+                rbDistance = (RangeBar) dialogPref.findViewById(R.id.rbDistance);
+                rbDistance.setRangeBarEnabled(false);
+
+                dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+
+                rbDistance.setSeekPinByValue(dst);
+
+                rbDistance.setPinColor(getResources().getColor(R.color.EDWARD));
+                rbDistance.setConnectingLineColor(getResources().getColor(R.color.EDWARD));
+                rbDistance.setSelectorColor(getResources().getColor(R.color.EDWARD));
+                rbDistance.setPinRadius(30f);
+                rbDistance.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+                    @Override
+                    public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex,
+                                                      String leftPinValue, String rightPinValue) {
+                        distTick = rightPinValue;
+                    }
+                });
+
+                Button dialogButton = (Button) dialogPref.findViewById(R.id.dialogButtonOK);
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
 
+                        SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+                        db.openToWrite();
 
+                        db.updateBroadcastDist(distTick);
+                        db.close();
+                        try {
+                            dst = Integer.parseInt(distTick);
+
+                        } catch (NumberFormatException e) {
+                            dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+                        }
+
+                        dialogPref.dismiss();
+                    }
+                });
+
+                CheckBox cbxSuperUser = (CheckBox) dialogPref
+                        .findViewById(R.id.cbx_superuser);
+                SessionManager sm = new SessionManager(
+                        GroupChatHomeActivity.this);
+                cbxSuperUser.setChecked(sm.isSuperuser());
+
+                cbxSuperUser.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        SessionManager sm = new SessionManager(
+                                GroupChatHomeActivity.this);
+                        if (((CheckBox) v).isChecked()) {
+                            rbDistance.setEnabled(false);
+                            sm.setSuperuser(true);
+                        } else {
+                            sm.setSuperuser(false);
+                            rbDistance.setEnabled(true);
+                        }
+
+                    }
+                });
+
+                if (cbxSuperUser.isChecked()) {
+                    rbDistance.setEnabled(false);
+                } else {
+                    rbDistance.setEnabled(true);
+                }
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialogPref.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                dialogPref.show();
+                dialogPref.getWindow().setAttributes(lp);
+
+
+            }
+
+        });
+
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+        createLocationRequest();
+    }
+
+    private void updateValuesFromBundle(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            // Update the value of mRequestingLocationUpdates from the Bundle, and
+            // make sure that the Start Updates and Stop Updates buttons are
+            // correctly enabled or disabled.
+            if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
+                mRequestingLocationUpdates = savedInstanceState.getBoolean(
+                        REQUESTING_LOCATION_UPDATES_KEY);
+            }
+
+            // Update the value of mCurrentLocation from the Bundle and update the
+            // UI to show the correct latitude and longitude.
+            if (savedInstanceState.keySet().contains(LOCATION_KEY)) {
+                // Since LOCATION_KEY was found in the Bundle, we can be sure that
+                // mCurrentLocationis not null.
+                mCurrentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
+            }
+
+        }
     }
 
     public static final int SUCCESS_RESULT = 0;
@@ -242,7 +430,6 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                                     dialogBroadcast.dismiss();
-
                                 }
                             });
                         }
@@ -260,6 +447,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             }
         });
     }
+
 
     private boolean broadcastMessage(final String msgToBroadcast) {
         SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
@@ -281,13 +469,13 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                     @Override
                     public void processPacket(Stanza stanza) throws SmackException.NotConnectedException {
 
-                        dateTime[0] = ((Time)stanza).getTime().getTime();
+                        dateTime[0] = ((Time) stanza).getTime().getTime();
                     }
                 }, new StanzaFilter() {
                     @Override
                     public boolean accept(Stanza stanza) {
 
-                        if(stanza.toString().contains("urn:xmpp:time"))
+                        if (stanza.toString().contains("urn:xmpp:time"))
                             return true;
                         return false;
                     }
@@ -297,15 +485,17 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             } catch (SmackException.NotConnectedException e) {
                 e.printStackTrace();
             }
+
             from = db.getUsername();
             body = msgToBroadcast;
             date = Long.toString(dateTime[0]);
-            locLocal = "";
+            locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
+
+            List<Subscription> subs = node.getSubscriptions();
             reach = 1;
 
-
             Announcement ann = new Announcement(from, body, date, locLocal, reach);
-
+            //mGson.toJson(ann);
 //            ConfigureForm configureForm = new ConfigureForm(DataForm.Type.submit);
 //            configureForm.setAccessModel(AccessModel.open);
 //            configureForm.setDeliverPayloads(false);
@@ -316,8 +506,10 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 //            node.sendConfigurationForm(configureForm);
 
             // Publish an Item with payload
+
+
             node.send(new PayloadItem(null,
-                    new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<broadcast xmlns='pubsub:nexpa:broadcast'>" + msgToBroadcast + "</broadcast>")));
+                    new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<broadcast xmlns='pubsub:nexpa:broadcast'>" + mGson.toJson(ann) + "</broadcast>")));
 
             return true;
 
@@ -335,6 +527,16 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     String locationName = "";
 
     @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+
+        savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
+                mRequestingLocationUpdates);
+        savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
+        super.onSaveInstanceState(savedInstanceState);
+
+    }
+
+    @Override
     public void OnServiceConnected(XMPPService service) {
 
     }
@@ -342,6 +544,144 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     @Override
     public void OnServiceDisconnected() {
 
+    }
+
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    protected void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        //L.debug("GroupChatHome, startLocationUpdates");
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+
+        mRequestingLocationUpdates = true;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
+
+
+        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+
+        if (mCurrentLocation != null) {
+
+            mAddress = generateAddress(mCurrentLocation);
+            //L.debug("latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
+            //L.debug("longitude: " + String.valueOf(mCurrentLocation.getLongitude()));
+
+        }
+
+    }
+
+    private String generateAddress(Location loc) {
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
+        L.debug("latitude: " + String.valueOf(loc.getLatitude()));
+        L.debug("longitude: " + String.valueOf(loc.getLongitude()));
+
+        if (!Geocoder.isPresent()) {
+            L.makeText(this, getResources().getString(R.string.no_geocoder_available),
+                    AppMsg.STYLE_ALERT);
+            return null;
+        }
+
+        try {
+            addresses = geocoder.getFromLocation(
+                    mCurrentLocation.getLatitude(),
+                    mCurrentLocation.getLongitude(),
+                    // In this sample, get just a single address.
+                    1);
+        } catch (IOException e) {
+            L.error(e.getMessage());
+        }
+
+        String address_ = null;
+        String errorMessage = "";
+        if (addresses == null || addresses.size() == 0) {
+            if (errorMessage.isEmpty()) {
+                errorMessage = getString(R.string.no_address_found);
+                L.error(errorMessage);
+            }
+
+        } else {
+            Address address = addresses.get(0);
+            //ArrayList<String> addressFragments = new ArrayList<String>();
+
+            // Fetch the address lines using getAddressLine,
+            // join them, and send them to the thread.
+            StringBuilder addressBuilder = new StringBuilder();
+            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                //addressFragments.add(address.getAddressLine(i));
+                //L.debug("address: "+address.getAddressLine(i));
+                addressBuilder.append(address.getAddressLine(i));
+                if (i != address.getMaxAddressLineIndex() - 1)
+                    addressBuilder.append(", ");
+            }
+
+            L.debug(getString(R.string.address_found));
+            address_ = addressBuilder.toString();
+
+        }
+
+        return address_;
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        L.makeText(this, "onConnectionSuspended", AppMsg.STYLE_ALERT);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+        // Get the error dialog from Google Play services
+        Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
+                connectionResult.getErrorCode(),
+                this,
+                CONNECTION_FAILURE_RESOLUTION_REQUEST);
+
+        // If Google Play services can provide an error dialog
+        if (errorDialog != null) {
+            // Create a new DialogFragment for the error dialog
+            ErrorDialogFragment errorFragment = ErrorDialogFragment.newInstance(errorDialog);
+                    /*new ErrorDialogFragment()*/
+            ;
+            // Set the dialog in the DialogFragment
+            //errorFragment.setDialog(errorDialog);
+            // Show the error dialog in the DialogFragment
+            errorFragment.show(getFragmentManager(),
+                    "Location Updates");
+        }
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mCurrentLocation = location;
+
+        if (mCurrentLocation != null) {
+            //L.debug("new latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
+            //L.debug("new longitude: " + String.valueOf(mCurrentLocation.getLongitude()));
+            mAddress = generateAddress(mCurrentLocation);
+        }
     }
 
 

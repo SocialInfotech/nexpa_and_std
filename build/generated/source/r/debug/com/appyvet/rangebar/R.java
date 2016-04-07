@@ -34,7 +34,7 @@ public final class R {
 		public static final int roundrect = 0x7f0200b4;
 	}
 	public static final class string {
-		public static final int app_name = 0x7f06003b;
+		public static final int app_name = 0x7f06003c;
 	}
 	public static final class style {
 		public static final int AppBaseTheme = 0x7f090004;

@@ -77,8 +77,7 @@ import java.util.HashMap;
 public class AroundMeActivity extends AppCompatActivity
         implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener,
-        XMPPManager.OnConnectedToOPenfireListener, XMPPService.OnServiceConnectedListener {
+        LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener, XMPPService.OnServiceConnectedListener {
     private static final String TAG = AroundMeActivity.class.getSimpleName();
     private static final String REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY";
     private static final String LOCATION_KEY = "LOCATION_KEY";
@@ -304,7 +303,9 @@ public class AroundMeActivity extends AppCompatActivity
     }
 
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient!=null && mGoogleApiClient.isConnected()){
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
@@ -947,62 +948,7 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onConnectedToOpenfire(final XMPPConnection connection) {
 
-//        if (((TabHostActivity) getParent()).getTabHost().getCurrentTab() != 0) return;
-//
-//        final Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
-//        if (!nearbyUsers.isEmpty()) {
-//
-//            for (final Geolocation nearByUser : nearbyUsers) {
-//
-//                final String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
-//
-//                Presence subscribe = new Presence(Presence.Type.subscribe);
-//                subscribe.setTo(address);
-//                try {
-//                    connection.sendPacket(subscribe);
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(e.getBody());
-//                }
-//
-//                try {
-//                    roster.createEntry(address, null, null);
-//                    updateUserAvailability(address, roster);
-//                } catch (XMPPException e) {
-//                    L.error(e.getBody());
-//                } catch (SmackException.NotLoggedInException e) {
-//                    L.error(address + ", " + e.getBody());
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(e.getBody());
-//                } catch (SmackException.NoResponseException e) {
-//                    L.error(e.getBody());
-//                }
-//
-//
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        final UserProfile uProfile = new UserProfile();
-//                        uProfile.setUsername(nearByUser.getUsername());
-//
-//                        uProfile.loadVCard(XMPPService.xmpp.connection);
-//
-//                        //L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
-//
-//                        updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
-//
-//                    }
-//                }).start();
-//
-//            }
-//
-//        }
-
-
-    }
 
     @Override
     public void onCorrespondentUpdate() {

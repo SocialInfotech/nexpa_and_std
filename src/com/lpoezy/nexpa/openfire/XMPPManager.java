@@ -447,7 +447,6 @@ public class XMPPManager {
                 Mychat.sendMessage(message);
 
             } else {
-
                 login();
             }
         } catch (NotConnectedException e) {

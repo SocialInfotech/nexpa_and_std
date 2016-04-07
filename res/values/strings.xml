@@ -120,5 +120,8 @@
     <!-- gcm -->
     <string name="gcm_defaultSenderId">983540022072</string>
     <string name="google_api_key">AIzaSyAtckbwEu0nJaMUlAj0ptLszozghH23Nyo</string>
+    <string name="no_address_found">No address found!</string>
+    <string name="address_found">Address found!</string>
+    <string name="no_geocoder_available">No geocoder available!</string>
 
 </resources>

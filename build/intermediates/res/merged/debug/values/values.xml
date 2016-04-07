@@ -341,6 +341,7 @@
     <string name="action_parallax">Parallax</string>
     <string name="action_settings">Settings</string>
     <string name="action_show_head">Show Head</string>
+    <string name="address_found">Address found!</string>
     <string name="app_id">780141175434027</string>
     <string name="app_name">Nexpa</string>
     <string name="auth_google_play_services_client_facebook_display_name">Facebook</string>
@@ -409,6 +410,8 @@
     <string name="msg_no_internet">Sorry your internet connection is not working, please enable it!</string>
     <string name="msg_request_to_reset_password_success">Please check your email to reset your Nexpa password.</string>
     <string name="name">Fullname</string>
+    <string name="no_address_found">No address found!</string>
+    <string name="no_geocoder_available">No geocoder available!</string>
     <string name="orien_show">show only profiles with orientation as</string>
     <string name="photo">Photo</string>
     <string name="place_autocomplete_clear_button">Clear search</string>

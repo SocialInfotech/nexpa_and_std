@@ -24,6 +24,17 @@ public class Geolocation {
 
     public Geolocation(){}
 
+    public Geolocation(String uname, double latitude, double longitude, String gpsProvider, long dateCreate, long dateUpdate, double distance) {
+        this.username = uname;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.gpsProvider = gpsProvider;
+        this.dateCreate = dateCreate;
+        this.dateUpdate = dateUpdate;
+        this.distance = distance;
+
+    }
+
     public double getDistance() {
         return distance;
     }

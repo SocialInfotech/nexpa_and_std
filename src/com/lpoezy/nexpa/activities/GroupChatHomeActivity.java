@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appyvet.rangebar.RangeBar;
@@ -45,9 +46,11 @@ import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
+import com.lpoezy.nexpa.objects.Geolocation;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
+import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.SmackException;
@@ -68,9 +71,13 @@ import org.jivesoftware.smackx.pubsub.Subscription;
 import org.jivesoftware.smackx.pubsub.listener.ItemEventListener;
 import org.jivesoftware.smackx.time.packet.Time;
 import org.jivesoftware.smackx.xdata.packet.DataForm;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -132,12 +139,13 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     private ImageView btnDistance;
     private Dialog dialogPref;
     private RangeBar rbDistance;
-    private int dst;
+    private int dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
     private String distTick;
+    private String mUsername;
 
     @Override
     protected void onStop() {
-        if(mGoogleApiClient!=null && mGoogleApiClient.isConnected()){
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
 
@@ -256,6 +264,11 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
         animFade = AnimationUtils.loadAnimation(GroupChatHomeActivity.this, R.anim.anim_fade_in_r);
 
+        SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+        db.openToRead();
+        mUsername = db.getUsername();
+        db.close();
+
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialogBroadcast.getWindow().getAttributes());
@@ -285,7 +298,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 rbDistance = (RangeBar) dialogPref.findViewById(R.id.rbDistance);
                 rbDistance.setRangeBarEnabled(false);
 
-                dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+
 
                 rbDistance.setSeekPinByValue(dst);
 
@@ -306,12 +319,6 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                     @Override
                     public void onClick(View v) {
 
-
-                        SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
-                        db.openToWrite();
-
-                        db.updateBroadcastDist(distTick);
-                        db.close();
                         try {
                             dst = Integer.parseInt(distTick);
 
@@ -408,6 +415,25 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
             ".LOCATION_DATA_EXTRA";
 
+    private void sendNewLocToServer(final double lat, final double longi) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+                Geolocation geo = new Geolocation();
+                geo.setUsername(mUsername);
+                geo.setLatitude(lat);
+                geo.setLongitude(longi);
+
+                geo.saveOnline();
+
+            }
+        }).start();
+
+
+    }
+
     private void openBroadcastDialog() {
         edBroad.setText("");
         dialogBroadcast.show();
@@ -419,6 +445,17 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        L.debug(">>>>>>>>>>>>>>>>>>>>>>>");
+                        //get nearby users
+                        final ProgressBar pbBroadcast = (ProgressBar) dialogBroadcast.findViewById(R.id.pbBroadcast);
+                        pbBroadcast.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                pbBroadcast.setVisibility(View.VISIBLE);
+                            }
+                        });
+                        downloadNearbyUsers();
+
                         boolean msgSent = broadcastMessage(msgToBroadcast);
 
                         if (msgSent) {
@@ -446,6 +483,82 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 dialogBroadcast.dismiss();
             }
         });
+    }
+    private List<Geolocation> mNearbyUsers = new ArrayList<Geolocation>();
+    private void downloadNearbyUsers()  {
+
+        L.debug("GroupChatHome, downloadNearbyUsers");
+        HashMap<String, String> postDataParams = new HashMap<String, String>();
+
+        SessionManager sm = new SessionManager(GroupChatHomeActivity.this);
+        int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
+
+        postDataParams.put("tag", "download_nearby_users");
+        postDataParams.put("username", mUsername);
+        postDataParams.put("longitude", mCurrentLocation.getLongitude() + "");
+        postDataParams.put("latitude", mCurrentLocation.getLatitude() + "");
+
+        postDataParams.put("dist", newDistance + "");
+        postDataParams.put("unit", "k");
+
+
+        final String spec = AppConfig.URL_GEO;
+        String webpage = HttpUtilz.makeRequest(spec, postDataParams);
+
+        L.debug("webpage: " + webpage);
+
+        JSONObject jObj = null;
+        try {
+            jObj = new JSONObject(webpage);
+        } catch (JSONException e) {
+            L.error(e.getMessage());
+        }
+        boolean error = false;
+        try {
+            error = jObj.getBoolean("error");
+        } catch (JSONException e) {
+            L.error(e.getMessage());
+        }
+
+        if (!error) {
+
+            JSONArray nearby_users = null;
+            try {
+                nearby_users = jObj.getJSONArray("data");
+            } catch (JSONException e) {
+                L.error(e.getMessage());
+            }
+
+            if (nearby_users!=null && nearby_users.length() != 0) {
+                mNearbyUsers.clear();
+                for (int i = 0; i < nearby_users.length(); i++) {
+                   
+                    try {
+                        JSONObject c = nearby_users.getJSONObject(i);
+                        // user profile
+                        String uname = c.getString("username");
+                        String latitude = c.getString("latitude");
+                        String longitude = c.getString("longitude");
+                        String gps_provider = c.getString("gps_provider");
+                        String date_create = c.getString("date_create");
+                        String date_update = c.getString("date_update");
+                        String geo_distance = c.getString("geo_distance");
+                        Geolocation geo = new Geolocation(uname, Double.parseDouble(latitude), Double.parseDouble(longitude),
+                                gps_provider, Long.parseLong(date_create), Long.parseLong(date_update), Double.parseDouble(geo_distance));
+                        mNearbyUsers.add(geo);
+
+                    } catch (JSONException e) {
+                        L.error(e.getMessage());
+                    }
+
+
+                }
+
+            }
+        } else {
+            //makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
+            L.makeText(GroupChatHomeActivity.this, "Error occurred while collecting users", AppMsg.STYLE_ALERT);
+        }
     }
 
 
@@ -492,9 +605,9 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
 
             List<Subscription> subs = node.getSubscriptions();
-            reach = 1;
+            reach = mNearbyUsers.size();
 
-            Announcement ann = new Announcement(from, body, date, locLocal, reach);
+            Announcement ann = new Announcement(from, body, date, locLocal, reach, true);
             //mGson.toJson(ann);
 //            ConfigureForm configureForm = new ConfigureForm(DataForm.Type.submit);
 //            configureForm.setAccessModel(AccessModel.open);
@@ -582,6 +695,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
         if (mCurrentLocation != null) {
 
+            sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             mAddress = generateAddress(mCurrentLocation);
             //L.debug("latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             //L.debug("longitude: " + String.valueOf(mCurrentLocation.getLongitude()));
@@ -681,6 +795,8 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             //L.debug("new latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             //L.debug("new longitude: " + String.valueOf(mCurrentLocation.getLongitude()));
             mAddress = generateAddress(mCurrentLocation);
+
+            sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
     }
 

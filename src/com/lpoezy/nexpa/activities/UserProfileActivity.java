@@ -164,7 +164,7 @@ public class UserProfileActivity extends AppCompatActivity
 		setSupportActionBar(myToolbar);
 		// myToolbar.setTitle("Settings");
 		TextView mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
-		mTitle.setText("SETTINGS");
+		mTitle.setText(R.string.your_profile);
 		myToolbar.setTitleTextColor(getResources().getColor(R.color.white));
 		myToolbar.setTitle("");
 

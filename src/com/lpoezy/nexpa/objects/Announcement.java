@@ -1,6 +1,7 @@
 package com.lpoezy.nexpa.objects;
 
 public class Announcement {
+	private boolean isMine;
 	// BROAD_ID, BROADCAST_TYPE, BROADCAST_FROM,
 	// BROADCAST_MESSAGE, BROADCAST_DATE, BROADCAST_LOCATION_LONG,
 	// BROADCAST_LOCATION_LAT, BROADCAST_LOCATION_LOCAL, BROADCAST_REACH,
@@ -35,7 +36,7 @@ public class Announcement {
 //	}
 
 	public Announcement(String from, String message, String date,
-						String locLocal, int reach) {
+						String locLocal, int reach, boolean isMine) {
 
 
 		this.from = from;
@@ -44,6 +45,7 @@ public class Announcement {
 
 		this.locLocal = locLocal;
 		this.reach = reach;
+		this.isMine = isMine;
 
 	}
 
@@ -88,4 +90,11 @@ public class Announcement {
 		this.reach = reach;
 	}
 
+	public boolean isMine() {
+		return isMine;
+	}
+
+	public void setIsMine(boolean isMine) {
+		this.isMine = isMine;
+	}
 }

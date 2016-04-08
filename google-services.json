@@ -1,0 +1,43 @@
+{
+  "project_info": {
+    "project_id": "nexpa-4930b",
+    "project_number": "983540022072",
+    "name": "nexpa"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983540022072:android:b01c6d47de69b26f",
+        "client_id": "android:com.lpoezy.nexpa",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.lpoezy.nexpa",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

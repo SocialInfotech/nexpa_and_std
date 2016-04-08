@@ -1,14 +1,14 @@
 package com.lpoezy.nexpa.objects;
 
 
+import com.lpoezy.nexpa.utility.L;
+
 import org.jivesoftware.smackx.bytestreams.ibb.packet.DataPacketExtension;
 import org.jivesoftware.smackx.bytestreams.ibb.provider.DataPacketProvider;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -16,24 +16,22 @@ import java.util.List;
  */
 public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProvider {
 
-    private MessageElement.OnParseCompleteListener mCallback;
-    private String with;
+    private MessageResultElement.OnParseCompleteListener mCallback;
 
-    public MAMExtensionProvider(String with, MessageElement.OnParseCompleteListener callback) {
-        this.with = with;
+
+    public MAMExtensionProvider(MessageResultElement.OnParseCompleteListener callback) {
+
         mCallback = callback;
     }
 
-//    public void addOnParseListener(MessageElement.OnParseCompleteListener callback) {
-//
-//        mCallback = callback;
-//
-//    }
-
+//</message>
+// <message to="kato@198.154.106.139/Smack">
+// <fin xmlns="urn:xmpp:mam:0" complete="true">
+// <set xmlns="http://jabber.org/protocol/rsm"><first index="0">130</first><last>155</last><count>26</count></set></fin></message><r xmlns='urn:xmpp:sm:3' />
 
     @Override
     public DataPacketExtension parse(XmlPullParser parser, int initialDepth) throws XmlPullParserException, IOException {
-
+     //L.debug("0000000000000000000000000000000000000000000000000000000000000000000000000");
         String stamp = "";
         String to = "";
         String type = "";
@@ -45,26 +43,21 @@ public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProv
         int last = 0;
         int count = 0;
 
-        List<MessageElement> msgs = new ArrayList<MessageElement>();
-
-        while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
-
-            switch (parser.getEventType()) {
-
+        outerloop:
+        while (true) {
+            int eventType = parser.next();
+            switch (eventType) {
                 case XmlPullParser.START_TAG:
-
                     String elementName = parser.getName();
-                    //L.debug("elementName: " + elementName);
 
+                    //L.debug("elementName: " + elementName);
                     switch (parser.getName()) {
 
-                        case "result":
+                        case "forwarded":
+
                             break;
 
-                        case "fin":
-                            complete = parser.getAttributeValue("", "complete");
-                           // L.debug("complete: " + complete);
-                            break;
+
 
                         case "delay":
                             stamp = parser.getAttributeValue("", "stamp");
@@ -72,11 +65,12 @@ public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProv
                             break;
 
                         case "message":
+
                             to = parser.getAttributeValue("", "to");
                             type = parser.getAttributeValue("", "type");
                             from = parser.getAttributeValue("", "from");
 
-                            // L.debug("to: "+to+", type: "+type+", from: "+from);
+                            //L.debug("to: "+to+", type: "+type+", from: "+from);
 
                             break;
 
@@ -89,54 +83,25 @@ public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProv
                             thread = parser.nextText();
                             // L.debug("thread: "+thread);
                             break;
-
-                        case "first":
-                            first = Integer.valueOf(parser.nextText());
-                            //L.debug("first: "+first);
-                            break;
-
-                        case "last":
-                            last = Integer.valueOf(parser.nextText());
-                            //L.debug("last: "+last);
-                            break;
-
-                        case "count":
-                            count = Integer.valueOf(parser.nextText());
-                            // L.debug("count: "+count);
-                            break;
-
                     }
-
                     break;
-
                 case XmlPullParser.END_TAG:
 
-                    switch (parser.getName()) {
-
-                        case "fin":
-
-                            if(mCallback!=null)mCallback.onParseComplete(msgs, first, last, count, with);
-                            break;
-
-                        case "message":
-                            MessageElement msg = new MessageElement(
-                                    stamp, to, type,
-                                    from, body, thread
-                            );
-                            msgs.add(msg);
-
-                            break;
-
+                    // Abort condition: if the are on a end tag (closing element) of the same depth
+                    if (parser.getDepth() == initialDepth) {
+                        break outerloop;
                     }
                     break;
-
-                default:
-                    break;
             }
-            parser.next();
         }
 
+        MessageResultElement msg = new MessageResultElement(
+                stamp, to, type,
+                from, body, thread
+        );
+        if(mCallback!=null)mCallback.onParseComplete(msg);
 
+       // L.debug("0000000000000000000000000000000000000000000000000000000000000000000000000");
         return null;
     }
 }

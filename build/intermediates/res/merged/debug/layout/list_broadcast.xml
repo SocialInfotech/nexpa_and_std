@@ -159,9 +159,8 @@
 
             <ImageView
                 android:id="@+id/imgReply"
-                android:layout_width="0dp"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_weight="0"
                 android:background="@drawable/btn_reply" />
 
             <TextView

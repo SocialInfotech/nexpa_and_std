@@ -361,9 +361,9 @@ public class ChatMessagesService extends Service {
 //					// }, new Response.ErrorListener() {
 //					// @Override
 //					// public void onErrorResponse(VolleyError error) {
-//					// L.error("error: " + error.getMessage());
+//					// L.error("error: " + error.getBody());
 //					// Toast.makeText(getApplicationContext(),
-//					// error.getMessage(), Toast.LENGTH_LONG).show();
+//					// error.getBody(), Toast.LENGTH_LONG).show();
 //					//
 //					// }
 //					// }) {

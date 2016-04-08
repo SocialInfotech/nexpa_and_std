@@ -72,10 +72,9 @@ public class CustomGrid extends BaseAdapter {
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
 
-        // TODO Auto-generated method stub
+
         View grid;
         grid = new View(mContext);
-
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext
@@ -93,54 +92,28 @@ public class CustomGrid extends BaseAdapter {
         //TextView txtAvailView = (TextView) grid.findViewById(R.id.txtAvail);
 
 
-        textView.setText(web.get(position)/*+  "|" */ /*+ distance.get(position) +"m" +avalability*/);
-        //imageView.setImageResource(Imageid.get(position));
-
-
-        int avalability = mCorrespondents.get(position).isAvailable() ? R.drawable.online : R.drawable.offline;
-        offline.setImageResource(avalability);
-
         Bitmap rawImage = BitmapFactory.decodeResource(mContext.getResources(),
-                        R.drawable.pic_sample_girl);
+                R.drawable.pic_sample_girl);
+        int avalability = R.drawable.offline;
 
-       if(mCorrespondents.get(position).getProfilePic()!=null){
-           rawImage = mCorrespondents.get(position).getProfilePic();
-       }
+        try{
 
+
+            textView.setText(web.get(position)/*+  "|" */ /*+ distance.get(position) +"m" +avalability*/);
+            //imageView.setImageResource(Imageid.get(position));
+
+
+            avalability = mCorrespondents.get(position).isAvailable() ? R.drawable.online : R.drawable.offline;
+
+
+            if(mCorrespondents.get(position).getProfilePic()!=null){
+                rawImage = mCorrespondents.get(position).getProfilePic();
+            }
+
+        } catch (IndexOutOfBoundsException e) {L.error(e.getMessage());}
+
+        offline.setImageResource(avalability);
         imageView.setImageBitmap(rawImage);
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                Bitmap rawImage = BitmapFactory.decodeResource(mContext.getResources(),
-//                        R.drawable.pic_sample_girl);
-//
-//                UserProfile uProfile = new UserProfile();
-//                uProfile.setUsername(mCorrespondents.get(position).getUsername());
-//                if(XMPPService.xmpp.connection.isConnected() && XMPPService.xmpp.connection.getUser()!=null){
-//                    uProfile.loadVCard(XMPPService.xmpp.connection);
-//
-//                    if (uProfile.getAvatarImg() != null) {
-//                        rawImage = uProfile.getAvatarImg();
-//                    }
-//                }
-//                final Bitmap avatar = rawImage;
-//                new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        imageView.setImageBitmap(avatar);
-//
-//                    }
-//                });
-//
-//
-//            }
-//        }).start();
-
-
-        // txtAvailView.setText(availabilty.get(position));
 
         return grid;
     }

@@ -1,11 +1,31 @@
 [
     {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\items.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\menu\\items.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\main.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\menu\\main.xml"
+    },
+    {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\distance.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\menu\\distance.xml"
     },
     {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\toolbar.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\menu\\toolbar.xml"
+    },
+    {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\test.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\menu\\test.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\distance.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\menu\\distance.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\list_view.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\menu\\list_view.xml"
     },
     {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\toolbar.xml",
@@ -26,5 +46,13 @@
     {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\scroll_view.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\menu\\scroll_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\scroll_view.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\menu\\scroll_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\menu\\test.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\menu\\test.xml"
     }
 ]

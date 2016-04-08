@@ -38,10 +38,9 @@ public class OthersBroadcastActivity extends Activity {
 
 		if (savedInstanceState == null) {
 
-			long userId = getIntent().getLongExtra(TAG_USER_ID, -1);
 			String username = getIntent().getStringExtra(TAG_USERNAME);
 
-			Fragment frag = OthersBroadcastsFragment.newInstance(userId, username);
+			Fragment frag = OthersBroadcastsFragment.newInstance(username);
 			getFragmentManager().beginTransaction()
 					.add(R.id.frag_container, frag, "OthersBroadcastsList")
 					.commit();

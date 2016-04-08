@@ -18,6 +18,7 @@ import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.utility.L;
 
 public class PeopleProfileActivity extends Activity /*implements Correspondent.OnCorrespondentUpdateListener*/{
 
@@ -151,7 +152,6 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 				profile.setUsername(username);
 				profile.loadVCard(XMPPService.xmpp.connection);
 
-
 				new Handler(Looper.getMainLooper()).post(new Runnable() {
 					@Override
 					public void run() {
@@ -166,7 +166,6 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 							mTvJobTitle.setVisibility(View.VISIBLE);
 							mTvJobTitle.setText(profile.getProfession());
 						}
-
 
 
 						if (profile.getUrl0() != null && !profile.getUrl0().equalsIgnoreCase("null") && !profile.getUrl0().equals("")) {

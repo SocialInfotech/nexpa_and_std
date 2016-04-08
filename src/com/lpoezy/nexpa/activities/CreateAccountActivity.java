@@ -10,6 +10,7 @@ import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.RegistrationIntentService;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.chatservice.XMPPService.OnUpdateScreenListener;
+import com.lpoezy.nexpa.objects.OfUser;
 import com.lpoezy.nexpa.openfire.Account;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
@@ -22,7 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -94,17 +97,11 @@ public class CreateAccountActivity extends Activity {
 
 				} else {
 
-					if (mBounded) {
-						
 						 // Fetch updated Instance ID token and notify of changes
 				        //Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
 				        //startService(intent);
 						
 						registerUser(name, email, password);
-
-					} else {
-						L.error("service not yet available");
-					}
 
 				}
 			}
@@ -124,8 +121,8 @@ public class CreateAccountActivity extends Activity {
 
 		super.onResume();
 
-		Intent service = new Intent(this, XMPPService.class);
-		bindService(service, mServiceConn, Context.BIND_AUTO_CREATE);
+//		Intent service = new Intent(this, XMPPService.class);
+//		bindService(service, mServiceConn, Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
@@ -133,9 +130,9 @@ public class CreateAccountActivity extends Activity {
 
 		super.onPause();
 
-		if (mServiceConn != null) {
-			unbindService(mServiceConn);
-		}
+//		if (mServiceConn != null) {
+//			unbindService(mServiceConn);
+//		}
 	}
 
 	public static boolean isEmailValid(String email) {
@@ -158,24 +155,57 @@ public class CreateAccountActivity extends Activity {
 		pDialog.setMessage("Registering ...");
 		showDialog();
 
-		mService.register(uname, email, password, new OnUpdateScreenListener() {
+
+		new Thread(new Runnable() {
 
 			@Override
-			public void onUpdateScreen() {
+			public void run() {
 
-				hideDialog();
-				L.makeText(CreateAccountActivity.this, "Your account created successfully.", AppMsg.STYLE_INFO);
+
+				OfUser ofuser = new OfUser();
+				ofuser.setUsername(uname);
+				ofuser.setEmail(email);
+				ofuser.setPlainPassword(password);
+
+				if(ofuser.createUser()){
+
+
+					L.makeText(CreateAccountActivity.this, "Your account created successfully.", AppMsg.STYLE_INFO);
+
+				} else {
+					L.makeText(CreateAccountActivity.this, "User Name already exists, please enter another one.", AppMsg.STYLE_ALERT);
+					//callback.onResumeScreen("User Name already exists, please enter another one.");
+				}
+				new Handler(Looper.getMainLooper()).post(new Runnable() {
+					@Override
+					public void run() {
+						hideDialog();
+					}
+				});
+
 			}
+		}).start();
 
-			@Override
-			public void onResumeScreen(String errorMsg) {
 
-				hideDialog();
 
-				L.makeText(CreateAccountActivity.this, errorMsg, AppMsg.STYLE_ALERT);
-
-			}
-		});
+//		mService.register(uname, email, password, new OnUpdateScreenListener() {
+//
+//			@Override
+//			public void onUpdateScreen() {
+//
+//				hideDialog();
+//				L.makeText(CreateAccountActivity.this, "Your account created successfully.", AppMsg.STYLE_INFO);
+//			}
+//
+//			@Override
+//			public void onResumeScreen(String errorMsg) {
+//
+//				hideDialog();
+//
+//				L.makeText(CreateAccountActivity.this, errorMsg, AppMsg.STYLE_ALERT);
+//
+//			}
+//		});
 
 	}
 

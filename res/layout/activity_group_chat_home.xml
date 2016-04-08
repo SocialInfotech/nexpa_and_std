@@ -164,11 +164,20 @@ android:orientation="vertical">
 	<LinearLayout android:id="@+id/lnBroadcastExist"
 	android:layout_width="fill_parent" android:layout_height="match_parent"
 	android:gravity="bottom" android:orientation="vertical">
-		<ListView android:layout_width="match_parent"
+
+		<android.support.v7.widget.RecyclerView
+			android:id="@+id/rv_my_broadcasts"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			>
+		</android.support.v7.widget.RecyclerView>
+
+
+		<!--<ListView android:layout_width="match_parent"
 		android:layout_height="match_parent" 
 		android:id="@+id/listview" 
 		tools:context=".GroupChatHomeActivity"
 		android:dividerHeight="10.0sp"  android:animateLayoutChanges="true"
-		/>
+		/>-->
 	</LinearLayout>
 </LinearLayout>

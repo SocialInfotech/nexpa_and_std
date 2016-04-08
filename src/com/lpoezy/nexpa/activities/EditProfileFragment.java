@@ -114,6 +114,7 @@ public class EditProfileFragment extends DialogFragment {
         edtName.setEnabled(false);
 
         edtDescription = (EditText) v.findViewById(R.id.edt_short_description);
+        edtDescription.setVisibility(View.GONE);
         edtProfession = (EditText) v.findViewById(R.id.edt_profession);
         edtUrl0 = (EditText) v.findViewById(R.id.edt_url0);
         edtUrl1 = (EditText) v.findViewById(R.id.edt_url1);

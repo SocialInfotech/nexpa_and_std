@@ -61,6 +61,14 @@ public class TabHostActivity extends TabActivity {
 		public void onServiceDisconnected(ComponentName name) {
 			mBounded = false;
 			mService = null;
+
+//			if(getTabHost().getCurrentTab()==0){
+//				XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) getCurrentActivity();
+//
+//				onServiceConnectedListener.OnServiceDisconnected();
+//
+//			}
+
 		}
 
 		@SuppressWarnings("unchecked")
@@ -70,11 +78,10 @@ public class TabHostActivity extends TabActivity {
 
 			mService = ((LocalBinder<XMPPService>) service).getService();
 
-			if(getTabHost().getCurrentTab()==0){
-				XMPPService.OnConnectedToOPenfireListener onConnectedToOPenfireListener = (XMPPService.OnConnectedToOPenfireListener) getCurrentActivity();
-				mService.addconnectedToOperfireListener(onConnectedToOPenfireListener);
+			XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) getCurrentActivity();
+			onServiceConnectedListener.OnServiceConnected(mService);
 
-			}
+
 
 		}
 	};
@@ -83,23 +90,8 @@ public class TabHostActivity extends TabActivity {
 	protected void onResume() {
 		
 		super.onResume();
-		
 		L.debug("TabHost, onResume");
-		
-		//start chat service here and syncdata service,
-		//this will only be stop when the user deactivated/cancel their account
-//		Intent msgService = new Intent(this, ChatMessagesService.class);
-//		startService(msgService);
-//		
-//		Intent syncDataService = new Intent(this, SyncDataService.class);
-//		startService(syncDataService);
-//		
-//		Intent syncProfileService = new Intent(this, SyncUserProfileService.class);
-//		startService(syncProfileService);
-//		
-//		Intent syncProfilePictureService = new Intent(this, SyncProfilePictureService.class);
-//		startService(syncProfilePictureService);
-//		
+
 //		registerReceiver(mUpdateMsgCount, new IntentFilter(AppConfig.ACTION_RECEIVED_MSG));
 //		isRunning = true;
 
@@ -119,7 +111,6 @@ public class TabHostActivity extends TabActivity {
 		L.debug("TabHost, onPause");
 
 		if (mServiceConn != null) {
-
 			unbindService(mServiceConn);
 		}
 		
@@ -156,6 +147,10 @@ public class TabHostActivity extends TabActivity {
 			// "", res.getDrawable(R.drawable.ic_tab_people)
 			spec = tabHost.newTabSpec("home")
 					.setIndicator(getTabIndicator(this, res.getDrawable(R.drawable.ic_tab_people))).setContent(intent);
+			//.setIndicator("Home1", getResources().getDrawable(R.drawable.ic_tab_people)).setContent(intent);
+
+						//spec.setContent(intent);
+			          // spec.setIndicator("Home");
 			tabHost.addTab(spec);
 			// "", res.getDrawable(R.drawable.ic_tab_chat)
 			intent = new Intent().setClass(TabHostActivity.this, ChatHistoryActivity.class);
@@ -177,7 +172,7 @@ public class TabHostActivity extends TabActivity {
 
 			tabHost.setCurrentTab(0);
 			tabHost.setup();
-			int heightValue = 45;
+			int heightValue = 50;
 
 			for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
 				tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = (int)(heightValue * res.getDisplayMetrics().density);

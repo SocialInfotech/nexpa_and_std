@@ -10,10 +10,15 @@ import com.lpoezy.nexpa.utility.BmpFactory;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.StanzaFilter;
+import org.jivesoftware.smack.packet.Stanza;
+import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
+import org.jivesoftware.smackx.vcardtemp.provider.VCardProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -64,18 +69,24 @@ public class UserProfile {
         }
 
         if (isSupported) {
+
+            ProviderManager.addIQProvider("vCard", "vcard-temp", new VCardProvider());
+
             VCard loadCard = null;
+
             try {
 
                 loadCard = vCardManager.loadVCard(this.username + "@" + XMPPService.DOMAIN);
-                //loadCard.load(connection, address); // load someone's VCard
+
             } catch (SmackException.NoResponseException e) {
-                L.error("loadVCard: "+e.getMessage());
+                L.error("loadVCard: " + e.getMessage());
             } catch (XMPPException.XMPPErrorException e) {
-                L.error("loadVCard: "+e.getMessage());
+                L.error("loadVCard: " + e.getMessage());
             } catch (SmackException.NotConnectedException e) {
-                L.error("loadVCard: "+e.getMessage());
+                L.error("loadVCard: " + e.getMessage());
             }
+
+
 
             if (loadCard != null) {
 
@@ -92,9 +103,13 @@ public class UserProfile {
                 }
             }
 
+
+//
         } else {
             L.error("vCard not supported");
         }
+
+
 
     }
 
@@ -160,6 +175,12 @@ public class UserProfile {
         } else {
             L.error("vCard not supported");
         }
+    }
+
+    public interface OnCArdReadyListener{
+
+        public void onCArdReady();
+
     }
 
 //	public UserProfile(String username, String description, String profession, String url0, String url1,

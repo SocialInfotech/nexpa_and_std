@@ -14,19 +14,21 @@ import android.support.v4.app.TaskStackBuilder;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.activities.ChatActivity;
 import com.lpoezy.nexpa.activities.ChatHistoryActivity;
+import com.lpoezy.nexpa.activities.ChatHistoryListFragment;
 import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.ChatMessage;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.NewMessage;
+import com.lpoezy.nexpa.objects.OfUser;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
+import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.openfire.XMPPManager;
-import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
 import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException.XMPPErrorException;
 import org.jivesoftware.smack.chat.Chat;
 import org.json.JSONException;
@@ -103,81 +105,85 @@ public class XMPPService extends Service {
 
     }
 
-    private List<OnConnectedToOPenfireListener> connectedToOperfireListeners = new ArrayList<OnConnectedToOPenfireListener>();
-
-    public void addconnectedToOperfireListener(OnConnectedToOPenfireListener observer) {
-
-        connectedToOperfireListeners.add(observer);
-    }
-
-    private OnConnectedToOPenfireListener connectedToOperfire = new OnConnectedToOPenfireListener() {
-        @Override
-        public void onConnectedToOpenfire(XMPPConnection connection) {
-
-
-            for (OnConnectedToOPenfireListener observer : connectedToOperfireListeners) {
-                observer.onConnectedToOpenfire(connection);
-            }
-
-        }
-    };
-
-
-    private List<OnProcessMessage> chatMessagesListeners = new ArrayList<OnProcessMessage>();
-
-    public void addMessageListener(OnProcessMessage observer) {
-        chatMessagesListeners.add(observer);
-    }
-
-
-    private OnProcessMessage processMessageCallback = new OnProcessMessage() {
-
-        @Override
-        public void onProcessMessage(ChatMessage chatMessage) {
-
-
-            if (!TabHostActivity.isRunning && !ChatHistoryActivity.isRunning
-                    && !ChatActivity.isRunning) {
-
-                L.debug("sending nottification!");
-
-                // send notification
-                //sendNotification(correspondent);
-
-            } else {
-                for (OnProcessMessage observer : chatMessagesListeners) {
-                    observer.onProcessMessage(chatMessage);
-                }
-                // send broadcast
-//                Intent broadcast = new Intent(AppConfig.ACTION_RECEIVED_MSG);
-//                broadcast.putExtra("username", chatMessage.sender);
-//                broadcast.putExtra("msg", chatMessage.body);
+//    private List<OnConnectedToOPenfireListener> connectedToOperfireListeners = new ArrayList<OnConnectedToOPenfireListener>();
 //
-//                L.debug("sending broadcast!");
-//                sendBroadcast(broadcast);
+//    public void addconnectedToOperfireListener(OnConnectedToOPenfireListener observer) {
+//
+//        connectedToOperfireListeners.add(observer);
+//    }
+//
+//    private OnConnectedToOPenfireListener connectedToOperfire = new OnConnectedToOPenfireListener() {
+//        @Override
+//        public void onConnectedToOpenfire(XMPPConnection connection) {
+//            L.debug("XMPPService, onConnectedToOpenfire");
+//            Iterator<OnConnectedToOPenfireListener> iter = connectedToOperfireListeners.iterator();
+//
+//            while(iter.hasNext()){
+//
+//                OnConnectedToOPenfireListener observer = iter.next();
+//                observer.onConnectedToOpenfire(connection);
+//            }
+//
+//
+//        }
+//    };
 
-            }
 
+//    private List<OnProcessMessage> chatMessagesListeners = new ArrayList<OnProcessMessage>();
+//
+//    public void addMessageListener(OnProcessMessage observer) {
+//        chatMessagesListeners.add(observer);
+//    }
+//
+//
+//    private OnProcessMessage processMessageCallback = new OnProcessMessage() {
+//
+//        @Override
+//        public void onProcessMessage(ChatMessage chatMessage) {
+//
+//
+//            if (!TabHostActivity.isRunning && !ChatHistoryActivity.isRunning
+//                    && !ChatActivity.isRunning) {
+//
+//                L.debug("sending nottification!");
+//
+//                // send notification
+//                //sendNotification(correspondent);
+//
+//            } else {
+//                for (OnProcessMessage observer : chatMessagesListeners) {
+//                    observer.onProcessMessage(chatMessage);
+//                }
+//                // send broadcast
+////                Intent broadcast = new Intent(AppConfig.ACTION_RECEIVED_MSG);
+////                broadcast.putExtra("username", chatMessage.sender);
+////                broadcast.putExtra("msg", chatMessage.body);
+////
+////                L.debug("sending broadcast!");
+////                sendBroadcast(broadcast);
+//
+//            }
+//
+//
+//        }
+//    };
 
-        }
-    };
 
     @Override
     public void onCreate() {
         super.onCreate();
         cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         L.debug("XMPPService, onCreate");
-        String uname, password;
-        SQLiteHandler db = new SQLiteHandler(XMPPService.this);
-        db.openToRead();
-        uname = db.getUsername();
-        password = db.getPlainPassword();
-        xmpp = XMPPManager.getInstance(XMPPService.this, DOMAIN, uname,
-                password, processMessageCallback, connectedToOperfire);
+//        String uname, password;
+//        SQLiteHandler db = new SQLiteHandler(XMPPService.this);
+//        db.openToRead();
+//        uname = db.getUsername();
+//        password = db.getPlainPassword();
+        xmpp = XMPPManager.getInstance(XMPPService.this);
         xmpp.connect("onCreate");
 
 
-        db.close();
+        //db.close();
         isRunning = true;
     }
 
@@ -223,12 +229,31 @@ public class XMPPService extends Service {
 
     }
 
+
     public static boolean isNetworkConnected() {
         return cm.getActiveNetworkInfo() != null;
     }
 
     public static boolean isRunning() {
         return isRunning;
+    }
+
+
+    public void removeOnConnectedToOpenfireObserver(XMPPManager.OnConnectedToOPenfireListener observer) {
+        xmpp.removeConnectedToOPenfireListeners(observer);
+    }
+
+    public void addOnConnectedToOpenfireObserver(XMPPManager.OnConnectedToOPenfireListener observer) {
+        xmpp.addConnectedToOPenfireListeners(observer);
+    }
+
+
+    public void removeMAMObserver(OnRetrieveMessageArchiveListener observer) {
+        xmpp.removeMAMListeners(observer);
+    }
+
+    public void addMAMObserver(OnRetrieveMessageArchiveListener observer) {
+        xmpp.addMAMListeners(observer);
     }
 
     public void resetPassword(final String email,
@@ -275,27 +300,42 @@ public class XMPPService extends Service {
             public void run() {
 
 
-                if (xmpp.connection.isConnected()) {
+                OfUser ofuser = new OfUser();
+                ofuser.setUsername(uname);
+                ofuser.setEmail(email);
+                ofuser.setPlainPassword(password);
 
-                    try {
-                        xmpp.register(uname, password, email);
+                if (ofuser.createUser()) {
 
-                        callback.onUpdateScreen();
-
-                    } catch (NoResponseException | NotConnectedException e) {
-                        callback.onResumeScreen("User is not, or no longer, connected.");
-                        L.error(e.getMessage());
-                    } catch (XMPPErrorException e) {
-                        L.error(e.getMessage());
-                        callback.onResumeScreen("User Name already exists, please enter another one.");
-                    }
+                    callback.onUpdateScreen();
 
                 } else {
 
-                    L.error("Not connected to openfire server!!!");
-                    callback.onResumeScreen("Not connected to openfire server!!!");
-
+                    callback.onResumeScreen("User Name already exists, please enter another one.");
                 }
+
+
+//                if (xmpp.connection.isConnected()) {
+//
+//                    try {
+//                        xmpp.register(uname, password, email);
+//
+//                        callback.onUpdateScreen();
+//
+//                    } catch (NoResponseException | NotConnectedException e) {
+//                        callback.onResumeScreen("User is not, or no longer, connected.");
+//                        L.error(e.getBody());
+//                    } catch (XMPPErrorException e) {
+//                        L.error(e.getBody());
+//                        callback.onResumeScreen("User Name already exists, please enter another one.");
+//                    }
+//
+//                } else {
+//
+//                    L.error("Not connected to openfire server!!!");
+//                    callback.onResumeScreen("Not connected to openfire server!!!");
+//
+//                }
 
             }
         }).start();
@@ -311,21 +351,39 @@ public class XMPPService extends Service {
 //    }
 
 
-    public void retrieveListOfCollectionsFrmMsgArchive(final OnUpdateScreenListener callback) {
+//    public void retrieveListOfCollectionsFrmMsgArchive(final String with) {
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//
+//                xmpp.retrieveListOfCollectionsFrmMsgArchive(with);
+//
+//
+//            }
+//        }).start();
+//
+//
+//    }
 
 
-        xmpp.retrieveListOfCollectionsFrmMsgArchive(null, callback, null);
+    public void onExecutePendingTask(OnExecutePendingTaskListener task) {
 
+        task.onExecutePendingTask();
+
+        if (!xmpp.connection.isConnected() || !xmpp.connection.isAuthenticated()) {
+            xmpp.pendingTasks.add(task);
+        }
 
     }
 
-    public void retrieveCollectionFrmMsgArchive(final String with, final ChatActivity.OnRetrieveMessageArchiveListener callback) {
 
-
-        xmpp.retrieveListOfCollectionsFrmMsgArchive(with, null, callback);
-
-
-    }
+//    public void retrieveCollectionFrmMsgArchive(final String with) {
+//
+//        xmpp.retrieveListOfCollectionsFrmMsgArchive(with);
+//
+//    }
 
 
 //    public void login(final String uname, final String password, final OnUpdateScreenListener callback) {
@@ -343,7 +401,7 @@ public class XMPPService extends Service {
 //                    ofuser.downloadOnline();
 //
 //                } catch (JSONException e) {
-//                    L.error("" + e.getMessage());
+//                    L.error("" + e.getBody());
 //                }
 //
 //                if (ofuser.saveOffline(getApplicationContext())) {
@@ -382,7 +440,7 @@ public class XMPPService extends Service {
 ////												Exception exception) {
 ////											exception.printStackTrace();
 ////											L.error("IO archjieve Exception, "
-////													+ exception.getMessage());
+////													+ exception.getBody());
 ////										}
 ////									});
 //
@@ -421,12 +479,13 @@ public class XMPPService extends Service {
         public void onUpdateScreen();
     }
 
-    public interface OnProcessMessage {
-        public void onProcessMessage(ChatMessage chatMessage);
+
+
+    public interface OnServiceConnectedListener {
+        public void OnServiceConnected(XMPPService service);
+
+        public void OnServiceDisconnected();
     }
 
-    public interface OnConnectedToOPenfireListener {
-        public void onConnectedToOpenfire(XMPPConnection connection);
-    }
 
 }

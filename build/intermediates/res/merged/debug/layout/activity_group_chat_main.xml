@@ -27,6 +27,7 @@ android:orientation="vertical">
 		    android:minHeight="30dp"
 		    android:minWidth="30dp"
 		     android:maxHeight="30dp"
+			android:visibility="gone"
 		    android:maxWidth="30dp" >
 
         </ProgressBar>

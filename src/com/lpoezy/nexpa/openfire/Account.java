@@ -207,7 +207,7 @@ public class Account {
 //			public void onErrorResponse(VolleyError error) {
 //				// db.updateAccountValidate(0);
 //				// Log.e("Validate Account", "Registration Error lvl 3: " +
-//				// error.getMessage());
+//				// error.getBody());
 //
 //			}
 //		}) {

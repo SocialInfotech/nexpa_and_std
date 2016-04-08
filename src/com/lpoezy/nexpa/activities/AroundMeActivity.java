@@ -37,6 +37,8 @@ import com.appyvet.rangebar.RangeBar;
 import com.devspark.appmsg.AppMsg;
 import com.devspark.appmsg.AppMsg.Style;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.ErrorDialogFragment;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -47,17 +49,17 @@ import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.Geolocation;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.objects.Users;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
-import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterListener;
@@ -75,12 +77,12 @@ import java.util.HashMap;
 public class AroundMeActivity extends AppCompatActivity
         implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener,
-        XMPPService.OnConnectedToOPenfireListener {
+        LocationListener, OnRefreshListener, Correspondent.OnCorrespondentUpdateListener, XMPPService.OnServiceConnectedListener {
     private static final String TAG = AroundMeActivity.class.getSimpleName();
     private static final String REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY";
     private static final String LOCATION_KEY = "LOCATION_KEY";
     private static final String LAST_UPDATED_TIME_STRING_KEY = "LAST_UPDATED_TIME_STRING_KEY";
+    private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = -1;
     // Button btnUpdate;
     LocationManager locationManager;
     // MyLocationListener locationListener;
@@ -186,8 +188,6 @@ public class AroundMeActivity extends AppCompatActivity
             case R.id.action_distance:
 
 
-
-
                 dialogPref = new Dialog(AroundMeActivity.this);
                 dialogPref.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialogPref.setContentView(R.layout.activity_profile_distance_settings);
@@ -239,7 +239,10 @@ public class AroundMeActivity extends AppCompatActivity
                             dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
                         }
 
-                        downloadNearbyUsersOnline();
+                        if (mBounded) {
+                            mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+                        }
+                        //downloadNearbyUsersOnline();
                         dialogPref.dismiss();
                     }
                 });
@@ -292,13 +295,17 @@ public class AroundMeActivity extends AppCompatActivity
 
     protected void onStart() {
 
-        mGoogleApiClient.connect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
 
         super.onStart();
     }
 
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient!=null && mGoogleApiClient.isConnected()){
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
@@ -339,6 +346,10 @@ public class AroundMeActivity extends AppCompatActivity
 
         db.close();
 
+        if (mBounded) {
+
+        }
+
     }
 
 
@@ -371,47 +382,69 @@ public class AroundMeActivity extends AppCompatActivity
         mRequestingLocationUpdates = true;
     }
 
-    private void downloadNearbyUsersOnline() {
+    private class OnDownloadNearbyUsersOnline implements OnExecutePendingTaskListener {
+
+        @Override
+        public void onExecutePendingTask() {
+
+            //mSwipeRefreshLayout.setRefreshing(true);
+
+            if (!XMPPService.xmpp.connection.isConnected()) {
 
 
-        if (mCurrentLocation == null) {
-            L.error("mCurrentLocation is null!!!");
-            return;
-        }
-        L.debug("Geolocation, downloadNearbyUsersOnline");
-        mSwipeRefreshLayout.setRefreshing(true);
+                XMPPManager.getInstance(AroundMeActivity.this).instance = null;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+                XMPPService.xmpp = XMPPManager.getInstance(AroundMeActivity.this);
 
-                HashMap<String, String> postDataParams = new HashMap<String, String>();
+                XMPPService.xmpp.connect("onCreate");
+
+            } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+                XMPPService.xmpp.login();
+            } else {
+
+                //*
+                if (mCurrentLocation == null) {
+                    L.error("mCurrentLocation is null!!!");
+                    return;
+                }
+
+                L.debug("AroundMe, downloadNearbyUsersOnline");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        HashMap<String, String> postDataParams = new HashMap<String, String>();
+
+                        SessionManager sm = new SessionManager(AroundMeActivity.this);
+                        int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
+
+                        postDataParams.put("tag", "download_nearby_users");
+                        postDataParams.put("username", mUsername);
+                        postDataParams.put("longitude", mCurrentLocation.getLongitude() + "");
+                        postDataParams.put("latitude", mCurrentLocation.getLatitude() + "");
+
+                        postDataParams.put("dist", newDistance + "");
+                        postDataParams.put("unit", "k");
 
 
-                SessionManager sm = new SessionManager(AroundMeActivity.this);
-                int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
+                        final String spec = AppConfig.URL_GEO;
+                        String webpage = HttpUtilz.makeRequest(spec, postDataParams);
 
-                postDataParams.put("tag", "download_nearby_users");
-                postDataParams.put("username", mUsername);
-                postDataParams.put("longitude", mCurrentLocation.getLongitude() + "");
-                postDataParams.put("latitude", mCurrentLocation.getLatitude() + "");
+                        L.debug(webpage);
 
-                postDataParams.put("dist", newDistance + "");
-                postDataParams.put("unit", "k");
+                        updateUI(webpage);
 
-
-                final String spec = AppConfig.URL_GEO;
-                String webpage = HttpUtilz.makeRequest(spec, postDataParams);
-
-                L.debug(webpage);
-
-                updateUI(webpage);
-
-
+                    }
+                }).start();
+                //*/
             }
-        }).start();
 
+        }
     }
+
+    ;
+
 
     private void updateUI(final String webpage) {
 
@@ -450,37 +483,6 @@ public class AroundMeActivity extends AppCompatActivity
                         String date_create = c.getString("date_create");
                         String date_update = c.getString("date_update");
                         String geo_distance = c.getString("geo_distance");
-
-//                        String description = c.getString("description");
-//                        String title = c.getString("title");
-//                        String url0 = c.getString("url0");
-//                        String url1 = c.getString("url1");
-//                        String url2 = c.getString("url2");
-//                        String dateUpdated = c.getString("date_updated");
-//
-//                        // saveVCard profile of specific users
-//                        UserProfile userProfile = new UserProfile(uname, description,
-//                                title, url0, url1, url2);
-//
-//                        userProfile.saveOffline(AroundMeActivity.this);
-
-                        // replace geo id with userid
-
-                        // profile pic info
-//                        String imgDir = c.getString("img_dir");
-//                        String imgFile = c.getString("img_file");
-//                        String dateCreated = c.getString("date_uploaded");
-//
-//
-//                        if ((imgDir != null && !imgDir.isEmpty() && !imgDir.equalsIgnoreCase("null"))
-//                                && (imgFile != null && !imgFile.isEmpty()
-//                                && !imgFile.equalsIgnoreCase("null"))) {
-//                            L.error("getting profile picture of uname: " + uname
-//                                    + ", imgDir: " + imgDir + ", imgFile: " + imgFile);
-//                            ProfilePicture profilePic = new ProfilePicture(uname, imgDir,
-//                                    imgFile, dateCreated, true);
-//                            profilePic.saveOffline(AroundMeActivity.this);
-//                        }
 
                         SQLiteHandler db = new SQLiteHandler(AroundMeActivity.this);
                         db.openToWrite();
@@ -541,8 +543,12 @@ public class AroundMeActivity extends AppCompatActivity
 
             L.debug("last loc latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             L.debug("last loc long: " + String.valueOf(mCurrentLocation.getLongitude()));
+            if (mBounded) {
 
-            downloadNearbyUsersOnline();
+                mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+
+                //downloadNearbyUsersOnline();
+            }
 
             sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
@@ -570,12 +576,32 @@ public class AroundMeActivity extends AppCompatActivity
 
     @Override
     public void onConnectionSuspended(int i) {
-        L.makeText(this, "onConnectionSuspended",AppMsg.STYLE_ALERT);
+        L.makeText(this, "onConnectionSuspended", AppMsg.STYLE_ALERT);
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        L.makeText(this, "onConnectionFailed",AppMsg.STYLE_ALERT);
+
+        // Get the error dialog from Google Play services
+        Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
+                connectionResult.getErrorCode(),
+                this,
+                CONNECTION_FAILURE_RESOLUTION_REQUEST);
+
+        // If Google Play services can provide an error dialog
+        if (errorDialog != null) {
+            // Create a new DialogFragment for the error dialog
+            ErrorDialogFragment errorFragment = ErrorDialogFragment.newInstance(errorDialog);
+                    /*new ErrorDialogFragment()*/
+            ;
+            // Set the dialog in the DialogFragment
+            //errorFragment.setDialog(errorDialog);
+            // Show the error dialog in the DialogFragment
+            errorFragment.show(getFragmentManager(),
+                    "Location Updates");
+        }
+
+
     }
 
     @Override
@@ -662,8 +688,10 @@ public class AroundMeActivity extends AppCompatActivity
                     @Override
                     public void run() {
 
-
-                        downloadNearbyUsersOnline();
+                        if (mBounded) {
+                            mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+                        }
+                        //downloadNearbyUsersOnline();
                     }
                 }, 500);
             }
@@ -734,67 +762,8 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
-    private void getNewLoc() {
-
-//		String dtUpdate = db.getLocationDateUpdate();
-//		L.error("AroundMeActivity, getNewLoc dtUpdate: " + dtUpdate);
-//		if ((dtUpdate == "") || (du.hoursAgo(dtUpdate))) {
-//
-//			L.error("LOCATION INTELLIGENCE, Update needed...");
-//
-//			LocationResult locationResult = new LocationResult() {
-//
-//				@Override
-//				public void gotLocation(Location location) {
-//
-//					if (location != null) {
-//
-//						ftLatitude = (float) location.getLatitude() /*-33.8788025f*/;
-//						ftLongitude = (float) location
-//								.getLongitude() /* 151.2120050f */;
-//						latitude = ftLatitude;
-//						longitude = ftLongitude;
-//						db.insertLocation(username, longitude, latitude);
-//						SendLocToServer();
-//
-//					} else {
-//						// Looper.prepare();
-//
-//						try {
-//
-//							mHandler.sendEmptyMessage(1);
-//						} catch (Exception e) {
-//							Log.e("FAIL", "FAILED A:LL");
-//						}
-//						// makeNotify("Failed To Retrieve GPS Location",
-//						// AppMsg.STYLE_INFO);
-//						// mSwipeRefreshLayout.setRefreshing(false);
-//					}
-//				}
-//			};
-//
-//			PackageManager packMan = getPackageManager();
-//			hasGps = packMan.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
-//
-//			MyLocation myLocation = new MyLocation();
-//			boolean availLoc = myLocation.getLocation(this, locationResult);
-//			if (availLoc == false) {
-//				makeNotify("GPS Services Unavailable", AppMsg.STYLE_ALERT);
-//				mSwipeRefreshLayout.setRefreshing(false);
-//			}
-//		} else {
-//			L.error("LOCATION INTELLIGENCE, Getting db location...");
-//			ftLatitude = Float.parseFloat(db.getLocationLatitude()) /*-33.8788025f*/;
-//			ftLongitude = Float
-//					.parseFloat(db.getLocationLongitude()) /* 151.2120050f */;
-//			latitude = ftLatitude;
-//			longitude = ftLongitude;
-//			SendLocToServer();
-//		}
-    }
-
     private void updateGrid() {
-
+        L.debug("updateGrid");
 
         // us = null;
         //us = new ArrayList<Geolocation>();
@@ -830,6 +799,10 @@ public class AroundMeActivity extends AppCompatActivity
         Animation in = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_in_r);
         Animation out = AnimationUtils.loadAnimation(AroundMeActivity.this, R.anim.anim_fade_out_r);
         arr_correspondents.clear();
+
+
+        final Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
+
         for (int j = 0; j < nearbyUsers.size(); j++) {
 
             final String name = nearbyUsers.get(j).getUsername();
@@ -839,41 +812,54 @@ public class AroundMeActivity extends AppCompatActivity
 
             arr_correspondents.add(j, correspondent);
 
-            //check if connected to openfire server
-            if (XMPPService.xmpp.connection.isAuthenticated()) {
 
-                Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
-                String address = name + "@198.154.106.139/Smack";
-                updateUserAvailability(address, roster);
+            String address = name + "@198.154.106.139/Smack";
+            updateUserAvailability(address, roster);
 
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        UserProfile uProfile = new UserProfile();
-                        uProfile.setUsername(name);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
-                        uProfile.loadVCard(XMPPService.xmpp.connection);
-                        L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+                    final UserProfile uProfile = new UserProfile();
+                    uProfile.setUsername(name);
 
-                        updateUserAvatar(name, uProfile.getAvatarImg());
+                    uProfile.loadVCard(XMPPService.xmpp.connection);
 
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            L.error(e.getMessage());
-                        }
-                    }
-                }).start();
+                    L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+
+                    updateUserAvatar(name, uProfile.getAvatarImg());
 
 
-            }
+                }
+            }).start();
 
 
             imageId.add(j, R.drawable.pic_sample_girl);
             availabilty.add(j, "ADDED");
             web.add(j, name);
         }
+
+        roster.addRosterListener(new RosterListener() {
+            // Ignored events public void entriesAdded(Collection<String> addresses) {}
+            public void entriesDeleted(Collection<String> addresses) {
+            }
+
+            @Override
+            public void entriesAdded(Collection<String> collection) {
+
+            }
+
+            public void entriesUpdated(Collection<String> addresses) {
+            }
+
+            public void presenceChanged(Presence presence) {
+                //L.debug("Presence changed: " + presence.getFrom() + " " + presence);
+                L.debug("Presence changed: " + presence.getFrom());
+                updateUserAvailability(presence.getFrom(), roster);
+
+            }
+        });
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -885,38 +871,6 @@ public class AroundMeActivity extends AppCompatActivity
 
 
         db.close();
-    }
-
-    protected void updateCorrespondentsAvailability(Correspondent correspondent, String address, XMPPConnection connection) {
-        if (connection.isConnected()) {
-
-			/*/
-            boolean isAvailable = connection.getRoster().getPresence(address).isAvailable();
-			correspondent.setAvailable(isAvailable);
-			mSwipeRefreshLayout.post(new Runnable() {
-				
-				@Override
-				public void run() {
-					adapter.notifyDataSetChanged();
-					mSwipeRefreshLayout.setRefreshing(false);
-					
-				}
-			});
-			//*/
-        } else {
-
-            mSwipeRefreshLayout.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    makeNotify("Cannot connect to server", AppMsg.STYLE_ALERT);
-
-                }
-            });
-
-        }
-
-
     }
 
     private String displayGridCellName(String fname, String user) {
@@ -981,19 +935,12 @@ public class AroundMeActivity extends AppCompatActivity
                 L.debug(addresss + " isAvailable? " + isAvailable);
                 c.setAvailable(isAvailable);
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                   L.error(e.getMessage());
-                }
             }
         }
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-
-
                 adapter.notifyDataSetChanged();
             }
         });
@@ -1001,216 +948,7 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onConnectedToOpenfire(final XMPPConnection connection) {
-        //http://www.igniterealtime.org/builds/smack/docs/4.0.2/documentation/providers.html
-        //http://stackoverflow.com/questions/17485106/asmak-packet-listener-and-custom-iqprovider-not-triggering-called
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-                L.debug("=====================================================");
-//
-//                ServiceDiscoveryManager sdm = ServiceDiscoveryManager
-//                        .getInstanceFor(connection);
-//
-//                sdm.addFeature("http://jabber.org/protocol/disco#info");
-//                sdm.addFeature("urn:xmpp:archive");
-
-//xTX8b-9
-//                Time iq = new Time();
-//                iq.setType(IQ.Type.set);
-//                //iq.setTo(XMPPService.DOMAIN);
-//        try {
-//            connection.sendStanza(iq);
-//        } catch (SmackException.NotConnectedException e) {
-//
-//        }
-
-//                try {
-//                    connection.sendIqWithResponseCallback(iq,
-//                            new StanzaListener() {
-//
-//                                @Override
-//                                public void processPacket(Stanza arg0)
-//                                        throws SmackException.NotConnectedException {
-//
-//                                    //L.debug("Send IQ with Response, ****** message " + arg0);
-//                                }
-//                            }, new ExceptionCallback() {
-//                                @Override
-//                                public void processException(
-//                                        Exception exception) {
-//                                    exception.printStackTrace();
-//                                    L.error("IO archjieve Exception, " + exception.getMessage());
-//                                }
-//                            });
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(""+e.getMessage());
-//                }
-
-        //I36G1-9
-
-
-//
-//
-//                Time iq = new Time();
-//                iq.setType(IQ.Type.get);
-//                //iq.setTo(XMPPService.DOMAIN);
-//
-//                try {
-//                    connection.sendIqWithResponseCallback(iq,
-//                            new StanzaListener() {
-//
-//                                @Override
-//                                public void processPacket(Stanza arg0)
-//                                        throws SmackException.NotConnectedException {
-//
-//                                    L.debug("Send IQ with Response, ****** message "
-//                                            + arg0);
-//                                }
-//                            }, new ExceptionCallback() {
-//                                @Override
-//                                public void processException(
-//                                        Exception exception) {
-//                                    exception.printStackTrace();
-//                                    L.error("IO archjieve Exception, "
-//                                            + exception.getMessage());
-//                                }
-//                            });
-//                } catch (SmackException.NotConnectedException e) {
-//                    L.error(""+e.getMessage());
-//                }
-//
-//            }
-//        }).start();
-
-        final Roster roster = Roster.getInstanceFor(connection);
-        if (!nearbyUsers.isEmpty()) {
-
-            for (final Geolocation nearByUser : nearbyUsers) {
-                final String address = nearByUser.getUsername() + "@198.154.106.139/Smack";
-
-                Presence subscribe = new Presence(Presence.Type.subscribe);
-                subscribe.setTo(address);
-                try {
-                    connection.sendPacket(subscribe);
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-
-                try {
-                    roster.createEntry(address, null, null);
-                    updateUserAvailability(address, roster);
-                } catch (XMPPException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotLoggedInException e) {
-                    L.error(address + ", " + e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                }
-
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        UserProfile uProfile = new UserProfile();
-                        uProfile.setUsername(nearByUser.getUsername());
-
-                        uProfile.loadVCard(connection);
-                        L.debug("onConnectedToOpenfire, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
-
-                        updateUserAvatar(nearByUser.getUsername(), uProfile.getAvatarImg());
-
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                           L.error(e.getMessage());
-                        }
-                    }
-                }).start();
-
-
-
-
-                /*/
-                L.debug("saving vcard: "+address);
-                //saveVCard vcard
-                VCard saveCard = new VCard();
-                saveCard.setFirstName(nearByUser.getUsername());
-                saveCard.setEmailHome("foo@fee0.bar");
-                saveCard.setEmailWork("foo@fee1.bar");
-                saveCard.setJabberId(connection.getUser().replace("/Smack", ""));
-
-                VCardManager vCardManager = VCardManager.getInstanceFor(connection);
-                try {
-                    L.debug("isVCArdSupported? "+connection.getUser()+", "+vCardManager.isSupported(connection.getUser()));
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-                try {
-                    vCardManager.saveVCard(saveCard);
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-
-                //load vcard
-                L.debug("loading vcard: "+address);
-                try {
-
-                    VCard loadCard = vCardManager.loadVCard(address.replace("/Smack", ""));
-                    //loadCard.load(connection, address); // load someone's VCard
-
-                    L.debug("vcard: "+loadCard.getEmailHome());
-                } catch (SmackException.NoResponseException e) {
-                    L.error(e.getMessage());
-                } catch (XMPPException.XMPPErrorException e) {
-                    L.error(e.getMessage());
-                } catch (SmackException.NotConnectedException e) {
-                    L.error(e.getMessage());
-                }
-                //*/
-            }
-
-        }
-//
-//
-        roster.addRosterListener(new RosterListener() {
-            // Ignored events public void entriesAdded(Collection<String> addresses) {}
-            public void entriesDeleted(Collection<String> addresses) {
-            }
-
-            @Override
-            public void entriesAdded(Collection<String> collection) {
-
-            }
-
-            public void entriesUpdated(Collection<String> addresses) {
-            }
-
-            public void presenceChanged(Presence presence) {
-                //L.debug("Presence changed: " + presence.getFrom() + " " + presence);
-                L.debug("Presence changed: " + presence.getFrom());
-                updateUserAvailability(presence.getFrom(), roster);
-
-            }
-        });
-
-
-
-    }
 
     @Override
     public void onCorrespondentUpdate() {
@@ -1222,5 +960,23 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
+    private XMPPService mService;
+    private boolean mBounded;
 
+    @Override
+    public void OnServiceConnected(XMPPService service) {
+        mService = service;
+        mBounded = true;
+
+        mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+
+    }
+
+    @Override
+    public void OnServiceDisconnected() {
+        mService = null;
+        mBounded = false;
+
+
+    }
 }

@@ -1836,6 +1836,10 @@
         "source": "/Users/administrator/AndroidStudioProjects/nexpa_wip/nexpa_and_std/C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\drawable-hdpi\\speech_bubble_green.9.png"
     },
     {
+        "merged": "/Users/administrator/AndroidStudioProjects/nexpa_wip/nexpa_and_std/build/intermediates/res/merged/debug/drawable-hdpi-v4/img_building1.png",
+        "source": "/Users/administrator/AndroidStudioProjects/nexpa_wip/nexpa_and_std/res/drawable-hdpi/img_building1.png"
+    },
+    {
         "merged": "/Users/administrator/AndroidStudioProjects/nexpa_wip/nexpa_and_std/build/intermediates/res/merged/debug/drawable-hdpi-v4/common_ic_googleplayservices.png",
         "source": "/Users/administrator/AndroidStudioProjects/nexpa_wip/nexpa_and_std/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable-hdpi/common_ic_googleplayservices.png"
     },

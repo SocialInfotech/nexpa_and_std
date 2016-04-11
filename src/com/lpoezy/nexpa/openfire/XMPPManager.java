@@ -673,13 +673,14 @@ public class XMPPManager {
                                         broadcast = xpp.nextText();
                                         break;
                                 }
+
 //                                if(xpp.getName().equals("broadcast")){
 //                                    broadcast = xpp.nextText();
 //                                }
                             } else if(eventType == XmlPullParser.END_TAG) {
                                 //L.debug("End tag " + xpp.getName());
                             } else if(eventType == XmlPullParser.TEXT) {
-                                //L.debug("Text " + xpp.getText());
+                                //L.debug("Teb xt " + xpp.getText());
                             }
                             eventType = xpp.next();
                         }
@@ -694,14 +695,13 @@ public class XMPPManager {
                     if(broadcast!=null && !broadcast.isEmpty()){
 
                         SQLiteHandler db = new SQLiteHandler(context);
-                        db.openToRead();
+                        db.openToWrite();
                         Announcement ann = gson.fromJson(broadcast, Announcement.class);
                         ann.setItemId(itemId);
 
                         if(!ann.getFrom().equals(db.getUsername())){
                             ann.setIsMine(false);
                         }
-
 
                         GroupChatHomeActivity.addNewAnnouncement(ann);
                         db.close();

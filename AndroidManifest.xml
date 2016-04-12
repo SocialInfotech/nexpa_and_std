@@ -3,14 +3,11 @@
     package="com.lpoezy.nexpa"
     android:largeHeap="true"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="23" />
-
-
-
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -27,39 +24,37 @@
 
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name=".configuration.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-         >
-
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".activities.SplashScreen"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".activities.PeopleActivity" />
         <activity android:name=".activities.ForgotPasswordActivity" />
         <activity
             android:name=".activities.TabHostActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.SearchActivity" />
-
         <activity
             android:name=".activities.ChatActivity"
             android:parentActivityName=".activities.TabHostActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.TabHostActivity" />
@@ -99,14 +94,11 @@
         <service
             android:name=".chatservice.ChatMessagesService"
             android:enabled="true"
-            android:exported="true" >
-        </service>
-
-
+            android:exported="true"></service>
 
         <receiver
             android:name=".chatservice.NetworkChangeReceiver"
-            android:label="NetworkChangeReceiver" >
+            android:label="NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
@@ -117,38 +109,30 @@
             android:name=".activities.SettingsActivity"
             android:theme="@style/AppTheme" />
 
-        <service android:name=".chatservice.SyncDataService" >
-        </service>
-        <service android:name=".chatservice.SyncUserProfileService" >
-        </service>
-        <service android:name=".chatservice.SyncProfilePictureService" >
-        </service>
+        <service android:name=".chatservice.SyncDataService"></service>
+        <service android:name=".chatservice.SyncUserProfileService"></service>
+        <service android:name=".chatservice.SyncProfilePictureService"></service>
 
         <activity
             android:name=".activities.OthersBroadcastActivity"
             android:parentActivityName=".activities.GroupChatHomeActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.GroupChatHomeActivity" />
         </activity>
-        <activity android:name=".activities.BuddyRequestActivity" >
-        </activity>
+        <activity android:name=".activities.BuddyRequestActivity"></activity>
 
         <service
             android:name=".chatservice.XMPPService"
             android:enabled="true"
-            android:exported="false" >
-        </service>
-        
+            android:exported="false"></service>
         <service
-            android:name="com.lpoezy.nexpa.chatservice.RegistrationIntentService"
-            android:exported="false" >
-        </service>
-        
+            android:name=".chatservice.RegistrationIntentService"
+            android:exported="false"></service>
         <service
-            android:name="com.lpoezy.nexpa.chatservice.MyInstanceIdListenerService"
-            android:exported="false" >
+            android:name=".chatservice.MyInstanceIdListenerService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
@@ -157,13 +141,18 @@
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
                 <category android:name="com.codepath.gcmquickstart" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".activities.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

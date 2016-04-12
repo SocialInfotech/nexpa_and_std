@@ -106,17 +106,17 @@
     <!-- alerts -->
     <string name="msg_no_internet">Sorry your internet connection is not working, please enable it!</string>
     <string name="msg_request_to_reset_password_success">Please check your email to reset your Nexpa password.</string>
-    
+
 
     <!-- hints -->
-    <string name="short_description">Short description</string>
+    <string name="short_description">Description</string>
     <string name="profession">Profession</string>
     <string name="username">Username</string>
     <string name="url">URL</string>
     <string name="title_activity_others_broadcast">OthersBroadcastActivity</string>
     <string name="title_activity_buddy_request">BuddyRequestActivity</string>
-    
-    
+
+
     <!-- gcm -->
     <string name="gcm_defaultSenderId">983540022072</string>
     <string name="google_api_key">AIzaSyAtckbwEu0nJaMUlAj0ptLszozghH23Nyo</string>
@@ -125,5 +125,6 @@
     <string name="address_found">Address found!</string>
     <string name="no_geocoder_available">No geocoder available!</string>
     <string name="your_profile">YOUR PROFILE</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>

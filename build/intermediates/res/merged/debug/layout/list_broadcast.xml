@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:descendantFocusability="blocksDescendants"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/broad_id"
@@ -41,16 +42,24 @@
             android:layout_weight="0"
             android:background="@color/white" >
 
-            <View
+          <!--  <View
                 android:id="@+id/innerPic"
                 android:layout_width="40dip"
                 android:layout_height="40dip"
                 android:layout_marginBottom="1dip"
                 android:layout_marginTop="1dip"
                 android:background="@drawable/circle"
-                android:orientation="vertical" />
+                android:orientation="vertical" />-->
 
-            <ImageView
+            <com.github.siyamed.shapeimageview.CircularImageView
+                android:id="@+id/img_profile"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                app:siBorderWidth="3dp"
+                android:src="@drawable/pic_sample_girl"
+                app:siBorderColor="@color/flat_silver"/>
+
+           <!-- <ImageView
                 android:id="@+id/img_profile"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +68,7 @@
                 android:layout_alignRight="@id/innerPic"
                 android:layout_alignTop="@id/innerPic"
                 android:padding="1dip"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY" />-->
         </RelativeLayout>
 
         <RelativeLayout

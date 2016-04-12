@@ -65,7 +65,7 @@
                         android:layout_height="50dp"
                         android:id="@+id/img_profile_pic"
                         app:siRadius="6dp"
-                        app:siBorderWidth="6dp"
+                        app:siBorderWidth="2dp"
                         app:siBorderColor="@color/flat_silver"
                         app:siSquare="true"/>
 

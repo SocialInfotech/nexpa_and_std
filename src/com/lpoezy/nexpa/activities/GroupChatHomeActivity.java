@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -40,6 +41,7 @@ import android.widget.TextView;
 
 import com.appyvet.rangebar.RangeBar;
 import com.devspark.appmsg.AppMsg;
+import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -53,6 +55,7 @@ import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.objects.Geolocation;
+import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
@@ -205,7 +208,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             @Override
             public void run() {
 
-                if(XMPPService.xmpp.connection.isAuthenticated()) {
+                if (XMPPService.xmpp.connection.isAuthenticated()) {
 
 
                     SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
@@ -269,22 +272,51 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             public void run() {
                 //L.debug("itemId: "+ann.getItemId());
                 boolean doAdd = true;
-                for(Announcement announcement: announcements){
-                        if(announcement.getItemId().equals(ann.getItemId())){
+                for (Announcement announcement : announcements) {
+                    if (announcement.getItemId().equals(ann.getItemId())) {
 
-                            doAdd = false;
+                        doAdd = false;
+                    }
+                }
+
+                if (doAdd) {
+                    // int size = announcements.size()-1<0?0:announcements.size()-1;
+                    lnEmpty.setEnabled(false);
+                    lnEmpty.setVisibility(LinearLayout.GONE);
+
+                    final String uname = ann.getFrom();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final UserProfile userProfile = new UserProfile();
+                            userProfile.setUsername(uname);
+                            userProfile.loadVCard(XMPPService.xmpp.connection);
+
+                            if (userProfile.getAvatarImg() != null) {
+
+                                ann.setDP(userProfile.getAvatarImg());
+
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        adapter.notifyDataSetChanged();
+
+                                    }
+                                });
+
+
+                            }
+
+
                         }
-                    }
+                    }).start();
 
-                    if(doAdd){
-                       // int size = announcements.size()-1<0?0:announcements.size()-1;
-                        lnEmpty.setEnabled(false);
-                        lnEmpty.setVisibility(LinearLayout.GONE);
 
-                        announcements.add(ann);
-                        Collections.reverse(announcements);
-                        adapter.notifyDataSetChanged();
-                    }
+                    announcements.add(ann);
+                    Collections.reverse(announcements);
+                    adapter.notifyDataSetChanged();
+                }
 
 
             }
@@ -323,22 +355,25 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             vh.tvReply.setVisibility(ann.isMine() ? View.VISIBLE : View.GONE);
             vh.tvBroadFrm.setText(ann.getFrom());
 
+
             DateUtils du = new DateUtils();
-            String dateFormatted="";
-            if(ann.getDate()!=null&& !ann.getDate().isEmpty()){
-                dateFormatted = du.getMinAgo(ann.getDate());
-                vh.tvDateBroad.setText(dateFormatted);
+            String dateFormatted = "";
+            if (ann.getDate() != null && !ann.getDate().isEmpty()) {
+
+                vh.tvDateBroad.setText(DateUtils.millisToSimpleDate(Long.parseLong(ann.getDate()), DateUtils.DateFormatz.DATE_FORMAT_5));
             }
 
             vh.tvLocLocal.setVisibility(View.GONE);
-
-
 
             if (ann.getLocLocal() != null && !ann.getLocLocal().isEmpty()) {
                 String strLoc = "near " + ann.getLocLocal();
 
                 vh.tvLocLocal.setText(strLoc);
                 vh.tvLocLocal.setVisibility(TextView.VISIBLE);
+            }
+            vh.imgProfile.setImageResource(R.drawable.pic_sample_girl);
+            if (ann.getDP() != null) {
+                vh.imgProfile.setImageBitmap(ann.getDP());
             }
 
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
@@ -354,8 +389,9 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             return new ViewHolder(itemView);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+            private final CircularImageView imgProfile;
             TextView tvBroadId;
             TextView tvBroadFrm;
             TextView tvDateBroad;
@@ -369,7 +405,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
             public ViewHolder(View itemView) {
                 super(itemView);
-
+                imgProfile = (CircularImageView) itemView.findViewById(R.id.img_profile);
                 tvBroadId = (TextView) itemView.findViewById(R.id.broad_id);
                 tvBroadFrm = (TextView) itemView.findViewById(R.id.broad_from);
                 tvDateBroad = (TextView) itemView.findViewById(R.id.date_broad);
@@ -391,7 +427,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 db.openToRead();
                 String uname = db.getUsername();
                 db.close();
-                if(tvBroadFrm.getText().toString().equals(uname)){
+                if (tvBroadFrm.getText().toString().equals(uname)) {
                     return;
                 }
 
@@ -405,15 +441,13 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     }
 
 
-
-
     private Gson mGson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat_home);
-        
+
         mRvBroadcasts = (RecyclerView) findViewById(R.id.rv_my_broadcasts);
         mRvBroadcasts.setLayoutManager(new LinearLayoutManager(GroupChatHomeActivity.this));
         mRvBroadcasts.addItemDecoration(new DividerItemDecoration(GroupChatHomeActivity.this, DividerItemDecoration.VERTICAL_LIST));
@@ -472,83 +506,14 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             @Override
             public void onClick(View arg0) {
 
-                dialogPref = new Dialog(GroupChatHomeActivity.this);
-                dialogPref.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialogPref.setContentView(R.layout.activity_profile_distance_settings);
-
-                rbDistance = (RangeBar) dialogPref.findViewById(R.id.rbDistance);
-                rbDistance.setRangeBarEnabled(false);
+                openDistanceDialog();
 
 
-
-                rbDistance.setSeekPinByValue(dst);
-
-                rbDistance.setPinColor(getResources().getColor(R.color.EDWARD));
-                rbDistance.setConnectingLineColor(getResources().getColor(R.color.EDWARD));
-                rbDistance.setSelectorColor(getResources().getColor(R.color.EDWARD));
-                rbDistance.setPinRadius(30f);
-                rbDistance.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
-                    @Override
-                    public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex,
-                                                      String leftPinValue, String rightPinValue) {
-                        distTick = rightPinValue;
-                    }
-                });
-
-                Button dialogButton = (Button) dialogPref.findViewById(R.id.dialogButtonOK);
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        try {
-                            dst = Integer.parseInt(distTick);
-
-                        } catch (NumberFormatException e) {
-                            dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
-                        }
-
-                        dialogPref.dismiss();
-                    }
-                });
-
-                CheckBox cbxSuperUser = (CheckBox) dialogPref
-                        .findViewById(R.id.cbx_superuser);
-                SessionManager sm = new SessionManager(
-                        GroupChatHomeActivity.this);
-                cbxSuperUser.setChecked(sm.isSuperuser());
-
-                cbxSuperUser.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        SessionManager sm = new SessionManager(
-                                GroupChatHomeActivity.this);
-                        if (((CheckBox) v).isChecked()) {
-                            rbDistance.setEnabled(false);
-                            sm.setSuperuser(true);
-                        } else {
-                            sm.setSuperuser(false);
-                            rbDistance.setEnabled(true);
-                        }
-
-                    }
-                });
-
-                if (cbxSuperUser.isChecked()) {
-                    rbDistance.setEnabled(false);
-                } else {
-                    rbDistance.setEnabled(true);
-                }
-
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(dialogPref.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                dialogPref.show();
-                dialogPref.getWindow().setAttributes(lp);
 
 
             }
+
+
 
         });
 
@@ -563,6 +528,84 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         }
 
         createLocationRequest();
+    }
+
+    private void openDistanceDialog() {
+
+        dialogPref = new Dialog(GroupChatHomeActivity.this);
+        dialogPref.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogPref.setContentView(R.layout.activity_profile_distance_settings);
+
+        rbDistance = (RangeBar) dialogPref.findViewById(R.id.rbDistance);
+        rbDistance.setRangeBarEnabled(false);
+
+
+        rbDistance.setSeekPinByValue(dst);
+
+        rbDistance.setPinColor(getResources().getColor(R.color.EDWARD));
+        rbDistance.setConnectingLineColor(getResources().getColor(R.color.EDWARD));
+        rbDistance.setSelectorColor(getResources().getColor(R.color.EDWARD));
+        rbDistance.setPinRadius(30f);
+        rbDistance.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+            @Override
+            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex,
+                                              String leftPinValue, String rightPinValue) {
+                distTick = rightPinValue;
+            }
+        });
+
+        Button dialogButton = (Button) dialogPref.findViewById(R.id.dialogButtonOK);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    dst = Integer.parseInt(distTick);
+
+                } catch (NumberFormatException e) {
+                    dst = AppConfig.SUPERUSER_MIN_DISTANCE_KM;
+                }
+
+                dialogPref.dismiss();
+            }
+        });
+
+        CheckBox cbxSuperUser = (CheckBox) dialogPref
+                .findViewById(R.id.cbx_superuser);
+        SessionManager sm = new SessionManager(
+                GroupChatHomeActivity.this);
+        cbxSuperUser.setChecked(sm.isSuperuser());
+
+        cbxSuperUser.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                SessionManager sm = new SessionManager(
+                        GroupChatHomeActivity.this);
+                if (((CheckBox) v).isChecked()) {
+                    rbDistance.setEnabled(false);
+                    sm.setSuperuser(true);
+                } else {
+                    sm.setSuperuser(false);
+                    rbDistance.setEnabled(true);
+                }
+
+            }
+        });
+
+        if (cbxSuperUser.isChecked()) {
+            rbDistance.setEnabled(false);
+        } else {
+            rbDistance.setEnabled(true);
+        }
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogPref.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogPref.show();
+        dialogPref.getWindow().setAttributes(lp);
+
     }
 
     private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -601,12 +644,10 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             @Override
             public void run() {
 
-
                 Geolocation geo = new Geolocation();
                 geo.setUsername(mUsername);
                 geo.setLatitude(lat);
                 geo.setLongitude(longi);
-
                 geo.saveOnline();
 
             }
@@ -637,20 +678,19 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                         });
 
 
-                        boolean msgSent = broadcastMessage(msgToBroadcast);
+                        broadcastMessage(msgToBroadcast);
 
-                        if (msgSent) {
 
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                                    dialogBroadcast.dismiss();
-                                }
-                            });
-                        }
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                                dialogBroadcast.dismiss();
+                            }
+                        });
+
                     }
                 }).start();
 
@@ -665,8 +705,10 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             }
         });
     }
+
     private List<Geolocation> mNearbyUsers = new ArrayList<Geolocation>();
-    private void downloadNearbyUsers()  {
+
+    private void downloadNearbyUsers() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -686,7 +728,6 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 postDataParams.put("dist", newDistance + "");
                 postDataParams.put("unit", "k");
 
-
                 final String spec = AppConfig.URL_GEO;
                 String webpage = HttpUtilz.makeRequest(spec, postDataParams);
 
@@ -703,6 +744,8 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                     error = jObj.getBoolean("error");
                 } catch (JSONException e) {
                     L.error(e.getMessage());
+                } catch (NullPointerException e) {
+                    L.error(e.getMessage());
                 }
 
                 if (!error) {
@@ -714,11 +757,12 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                         L.error(e.getMessage());
                     }
 
-                    if (nearby_users!=null && nearby_users.length() != 0) {
+                    if (nearby_users != null && nearby_users.length() != 0) {
                         mNearbyUsers.clear();
                         for (int i = 0; i < nearby_users.length(); i++) {
 
                             try {
+
                                 JSONObject c = nearby_users.getJSONObject(i);
                                 // user profile
                                 String uname = c.getString("username");
@@ -738,7 +782,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                                     Node node = mgr.getNode(uname + "-broadcast");
                                     node.subscribe(db.getUsername() + "@198.154.106.139");
 
-                                    L.debug("subscribed to "+uname);
+                                    L.debug("subscribed to " + uname);
                                 } catch (SmackException.NoResponseException e) {
                                     L.error(e.getMessage());
                                 } catch (XMPPException.XMPPErrorException e) {
@@ -770,8 +814,8 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     }
 
 
-    private boolean broadcastMessage(final String msgToBroadcast) {
-        SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+    private void broadcastMessage(final String msgToBroadcast) {
+        final SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
         db.openToRead();
         PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
 
@@ -779,18 +823,56 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         try {
             node = mgr.getNode(db.getUsername() + "-broadcast");
 
-            final String from, body, date, locLocal;
-            int reach = 0;
-            final long[] dateTime = new long[1];
             Time time = new Time();
+
             try {
                 XMPPService.xmpp.connection.sendStanza(time);
 
+                final LeafNode finalNode = node;
                 XMPPService.xmpp.connection.addSyncStanzaListener(new StanzaListener() {
                     @Override
                     public void processPacket(Stanza stanza) throws SmackException.NotConnectedException {
 
+                        final String from, body, date, locLocal;
+                        int reach = 0;
+                        final long[] dateTime = new long[1];
+
                         dateTime[0] = ((Time) stanza).getTime().getTime();
+
+                        from = db.getUsername();
+                        body = msgToBroadcast;
+                        date = Long.toString(dateTime[0]);
+
+                        locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
+
+//                        List<Subscription> subs = null;
+//                        try {
+//                            subs = finalNode.getSubscriptions();
+//                        } catch (SmackException.NoResponseException e) {
+//                            e.printStackTrace();
+//                        } catch (XMPPException.XMPPErrorException e) {
+//                            e.printStackTrace();
+//                        }
+//                        L.debug("==========subscribers=====================");
+//                        for (int i = 0; i < subs.size(); i++) {
+//                            L.debug(subs.get(i).getJid() + ": " + subs.get(i).getId());
+//                        }
+//
+//                        L.debug("==========================================");
+
+                        reach = mNearbyUsers.size();
+                        Announcement ann = new Announcement(from, body, date, locLocal, reach, true);
+
+                        try {
+
+                            finalNode.send(new PayloadItem(null,
+                                    new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<broadcast xmlns='pubsub:nexpa:broadcast'>" + mGson.toJson(ann) + "</broadcast>")));
+
+                        } catch (SmackException.NoResponseException e) {
+                            e.printStackTrace();
+                        } catch (XMPPException.XMPPErrorException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new StanzaFilter() {
                     @Override
@@ -807,42 +889,6 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 e.printStackTrace();
             }
 
-            from = db.getUsername();
-            body = msgToBroadcast;
-            date = Long.toString(dateTime[0]);
-            locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
-
-            List<Subscription> subs = node.getSubscriptions();
-            L.debug("==========subscribers=====================");
-            for(int i = 0; i < subs.size(); i++)
-            {
-                L.debug(subs.get(i).getJid()+": "+subs.get(i).getId());
-
-
-            }
-            L.debug("==========================================");
-
-            reach = mNearbyUsers.size();
-
-            Announcement ann = new Announcement(from, body, date, locLocal, reach, true);
-            //mGson.toJson(ann);
-//            ConfigureForm configureForm = new ConfigureForm(DataForm.Type.submit);
-//            configureForm.setAccessModel(AccessModel.open);
-//            configureForm.setDeliverPayloads(false);
-//            configureForm.setNotifyRetract(true);
-//            configureForm.setPersistentItems(true);
-//            configureForm.setPublishModel(PublishModel.open);
-//
-//            node.sendConfigurationForm(configureForm);
-
-            // Publish an Item with payload
-
-
-            node.send(new PayloadItem(null,
-                    new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<broadcast xmlns='pubsub:nexpa:broadcast'>" + mGson.toJson(ann) + "</broadcast>")));
-
-            return true;
-
         } catch (SmackException.NoResponseException e) {
             L.error(e.getMessage());
         } catch (XMPPException.XMPPErrorException e) {
@@ -851,7 +897,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             L.error(e.getMessage());
         }
         db.close();
-        return false;
+
     }
 
     String locationName = "";

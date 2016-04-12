@@ -1,5 +1,7 @@
 package com.lpoezy.nexpa.objects;
 
+import android.graphics.Bitmap;
+
 public class Announcement {
 	private boolean isMine;
 	// BROAD_ID, BROADCAST_TYPE, BROADCAST_FROM,
@@ -17,6 +19,7 @@ public class Announcement {
 	private String locLocal;
 	private int reach;
 	private String itemId;
+	private Bitmap DP;
 	//private int status;
 	
 	public Announcement(){}
@@ -83,6 +86,9 @@ public class Announcement {
 		this.locLocal = locLocal;
 	}
 
+	public void setDP(Bitmap DP) {
+		this.DP = DP;
+	}
 	public int getReach() {
 		return reach;
 	}
@@ -105,5 +111,10 @@ public class Announcement {
 
 	public String getItemId() {
 		return itemId;
+	}
+
+
+	public Bitmap getDP() {
+		return DP;
 	}
 }

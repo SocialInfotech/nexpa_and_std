@@ -24,6 +24,8 @@
 
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -96,8 +98,7 @@
         <service
             android:name="com.lpoezy.nexpa.chatservice.ChatMessagesService"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true" />
 
         <receiver
             android:name="com.lpoezy.nexpa.chatservice.NetworkChangeReceiver"
@@ -112,12 +113,9 @@
             android:name="com.lpoezy.nexpa.activities.SettingsActivity"
             android:theme="@style/AppTheme" />
 
-        <service android:name="com.lpoezy.nexpa.chatservice.SyncDataService" >
-        </service>
-        <service android:name="com.lpoezy.nexpa.chatservice.SyncUserProfileService" >
-        </service>
-        <service android:name="com.lpoezy.nexpa.chatservice.SyncProfilePictureService" >
-        </service>
+        <service android:name="com.lpoezy.nexpa.chatservice.SyncDataService" />
+        <service android:name="com.lpoezy.nexpa.chatservice.SyncUserProfileService" />
+        <service android:name="com.lpoezy.nexpa.chatservice.SyncProfilePictureService" />
 
         <activity
             android:name="com.lpoezy.nexpa.activities.OthersBroadcastActivity"
@@ -127,18 +125,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.GroupChatHomeActivity" />
         </activity>
-        <activity android:name="com.lpoezy.nexpa.activities.BuddyRequestActivity" >
-        </activity>
+        <activity android:name="com.lpoezy.nexpa.activities.BuddyRequestActivity" />
 
         <service
             android:name="com.lpoezy.nexpa.chatservice.XMPPService"
             android:enabled="true"
-            android:exported="false" >
-        </service>
+            android:exported="false" />
         <service
             android:name="com.lpoezy.nexpa.chatservice.RegistrationIntentService"
-            android:exported="false" >
-        </service>
+            android:exported="false" />
         <service
             android:name="com.lpoezy.nexpa.chatservice.MyInstanceIdListenerService"
             android:exported="false" >
@@ -157,6 +152,11 @@
                 <category android:name="com.codepath.gcmquickstart" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="com.lpoezy.nexpa.activities.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <provider
             android:name="com.google.android.gms.measurement.AppMeasurementContentProvider"

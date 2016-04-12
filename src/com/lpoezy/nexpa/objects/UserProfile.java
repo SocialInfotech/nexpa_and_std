@@ -53,7 +53,7 @@ public class UserProfile {
     }
 
     public void loadVCard(XMPPConnection connection) {
-
+        L.debug("loading card of "+this.username);
 
         VCardManager vCardManager = VCardManager.getInstanceFor(connection);
 

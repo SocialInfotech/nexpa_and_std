@@ -2,34 +2,6 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-extensions-4.1.5.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="d2a55a29b761ca02cfc9c06a5e1a548ead68abd2">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-extensions-4.1.5_45b531d97617218fb9e74e05c036fcfe2eb2bdca.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-android-4.1.5.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="780e9a850108b15f53b70271f9d7e4513cd9e57b">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-android-4.1.5_8ae5b3a3759aee469526f1402f000bff2ef5e844.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-im-4.1.5.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="2245aac70ff47195c61711a15a790e65c43c5c6a">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-im-4.1.5_589595e7f3be43fdf85dc7472b8b96307476ef37.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3\3.4\5fe28b9518e58819180a43a850fbc0dd24b7c050\commons-lang3-3.4.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="5fe28b9518e58819180a43a850fbc0dd24b7c050">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\commons-lang3-3.4_37e71301b1f7ee127b2c795177d7a4a7c80de288.jar" />
-    </item>
-    <item
         jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\minidns-0.1.7.jar"
         jumboMode="false"
         revision="23.0.1"
@@ -37,109 +9,11 @@
         <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\minidns-0.1.7_e3a9f4a87f591c6e5ad220e39e29c96c9e7ff340.jar" />
     </item>
     <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.github.johnkil.android-appmsg\appmsg\1.2.0\jars\classes.jar"
+        jar="C:\Users\HP PAVILION\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3\3.4\5fe28b9518e58819180a43a850fbc0dd24b7c050\commons-lang3-3.4.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="398ec51345409df9e36a1de1a81f2b3ad5234bfb">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.github.johnkil.android-appmsg-appmsg-1.2.0_7a97659bbd4af8f1ea78cbe997d9bc8badace216.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.4.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-8.4.0_1fe48b16baa57ac14461a442520464f4872754fe.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\8.4.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="a8412b654dab86d57bf90683367488211c8a81f1">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-location-8.4.0_7977e461b0c5276a6f6d6c8cb16697524ca5841c.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\.gradle\caches\modules-2\files-2.1\joda-time\joda-time\2.9.2\36d6e77a419cb455e6fd5909f6f96b168e21e9d0\joda-time-2.9.2.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="36d6e77a419cb455e6fd5909f6f96b168e21e9d0">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\joda-time-2.9.2_a7344190ff762d68d433063dd8bb39ad58bcf0ee.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-experimental-4.1.5.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="c6ee99cc1a1e676ae178774ba6bc8730753160da">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-experimental-4.1.5_1b869dc6441039d10007a9279b48c302363819c5.jar" />
-    </item>
-    <item
-        jar="C:\adt-bundle-windows-x86_64-20130729\sdk\extras\android\m2repository\com\android\support\support-annotations\23.1.1\support-annotations-23.1.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\support-annotations-23.1.1_518a938a38aae6372111763137ccd02c7c1c0634.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.1.1_7fa5664db72c82ad981a2afdc229762b77cee37e.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.1.1_34e937a04f5cb25e45ba3c5766d4add6e2678c1f.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\8.4.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="2d7fe76982677315c4dc4edfb459c8ca718a9d4c">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-gcm-8.4.0_72b597f4aedcfb85adf0c041ec71707ba73d70c1.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.appyvet\materialrangebar\1.3\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="8eb551963af29c7faacd640a4e74a8e9e698ab90">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.appyvet-materialrangebar-1.3_0f6ffc56100b6b97037dfd46cd503c86e21bfb0b.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\8.4.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-8.4.0_0260ad2722c8d3488804e9e05275e37f0aca3516.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-sasl-provided-4.1.5.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="b41c37cd16b10aabc4d97f34f212ad02949aa3f1">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-sasl-provided-4.1.5_a73900c4690b9a2054e96f37e22e3173278566f9.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.1.1_12cfbc7694310a22303c5a3f71078187c99885b0.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.github.siyamed\android-shape-imageview\0.9.3\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="ee07783aa59eefdeacc107abf472f45f60272302">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.github.siyamed-android-shape-imageview-0.9.3_318c97895c1273f988c6cf16a2569def84d6e005.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.1\jars\libs\internal_impl-23.1.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\internal_impl-23.1.1_01a7cffdbeca30302a182a96fc429eb4a28e9de3.jar" />
+        sha1="5fe28b9518e58819180a43a850fbc0dd24b7c050">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\commons-lang3-3.4_37e71301b1f7ee127b2c795177d7a4a7c80de288.jar" />
     </item>
     <item
         jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-resolver-minidns-4.1.5.jar"
@@ -156,39 +30,11 @@
         <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.github.nirhart-parallaxscroll-1.0_39f3ed0c4e300b70191842c3c486aa1e749137a5.jar" />
     </item>
     <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\8.4.0\jars\classes.jar"
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.4.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="04de44f90606c77f3b28cf44861f306290505aac">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-maps-8.4.0_8a3125565b2be1c68bfe822cfcaa9daca4597e89.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-android-extensions-4.1.5.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="9c52e550cc679a3b30289d397707ee988a61b9b5">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-android-extensions-4.1.5_4017e00a637b5949ce8f0e52f230af4108740072.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-measurement\8.4.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="613298b7aa012f121ce542881c0a599ebd8078f2">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-measurement-8.4.0_905f1de6be05dc0a5c2e00bb6ef67f6d1405b252.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\.gradle\caches\modules-2\files-2.1\eu.the4thfloor.volley\com.android.volley\2015.05.28\b0b08cc0ac897e596abe6b263a9507cba875b705\com.android.volley-2015.05.28.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="b0b08cc0ac897e596abe6b263a9507cba875b705">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.volley-2015.05.28_1487af7081c8d37f2d212f232df841cef3dc3246.jar" />
-    </item>
-    <item
-        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-tcp-4.1.5.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="1c988c338c25e3b4531a2261ac880f46a25d3f79">
-        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-tcp-4.1.5_a87ebcc19adf819498ce4b210b891f685fc86953.jar" />
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-8.4.0_1fe48b16baa57ac14461a442520464f4872754fe.jar" />
     </item>
     <item
         jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\gson-2.2.4.jar"
@@ -198,11 +44,186 @@
         <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\gson-2.2.4_7cee503789e7b191a2fc2f303d27ead13fc0cab9.jar" />
     </item>
     <item
+        jar="C:\Users\HP PAVILION\.gradle\caches\modules-2\files-2.1\joda-time\joda-time\2.9.2\36d6e77a419cb455e6fd5909f6f96b168e21e9d0\joda-time-2.9.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="36d6e77a419cb455e6fd5909f6f96b168e21e9d0">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\joda-time-2.9.2_a7344190ff762d68d433063dd8bb39ad58bcf0ee.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.github.johnkil.android-appmsg\appmsg\1.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="398ec51345409df9e36a1de1a81f2b3ad5234bfb">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.github.johnkil.android-appmsg-appmsg-1.2.0_7a97659bbd4af8f1ea78cbe997d9bc8badace216.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-android-extensions-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="9c52e550cc679a3b30289d397707ee988a61b9b5">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-android-extensions-4.1.5_4017e00a637b5949ce8f0e52f230af4108740072.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="04de44f90606c77f3b28cf44861f306290505aac">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-maps-8.4.0_8a3125565b2be1c68bfe822cfcaa9daca4597e89.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-extensions-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d2a55a29b761ca02cfc9c06a5e1a548ead68abd2">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-extensions-4.1.5_45b531d97617218fb9e74e05c036fcfe2eb2bdca.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-experimental-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c6ee99cc1a1e676ae178774ba6bc8730753160da">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-experimental-4.1.5_1b869dc6441039d10007a9279b48c302363819c5.jar" />
+    </item>
+    <item
+        jar="C:\adt-bundle-windows-x86_64-20130729\sdk\extras\android\m2repository\com\android\support\support-annotations\23.2.1\support-annotations-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\support-annotations-23.2.1_bf5f1cd2a5522be4bcd406c35c89fd5ebc111cf9.jar" />
+    </item>
+    <item
         jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-core-4.1.5.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="4e896af64e8be5c1aa12d9db95353e1987ef4d84">
         <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-core-4.1.5_34b42595425099ab8c179474fd727da3ba98aa3c.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a8412b654dab86d57bf90683367488211c8a81f1">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-location-8.4.0_7977e461b0c5276a6f6d6c8cb16697524ca5841c.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\.gradle\caches\modules-2\files-2.1\eu.the4thfloor.volley\com.android.volley\2015.05.28\b0b08cc0ac897e596abe6b263a9507cba875b705\com.android.volley-2015.05.28.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b0b08cc0ac897e596abe6b263a9507cba875b705">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.volley-2015.05.28_1487af7081c8d37f2d212f232df841cef3dc3246.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.appyvet\materialrangebar\1.3\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8eb551963af29c7faacd640a4e74a8e9e698ab90">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.appyvet-materialrangebar-1.3_0f6ffc56100b6b97037dfd46cd503c86e21bfb0b.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\libs\internal_impl-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\internal_impl-23.2.1_787999e13f5c87873ac92c3550ee00a4cd35ec82.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2d7fe76982677315c4dc4edfb459c8ca718a9d4c">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-gcm-8.4.0_72b597f4aedcfb85adf0c041ec71707ba73d70c1.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-sasl-provided-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b41c37cd16b10aabc4d97f34f212ad02949aa3f1">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-sasl-provided-4.1.5_a73900c4690b9a2054e96f37e22e3173278566f9.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.2.1_75c9d5e40acc0a4178fbf709e55239013ed817f5.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-im-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2245aac70ff47195c61711a15a790e65c43c5c6a">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-im-4.1.5_589595e7f3be43fdf85dc7472b8b96307476ef37.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-tcp-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1c988c338c25e3b4531a2261ac880f46a25d3f79">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-tcp-4.1.5_a87ebcc19adf819498ce4b210b891f685fc86953.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\design\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="72961d8b453b46e277702f18de9d210bc019e36e">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-design-23.2.1_1fae2b0b92a315401ea750d97da828df07b99803.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-measurement\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="613298b7aa012f121ce542881c0a599ebd8078f2">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-measurement-8.4.0_905f1de6be05dc0a5c2e00bb6ef67f6d1405b252.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-8.4.0_0260ad2722c8d3488804e9e05275e37f0aca3516.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.github.siyamed\android-shape-imageview\0.9.3\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ee07783aa59eefdeacc107abf472f45f60272302">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.github.siyamed-android-shape-imageview-0.9.3_318c97895c1273f988c6cf16a2569def84d6e005.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\libs\smack-android-4.1.5.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="780e9a850108b15f53b70271f9d7e4513cd9e57b">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\smack-android-4.1.5_8ae5b3a3759aee469526f1402f000bff2ef5e844.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e4d0cbb0b999604b349062f0214a0a228a7fd151">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.2.1_9d7caaeb612f1f054fd05ddea2b38f5119cb84aa.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3469cb457f10f74c28cbc05f069b6c894f6cbdd0">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-23.2.1_0c151b1c3d064b74211c62c546a0941d91a9e688.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="673d77a5bbddd766037f088e775df525c46407f0">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-23.2.1_162dec15bd42f0c5171db7026143f220e8eb000c.jar" />
+    </item>
+    <item
+        jar="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e3885783ff8926ed9e2fdcd16816c2e1e73e7aee">
+        <dex dex="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.2.1_3b4f17d38d63fadeb80e83a3db49353b74d8fea3.jar" />
     </item>
 
 </items>

@@ -86,7 +86,7 @@ public class MyBroadcastsFragment extends Fragment {
 
     ParallaxRecyclerAdapter<Announcement> mAdapter;
     private ImageView mImgProfile;
-    private TextView mTvJobTitle;
+    private TextView mTvDescription;
     private TextView mTvUname;
     private TextView mTvUrl0;
     private TextView mTvUrl1;
@@ -178,7 +178,7 @@ public class MyBroadcastsFragment extends Fragment {
         mImgProfile = (ImageView) header.findViewById(R.id.img_profile);
 
 
-        mTvJobTitle = (TextView) header.findViewById(R.id.tv_job_title);
+        mTvDescription = (TextView) header.findViewById(R.id.tv_description);
         mTvUname = (TextView) header.findViewById(R.id.tv_uname);
         mTvUrl0 = (TextView) header.findViewById(R.id.tv_url0);
         mTvUrl1 = (TextView) header.findViewById(R.id.tv_url1);
@@ -438,16 +438,16 @@ public class MyBroadcastsFragment extends Fragment {
 
                         mImgProfile.setImageBitmap(avatar);
 
-                        mTvJobTitle.setVisibility(View.GONE);
+                        mTvDescription.setVisibility(View.GONE);
                         mTvUname.setVisibility(View.GONE);
                         mTvUrl0.setVisibility(View.GONE);
                         mTvUrl1.setVisibility(View.GONE);
                         mTvUrl2.setVisibility(View.GONE);
 
 
-                        if (profile.getProfession() != null && !profile.getProfession().equals("")) {
-                            mTvJobTitle.setVisibility(View.VISIBLE);
-                            mTvJobTitle.setText(profile.getProfession());
+                        if (profile.getDescription() != null && !profile.getDescription().equals("")) {
+                            mTvDescription.setVisibility(View.VISIBLE);
+                            mTvDescription.setText(profile.getDescription());
                         }
 
                         if (profile.getUsername() != null && !profile.getUsername().equals("")) {

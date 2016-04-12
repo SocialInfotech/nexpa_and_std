@@ -42,7 +42,6 @@ import com.lpoezy.nexpa.objects.MessageArchiveWithIQ;
 import com.lpoezy.nexpa.objects.MessageResultElement;
 import com.lpoezy.nexpa.objects.Messages;
 import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
-import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;

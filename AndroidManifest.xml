@@ -94,7 +94,7 @@
         <service
             android:name=".chatservice.ChatMessagesService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <receiver
             android:name=".chatservice.NetworkChangeReceiver"
@@ -109,9 +109,9 @@
             android:name=".activities.SettingsActivity"
             android:theme="@style/AppTheme" />
 
-        <service android:name=".chatservice.SyncDataService"></service>
-        <service android:name=".chatservice.SyncUserProfileService"></service>
-        <service android:name=".chatservice.SyncProfilePictureService"></service>
+        <service android:name=".chatservice.SyncDataService" />
+        <service android:name=".chatservice.SyncUserProfileService" />
+        <service android:name=".chatservice.SyncProfilePictureService" />
 
         <activity
             android:name=".activities.OthersBroadcastActivity"
@@ -121,15 +121,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.GroupChatHomeActivity" />
         </activity>
-        <activity android:name=".activities.BuddyRequestActivity"></activity>
+        <activity android:name=".activities.BuddyRequestActivity" />
 
         <service
             android:name=".chatservice.XMPPService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
         <service
             android:name=".chatservice.RegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
         <service
             android:name=".chatservice.MyInstanceIdListenerService"
             android:exported="false">
@@ -152,6 +152,10 @@
         <activity
             android:name=".activities.Main2Activity"
             android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activities.CommentsActivity"
+            android:label="@string/title_activity_comments"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 

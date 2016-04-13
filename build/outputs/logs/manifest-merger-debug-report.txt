@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:2:1-158:12
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:2:1-162:12
 	package
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:3:5-31
 		INJECTED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml
@@ -58,6 +58,7 @@ MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop
 MERGED from [com.android.support:support-vector-drawable:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.2.1\AndroidManifest.xml:5:5-43
 MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:recyclerview-v7:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.2.1\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
 	tools:overrideLibrary
 		ADDED from [com.android.support:appcompat-v7:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.2.1\AndroidManifest.xml:23:9-75
@@ -123,7 +124,7 @@ ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManife
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:27:30-80
 application
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:29:5-156:19
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:29:5-160:19
 MERGED from [com.android.support:appcompat-v7:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.2.1\AndroidManifest.xml:25:5-20
 MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:animated-vector-drawable:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.2.1\AndroidManifest.xml:7:5-20
@@ -155,6 +156,7 @@ MERGED from [com.android.support:animated-vector-drawable:23.2.1] C:\Users\HP PA
 MERGED from [com.android.support:support-vector-drawable:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.2.1\AndroidManifest.xml:7:5-20
 MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-vector-drawable:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.2.1\AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.2.1] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
 	android:label
@@ -298,7 +300,7 @@ ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManife
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:91:13-59
 service#com.lpoezy.nexpa.chatservice.ChatMessagesService
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:94:9-97:47
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:94:9-97:39
 	android:enabled
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:96:13-35
 	android:exported
@@ -328,15 +330,15 @@ ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManife
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:109:13-56
 service#com.lpoezy.nexpa.chatservice.SyncDataService
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:112:9-72
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:112:9-64
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:112:18-61
 service#com.lpoezy.nexpa.chatservice.SyncUserProfileService
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:113:9-79
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:113:9-71
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:113:18-68
 service#com.lpoezy.nexpa.chatservice.SyncProfilePictureService
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:114:9-82
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:114:9-74
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:114:18-71
 activity#com.lpoezy.nexpa.activities.OthersBroadcastActivity
@@ -348,11 +350,11 @@ ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManife
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:117:13-63
 activity#com.lpoezy.nexpa.activities.BuddyRequestActivity
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:124:9-78
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:124:9-69
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:124:19-66
 service#com.lpoezy.nexpa.chatservice.XMPPService
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:126:9-129:48
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:126:9-129:40
 	android:enabled
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:128:13-35
 	android:exported
@@ -360,7 +362,7 @@ ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManife
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:127:13-52
 service#com.lpoezy.nexpa.chatservice.RegistrationIntentService
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:130:9-132:48
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:130:9-132:40
 	android:exported
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:132:13-37
 	android:name
@@ -396,13 +398,21 @@ ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManife
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:148:27-68
 activity#com.lpoezy.nexpa.activities.Main2Activity
-ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:152:9-155:81
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:152:9-155:72
 	android:label
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:154:13-57
 	android:theme
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:155:13-69
 	android:name
 		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:153:13-53
+activity#com.lpoezy.nexpa.activities.CommentsActivity
+ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:156:9-159:81
+	android:label
+		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:158:13-60
+	android:theme
+		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:159:13-69
+	android:name
+		ADDED from C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\AndroidManifest.xml:157:13-56
 provider#com.google.android.gms.measurement.AppMeasurementContentProvider
 ADDED from [com.google.android.gms:play-services-measurement:8.4.0] C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std\build\intermediates\exploded-aar\com.google.android.gms\play-services-measurement\8.4.0\AndroidManifest.xml:28:7-31:37
 	android:authorities

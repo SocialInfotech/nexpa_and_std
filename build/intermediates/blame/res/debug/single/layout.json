@@ -4,6 +4,10 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\activity_others_broadcast.xml"
     },
     {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\list_comment.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\list_comment.xml"
+    },
+    {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\list_broadcast.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\list_broadcast.xml"
     },
@@ -368,6 +372,10 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\grid_single.xml"
     },
     {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_comments.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\activity_comments.xml"
+    },
+    {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_chat_history_details.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\fragment_chat_history_details.xml"
     },
@@ -498,6 +506,10 @@
     {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_search.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_comments.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\fragment_comments.xml"
     },
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\message_count.xml",
@@ -794,6 +806,10 @@
     {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_group_chat_main.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\activity_group_chat_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\content_comments.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\content_comments.xml"
     },
     {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_icon.xml",

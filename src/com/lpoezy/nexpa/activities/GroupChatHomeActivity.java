@@ -54,6 +54,7 @@ import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
+import com.lpoezy.nexpa.objects.BroadcastComment;
 import com.lpoezy.nexpa.objects.Geolocation;
 import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
@@ -347,7 +348,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         public void onBindViewHolder(final ViewHolder vh, final int position) {
 
             Announcement ann = announcements.get(position);
-
+            vh.tvBroadId.setText(ann.getItemId());
             vh.tvBroadMsg.setText(ann.getBody());
             vh.ImgReply.setImageResource(R.drawable.btn_reply);
             vh.tvReply.setText("REACHED " + ann.getReach());
@@ -417,7 +418,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 btnReply = (LinearLayout) itemView.findViewById(R.id.btnReply);
                 tvBroadFrmRaw = (TextView) itemView.findViewById(R.id.broad_from_raw);
 
-                //itemView.setOnClickListener(this);
+                itemView.setOnClickListener(this);
 
             }
 
@@ -431,10 +432,10 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                     return;
                 }
 
-                Intent intent = new Intent(GroupChatHomeActivity.this, OthersBroadcastActivity.class);
-
-                intent.putExtra(OthersBroadcastActivity.TAG_USERNAME, tvBroadFrm.getText().toString());
-
+                Intent intent = new Intent(GroupChatHomeActivity.this, CommentsActivity.class);
+                String locLocal  = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
+                intent.putExtra(CommentsFragment.BROADCAST_ID, tvBroadId.getText().toString());
+                intent.putExtra(CommentsFragment.ADDRESS, locLocal);
                 startActivity(intent);
             }
         }

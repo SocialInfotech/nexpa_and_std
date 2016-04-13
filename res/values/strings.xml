@@ -126,5 +126,6 @@
     <string name="no_geocoder_available">No geocoder available!</string>
     <string name="your_profile">YOUR PROFILE</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_comments">CommentsActivity</string>
 
 </resources>

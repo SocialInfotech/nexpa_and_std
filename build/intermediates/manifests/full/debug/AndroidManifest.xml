@@ -157,6 +157,10 @@
             android:name="com.lpoezy.nexpa.activities.Main2Activity"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.CommentsActivity"
+            android:label="@string/title_activity_comments"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <provider
             android:name="com.google.android.gms.measurement.AppMeasurementContentProvider"

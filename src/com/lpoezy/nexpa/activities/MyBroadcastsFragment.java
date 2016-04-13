@@ -359,42 +359,6 @@ public class MyBroadcastsFragment extends Fragment {
 
         //resetProfilePic();
         updateUI();
-        /*/
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				SQLiteHandler db = new SQLiteHandler(getActivity().getApplicationContext());
-				db.openToRead();
-				
-				final List<Announcement> announcements = db.downloadPersonalBroadcasts();
-				
-				mUsername = GroupChatHomeActivity.displayName(db.getName() + "", db.getUsername());
-				
-				db.close();
-				
-				
-				mRvBroadcasts.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						
-						mAnouncements.clear();
-						mAnouncements.addAll(announcements);
-						
-						L.debug("mAnouncements.size "+mAnouncements.size());
-						adapter.notifyDataSetChanged();
-					}
-				});
-				
-			}
-		}).start();
-		//*/
-
-
-
-
 
     }
 

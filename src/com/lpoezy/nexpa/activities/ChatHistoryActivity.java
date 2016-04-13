@@ -33,19 +33,7 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 
     public static boolean isRunning;
 
-//	@Override
-//	public void onBackPressed() {
-//		
-//		//super.onBackPressed();
-//		SessionManager session = new SessionManager(getApplicationContext());
-//		if(session.isLoggedIn()){
-//			UserProfileActivity.promptYesNoDialog("Quit Toucan?",
-//					"Are you sure you want to log off?",
-//   					this,
-//   					"DEAC",
-//   					true);
-//		}
-//	}
+
 
 
     @Override
@@ -72,7 +60,7 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 //		}
 
 
-        //RecyclerView
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         TextView mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);

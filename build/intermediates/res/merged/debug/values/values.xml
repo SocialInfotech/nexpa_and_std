@@ -533,6 +533,7 @@
     <string name="take_photo">Take photo</string>
     <string name="title_activity_buddy_request">BuddyRequestActivity</string>
     <string name="title_activity_chat_history">ChatHistoryActivity</string>
+    <string name="title_activity_comments">CommentsActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_others_broadcast">OthersBroadcastActivity</string>
     <string name="title_activity_test">TestActivity</string>

@@ -3,6 +3,7 @@ package com.lpoezy.nexpa.activities;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,14 +12,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.google.gson.Gson;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.BroadcastComment;
 import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
+import com.lpoezy.nexpa.objects.UserProfile;
 import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.DateUtils;
@@ -35,6 +41,7 @@ import org.jivesoftware.smackx.pubsub.LeafNode;
 import org.jivesoftware.smackx.pubsub.PayloadItem;
 import org.jivesoftware.smackx.pubsub.PubSubManager;
 import org.jivesoftware.smackx.pubsub.PublishModel;
+import org.jivesoftware.smackx.pubsub.SimplePayload;
 import org.jivesoftware.smackx.pubsub.Subscription;
 import org.jivesoftware.smackx.xdata.packet.DataForm;
 import org.xmlpull.v1.XmlPullParser;
@@ -46,7 +53,15 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class CommentsFragment extends Fragment {
@@ -58,7 +73,9 @@ public class CommentsFragment extends Fragment {
     private String mAddress;
     private static CommentsAdapter adapter;
     private RecyclerView mRvComments;
-    private  SwipyRefreshLayout mSwipeRefreshLayout;
+    private SwipyRefreshLayout mSwipeRefreshLayout;
+    private Button mBtnSend;
+    private EditText mTextComment;
 
     public CommentsFragment() {
         // Required empty public constructor
@@ -78,6 +95,8 @@ public class CommentsFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    //https://github.com/luizgrp/SectionedRecyclerViewAdapter
+    private Map<String, Bitmap> mAvatars;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,27 +104,36 @@ public class CommentsFragment extends Fragment {
 
         if (getArguments() != null) {
             mBroadcastId = getArguments().getString(BROADCAST_ID);
-            mAddress  = getArguments().getString(ADDRESS);
+            mAddress = getArguments().getString(ADDRESS);
         }
 
         mGson = new Gson();
         comments = new ArrayList<BroadcastComment>();
-        
+        mAvatars = new HashMap<String, Bitmap>();
         adapter = new CommentsAdapter(getActivity());
 
         mRvComments = (RecyclerView) v.findViewById(R.id.listComments);
-        mRvComments.setAdapter(adapter);
 
         final LinearLayoutManager lm = new LinearLayoutManager(getActivity());
-//
-//        lm.setStackFromEnd(true);
         mRvComments.setLayoutManager(lm);
-        //L.debug("mBroadcastId: " + mBroadcastId);
+        RecyclerViewHeader header = (RecyclerViewHeader) v.findViewById(R.id.comments_header);
 
+        header.attachTo(mRvComments);
+
+        mRvComments.setAdapter(adapter);
 
         mSwipeRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.niagara, R.color.buttercup, R.color.niagara);
         mSwipeRefreshLayout.setBackgroundColor(getResources().getColor(R.color.carrara));
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+
+                RetrieveMyOwnBroadcast task = new RetrieveMyOwnBroadcast();
+                task.onExecutePendingTask();
+            }
+        });
 
 
         mSwipeRefreshLayout.post(new Runnable() {
@@ -113,6 +141,26 @@ public class CommentsFragment extends Fragment {
             public void run() {
 
                 mSwipeRefreshLayout.setRefreshing(true);
+
+
+            }
+        });
+
+        mTextComment = (EditText) v.findViewById(R.id.commentET);
+
+        Button btnSend = (Button) v.findViewById(R.id.sendBtn);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            private boolean isReconnecting;
+
+            public void onClick(View view) {
+
+
+                final String comment = mTextComment.getText().toString();
+
+                if (!comment.equalsIgnoreCase("")) {
+                    OnSendCommentTask sendComment = new OnSendCommentTask(comment);
+                    sendComment.onExecutePendingTask();
+                }
             }
         });
 
@@ -128,7 +176,7 @@ public class CommentsFragment extends Fragment {
 
     private static List<BroadcastComment> comments;
 
-    private class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder>{
+    private class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
         private final Context context;
         private final LayoutInflater inflater;
@@ -148,14 +196,14 @@ public class CommentsFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder vh, int position) {
+        public void onBindViewHolder(final ViewHolder vh, final int position) {
 
-            BroadcastComment bc = comments.get(position);
+            final BroadcastComment bc = comments.get(position);
 
             vh.tvCommentMsg.setText(bc.getBody());
             vh.tvCommentFrm.setText(bc.getFrom());
 
-            if(bc.getDate()!=null&& !bc.getDate().isEmpty()){
+            if (bc.getDate() != null && !bc.getDate().isEmpty()) {
 
                 vh.tvCommentDate.setText(DateUtils.millisToSimpleDate(Long.parseLong(bc.getDate()), DateUtils.DateFormatz.DATE_FORMAT_5));
             }
@@ -169,6 +217,34 @@ public class CommentsFragment extends Fragment {
                 vh.tvLocLocal.setVisibility(TextView.VISIBLE);
             }
 
+            vh.imgProfile.setImageResource(R.drawable.pic_sample_girl);
+            Bitmap avatar = mAvatars.get(bc.getFrom());
+            if (avatar != null) {
+                vh.imgProfile.setImageBitmap(avatar);
+            }
+
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    final UserProfile userProfile = new UserProfile();
+//                    userProfile.setUsername("fitz");
+//                    userProfile.loadVCard(XMPPService.xmpp.connection);
+//
+//                    if (userProfile.getAvatarImg() != null) {
+//                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                //L.debug("success!!!!!!!!!!!!!!!");
+//                                vh.imgProfile.setImageBitmap(userProfile.getAvatarImg());
+//                            }
+//                        });
+//
+//
+//                    }
+//                }
+//            }).start();
+
+
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                     0, ActionBar.LayoutParams.WRAP_CONTENT, 1.2f);
             //vh.btnReply.setLayoutParams(param);
@@ -181,14 +257,14 @@ public class CommentsFragment extends Fragment {
             return comments.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder{
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView tvCommentId;
             TextView tvCommentFrm;
             TextView tvCommentDate;
             TextView tvLocLocal;
             TextView tvCommentMsg;
-
+            ImageView imgProfile;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -198,18 +274,24 @@ public class CommentsFragment extends Fragment {
                 tvCommentDate = (TextView) itemView.findViewById(R.id.comment_date);
                 tvLocLocal = (TextView) itemView.findViewById(R.id.location_local);
                 tvCommentMsg = (TextView) itemView.findViewById(R.id.comment_message);
+                imgProfile = (ImageView) itemView.findViewById(R.id.img_profile);
 
             }
         }
-    };
+    }
+
+    ;
     private Gson mGson;
-    private class RetrieveMyOwnBroadcast implements OnExecutePendingTaskListener{
+
+    private class RetrieveMyOwnBroadcast implements OnExecutePendingTaskListener {
         @Override
         public void onExecutePendingTask() {
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+
+                    L.debug("RetrieveMyOwnBroadcast");
 
                     if (!XMPPService.xmpp.connection.isConnected()) {
 
@@ -239,10 +321,9 @@ public class CommentsFragment extends Fragment {
                             List<Subscription> subs = node.getSubscriptions();
                             String mySubid = null;
                             String uname = db.getUsername();
-                            for(int i = 0; i < subs.size(); i++)
-                            {
+                            for (int i = 0; i < subs.size(); i++) {
                                 //L.debug(XMPPService.xmpp.connection.getUser()+", "+subs.get(i).getJid()+": "+subs.get(i).getId());
-                                if(subs.get(i).getJid().split("@")[0].equals(uname)){
+                                if (subs.get(i).getJid().split("@")[0].equals(uname)) {
                                     mySubid = subs.get(i).getId();
                                     break;
                                 }
@@ -253,8 +334,8 @@ public class CommentsFragment extends Fragment {
                             Collection<PayloadItem<Item>> eventItems = node.getItems(100, mySubid);
 
                             Gson gson = new Gson();
-                            List<BroadcastComment>bComments = new ArrayList<BroadcastComment>();
-                            for(Item item : eventItems) {
+                            List<BroadcastComment> bComments = new ArrayList<BroadcastComment>();
+                            for (Item item : eventItems) {
 
 
                                 String comment = null;
@@ -267,15 +348,15 @@ public class CommentsFragment extends Fragment {
                                     factory.setNamespaceAware(true);
                                     XmlPullParser xpp = factory.newPullParser();
 
-                                    xpp.setInput( new StringReader( item.toXML()) );
+                                    xpp.setInput(new StringReader(item.toXML()));
                                     int eventType = xpp.getEventType();
 
                                     while (eventType != XmlPullParser.END_DOCUMENT) {
-                                        if(eventType == XmlPullParser.START_DOCUMENT) {
+                                        if (eventType == XmlPullParser.START_DOCUMENT) {
                                             // L.debug("Start document");
-                                        } else if(eventType == XmlPullParser.START_TAG) {
+                                        } else if (eventType == XmlPullParser.START_TAG) {
                                             //L.debug("Start tag " + xpp.getName());
-                                            switch (xpp.getName()){
+                                            switch (xpp.getName()) {
                                                 case "item":
                                                     itemId = xpp.getAttributeValue("", "id");
                                                     break;
@@ -284,10 +365,9 @@ public class CommentsFragment extends Fragment {
                                                     break;
                                             }
 
-
-                                        } else if(eventType == XmlPullParser.END_TAG) {
+                                        } else if (eventType == XmlPullParser.END_TAG) {
                                             // L.debug("End tag " + xpp.getName());
-                                        } else if(eventType == XmlPullParser.TEXT) {
+                                        } else if (eventType == XmlPullParser.TEXT) {
                                             //L.debug("Texxt " + xpp.getText());
                                         }
                                         eventType = xpp.next();
@@ -300,28 +380,27 @@ public class CommentsFragment extends Fragment {
                                     L.error(e.getMessage());
                                 }
 
-                                L.debug("comment: "+comment);
-                                BroadcastComment bc = mGson.fromJson(comment, BroadcastComment.class);
+                                L.debug("comment: " + comment);
+                                final BroadcastComment bc = mGson.fromJson(comment, BroadcastComment.class);
+
                                 bComments.add(bc);
                             }
 
-                            if(!bComments.isEmpty()){
+                            if (!bComments.isEmpty()) {
                                 comments.clear();
                                 comments.addAll(bComments);
-                                Collections.reverse(comments);
+                                //Collections.reverse(comments);
                             }
-                            L.debug("comments: "+comments.size());
-//                            mAnouncements.clear();
-//                            mAnouncements.addAll(announcements);
-//                            Collections.reverse(mAnouncements);
-
 
 
                             mSwipeRefreshLayout.post(new Runnable() {
                                 @Override
                                 public void run() {
+
                                     adapter.notifyDataSetChanged();
+
                                     mSwipeRefreshLayout.setRefreshing(false);
+                                    mRvComments.smoothScrollToPosition(comments.size() - 1);
                                 }
                             });
 
@@ -334,19 +413,76 @@ public class CommentsFragment extends Fragment {
                         }
 
 
+                        ExecutorService ex = Executors.newFixedThreadPool(5);
+                        ExecutorCompletionService ecs = new ExecutorCompletionService(ex);
+                        for(final BroadcastComment bc : comments){
+                            ecs.submit(new Callable<UserProfile>(){
+                                @Override
+                                public UserProfile call() throws Exception {
+
+                                    final UserProfile userProfile = new UserProfile();
+                                    userProfile.setUsername(bc.getFrom());
+                                    userProfile.loadVCard(XMPPService.xmpp.connection);
+
+                                    return userProfile;
+                                }
+                            });
+                        }
+
+                        for(int i=0;i<comments.size();++i){
+                            Future<UserProfile> f=null;
+                            try {
+                                f = ecs.take();
+                            } catch (InterruptedException e) {
+                               L.error(e.getMessage());
+                            }
+                            UserProfile up = null;
+                            if(f!=null){
+                                try {
+                                   up = f.get();
+                                } catch (InterruptedException e) {
+                                    L.error(e.getMessage());
+                                } catch (ExecutionException e) {
+                                    L.error(e.getMessage());
+                                }
+                            }
+
+                            if(up.getAvatarImg()!=null){
+                                L.debug("uname: " + up.getUsername() + ", upic: " + up.getAvatarImg());
+                                if(!mAvatars.containsKey(up.getUsername())){
+                                    mAvatars.put(up.getUsername(), up.getAvatarImg());
+
+
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+
+                            }
+                        }
+
+
                         db.close();
-
-
-
                     }
 
                 }
             }).start();
 
         }
-    };
+    }
+
+    ;
 
     private class OnSendCommentTask implements OnExecutePendingTaskListener {
+        private final String body;
+
+        public OnSendCommentTask(String body) {
+            this.body = body;
+        }
+
         @Override
         public void onExecutePendingTask() {
 
@@ -367,6 +503,16 @@ public class CommentsFragment extends Fragment {
                         XMPPService.xmpp.login();
 
                     } else {
+
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mTextComment.setText("");
+
+                            }
+                        });
+
+
                         SQLiteHandler db = new SQLiteHandler(getActivity());
                         db.openToRead();
                         // Create a pubsub manager using an existing XMPPConnection
@@ -418,8 +564,8 @@ public class CommentsFragment extends Fragment {
                                 for (int i = 0; i < subs.size(); i++) {
                                     L.debug(subs.get(i).getJid() + ": " + subs.get(i).getId());
                                     //only subscribe if name don't appear in the list
-                                    if(subs.get(i).getJid().split("@")[0].equals(db.getUsername())){
-                                        L.debug(db.getUsername()+" is already subscribed to "+node.getId());
+                                    if (subs.get(i).getJid().split("@")[0].equals(db.getUsername())) {
+                                        L.debug(db.getUsername() + " is already subscribed to " + node.getId());
                                         isAlreadySubscribe = true;
                                         break;
                                     }
@@ -430,11 +576,11 @@ public class CommentsFragment extends Fragment {
                                 isAlreadySubscribe = false;
                             }
 
-                            if(!isAlreadySubscribe){
+                            if (!isAlreadySubscribe) {
                                 try {
                                     node.subscribe(db.getUsername() + "@198.154.106.139");
                                     isAlreadySubscribe = true;
-                                    L.debug("subscribe to "+node.getId());
+                                    L.debug("subscribe to " + node.getId());
                                 } catch (SmackException.NoResponseException e) {
                                     L.error(e.getMessage());
                                 } catch (XMPPException.XMPPErrorException e) {
@@ -444,24 +590,35 @@ public class CommentsFragment extends Fragment {
                                 }
                             }
 
-//                            String from = db.getUsername();
-//                            String address = mAddress;
-//                            String date = Long.toString(System.currentTimeMillis());
-//                            String body = "this is a comment!!!";
-//                            BroadcastComment comment = new BroadcastComment(from, body, address, date, true);
-//
-//                            Gson gson = new Gson();
-//                            try {
-//                                node.send(new PayloadItem(null,
-//                                        new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<comment xmlns='pubsub:nexpa:comment'>" + gson.toJson(comment) + "</comment>")));
-//                            } catch (SmackException.NoResponseException e) {
-//                                L.error(e.getMessage());
-//                            } catch (XMPPException.XMPPErrorException e) {
-//                                L.error(e.getMessage());
-//                            } catch (SmackException.NotConnectedException e) {
-//                                L.error(e.getMessage());
-//                            }
 
+                            String from = db.getUsername();
+                            String address = mAddress;
+                            String date = Long.toString(System.currentTimeMillis());
+
+                            BroadcastComment comment = new BroadcastComment(from, body, address, date, true);
+
+                            Gson gson = new Gson();
+                            try {
+                                node.send(new PayloadItem(null,
+                                        new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<comment xmlns='pubsub:nexpa:comment'>" + gson.toJson(comment) + "</comment>")));
+                            } catch (SmackException.NoResponseException e) {
+                                L.error(e.getMessage());
+                            } catch (XMPPException.XMPPErrorException e) {
+                                L.error(e.getMessage());
+                            } catch (SmackException.NotConnectedException e) {
+                                L.error(e.getMessage());
+                            }
+
+                            comments.add(comment);
+
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    adapter.notifyDataSetChanged();
+                                    mRvComments.smoothScrollToPosition(comments.size() - 1);
+                                }
+                            });
                         }
 
                         db.close();
@@ -472,7 +629,9 @@ public class CommentsFragment extends Fragment {
 
 
         }
-    };
+    }
+
+    ;
 
     private LeafNode createCommentNode() throws SmackException.NotConnectedException, XMPPException.XMPPErrorException, SmackException.NoResponseException {
         LeafNode node = null;

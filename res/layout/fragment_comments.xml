@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <!--<RelativeLayout
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:visibility="invisible" >
@@ -22,7 +22,22 @@
             android:layout_height="wrap_content"
             android:scrollHorizontally="true"
             android:singleLine="true" />
-    </RelativeLayout>
+    </RelativeLayout>-->
+
+    <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
+        android:id="@+id/comments_header"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="header"/>
+
+    </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
 
     <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -51,7 +66,7 @@
         android:textColor="@color/txt_color" >
 
         <EditText
-            android:id="@+id/chatET"
+            android:id="@+id/commentET"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"

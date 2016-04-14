@@ -1,5 +1,7 @@
 package com.lpoezy.nexpa.objects;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by HP PAVILION on 4/12/2016.
  */
@@ -10,6 +12,8 @@ public class BroadcastComment {
     private String from;
     private String date;
     private String address;
+
+    private Bitmap avatar;
 
     public BroadcastComment(String from, String body, String address, String date, boolean isMine){
         this.from = from;
@@ -57,5 +61,13 @@ public class BroadcastComment {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public Bitmap getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Bitmap avatar) {
+        this.avatar = avatar;
     }
 }

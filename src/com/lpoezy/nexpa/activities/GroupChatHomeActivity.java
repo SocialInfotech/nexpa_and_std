@@ -209,7 +209,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             @Override
             public void run() {
 
-                if (XMPPService.xmpp.connection.isAuthenticated()) {
+                if (XMPPService.xmpp.connection!=null && XMPPService.xmpp.connection.isAuthenticated()) {
 
 
                     SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);

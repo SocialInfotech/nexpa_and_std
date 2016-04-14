@@ -793,6 +793,4 @@ public class XMPPManager {
 
     }
 
-
-
 }

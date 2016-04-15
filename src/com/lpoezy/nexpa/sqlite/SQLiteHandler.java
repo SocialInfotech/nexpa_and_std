@@ -155,6 +155,21 @@ public class SQLiteHandler {
     public static final String PROFILE_EMAIL = "email";
     public static final String PROFILE_VALID = "is_valid";
 
+//    private String from;
+//    private String body;
+//    private String date;
+//    private String locLocal;
+//    private int reach;
+//    private String itemId;
+
+    public static final String TABLE_BROADCASTS = "broadcasts";
+    public static final String BROADCAST_FROM_ = "b_from";
+    public static final String BROADCAST_BODY = "b_body";
+    public static final String BROADCAST_DATE_ = "b_date";
+    public static final String BROADCAST_LOC = "b_loc";
+    public static final String BROADCAST_REACH_ = "b_reach";
+    public static final String BROADCAST_ID = "b_id";
+
     public static final String DATABASE_TABLE_3 = "broadcast";
     public static final String BROAD_ID = "_id";
     public static final String BROADCAST_TYPE = "broad_type_of";
@@ -194,6 +209,8 @@ public class SQLiteHandler {
     }
 
 
+
+
     public class SQLiteHelper extends SQLiteOpenHelper {
 
         public SQLiteHelper(Context context, String name, CursorFactory factory, int version) {
@@ -220,6 +237,19 @@ public class SQLiteHandler {
                     + MAM_TO + " TEXT, " + MAM_TYPE + " TEXT, " + MAM_FROM + " TEXT, "
                     + MAM_BODY + " TEXT, " + MAM_THREAD + " TEXT);";
             db.execSQL(CREATE_MAM_TABLE);
+
+//            public static final String TABLE_BROADCASTS = "broadcasts";
+//            public static final String BROADCAST_FROM_ = "from";
+//            public static final String BROADCAST_BODY = "body";
+//            public static final String BROADCAST_DATE_ = "date";
+//            public static final String BROADCAST_LOC = "loc";
+//            public static final String BROADCAST_REACH_ = "reach";
+//            public static final String BROADCAST_ID = "id";
+
+            String CREATE_BROADCAST_TABLE = "CREATE TABLE " + TABLE_BROADCASTS + "(" + BROADCAST_ID + " TEXT UNIQUE, "
+                    + BROADCAST_FROM_ + " TEXT, " + BROADCAST_BODY + " TEXT, " + BROADCAST_DATE_ + " TEXT, "
+                    + BROADCAST_LOC + " TEXT, " +  BROADCAST_REACH_ + " TEXT);";
+            db.execSQL(CREATE_BROADCAST_TABLE);
 
 
 //            String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -1279,6 +1309,47 @@ public class SQLiteHandler {
         return getUsername();
 
 
+    }
+
+    public List<Announcement> downloadAllBroadcast() {
+        List<Announcement> broadcasts = null;
+        Cursor c = sqLiteDatabase.query(TABLE_BROADCASTS, new String[]{BROADCAST_ID, BROADCAST_FROM_, BROADCAST_BODY, BROADCAST_DATE_, BROADCAST_LOC, BROADCAST_REACH_}, null, null, null, null, BROADCAST_DATE_+" ASC");
+        if(c.moveToFirst()){
+            broadcasts= new ArrayList<Announcement>();
+            do{
+
+                Announcement announcement = new Announcement();
+                announcement.setItemId(c.getString(c.getColumnIndex(BROADCAST_ID)));
+                announcement.setFrom(c.getString(c.getColumnIndex(BROADCAST_FROM_)));
+                announcement.setBody(c.getString(c.getColumnIndex(BROADCAST_BODY)));
+                announcement.setDate(c.getString(c.getColumnIndex(BROADCAST_DATE_)));
+                announcement.setLocLocal(c.getString(c.getColumnIndex(BROADCAST_LOC)));
+                announcement.setReach(c.getInt(c.getColumnIndex(BROADCAST_REACH_)));
+                broadcasts.add(announcement);
+
+            }while(c.moveToNext());
+        }
+
+        c.close();
+
+        return broadcasts;
+    }
+
+    public void saveBroadcast(String itemId, String from, String body, String date, String locLocal, int reach) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(BROADCAST_ID, itemId);
+        values.put(BROADCAST_FROM_, from);
+        values.put(BROADCAST_BODY, body);
+        values.put(BROADCAST_DATE_, date);
+        values.put(BROADCAST_LOC, locLocal);
+        values.put(BROADCAST_REACH_, reach);
+
+
+        sqLiteDatabase.insertWithOnConflict(TABLE_BROADCASTS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+
+        L.debug("saved broadcast "+itemId);
     }
 
     public long saveCorrespondent(String username) {

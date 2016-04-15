@@ -116,9 +116,9 @@ public class CommentsFragment extends Fragment {
 
         final LinearLayoutManager lm = new LinearLayoutManager(getActivity());
         mRvComments.setLayoutManager(lm);
-        RecyclerViewHeader header = (RecyclerViewHeader) v.findViewById(R.id.comments_header);
-
-        header.attachTo(mRvComments);
+//        RecyclerViewHeader header = (RecyclerViewHeader) v.findViewById(R.id.comments_header);
+//
+//        header.attachTo(mRvComments);
 
         mRvComments.setAdapter(adapter);
 
@@ -168,10 +168,19 @@ public class CommentsFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+
+        XMPPService.xmpp.removeUpdateCommentsUIListener(mOnupdateUI);
+        super.onPause();
+    }
+
+    @Override
     public void onResume() {
         RetrieveMyOwnBroadcast task = new RetrieveMyOwnBroadcast();
         task.onExecutePendingTask();
         super.onResume();
+
+        XMPPService.xmpp.registerUpdateCommentsUIListener(mOnupdateUI);
     }
 
     private static List<BroadcastComment> comments;
@@ -651,6 +660,18 @@ public class CommentsFragment extends Fragment {
 
         return node;
 
+    }
+
+    private OnUpdateUIListener mOnupdateUI = new OnUpdateUIListener() {
+        @Override
+        public void onUpdateUI() {
+            RetrieveMyOwnBroadcast task = new RetrieveMyOwnBroadcast();
+            task.onExecutePendingTask();
+        }
+    };
+
+    public interface OnUpdateUIListener{
+        public void onUpdateUI();
     }
 
 }

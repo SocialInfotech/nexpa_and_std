@@ -148,8 +148,8 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
 
         intentMes = getIntent();
         // String email = intentMes.getStringExtra("email");
-        final long userId = getIntent().getLongExtra("userid", -1);
-        mCorrespondentId = userId;
+//        final long userId = getIntent().getLongExtra("userid", -1);
+//        mCorrespondentId = userId;
         mCorrespondentName = intentMes.getStringExtra("username");
         //final String username = intentMes.getStringExtra("username");
         final String email = getIntent().getStringExtra("email");
@@ -331,7 +331,7 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-
+                                if(!chatMessage.senderName.equals(mCorrespondentName))return;
                                 //NewMessage comment = new NewMessage(senderName, receiverName, body, isLeft, isSuccessful, isUnread, isSyncedOnline, date);
                                 mChatMsgs.add(chatMessage);
                                 //mComments.add(comment);

@@ -28,21 +28,23 @@
                 android:layout_height="8dp"
                  />
 
+        <TextView
+            android:id="@+id/tv_uname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/tv_job_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="job title"
-                android:textStyle="bold"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tv_uname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="username"
-                android:textSize="14sp" />
+
 
             <TextView
                 android:id="@+id/tv_url0"

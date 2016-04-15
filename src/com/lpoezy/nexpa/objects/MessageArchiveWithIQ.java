@@ -35,7 +35,7 @@ public class MessageArchiveWithIQ extends IQ {
             xml.append("</field></x>");
         }
         xml.append("<set xmlns='http://jabber.org/protocol/rsm'>");
-        xml.append("<max>30</max><before/>");
+        xml.append("<max>100</max><before/>");
         xml.append("</set>");
 
 

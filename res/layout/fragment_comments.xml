@@ -24,7 +24,7 @@
             android:singleLine="true" />
     </RelativeLayout>-->
 
-    <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
+   <!-- <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
         android:id="@+id/comments_header"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -37,7 +37,7 @@
             android:layout_centerInParent="true"
             android:text="header"/>
 
-    </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
+    </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>-->
 
     <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
         android:id="@+id/swipeRefreshLayout"

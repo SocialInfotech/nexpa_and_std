@@ -1,21 +1,18 @@
 package com.lpoezy.nexpa.objects;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+
+import com.lpoezy.nexpa.sqlite.SQLiteHandler;
+
+import java.util.List;
 
 public class Announcement {
 	private boolean isMine;
-	// BROAD_ID, BROADCAST_TYPE, BROADCAST_FROM,
-	// BROADCAST_MESSAGE, BROADCAST_DATE, BROADCAST_LOCATION_LONG,
-	// BROADCAST_LOCATION_LAT, BROADCAST_LOCATION_LOCAL, BROADCAST_REACH,
-	// BROADCAST_STATUS
 
-	//private long id;
-	//private int type;
 	private String from;
 	private String body;
 	private String date;
-	//private long locLongitude;
-	//private long locLatitude;
 	private String locLocal;
 	private int reach;
 	private String itemId;
@@ -116,5 +113,23 @@ public class Announcement {
 
 	public Bitmap getDP() {
 		return DP;
+	}
+
+	public void saveOffline(Context context) {
+
+		SQLiteHandler db = new SQLiteHandler(context);
+		db.openToWrite();
+		db.saveBroadcast(itemId, from, body, date, locLocal, reach);
+		db.close();
+	}
+
+	public static List<Announcement> downloadOffline(Context context) {
+
+		SQLiteHandler db = new SQLiteHandler(context);
+		db.openToRead();
+		List<Announcement> broadcasts = db.downloadAllBroadcast();
+		db.close();
+
+		return broadcasts;
 	}
 }

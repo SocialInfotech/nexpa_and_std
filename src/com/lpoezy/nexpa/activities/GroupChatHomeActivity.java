@@ -96,6 +96,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class GroupChatHomeActivity extends AppCompatActivity implements XMPPService.OnServiceConnectedListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -186,6 +190,8 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
         }
+
+        XMPPService.xmpp.removeUpdateBroadcastUIListener(mOnupdateUI);
         frmPause = true;
         super.onPause();
         isRunning = false;
@@ -204,12 +210,14 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     @Override
     protected void onResume() {
         super.onResume();
+
+        XMPPService.xmpp.registerUpdateBroadcastUIListener(mOnupdateUI);
 //*/
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                if (XMPPService.xmpp.connection!=null && XMPPService.xmpp.connection.isAuthenticated()) {
+                if (XMPPService.xmpp.connection != null && XMPPService.xmpp.connection.isAuthenticated()) {
 
 
                     SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
@@ -265,6 +273,33 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         isRunning = true;
     }
 
+    public static void updateUI(Context context) {
+
+    }
+
+
+    private void downloadReceivedBroadcastsNearby() {
+
+        List<Announcement> broadcasts = Announcement.downloadOffline(GroupChatHomeActivity.this);
+
+        SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+        db.openToRead();
+        if(broadcasts!=null && !broadcasts.isEmpty() || mNearbyUsers!=null && !mNearbyUsers.isEmpty()){
+            for(int i=0;i<broadcasts.size();i++){
+                Announcement ann = broadcasts.get(i);
+
+                for(int j=0;j<mNearbyUsers.size();j++){
+                    Geolocation nearby = mNearbyUsers.get(j);
+                    if(ann.getFrom().equals(nearby.getUsername()) || ann.getFrom().equals(db.getUsername())){
+                        addNewAnnouncement(ann);
+                    }
+                }
+            }
+        }
+
+        db.close();
+    }
+
     public static void addNewAnnouncement(final Announcement ann) {
 
 
@@ -313,17 +348,23 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                         }
                     }).start();
 
+                    int index = announcements!=null && !announcements.isEmpty()?announcements.size()-1:0;
 
-                    announcements.add(ann);
-                    Collections.reverse(announcements);
+                    announcements.add(0, ann);
+                    //Collections.reverse(announcements);
                     adapter.notifyDataSetChanged();
                 }
-
-
             }
         });
 
     }
+
+    private OnUpdateUIListener mOnupdateUI = new OnUpdateUIListener() {
+        @Override
+        public void onUpdateUI() {
+            downloadReceivedBroadcastsNearby();
+        }
+    };
 
     private class BroadcastAdapter extends RecyclerView.Adapter<BroadcastAdapter.ViewHolder> {
 
@@ -433,7 +474,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 }
 
                 Intent intent = new Intent(GroupChatHomeActivity.this, CommentsActivity.class);
-                String locLocal  = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
+                String locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
                 intent.putExtra(CommentsFragment.BROADCAST_ID, tvBroadId.getText().toString());
                 intent.putExtra(CommentsFragment.ADDRESS, locLocal);
                 startActivity(intent);
@@ -510,10 +551,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 openDistanceDialog();
 
 
-
-
             }
-
 
 
         });
@@ -710,10 +748,9 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     private List<Geolocation> mNearbyUsers = new ArrayList<Geolocation>();
 
     private void downloadNearbyUsers() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
                 L.debug("GroupChatHome, downloadNearbyUsers");
                 HashMap<String, String> postDataParams = new HashMap<String, String>();
@@ -776,23 +813,25 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                                 Geolocation geo = new Geolocation(uname, Double.parseDouble(latitude), Double.parseDouble(longitude),
                                         gps_provider, Long.parseLong(date_create), Long.parseLong(date_update), Double.parseDouble(geo_distance));
 
-                                SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
-                                db.openToRead();
-                                PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
-                                try {
-                                    Node node = mgr.getNode(uname + "-broadcast");
-                                    node.subscribe(db.getUsername() + "@198.154.106.139");
-
-                                    L.debug("subscribed to " + uname);
-                                } catch (SmackException.NoResponseException e) {
-                                    L.error(e.getMessage());
-                                } catch (XMPPException.XMPPErrorException e) {
-                                    L.error(e.getMessage());
-                                } catch (SmackException.NotConnectedException e) {
-                                    L.error(e.getMessage());
-                                }
-
-                                db.close();
+//                                final SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+//                                db.openToRead();
+//
+//                                PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
+//                                try {
+//                                    Node node = mgr.getNode(uname + "-broadcast");
+//                                    node.subscribe(db.getUsername() + "@198.154.106.139");
+//
+//                                    L.debug("subscribed to " + uname);
+//                                } catch (SmackException.NoResponseException e) {
+//                                    L.error(e.getMessage());
+//                                } catch (XMPPException.XMPPErrorException e) {
+//                                    L.error(e.getMessage());
+//                                } catch (SmackException.NotConnectedException e) {
+//                                    L.error(e.getMessage());
+//                                }
+//
+//
+//                                db.close();
 
                                 mNearbyUsers.add(geo);
 
@@ -809,8 +848,8 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                     L.makeText(GroupChatHomeActivity.this, "Error occurred while collecting users", AppMsg.STYLE_ALERT);
                 }
 
-            }
-        }).start();
+//            }
+//        }).start();
 
     }
 
@@ -964,10 +1003,49 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             //L.debug("latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             //L.debug("longitude: " + String.valueOf(mCurrentLocation.getLongitude()));
 
-            downloadNearbyUsers();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    downloadNearbyUsers();
+                    subscribeToUsers();
+                    downloadReceivedBroadcastsNearby();
+                }
+            }).start();
+
+
+
 
         }
 
+    }
+
+
+
+    private void subscribeToUsers() {
+
+        final SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+        db.openToRead();
+
+        ExecutorService ex = Executors.newFixedThreadPool(5);
+
+        for (final Geolocation nearby : mNearbyUsers) {
+
+            PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
+            try {
+                Node node = mgr.getNode(nearby.getUsername() + "-broadcast");
+                node.subscribe(db.getUsername() + "@198.154.106.139");
+
+                L.debug("subscribed to " + nearby.getUsername());
+            } catch (SmackException.NoResponseException e) {
+                L.error(e.getMessage());
+            } catch (XMPPException.XMPPErrorException e) {
+                L.error(e.getMessage());
+            } catch (SmackException.NotConnectedException e) {
+                L.error(e.getMessage());
+            }
+        }
+
+        db.close();
     }
 
     private String generateAddress(Location loc) {
@@ -1075,5 +1153,9 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
 
         }
+    }
+
+    public interface OnUpdateUIListener{
+        public void onUpdateUI();
     }
 }

@@ -1,21 +1,34 @@
 package com.lpoezy.nexpa.openfire;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.activities.ChatActivity;
+import com.lpoezy.nexpa.activities.ChatHistoryActivity;
 import com.lpoezy.nexpa.activities.CommentsActivity;
+import com.lpoezy.nexpa.activities.CommentsFragment;
 import com.lpoezy.nexpa.activities.GroupChatHomeActivity;
+import com.lpoezy.nexpa.activities.TabHostActivity;
 import com.lpoezy.nexpa.chatservice.XMPPService;
+import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.objects.BroadcastComment;
 import com.lpoezy.nexpa.objects.ChatMessage;
+import com.lpoezy.nexpa.objects.Correspondent;
 import com.lpoezy.nexpa.objects.MessageResultElement;
+import com.lpoezy.nexpa.objects.NewMessage;
 import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.OnRetrieveMessageArchiveListener;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
@@ -325,6 +338,37 @@ public class XMPPManager {
     public void addOnProcessMessageListener(ChatActivity.OnProcessMessage processMessageListener) {
         mProcessMessageListener = processMessageListener;
     }
+    private List<GroupChatHomeActivity.OnUpdateUIListener> mUpdateBroadcastUIListeners = new ArrayList<GroupChatHomeActivity.OnUpdateUIListener>();
+    public void registerUpdateBroadcastUIListener(GroupChatHomeActivity.OnUpdateUIListener listener) {
+        mUpdateBroadcastUIListeners.add(listener);
+    }
+
+    private void notifyUpdateBroadcastListeners() {
+
+        for(GroupChatHomeActivity.OnUpdateUIListener listener : mUpdateBroadcastUIListeners){
+            listener.onUpdateUI();
+        }
+    }
+
+    public void removeUpdateBroadcastUIListener(GroupChatHomeActivity.OnUpdateUIListener listener) {
+        mUpdateBroadcastUIListeners.remove(listener);
+    }
+
+    private void notifyUpdateCommentsListeners() {
+
+        for(CommentsFragment.OnUpdateUIListener listener : mUpdateCommentsUIListeners){
+            listener.onUpdateUI();
+        }
+    }
+
+    List<CommentsFragment.OnUpdateUIListener> mUpdateCommentsUIListeners = new ArrayList<CommentsFragment.OnUpdateUIListener>();
+    public void registerUpdateCommentsUIListener(CommentsFragment.OnUpdateUIListener listener) {
+        mUpdateCommentsUIListeners.add(listener);
+    }
+
+    public void removeUpdateCommentsUIListener(CommentsFragment.OnUpdateUIListener listener) {
+        mUpdateCommentsUIListeners.remove(listener);
+    }
 
     public interface OnConnectedToOPenfireListener {
         public void onConnectedToOpenfire(XMPPConnection connection);
@@ -625,6 +669,51 @@ public class XMPPManager {
         }
     }
 
+    private PendingIntent getNotificationPendingIntent(ChatMessage chat) {
+        // Creates an explicit intent for an Activity in your app
+        Intent resultIntent = new Intent(context, ChatActivity.class);
+        resultIntent.putExtra("username", chat.senderName);
+        // The stack builder object will contain an artificial back stack for
+        // the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(ChatActivity.class);
+
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+
+        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+    }
+
+    private void sendNotification(ChatMessage chat) {
+        chat.isMine = false;
+        int msgCount = NewMessage.getUnReadMsgCountOffline(context);
+
+        String title =  "new message";
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle(title).setAutoCancel(true).setContentText(chat.senderName);
+
+        mBuilder.build().flags |= Notification.FLAG_AUTO_CANCEL;
+
+        PendingIntent resultPendingIntent = getNotificationPendingIntent(chat);
+
+        // if (Build.VERSION.SDK_INT == 19) {
+        // resultPendingIntent.cancel();
+        // }
+
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(AppConfig.MSG_NOTIFICATION_ID, mBuilder.build());
+
+    }
+
 
     private class MMessageListener implements ChatMessageListener {
 
@@ -644,7 +733,22 @@ public class XMPPManager {
                 final ChatMessage chatMessage = gson.fromJson(
                         message.getBody(), ChatMessage.class);
 
-                processMessage(chatMessage);
+
+                if (!TabHostActivity.isRunning && !ChatHistoryActivity.isRunning
+                        && !ChatActivity.isRunning) {
+
+                    L.debug("sending nottification!");
+
+                    // send notification
+                    sendNotification(chatMessage);
+
+                }else{
+                    processMessage(chatMessage);
+                }
+
+
+
+
             }else{
                 if(GroupChatHomeActivity.isRunning){
 
@@ -716,7 +820,7 @@ public class XMPPManager {
                 if(!bc.getFrom().equals(db.getUsername())){
                     bc.setIsMine(false);
                 }
-
+                notifyUpdateCommentsListeners();
                 db.close();
 
             }
@@ -779,9 +883,12 @@ public class XMPPManager {
                 if(!ann.getFrom().equals(db.getUsername())){
                     ann.setIsMine(false);
                 }
-
-                GroupChatHomeActivity.addNewAnnouncement(ann);
+                ann.saveOffline(context);
+                //GroupChatHomeActivity.addNewAnnouncement(ann);
+                //send broadcast here
                 db.close();
+
+               notifyUpdateBroadcastListeners();
             }
         }
 
@@ -792,5 +899,7 @@ public class XMPPManager {
         }
 
     }
+
+
 
 }

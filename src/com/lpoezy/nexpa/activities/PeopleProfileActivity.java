@@ -162,7 +162,7 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 						}
 
 
-						if (profile.getProfession() != null && !profile.getProfession().equalsIgnoreCase("null") && !profile.getProfession().equals("")) {
+						if (profile.getDescription() != null && !profile.getDescription().equalsIgnoreCase("null") && !profile.getDescription().equals("")) {
 							mTvJobTitle.setVisibility(View.VISIBLE);
 							mTvJobTitle.setText(profile.getProfession());
 						}

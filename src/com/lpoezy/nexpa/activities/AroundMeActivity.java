@@ -804,40 +804,42 @@ public class AroundMeActivity extends AppCompatActivity
         final Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
 
         for (int j = 0; j < nearbyUsers.size(); j++) {
+            try{
+                final String name = nearbyUsers.get(j).getUsername();
+                final Correspondent correspondent = new Correspondent();
+                correspondent.setUsername(name);
+                correspondent.addListener(AroundMeActivity.this);
 
-            final String name = nearbyUsers.get(j).getUsername();
-            final Correspondent correspondent = new Correspondent();
-            correspondent.setUsername(name);
-            correspondent.addListener(AroundMeActivity.this);
-
-            arr_correspondents.add(j, correspondent);
-
-
-            String address = name + "@198.154.106.139/Smack";
-            updateUserAvailability(address, roster);
+                arr_correspondents.add(j, correspondent);
 
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    final UserProfile uProfile = new UserProfile();
-                    uProfile.setUsername(name);
-
-                    uProfile.loadVCard(XMPPService.xmpp.connection);
-
-                    L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
-
-                    updateUserAvatar(name, uProfile.getAvatarImg());
+                String address = name + "@198.154.106.139/Smack";
+                updateUserAvailability(address, roster);
 
 
-                }
-            }).start();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final UserProfile uProfile = new UserProfile();
+                        uProfile.setUsername(name);
+
+                        uProfile.loadVCard(XMPPService.xmpp.connection);
+
+                        L.debug("updateGrid, uname: " + uProfile.getUsername() + ", desc: " + uProfile.getDescription() + ", " + uProfile.getAvatarImg());
+
+                        updateUserAvatar(name, uProfile.getAvatarImg());
 
 
-            imageId.add(j, R.drawable.pic_sample_girl);
-            availabilty.add(j, "ADDED");
-            web.add(j, name);
+                    }
+                }).start();
+
+
+                imageId.add(j, R.drawable.pic_sample_girl);
+                availabilty.add(j, "ADDED");
+                web.add(j, name);
+            }catch(IndexOutOfBoundsException e){L.error(e.getMessage());}
+
         }
 
         roster.addRosterListener(new RosterListener() {

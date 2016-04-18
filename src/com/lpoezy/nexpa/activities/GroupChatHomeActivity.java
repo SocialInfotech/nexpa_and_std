@@ -211,7 +211,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     protected void onResume() {
         super.onResume();
 
-        XMPPService.xmpp.registerUpdateBroadcastUIListener(mOnupdateUI);
+        if(XMPPService.xmpp != null)XMPPService.xmpp.registerUpdateBroadcastUIListener(mOnupdateUI);
 //*/
         new Thread(new Runnable() {
             @Override
@@ -475,8 +475,11 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
                 Intent intent = new Intent(GroupChatHomeActivity.this, CommentsActivity.class);
                 String locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
+                intent.putExtra(CommentsFragment.UNAME, tvBroadFrm.getText().toString());
                 intent.putExtra(CommentsFragment.BROADCAST_ID, tvBroadId.getText().toString());
-                intent.putExtra(CommentsFragment.ADDRESS, locLocal);
+                intent.putExtra(CommentsFragment.ADDRESS, tvLocLocal.getText().toString());
+                intent.putExtra(CommentsFragment.DATE, tvDateBroad.getText().toString());
+                intent.putExtra(CommentsFragment.BROADCAST, tvBroadMsg.getText().toString());
                 startActivity(intent);
             }
         }
@@ -1029,20 +1032,31 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         ExecutorService ex = Executors.newFixedThreadPool(5);
 
         for (final Geolocation nearby : mNearbyUsers) {
+            ex.submit(new Runnable() {
+                @Override
+                public void run() {
+                    PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
+                    try {
+                        Node node = mgr.getNode(nearby.getUsername() + "-broadcast");
+                        node.subscribe(db.getUsername() + "@198.154.106.139");
 
-            PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
-            try {
-                Node node = mgr.getNode(nearby.getUsername() + "-broadcast");
-                node.subscribe(db.getUsername() + "@198.154.106.139");
+                        L.debug("subscribed to " + nearby.getUsername());
+                    } catch (SmackException.NoResponseException e) {
+                        L.error(e.getMessage());
+                    } catch (XMPPException.XMPPErrorException e) {
+                        L.error(e.getMessage());
+                    } catch (SmackException.NotConnectedException e) {
+                        L.error(e.getMessage());
+                    }
+                }
+            });
 
-                L.debug("subscribed to " + nearby.getUsername());
-            } catch (SmackException.NoResponseException e) {
-                L.error(e.getMessage());
-            } catch (XMPPException.XMPPErrorException e) {
-                L.error(e.getMessage());
-            } catch (SmackException.NotConnectedException e) {
-                L.error(e.getMessage());
-            }
+        }
+        ex.shutdown();
+        try {
+            ex.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            L.error(e.getMessage());
         }
 
         db.close();

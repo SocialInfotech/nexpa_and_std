@@ -543,7 +543,7 @@ public class AroundMeActivity extends AppCompatActivity
 
             L.debug("last loc latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             L.debug("last loc long: " + String.valueOf(mCurrentLocation.getLongitude()));
-            if (mBounded) {
+            if (mBounded && nearbyUsers.size()==0) {
 
                 mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
 
@@ -651,10 +651,14 @@ public class AroundMeActivity extends AppCompatActivity
 
     }
 
+    private boolean mFrmSaveInstanceState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_around_me);
+
+        if(savedInstanceState!=null)mFrmSaveInstanceState= true;
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -970,7 +974,9 @@ public class AroundMeActivity extends AppCompatActivity
         mService = service;
         mBounded = true;
 
-        mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+        if(nearbyUsers!= null && nearbyUsers.size()==0){
+            mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
+        }
 
     }
 

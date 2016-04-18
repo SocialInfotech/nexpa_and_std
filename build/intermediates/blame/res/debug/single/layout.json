@@ -132,6 +132,10 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\activity_create_account.xml"
     },
     {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\list_comments_header.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\list_comments_header.xml"
+    },
+    {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\activity_profile_status.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_profile_status.xml"
     },

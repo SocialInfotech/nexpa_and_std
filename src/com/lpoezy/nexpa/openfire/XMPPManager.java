@@ -321,10 +321,6 @@ public class XMPPManager {
         }
 
 
-
-
-
-
     }
 
     public void notifyConnectedToOPenfireListeners(XMPPConnection connection) {
@@ -334,18 +330,22 @@ public class XMPPManager {
 
         }
     }
+
     ChatActivity.OnProcessMessage mProcessMessageListener;
+
     public void addOnProcessMessageListener(ChatActivity.OnProcessMessage processMessageListener) {
         mProcessMessageListener = processMessageListener;
     }
+
     private List<GroupChatHomeActivity.OnUpdateUIListener> mUpdateBroadcastUIListeners = new ArrayList<GroupChatHomeActivity.OnUpdateUIListener>();
+
     public void registerUpdateBroadcastUIListener(GroupChatHomeActivity.OnUpdateUIListener listener) {
         mUpdateBroadcastUIListeners.add(listener);
     }
 
     private void notifyUpdateBroadcastListeners() {
 
-        for(GroupChatHomeActivity.OnUpdateUIListener listener : mUpdateBroadcastUIListeners){
+        for (GroupChatHomeActivity.OnUpdateUIListener listener : mUpdateBroadcastUIListeners) {
             listener.onUpdateUI();
         }
     }
@@ -356,12 +356,13 @@ public class XMPPManager {
 
     private void notifyUpdateCommentsListeners() {
 
-        for(CommentsFragment.OnUpdateUIListener listener : mUpdateCommentsUIListeners){
+        for (CommentsFragment.OnUpdateUIListener listener : mUpdateCommentsUIListeners) {
             listener.onUpdateUI();
         }
     }
 
     List<CommentsFragment.OnUpdateUIListener> mUpdateCommentsUIListeners = new ArrayList<CommentsFragment.OnUpdateUIListener>();
+
     public void registerUpdateCommentsUIListener(CommentsFragment.OnUpdateUIListener listener) {
         mUpdateCommentsUIListeners.add(listener);
     }
@@ -694,7 +695,7 @@ public class XMPPManager {
         chat.isMine = false;
         int msgCount = NewMessage.getUnReadMsgCountOffline(context);
 
-        String title =  "new message";
+        String title = "new message";
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(title).setAutoCancel(true).setContentText(chat.senderName);
@@ -742,22 +743,20 @@ public class XMPPManager {
                     // send notification
                     sendNotification(chatMessage);
 
-                }else{
+                } else {
                     processMessage(chatMessage);
                 }
 
 
+            } else {
+                if (GroupChatHomeActivity.isRunning) {
 
-
-            }else{
-                if(GroupChatHomeActivity.isRunning){
-
-                    L.debug("broadcast: "+message.toXML());
+                    L.debug("broadcast: " + message.toXML());
 
                     parseReceivedBroadcast(message);
 
-                }else if(CommentsActivity.isRunning){
-                    L.debug("comments: "+message.toXML());
+                } else if (CommentsActivity.isRunning) {
+                    L.debug("comments: " + message.toXML());
 
                     parseReceivedComment(message);
                 }
@@ -775,15 +774,15 @@ public class XMPPManager {
                 factory.setNamespaceAware(true);
                 XmlPullParser xpp = factory.newPullParser();
 
-                xpp.setInput( new StringReader( message.toXML().toString()) );
+                xpp.setInput(new StringReader(message.toXML().toString()));
                 int eventType = xpp.getEventType();
 
                 while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if(eventType == XmlPullParser.START_DOCUMENT) {
-                       // L.debug("Start document");
-                    } else if(eventType == XmlPullParser.START_TAG) {
+                    if (eventType == XmlPullParser.START_DOCUMENT) {
+                        // L.debug("Start document");
+                    } else if (eventType == XmlPullParser.START_TAG) {
                         //L.debug("Start tag " + xpp.getName());
-                        switch (xpp.getName()){
+                        switch (xpp.getName()) {
                             case "item":
                                 itemId = xpp.getAttributeValue("", "id");
                                 break;
@@ -793,9 +792,9 @@ public class XMPPManager {
                         }
 
 
-                    } else if(eventType == XmlPullParser.END_TAG) {
-                       // L.debug("End tag " + xpp.getName());
-                    } else if(eventType == XmlPullParser.TEXT) {
+                    } else if (eventType == XmlPullParser.END_TAG) {
+                        // L.debug("End tag " + xpp.getName());
+                    } else if (eventType == XmlPullParser.TEXT) {
                         //L.debug("Texxt " + xpp.getText());
                     }
                     eventType = xpp.next();
@@ -808,22 +807,24 @@ public class XMPPManager {
                 L.error(e.getMessage());
             }
 
-            L.debug("itemId: "+itemId+", comment: "+comment);
+            L.debug("itemId: " + itemId + ", comment: " + comment);
 
-            if(comment!=null && !comment.isEmpty()){
+            if (comment != null && !comment.isEmpty()) {
 
                 BroadcastComment bc = gson.fromJson(comment, BroadcastComment.class);
 
                 SQLiteHandler db = new SQLiteHandler(context);
                 db.openToWrite();
 
-                if(!bc.getFrom().equals(db.getUsername())){
+                if (!bc.getFrom().equals(db.getUsername())) {
                     bc.setIsMine(false);
                 }
-                notifyUpdateCommentsListeners();
+
                 db.close();
 
             }
+
+            notifyUpdateCommentsListeners();
         }
 
         private void parseReceivedBroadcast(Message message) {
@@ -838,15 +839,15 @@ public class XMPPManager {
                 factory.setNamespaceAware(true);
                 XmlPullParser xpp = factory.newPullParser();
 
-                xpp.setInput( new StringReader( message.toXML().toString()) );
+                xpp.setInput(new StringReader(message.toXML().toString()));
                 int eventType = xpp.getEventType();
 
                 while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if(eventType == XmlPullParser.START_DOCUMENT) {
+                    if (eventType == XmlPullParser.START_DOCUMENT) {
                         //L.debug("Start document");
-                    } else if(eventType == XmlPullParser.START_TAG) {
+                    } else if (eventType == XmlPullParser.START_TAG) {
                         //L.debug("Start tag " + xpp.getName());
-                        switch (xpp.getName()){
+                        switch (xpp.getName()) {
                             case "item":
                                 itemId = xpp.getAttributeValue("", "id");
                                 break;
@@ -858,9 +859,9 @@ public class XMPPManager {
 //                                if(xpp.getName().equals("broadcast")){
 //                                    broadcast = xpp.nextText();
 //                                }
-                    } else if(eventType == XmlPullParser.END_TAG) {
+                    } else if (eventType == XmlPullParser.END_TAG) {
                         //L.debug("End tag " + xpp.getName());
-                    } else if(eventType == XmlPullParser.TEXT) {
+                    } else if (eventType == XmlPullParser.TEXT) {
                         //L.debug("Teb xt " + xpp.getText());
                     }
                     eventType = xpp.next();
@@ -873,22 +874,27 @@ public class XMPPManager {
                 L.error(e.getMessage());
             }
             //L.debug("broadcast: "+broadcast);
-            if(broadcast!=null && !broadcast.isEmpty()){
+            if (broadcast != null && !broadcast.isEmpty()) {
 
                 SQLiteHandler db = new SQLiteHandler(context);
                 db.openToWrite();
-                Announcement ann = gson.fromJson(broadcast, Announcement.class);
-                ann.setItemId(itemId);
+                try {
+                    Announcement ann = gson.fromJson(broadcast, Announcement.class);
+                    ann.setItemId(itemId);
 
-                if(!ann.getFrom().equals(db.getUsername())){
-                    ann.setIsMine(false);
+                    if (!ann.getFrom().equals(db.getUsername())) {
+                        ann.setIsMine(false);
+                    }
+                    ann.saveOffline(context);
+                    //GroupChatHomeActivity.addNewAnnouncement(ann);
+                    //send broadcast here
+                    db.close();
+
+                    notifyUpdateBroadcastListeners();
+                } catch (Exception e) {
+                    L.error(e.getMessage());
                 }
-                ann.saveOffline(context);
-                //GroupChatHomeActivity.addNewAnnouncement(ann);
-                //send broadcast here
-                db.close();
 
-               notifyUpdateBroadcastListeners();
             }
         }
 
@@ -899,7 +905,6 @@ public class XMPPManager {
         }
 
     }
-
 
 
 }

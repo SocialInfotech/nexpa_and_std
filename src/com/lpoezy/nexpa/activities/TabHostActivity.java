@@ -62,12 +62,6 @@ public class TabHostActivity extends TabActivity {
 			mBounded = false;
 			mService = null;
 
-//			if(getTabHost().getCurrentTab()==0){
-//				XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) getCurrentActivity();
-//
-//				onServiceConnectedListener.OnServiceDisconnected();
-//
-//			}
 
 		}
 

@@ -2,10 +2,12 @@ package com.lpoezy.nexpa.activities;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.BroadcastComment;
 import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
@@ -28,6 +31,7 @@ import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.L;
+import com.mikhaellopez.hfrecyclerview.HFRecyclerView;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
@@ -67,23 +71,32 @@ public class CommentsFragment extends Fragment {
     public static final String BROADCAST_ID = "BROADCAST_ID";
     public static final String UNAME = "UNAME";
     public static final String ADDRESS = "ADDRESS";
+    public static final String DATE = "DATE";
+    public static final String BROADCAST = "BROADCAST";
     private String mBroadcastId;
     private String mAddress;
-    private static CommentsAdapter adapter;
+    //private static CommentsAdapter adapter;
+    private static CommentsHFAdapter adapter;
     private RecyclerView mRvComments;
     private SwipyRefreshLayout mSwipeRefreshLayout;
     private Button mBtnSend;
     private EditText mTextComment;
+    private String mUname;
+    private String mDate;
+    private String mBroadcast;
 
     public CommentsFragment() {
         // Required empty public constructor
     }
 
-    public static CommentsFragment newInstance(String itemid, String address) {
+    public static CommentsFragment newInstance(String itemid, String address, String uname, String date, String broadcast) {
         CommentsFragment fragment = new CommentsFragment();
         Bundle args = new Bundle();
         args.putString(BROADCAST_ID, itemid);
         args.putString(ADDRESS, address);
+        args.putString(UNAME, uname);
+        args.putString(DATE, date);
+        args.putString(BROADCAST, broadcast);
         fragment.setArguments(args);
         return fragment;
     }
@@ -102,21 +115,22 @@ public class CommentsFragment extends Fragment {
 
         if (getArguments() != null) {
             mBroadcastId = getArguments().getString(BROADCAST_ID);
+            mUname = getArguments().getString(UNAME);
+            mDate = getArguments().getString(DATE);
             mAddress = getArguments().getString(ADDRESS);
+            mBroadcast = getArguments().getString(BROADCAST);
         }
 
         mGson = new Gson();
         comments = new ArrayList<BroadcastComment>();
         mAvatars = new HashMap<String, Bitmap>();
-        adapter = new CommentsAdapter(getActivity());
+        //adapter = new CommentsAdapter(getActivity());
+        adapter = new CommentsHFAdapter();
 
         mRvComments = (RecyclerView) v.findViewById(R.id.listComments);
 
         final LinearLayoutManager lm = new LinearLayoutManager(getActivity());
         mRvComments.setLayoutManager(lm);
-//        RecyclerViewHeader header = (RecyclerViewHeader) v.findViewById(R.id.comments_header);
-//
-//        header.attachTo(mRvComments);
 
         mRvComments.setAdapter(adapter);
 
@@ -128,8 +142,10 @@ public class CommentsFragment extends Fragment {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
 
-                RetrieveMyOwnBroadcast task = new RetrieveMyOwnBroadcast();
-                task.onExecutePendingTask();
+                if(mService!=null){
+                    mService.onExecutePendingTask(new RetrieveMyOwnBroadcast());
+                }
+
             }
         });
 
@@ -174,38 +190,126 @@ public class CommentsFragment extends Fragment {
 
     @Override
     public void onResume() {
-        RetrieveMyOwnBroadcast task = new RetrieveMyOwnBroadcast();
-        task.onExecutePendingTask();
+
+//        RetrieveMyOwnBroadcast task = new RetrieveMyOwnBroadcast();
+//        task.onExecutePendingTask();
         super.onResume();
 
         XMPPService.xmpp.registerUpdateCommentsUIListener(mOnupdateUI);
     }
 
+    public boolean mBounded;
+    public XMPPService mService;
+
+    public void onServiceConnected(ComponentName name, IBinder service) {
+
+        mBounded = true;
+
+        mService = ((LocalBinder<XMPPService>) service).getService();
+
+        mService.onExecutePendingTask(new RetrieveMyOwnBroadcast());
+    }
+
+    public void onServiceDisconnected(ComponentName name) {
+
+        mBounded = false;
+        mService = null;
+
+    }
+
     private static List<BroadcastComment> comments;
 
-    private class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
-        private final Context context;
-        private final LayoutInflater inflater;
 
-        public CommentsAdapter(Context context) {
+    public class CommentsHFAdapter extends HFRecyclerView<BroadcastComment> {
 
-            L.debug("================CommentsAdapter=================");
-            this.context = context;
-            this.inflater = LayoutInflater.from(context);
+        public CommentsHFAdapter() {
+            super(comments, true, false);
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            View itemView = inflater.inflate(R.layout.list_comment, parent, false);
-            return new ViewHolder(itemView);
+        protected RecyclerView.ViewHolder getItemView(LayoutInflater inflater, ViewGroup parent) {
+            return new ViewHolder(inflater.inflate(R.layout.list_comment, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder vh, final int position) {
+        protected RecyclerView.ViewHolder getHeaderView(LayoutInflater inflater, ViewGroup parent) {
+            return new HeaderViewHolder(inflater.inflate(R.layout.list_comments_header, parent, false));
+        }
 
-            final BroadcastComment bc = comments.get(position);
+        @Override
+        protected RecyclerView.ViewHolder getFooterView(LayoutInflater inflater, ViewGroup parent) {
+            return new FooterViewHolder(inflater.inflate(R.layout.list_comment, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            if (holder instanceof ViewHolder) {
+                ViewHolder vh = (ViewHolder) holder;
+                BroadcastComment bc = getItem(position);
+
+                updateItemHolder(vh, bc);
+
+            } else if (holder instanceof HeaderViewHolder) {
+                HeaderViewHolder vh = (HeaderViewHolder) holder;
+                BroadcastComment bc = new BroadcastComment(mUname, mBroadcast, mAddress, mDate, false);
+                updateHeaderHolder(vh, bc);
+
+            } else if (holder instanceof FooterViewHolder) {
+
+            }
+
+        }
+
+        private void updateHeaderHolder(final HeaderViewHolder vh, final BroadcastComment bc) {
+
+            vh.tvCommentMsg.setText(bc.getBody());
+            vh.tvCommentFrm.setText(bc.getFrom());
+
+            if (bc.getDate() != null && !bc.getDate().isEmpty()) {
+
+                vh.tvCommentDate.setText(bc.getDate());
+            }
+
+            vh.tvLocLocal.setVisibility(View.GONE);
+
+            if (bc.getAddress() != null && !bc.getAddress().isEmpty()) {
+                String strLoc = "near " + bc.getAddress();
+
+                vh.tvLocLocal.setText(strLoc);
+                vh.tvLocLocal.setVisibility(TextView.VISIBLE);
+            }
+
+            vh.imgProfile.setImageResource(R.drawable.pic_sample_girl);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final UserProfile userProfile = new UserProfile();
+                    userProfile.setUsername(bc.getFrom());
+                    userProfile.loadVCard(XMPPService.xmpp.connection);
+
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(userProfile.getAvatarImg()!=null){
+                                vh.imgProfile.setImageBitmap(userProfile.getAvatarImg());
+                            }
+
+                        }
+                    });
+                }
+            }).start();
+
+            vh.imgProfile.setImageResource(R.drawable.pic_sample_girl);
+
+
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                    0, ActionBar.LayoutParams.WRAP_CONTENT, 1.2f);
+        }
+
+        private void updateItemHolder(ViewHolder vh, BroadcastComment bc) {
 
             vh.tvCommentMsg.setText(bc.getBody());
             vh.tvCommentFrm.setText(bc.getFrom());
@@ -230,38 +334,30 @@ public class CommentsFragment extends Fragment {
                 vh.imgProfile.setImageBitmap(avatar);
             }
 
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    final UserProfile userProfile = new UserProfile();
-//                    userProfile.setUsername("fitz");
-//                    userProfile.loadVCard(XMPPService.xmpp.connection);
-//
-//                    if (userProfile.getAvatarImg() != null) {
-//                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                //L.debug("success!!!!!!!!!!!!!!!");
-//                                vh.imgProfile.setImageBitmap(userProfile.getAvatarImg());
-//                            }
-//                        });
-//
-//
-//                    }
-//                }
-//            }).start();
-
-
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                     0, ActionBar.LayoutParams.WRAP_CONTENT, 1.2f);
-            //vh.btnReply.setLayoutParams(param);
-
         }
 
-        @Override
-        public int getItemCount() {
-            //L.debug("getItemCount: "+comments.size());
-            return comments.size();
+
+        class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+            TextView tvCommentId;
+            TextView tvCommentFrm;
+            TextView tvCommentDate;
+            TextView tvLocLocal;
+            TextView tvCommentMsg;
+            ImageView imgProfile;
+
+            public HeaderViewHolder(View itemView) {
+                super(itemView);
+
+                tvCommentId = (TextView) itemView.findViewById(R.id.comment_id);
+                tvCommentFrm = (TextView) itemView.findViewById(R.id.comment_from);
+                tvCommentDate = (TextView) itemView.findViewById(R.id.comment_date);
+                tvLocLocal = (TextView) itemView.findViewById(R.id.location_local);
+                tvCommentMsg = (TextView) itemView.findViewById(R.id.comment_message);
+                imgProfile = (ImageView) itemView.findViewById(R.id.img_profile);
+            }
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -285,9 +381,14 @@ public class CommentsFragment extends Fragment {
 
             }
         }
+
+        class FooterViewHolder extends RecyclerView.ViewHolder {
+            public FooterViewHolder(View itemView) {
+                super(itemView);
+            }
+        }
     }
 
-    ;
     private Gson mGson;
 
     private class RetrieveMyOwnBroadcast implements OnExecutePendingTaskListener {
@@ -399,18 +500,6 @@ public class CommentsFragment extends Fragment {
                                 //Collections.reverse(comments);
                             }
 
-
-                            mSwipeRefreshLayout.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    adapter.notifyDataSetChanged();
-
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                    mRvComments.smoothScrollToPosition(comments.size() - 1);
-                                }
-                            });
-
                         } catch (SmackException.NoResponseException e) {
                             L.error(e.getMessage());
                         } catch (XMPPException.XMPPErrorException e) {
@@ -418,6 +507,23 @@ public class CommentsFragment extends Fragment {
                         } catch (SmackException.NotConnectedException e) {
                             L.error(e.getMessage());
                         }
+
+
+                        mSwipeRefreshLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mSwipeRefreshLayout.setRefreshing(false);
+
+
+
+                                if(comments!=null &&!comments.isEmpty()){
+                                    adapter.notifyDataSetChanged();
+                                    mRvComments.smoothScrollToPosition(comments.size() - 1);
+                                }
+
+                            }
+                        });
+
 
 
                         ExecutorService ex = Executors.newFixedThreadPool(5);
@@ -663,8 +769,9 @@ public class CommentsFragment extends Fragment {
     private OnUpdateUIListener mOnupdateUI = new OnUpdateUIListener() {
         @Override
         public void onUpdateUI() {
-            RetrieveMyOwnBroadcast task = new RetrieveMyOwnBroadcast();
-            task.onExecutePendingTask();
+            if(mService!=null){
+                mService.onExecutePendingTask(new RetrieveMyOwnBroadcast());
+            }
         }
     };
 

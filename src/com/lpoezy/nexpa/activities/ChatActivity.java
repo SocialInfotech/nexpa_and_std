@@ -142,16 +142,10 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
         lm.setStackFromEnd(true);
         listview.setLayoutManager(lm);
 
-        // listview.addItemDecoration(new
-        // DividerItemDecoration(ChatActivity.this,
-        // DividerItemDecoration.VERTICAL_LIST));
-
         intentMes = getIntent();
-        // String email = intentMes.getStringExtra("email");
-//        final long userId = getIntent().getLongExtra("userid", -1);
-//        mCorrespondentId = userId;
+
         mCorrespondentName = intentMes.getStringExtra("username");
-        //final String username = intentMes.getStringExtra("username");
+
         final String email = getIntent().getStringExtra("email");
         final String fname = getIntent().getStringExtra("fname");
 
@@ -172,12 +166,6 @@ public class ChatActivity extends Activity implements Correspondent.OnCorrespond
             int_b_date = intentMes.getStringExtra("INTENT_MESSAGE_DATE");
         } catch (Exception e) {
         }
-
-        // intentMes.putExtra("email", email);
-        // intentMes.putExtra("username", username);
-        // intentMes.putExtra("fname", fname);
-
-        // String fname = intentMes.getStringExtra("fname");
 
         recipient.setText(mCorrespondentName + "@vps.gigapros.com/Smack", TextView.BufferType.EDITABLE);
         recipient.setVisibility(View.INVISIBLE);

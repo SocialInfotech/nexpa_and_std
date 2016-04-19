@@ -388,13 +388,23 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         @Override
         public void onBindViewHolder(final ViewHolder vh, final int position) {
 
+            SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+            db.openToRead();
+            String uname =  db.getUsername();
+            db.close();
+
             Announcement ann = announcements.get(position);
+
+            boolean isMine = uname.equals(ann.getFrom());
+
             vh.tvBroadId.setText(ann.getItemId());
             vh.tvBroadMsg.setText(ann.getBody());
             vh.ImgReply.setImageResource(R.drawable.btn_reply);
             vh.tvReply.setText("REACHED " + ann.getReach());
-            vh.ImgReply.setVisibility(!ann.isMine() ? View.VISIBLE : View.GONE);
-            vh.tvReply.setVisibility(ann.isMine() ? View.VISIBLE : View.GONE);
+
+            vh.ImgReply.setVisibility(!isMine ? View.VISIBLE : View.GONE);
+
+            vh.tvReply.setVisibility(isMine ? View.VISIBLE : View.GONE);
             vh.tvBroadFrm.setText(ann.getFrom());
 
 

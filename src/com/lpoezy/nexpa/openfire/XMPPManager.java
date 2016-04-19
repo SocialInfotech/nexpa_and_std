@@ -882,9 +882,9 @@ public class XMPPManager {
                     Announcement ann = gson.fromJson(broadcast, Announcement.class);
                     ann.setItemId(itemId);
 
-                    if (!ann.getFrom().equals(db.getUsername())) {
-                        ann.setIsMine(false);
-                    }
+//                    if (!ann.getFrom().equals(db.getUsername())) {
+//                        ann.setIsMine(false);
+//                    }
                     ann.saveOffline(context);
                     //GroupChatHomeActivity.addNewAnnouncement(ann);
                     //send broadcast here

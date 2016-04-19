@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.gson.Gson;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
@@ -62,6 +63,7 @@ public class MyBroadcastsFragment extends Fragment {
     //private MyBroascastsAdapter adapter;
     private RecyclerView mRvBroadcasts;
     protected String mUsername;
+    private Bitmap mAvatar;
 
 
     public static MyBroadcastsFragment newInstance() {
@@ -145,6 +147,11 @@ public class MyBroadcastsFragment extends Fragment {
 
                     vh.tvLocLocal.setText(strLoc);
                     vh.tvLocLocal.setVisibility(TextView.VISIBLE);
+                }
+
+                vh.imgProfile.setImageResource(R.drawable.pic_sample_girl);
+                if (mAvatar != null) {
+                    vh.imgProfile.setImageBitmap(mAvatar);
                 }
 
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
@@ -394,13 +401,16 @@ public class MyBroadcastsFragment extends Fragment {
 
                     if (newImage != null) rawImage = newImage;
                 }
-                final Bitmap avatar = rawImage;
+                mAvatar = rawImage;
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
 
-                        mImgProfile.setImageBitmap(avatar);
+                        if(mAvatar!=null)
+                            mAdapter.notifyDataSetChanged();
+
+                        mImgProfile.setImageBitmap(mAvatar);
 
                         mTvDescription.setVisibility(View.GONE);
                         mTvUname.setVisibility(View.GONE);
@@ -448,6 +458,7 @@ public class MyBroadcastsFragment extends Fragment {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        private  CircularImageView imgProfile;
         TextView tvBroadId;
         TextView tvBroadFrm;
         TextView tvDateBroad;
@@ -461,7 +472,7 @@ public class MyBroadcastsFragment extends Fragment {
 
         public ViewHolder(View itemView) {
             super(itemView);
-
+            imgProfile = (CircularImageView) itemView.findViewById(R.id.img_profile);
             tvBroadId = (TextView) itemView.findViewById(R.id.broad_id);
             tvBroadFrm = (TextView) itemView.findViewById(R.id.broad_from);
             tvDateBroad = (TextView) itemView.findViewById(R.id.date_broad);

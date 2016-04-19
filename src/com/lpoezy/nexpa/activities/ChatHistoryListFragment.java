@@ -291,7 +291,6 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
     }
 
-
     @Override
     public void onResume() {
         L.debug("ChatHistoryList, onResume");

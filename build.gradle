@@ -37,6 +37,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'com.mikhaellopez:hfrecyclerview:1.0.0'
+
 }
 
 android {

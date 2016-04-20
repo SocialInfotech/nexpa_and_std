@@ -66,6 +66,8 @@ public class UserProfile {
             L.error("loadVCard: "+e.getMessage());
         } catch (SmackException.NotConnectedException e) {
             L.error("loadVCard: "+e.getMessage());
+        } catch(IllegalArgumentException e){
+            L.error("loadVCard: "+e.getMessage());
         }
 
         if (isSupported) {

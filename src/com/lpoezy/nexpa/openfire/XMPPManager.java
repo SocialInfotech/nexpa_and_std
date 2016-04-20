@@ -129,12 +129,23 @@ public class XMPPManager {
             // problem loading reconnection manager
         }
     }
-
+    private XmlPullParserFactory factory = null;
     public void init() {
         gson = new Gson();
         mMessageListener = new MMessageListener(context);
         mChatManagerListener = new ChatManagerListenerImpl();
         pendingTasks = new ArrayList<OnExecutePendingTaskListener>();
+
+        try {
+            factory = XmlPullParserFactory.newInstance();
+
+            factory.setNamespaceAware(true);
+            XmlPullParser xpp = factory.newPullParser();
+
+        } catch (XmlPullParserException e) {
+            L.error(e.getMessage());
+        }
+
         initialiseConnection();
 
     }
@@ -344,7 +355,7 @@ public class XMPPManager {
     }
 
     private void notifyUpdateBroadcastListeners() {
-
+        L.debug("notifyUpdateBroadcastListeners");
         for (GroupChatHomeActivity.OnUpdateUIListener listener : mUpdateBroadcastUIListeners) {
             listener.onUpdateUI();
         }
@@ -749,6 +760,7 @@ public class XMPPManager {
 
 
             } else {
+
                 if (GroupChatHomeActivity.isRunning) {
 
                     L.debug("broadcast: " + message.toXML());
@@ -827,14 +839,15 @@ public class XMPPManager {
             notifyUpdateCommentsListeners();
         }
 
-        private void parseReceivedBroadcast(Message message) {
+        private void parseReceivedBroadcast(final Message message) {
 
+            L.debug("parseReceivedBroadcast");
             String broadcast = null;
             String itemId = null;
             XmlPullParserFactory factory = null;
             try {
-                factory = XmlPullParserFactory.newInstance();
 
+                factory = XmlPullParserFactory.newInstance();
 
                 factory.setNamespaceAware(true);
                 XmlPullParser xpp = factory.newPullParser();
@@ -844,9 +857,9 @@ public class XMPPManager {
 
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if (eventType == XmlPullParser.START_DOCUMENT) {
-                        //L.debug("Start document");
+                        L.debug("Start document");
                     } else if (eventType == XmlPullParser.START_TAG) {
-                        //L.debug("Start tag " + xpp.getName());
+                        L.debug("Start tag " + xpp.getName());
                         switch (xpp.getName()) {
                             case "item":
                                 itemId = xpp.getAttributeValue("", "id");
@@ -862,12 +875,12 @@ public class XMPPManager {
                     } else if (eventType == XmlPullParser.END_TAG) {
                         //L.debug("End tag " + xpp.getName());
                     } else if (eventType == XmlPullParser.TEXT) {
-                        //L.debug("Teb xt " + xpp.getText());
+                        //L.debug("Text " + xpp.getText());
                     }
                     eventType = xpp.next();
                 }
 
-                //L.debug("End document");
+                L.debug("End document");
             } catch (XmlPullParserException e) {
                 L.error(e.getMessage());
             } catch (IOException e) {
@@ -890,12 +903,14 @@ public class XMPPManager {
                     //send broadcast here
                     db.close();
 
-                    notifyUpdateBroadcastListeners();
+
                 } catch (Exception e) {
                     L.error(e.getMessage());
                 }
-
             }
+
+            notifyUpdateBroadcastListeners();
+
         }
 
         private void processMessage(final ChatMessage chatMessage) {

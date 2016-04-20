@@ -56,7 +56,9 @@ import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
 import com.lpoezy.nexpa.objects.BroadcastComment;
 import com.lpoezy.nexpa.objects.Geolocation;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.sqlite.SessionManager;
 import com.lpoezy.nexpa.utility.DateUtils;
@@ -191,6 +193,11 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             stopLocationUpdates();
         }
 
+        if(mService!=null){
+            mService = null;
+            mBound =false;
+        }
+
         XMPPService.xmpp.removeUpdateBroadcastUIListener(mOnupdateUI);
         frmPause = true;
         super.onPause();
@@ -211,8 +218,14 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     protected void onResume() {
         super.onResume();
 
-        if(XMPPService.xmpp != null)XMPPService.xmpp.registerUpdateBroadcastUIListener(mOnupdateUI);
-//*/
+        if (((TabHostActivity) getParent()).getService()!=null) {
+          mService = ((TabHostActivity) getParent()).getService();
+            mBound =true;
+        }
+
+        if (XMPPService.xmpp != null)
+            XMPPService.xmpp.registerUpdateBroadcastUIListener(mOnupdateUI);
+/*/
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -227,8 +240,6 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
                     LeafNode node = null;
                     try {
-
-                        //node = mgr.getNode(db.getUsername()+"-broadcast");
 
                         ConfigureForm form = new ConfigureForm(DataForm.Type.form.submit);
                         form.setAccessModel(AccessModel.open);
@@ -250,7 +261,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                     try {
                         node = mgr.getNode(db.getUsername() + "-broadcast");
 
-                        node.addItemEventListener(new ItemEventCoordinator());
+                        //node.addItemEventListener(new ItemEventCoordinator());
 
                         node.subscribe(db.getUsername() + "@198.154.106.139");
                     } catch (SmackException.NoResponseException e) {
@@ -284,13 +295,13 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
         SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
         db.openToRead();
-        if(broadcasts!=null && !broadcasts.isEmpty() || mNearbyUsers!=null && !mNearbyUsers.isEmpty()){
-            for(int i=0;i<broadcasts.size();i++){
+        if (broadcasts != null && !broadcasts.isEmpty() || mNearbyUsers != null && !mNearbyUsers.isEmpty()) {
+            for (int i = 0; i < broadcasts.size(); i++) {
                 Announcement ann = broadcasts.get(i);
 
-                for(int j=0;j<mNearbyUsers.size();j++){
+                for (int j = 0; j < mNearbyUsers.size(); j++) {
                     Geolocation nearby = mNearbyUsers.get(j);
-                    if(ann.getFrom().equals(nearby.getUsername()) || ann.getFrom().equals(db.getUsername())){
+                    if (ann.getFrom().equals(nearby.getUsername()) || ann.getFrom().equals(db.getUsername())) {
                         addNewAnnouncement(ann);
                     }
                 }
@@ -348,7 +359,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                         }
                     }).start();
 
-                    int index = announcements!=null && !announcements.isEmpty()?announcements.size()-1:0;
+                    int index = announcements != null && !announcements.isEmpty() ? announcements.size() - 1 : 0;
 
                     announcements.add(0, ann);
                     //Collections.reverse(announcements);
@@ -390,7 +401,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
             SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
             db.openToRead();
-            String uname =  db.getUsername();
+            String uname = db.getUsername();
             db.close();
 
             Announcement ann = announcements.get(position);
@@ -716,35 +727,32 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             public void onClick(final View view) {
                 final String msgToBroadcast = edBroad.getText().toString();
 
-                new Thread(new Runnable() {
+
+                //get nearby users
+                final ProgressBar pbBroadcast = (ProgressBar) dialogBroadcast.findViewById(R.id.pbBroadcast);
+                pbBroadcast.post(new Runnable() {
                     @Override
                     public void run() {
-                        L.debug(">>>>>>>>>>>>>>>>>>>>>>>");
-                        //get nearby users
-                        final ProgressBar pbBroadcast = (ProgressBar) dialogBroadcast.findViewById(R.id.pbBroadcast);
-                        pbBroadcast.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                pbBroadcast.setVisibility(View.VISIBLE);
-                            }
-                        });
-
-
-                        broadcastMessage(msgToBroadcast);
-
-
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                                dialogBroadcast.dismiss();
-                            }
-                        });
-
+                        pbBroadcast.setVisibility(View.VISIBLE);
                     }
-                }).start();
+                });
+
+                OnBroadcastMessageTask broadcastMessage = new OnBroadcastMessageTask(GroupChatHomeActivity.this, msgToBroadcast);
+                L.debug("mService: "+mService);
+                //broadcastMessage(msgToBroadcast);
+                if(mService!=null){
+                    mService.onExecutePendingTask(broadcastMessage);
+                }
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        dialogBroadcast.dismiss();
+                    }
+                });
 
 
             }
@@ -765,66 +773,66 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 //            @Override
 //            public void run() {
 
-                L.debug("GroupChatHome, downloadNearbyUsers");
-                HashMap<String, String> postDataParams = new HashMap<String, String>();
+        L.debug("GroupChatHome, downloadNearbyUsers");
+        HashMap<String, String> postDataParams = new HashMap<String, String>();
 
-                SessionManager sm = new SessionManager(GroupChatHomeActivity.this);
-                int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
+        SessionManager sm = new SessionManager(GroupChatHomeActivity.this);
+        int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
 
-                postDataParams.put("tag", "download_nearby_users");
-                postDataParams.put("username", mUsername);
-                postDataParams.put("longitude", mCurrentLocation.getLongitude() + "");
-                postDataParams.put("latitude", mCurrentLocation.getLatitude() + "");
+        postDataParams.put("tag", "download_nearby_users");
+        postDataParams.put("username", mUsername);
+        postDataParams.put("longitude", mCurrentLocation.getLongitude() + "");
+        postDataParams.put("latitude", mCurrentLocation.getLatitude() + "");
 
-                postDataParams.put("dist", newDistance + "");
-                postDataParams.put("unit", "k");
+        postDataParams.put("dist", newDistance + "");
+        postDataParams.put("unit", "k");
 
-                final String spec = AppConfig.URL_GEO;
-                String webpage = HttpUtilz.makeRequest(spec, postDataParams);
+        final String spec = AppConfig.URL_GEO;
+        String webpage = HttpUtilz.makeRequest(spec, postDataParams);
 
-                L.debug("webpage: " + webpage);
+        L.debug("webpage: " + webpage);
 
-                JSONObject jObj = null;
-                try {
-                    jObj = new JSONObject(webpage);
-                } catch (JSONException e) {
-                    L.error(e.getMessage());
-                }
-                boolean error = false;
-                try {
-                    error = jObj.getBoolean("error");
-                } catch (JSONException e) {
-                    L.error(e.getMessage());
-                } catch (NullPointerException e) {
-                    L.error(e.getMessage());
-                }
+        JSONObject jObj = null;
+        try {
+            jObj = new JSONObject(webpage);
+        } catch (JSONException e) {
+            L.error(e.getMessage());
+        }
+        boolean error = false;
+        try {
+            error = jObj.getBoolean("error");
+        } catch (JSONException e) {
+            L.error(""+e.getMessage());
+        } catch (NullPointerException e) {
+            L.error(""+e.getMessage());
+        }
 
-                if (!error) {
+        if (!error) {
 
-                    JSONArray nearby_users = null;
+            JSONArray nearby_users = null;
+            try {
+                nearby_users = jObj.getJSONArray("data");
+            } catch (JSONException e) {
+                L.error(""+e.getMessage());
+            }
+
+            if (nearby_users != null && nearby_users.length() != 0) {
+                mNearbyUsers.clear();
+                for (int i = 0; i < nearby_users.length(); i++) {
+
                     try {
-                        nearby_users = jObj.getJSONArray("data");
-                    } catch (JSONException e) {
-                        L.error(e.getMessage());
-                    }
 
-                    if (nearby_users != null && nearby_users.length() != 0) {
-                        mNearbyUsers.clear();
-                        for (int i = 0; i < nearby_users.length(); i++) {
-
-                            try {
-
-                                JSONObject c = nearby_users.getJSONObject(i);
-                                // user profile
-                                String uname = c.getString("username");
-                                String latitude = c.getString("latitude");
-                                String longitude = c.getString("longitude");
-                                String gps_provider = c.getString("gps_provider");
-                                String date_create = c.getString("date_create");
-                                String date_update = c.getString("date_update");
-                                String geo_distance = c.getString("geo_distance");
-                                Geolocation geo = new Geolocation(uname, Double.parseDouble(latitude), Double.parseDouble(longitude),
-                                        gps_provider, Long.parseLong(date_create), Long.parseLong(date_update), Double.parseDouble(geo_distance));
+                        JSONObject c = nearby_users.getJSONObject(i);
+                        // user profile
+                        String uname = c.getString("username");
+                        String latitude = c.getString("latitude");
+                        String longitude = c.getString("longitude");
+                        String gps_provider = c.getString("gps_provider");
+                        String date_create = c.getString("date_create");
+                        String date_update = c.getString("date_update");
+                        String geo_distance = c.getString("geo_distance");
+                        Geolocation geo = new Geolocation(uname, Double.parseDouble(latitude), Double.parseDouble(longitude),
+                                gps_provider, Long.parseLong(date_create), Long.parseLong(date_update), Double.parseDouble(geo_distance));
 
 //                                final SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
 //                                db.openToRead();
@@ -846,112 +854,194 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 //
 //                                db.close();
 
-                                mNearbyUsers.add(geo);
+                        mNearbyUsers.add(geo);
 
-                            } catch (JSONException e) {
-                                L.error(e.getMessage());
-                            }
-
-
-                        }
-
+                    } catch (JSONException e) {
+                        L.error(""+e.getMessage());
                     }
-                } else {
-                    //makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
-                    L.makeText(GroupChatHomeActivity.this, "Error occurred while collecting users", AppMsg.STYLE_ALERT);
+
+
                 }
+
+            }
+        } else {
+            //makeNotify("Error occurred while collecting users", AppMsg.STYLE_ALERT);
+            L.makeText(GroupChatHomeActivity.this, "Error occurred while collecting users", AppMsg.STYLE_ALERT);
+        }
 
 //            }
 //        }).start();
 
     }
 
+    private LeafNode createCommentNode() throws SmackException.NotConnectedException, XMPPException.XMPPErrorException, SmackException.NoResponseException {
 
-    private void broadcastMessage(final String msgToBroadcast) {
         final SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
         db.openToRead();
-        PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
 
         LeafNode node = null;
-        try {
-            node = mgr.getNode(db.getUsername() + "-broadcast");
 
-            Time time = new Time();
+        PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
 
-            try {
-                XMPPService.xmpp.connection.sendStanza(time);
 
-                final LeafNode finalNode = node;
-                XMPPService.xmpp.connection.addSyncStanzaListener(new StanzaListener() {
-                    @Override
-                    public void processPacket(Stanza stanza) throws SmackException.NotConnectedException {
+        ConfigureForm form = new ConfigureForm(DataForm.Type.form.submit);
+        form.setAccessModel(AccessModel.open);
+        form.setDeliverPayloads(true);
+        form.setNotifyRetract(true);
+        form.setPersistentItems(true);
+        form.setPublishModel(PublishModel.open);
 
-                        final String from, body, date, locLocal;
-                        int reach = 0;
-                        final long[] dateTime = new long[1];
+        node = (LeafNode) mgr.createNode(db.getUsername() + "-broadcast", form);
 
-                        dateTime[0] = ((Time) stanza).getTime().getTime();
-
-                        from = db.getUsername();
-                        body = msgToBroadcast;
-                        date = Long.toString(dateTime[0]);
-
-                        locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
-
-//                        List<Subscription> subs = null;
-//                        try {
-//                            subs = finalNode.getSubscriptions();
-//                        } catch (SmackException.NoResponseException e) {
-//                            e.printStackTrace();
-//                        } catch (XMPPException.XMPPErrorException e) {
-//                            e.printStackTrace();
-//                        }
-//                        L.debug("==========subscribers=====================");
-//                        for (int i = 0; i < subs.size(); i++) {
-//                            L.debug(subs.get(i).getJid() + ": " + subs.get(i).getId());
-//                        }
-//
-//                        L.debug("==========================================");
-
-                        reach = mNearbyUsers.size();
-                        Announcement ann = new Announcement(from, body, date, locLocal, reach, true);
-
-                        try {
-
-                            finalNode.send(new PayloadItem(null,
-                                    new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<broadcast xmlns='pubsub:nexpa:broadcast'>" + mGson.toJson(ann) + "</broadcast>")));
-
-                        } catch (SmackException.NoResponseException e) {
-                            e.printStackTrace();
-                        } catch (XMPPException.XMPPErrorException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new StanzaFilter() {
-                    @Override
-                    public boolean accept(Stanza stanza) {
-
-                        if (stanza.toString().contains("urn:xmpp:time"))
-                            return true;
-                        return false;
-                    }
-                });
-
-                L.debug("time: " + time.getTime());
-            } catch (SmackException.NotConnectedException e) {
-                e.printStackTrace();
-            }
-
-        } catch (SmackException.NoResponseException e) {
-            L.error(e.getMessage());
-        } catch (XMPPException.XMPPErrorException e) {
-            L.error(e.getMessage());
-        } catch (SmackException.NotConnectedException e) {
-            L.error(e.getMessage());
-        }
         db.close();
+        return node;
 
     }
+
+    private class OnBroadcastMessageTask implements OnExecutePendingTaskListener {
+
+        private final String msgToBroadcast;
+        private final Context context;
+
+        public OnBroadcastMessageTask(Context context, final String msgToBroadcast) {
+            this.msgToBroadcast = msgToBroadcast;
+            this.context= context;
+        }
+
+        @Override
+        public void onExecutePendingTask() {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (!XMPPService.xmpp.connection.isConnected()) {
+
+                        XMPPManager.getInstance(context).instance = null;
+
+                        XMPPService.xmpp = XMPPManager.getInstance(context);
+                        XMPPService.xmpp.connect("onCreate");
+
+                    } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+                        XMPPService.xmpp.login();
+
+                    } else {
+                        final SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+                        db.openToRead();
+                        PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
+
+                        LeafNode node = null;
+
+                        try {
+                            node = mgr.getNode(db.getUsername() + "-broadcast");
+                            //node.subscribe(db.getUsername() + "@198.154.106.139");
+
+                        } catch (SmackException.NoResponseException e) {
+                            L.error(e.getMessage());
+                        } catch (XMPPException.XMPPErrorException e) {
+                            L.error(e.getMessage());
+                        } catch (SmackException.NotConnectedException e) {
+                            L.error(e.getMessage());
+                        }
+
+                        if (node == null) {
+                            try {
+                                node = createCommentNode();
+                            } catch (SmackException.NotConnectedException e) {
+                                L.error(e.getMessage());
+                            } catch (XMPPException.XMPPErrorException e) {
+                                L.error(e.getMessage());
+                            } catch (SmackException.NoResponseException e) {
+                                L.error(e.getMessage());
+                            }
+                        }
+
+                        if (node != null) {
+
+                            //check if user is already subscribe
+                            List<Subscription> subs = null;
+                            try {
+                                subs = node.getSubscriptions();
+                            } catch (SmackException.NoResponseException e) {
+                                L.error(e.getMessage());
+                            } catch (XMPPException.XMPPErrorException e) {
+                                L.error(e.getMessage());
+                            } catch (SmackException.NotConnectedException e) {
+                                L.error(e.getMessage());
+                            }
+
+                            boolean isAlreadySubscribe = false;
+                            if (subs != null && !subs.isEmpty()) {
+                                for (int i = 0; i < subs.size(); i++) {
+                                    L.debug(subs.get(i).getJid() + ": " + subs.get(i).getId());
+                                    //only subscribe if name don't appear in the list
+                                    if (subs.get(i).getJid().split("@")[0].equals(db.getUsername())) {
+                                        L.debug(db.getUsername() + " is already subscribed to " + node.getId());
+                                        isAlreadySubscribe = true;
+                                        break;
+                                    }
+
+                                }
+                            } else {
+                                L.error("sbscription is empty!!");
+                                isAlreadySubscribe = false;
+                            }
+
+                            if (!isAlreadySubscribe) {
+                                try {
+                                    node.subscribe(db.getUsername() + "@198.154.106.139");
+                                    isAlreadySubscribe = true;
+                                    L.debug("subscribe to " + node.getId());
+                                } catch (SmackException.NoResponseException e) {
+                                    L.error(e.getMessage());
+                                } catch (XMPPException.XMPPErrorException e) {
+                                    L.error(e.getMessage());
+                                } catch (SmackException.NotConnectedException e) {
+                                    L.error(e.getMessage());
+                                }
+                            }
+
+
+                            final String from, body, date, locLocal;
+                            int reach = 0;
+                            final long[] dateTime = new long[1];
+
+                            dateTime[0] = System.currentTimeMillis();
+
+                            from = db.getUsername();
+                            body = msgToBroadcast;
+                            date = Long.toString(dateTime[0]);
+
+                            locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";
+
+                            reach = mNearbyUsers.size();
+                            Announcement ann = new Announcement(from, body, date, locLocal, reach, true);
+                            Gson gson = new Gson();
+                            try {
+
+                                node.send(new PayloadItem(null,
+                                        new SimplePayload("broadcast", "pubsub:nexpa:broadcast", "<broadcast xmlns='pubsub:nexpa:broadcast'>" + gson.toJson(ann) + "</broadcast>")));
+                                L.debug("sending bradcast!!!");
+                            } catch (SmackException.NoResponseException e) {
+                                L.error(e.getMessage());
+                            } catch (XMPPException.XMPPErrorException e) {
+                                L.error(e.getMessage());
+                            } catch (SmackException.NotConnectedException e) {
+                                L.error(e.getMessage());
+                            }
+
+                            db.close();
+
+                        }
+                    }
+
+
+                }
+            }).start();
+
+        }
+    };
 
     String locationName = "";
 
@@ -965,13 +1055,20 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
     }
 
+    private XMPPService mService;
+    private boolean mBound;
+
     @Override
     public void OnServiceConnected(XMPPService service) {
-
+        mService = service;
+        mBound = true;
     }
 
     @Override
     public void OnServiceDisconnected() {
+
+        mService = null;
+        mBound = false;
 
     }
 
@@ -1012,7 +1109,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         if (mCurrentLocation != null) {
 
             sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-            mAddress = generateAddress(mCurrentLocation);
+            generateAddress(mCurrentLocation);
             //L.debug("latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             //L.debug("longitude: " + String.valueOf(mCurrentLocation.getLongitude()));
 
@@ -1026,12 +1123,9 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
             }).start();
 
 
-
-
         }
 
     }
-
 
 
     private void subscribeToUsers() {
@@ -1072,58 +1166,66 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         db.close();
     }
 
-    private String generateAddress(Location loc) {
+    private synchronized void generateAddress(final Location loc) {
 
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        List<Address> addresses = null;
-        L.debug("latitude: " + String.valueOf(loc.getLatitude()));
-        L.debug("longitude: " + String.valueOf(loc.getLongitude()));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        if (!Geocoder.isPresent()) {
-            L.makeText(this, getResources().getString(R.string.no_geocoder_available),
-                    AppMsg.STYLE_ALERT);
-            return null;
-        }
+                Geocoder geocoder = new Geocoder(GroupChatHomeActivity.this, Locale.getDefault());
+                List<Address> addresses = null;
+                //L.debug("latitude: " + String.valueOf(loc.getLatitude()));
+                // L.debug("longitude: " + String.valueOf(loc.getLongitude()));
 
-        try {
-            addresses = geocoder.getFromLocation(
-                    mCurrentLocation.getLatitude(),
-                    mCurrentLocation.getLongitude(),
-                    // In this sample, get just a single address.
-                    1);
-        } catch (IOException e) {
-            L.error(e.getMessage());
-        }
+                if (!Geocoder.isPresent()) {
+                    L.makeText(GroupChatHomeActivity.this, getResources().getString(R.string.no_geocoder_available),
+                            AppMsg.STYLE_ALERT);
+                    mAddress = null;
+                }
 
-        String address_ = null;
-        String errorMessage = "";
-        if (addresses == null || addresses.size() == 0) {
-            if (errorMessage.isEmpty()) {
-                errorMessage = getString(R.string.no_address_found);
-                L.error(errorMessage);
+                try {
+                    addresses = geocoder.getFromLocation(
+                            mCurrentLocation.getLatitude(),
+                            mCurrentLocation.getLongitude(),
+                            // In this sample, get just a single address.
+                            1);
+                } catch (IOException e) {
+                    L.error(e.getMessage());
+                }
+
+                String address_ = null;
+                String errorMessage = "";
+                if (addresses == null || addresses.size() == 0) {
+                    if (errorMessage.isEmpty()) {
+                        errorMessage = getString(R.string.no_address_found);
+                        L.error(errorMessage);
+                    }
+
+                } else {
+                    Address address = addresses.get(0);
+                    //ArrayList<String> addressFragments = new ArrayList<String>();
+
+                    // Fetch the address lines using getAddressLine,
+                    // join them, and send them to the thread.
+                    StringBuilder addressBuilder = new StringBuilder();
+                    for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                        //addressFragments.add(address.getAddressLine(i));
+                        //L.debug("address: "+address.getAddressLine(i));
+                        addressBuilder.append(address.getAddressLine(i));
+                        if (i != address.getMaxAddressLineIndex() - 1)
+                            addressBuilder.append(", ");
+                    }
+
+                    //L.debug(getString(R.string.address_found));
+                    address_ = addressBuilder.toString();
+
+                }
+
+                mAddress = address_;
+
             }
+        }).start();
 
-        } else {
-            Address address = addresses.get(0);
-            //ArrayList<String> addressFragments = new ArrayList<String>();
-
-            // Fetch the address lines using getAddressLine,
-            // join them, and send them to the thread.
-            StringBuilder addressBuilder = new StringBuilder();
-            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                //addressFragments.add(address.getAddressLine(i));
-                //L.debug("address: "+address.getAddressLine(i));
-                addressBuilder.append(address.getAddressLine(i));
-                if (i != address.getMaxAddressLineIndex() - 1)
-                    addressBuilder.append(", ");
-            }
-
-            L.debug(getString(R.string.address_found));
-            address_ = addressBuilder.toString();
-
-        }
-
-        return address_;
     }
 
     @Override
@@ -1162,7 +1264,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         if (mCurrentLocation != null) {
             //L.debug("new latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             //L.debug("new longitude: " + String.valueOf(mCurrentLocation.getLongitude()));
-            mAddress = generateAddress(mCurrentLocation);
+            generateAddress(mCurrentLocation);
 
             sendNewLocToServer(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
@@ -1179,7 +1281,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         }
     }
 
-    public interface OnUpdateUIListener{
+    public interface OnUpdateUIListener {
         public void onUpdateUI();
     }
 }

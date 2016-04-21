@@ -59,8 +59,14 @@ import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
 
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterListener;
 import org.json.JSONArray;
@@ -303,7 +309,7 @@ public class AroundMeActivity extends AppCompatActivity
     }
 
     protected void onStop() {
-        if(mGoogleApiClient!=null && mGoogleApiClient.isConnected()){
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
         super.onStop();
@@ -402,6 +408,7 @@ public class AroundMeActivity extends AppCompatActivity
 
                 XMPPService.xmpp.login();
             } else {
+
 
                 //*
                 if (mCurrentLocation == null) {
@@ -543,7 +550,7 @@ public class AroundMeActivity extends AppCompatActivity
 
             L.debug("last loc latitude: " + String.valueOf(mCurrentLocation.getLatitude()));
             L.debug("last loc long: " + String.valueOf(mCurrentLocation.getLongitude()));
-            if (mBounded && nearbyUsers.size()==0) {
+            if (mBounded && nearbyUsers.size() == 0) {
 
                 mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
 
@@ -658,7 +665,7 @@ public class AroundMeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_around_me);
 
-        if(savedInstanceState!=null)mFrmSaveInstanceState= true;
+        if (savedInstanceState != null) mFrmSaveInstanceState = true;
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -808,7 +815,7 @@ public class AroundMeActivity extends AppCompatActivity
         final Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
 
         for (int j = 0; j < nearbyUsers.size(); j++) {
-            try{
+            try {
                 final String name = nearbyUsers.get(j).getUsername();
                 final Correspondent correspondent = new Correspondent();
                 correspondent.setUsername(name);
@@ -817,13 +824,26 @@ public class AroundMeActivity extends AppCompatActivity
                 arr_correspondents.add(j, correspondent);
 
 
-                String address = name + "@198.154.106.139/Smack";
-                updateUserAvailability(address, roster);
+                final String address = name + "@198.154.106.139/Smack";
+
 
 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+
+                        try {
+                            requestSubscription(address);
+                        } catch (SmackException.NotConnectedException e) {
+                           L.error(""+e.getMessage());
+                        } catch (SmackException.NotLoggedInException e) {
+                            L.error("" + e.getMessage());
+                        } catch (SmackException.NoResponseException e) {
+                            L.error("" + e.getMessage());
+                        } catch (XMPPException.XMPPErrorException e) {
+                            L.error("" + e.getMessage());
+                        }
+                        updateUserAvailability(address, roster);
 
                         final UserProfile uProfile = new UserProfile();
                         uProfile.setUsername(name);
@@ -842,9 +862,13 @@ public class AroundMeActivity extends AppCompatActivity
                 imageId.add(j, R.drawable.pic_sample_girl);
                 availabilty.add(j, "ADDED");
                 web.add(j, name);
-            }catch(IndexOutOfBoundsException e){L.error(e.getMessage());}
+            } catch (IndexOutOfBoundsException e) {
+                L.error(e.getMessage());
+            }
 
         }
+
+        subscriptionRequestListener();
 
         roster.addRosterListener(new RosterListener() {
             // Ignored events public void entriesAdded(Collection<String> addresses) {}
@@ -866,6 +890,8 @@ public class AroundMeActivity extends AppCompatActivity
 
             }
         });
+
+
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -931,7 +957,7 @@ public class AroundMeActivity extends AppCompatActivity
     }
 
     private void updateUserAvailability(final String addresss, final Roster roster) {
-
+        // L.debug("updateUserAvailability: "+arr_correspondents.size());
         String username = addresss.split("@")[0];
         for (Correspondent c : arr_correspondents) {
 
@@ -955,7 +981,6 @@ public class AroundMeActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public void onCorrespondentUpdate() {
         this.runOnUiThread(new Runnable() {
@@ -974,7 +999,7 @@ public class AroundMeActivity extends AppCompatActivity
         mService = service;
         mBounded = true;
 
-        if(nearbyUsers!= null && nearbyUsers.size()==0){
+        if (nearbyUsers != null && nearbyUsers.size() == 0) {
             mService.onExecutePendingTask(new OnDownloadNearbyUsersOnline());
         }
 
@@ -985,6 +1010,69 @@ public class AroundMeActivity extends AppCompatActivity
         mService = null;
         mBounded = false;
 
+
+    }
+
+    private void requestSubscription(String address) throws SmackException.NotConnectedException, SmackException.NotLoggedInException, SmackException.NoResponseException, XMPPException.XMPPErrorException {
+
+        //L.error("sending subscription request to address: " + address);
+        Presence subscribe = new Presence(Presence.Type.subscribe);
+        subscribe.setTo(address);
+        XMPPService.xmpp.connection.sendPacket(subscribe);
+
+        final Roster roster = Roster.getInstanceFor(XMPPService.xmpp.connection);
+
+        roster.createEntry(address, null, null);
+
+
+    }
+
+    private void subscriptionRequestListener() {
+
+        L.debug("==============subscriptionRequestListener================");
+        XMPPService.xmpp.connection.addPacketListener(new PacketListener() {
+
+            @Override
+            public void processPacket(Stanza stanza) throws SmackException.NotConnectedException {
+                L.debug("==============subscriptionRequestListener processPacket================");
+                final Presence presence = (Presence) stanza;
+                final String fromId = presence.getFrom();
+                //final RosterEntry newEntry = connection.getRoster().getEntry(fromId);
+                final String uname = fromId.split("@")[0];
+
+//                Correspondent correspondent = null;
+//                for (Correspondent c : arr_correspondents) {
+//                    if (c.getUsername().equals(uname)) {
+//                        correspondent = c;
+//                        break;
+//                    }
+//                }
+                // Correspondent correspondent = arr_correspondents.;
+
+                if (presence.getType() == Presence.Type.subscribe) {
+
+                    L.debug("subscribe: " + fromId);
+                    //approved request
+                    Presence subscribed = new Presence(Presence.Type.subscribed);
+                    subscribed.setTo(fromId);
+                    XMPPService.xmpp.connection.sendPacket(subscribed);
+
+                } else if (presence.getType() == Presence.Type.unsubscribe) {
+                    L.debug("unsubscribe: " + fromId);
+                } else if (presence.getType() == Presence.Type.subscribed) {
+                    L.debug("subscribed: " + fromId);
+                } else if (presence.getType() == Presence.Type.unsubscribed) {
+                    L.debug("unsubscribed: " + fromId);
+                } else if (presence.getType() == Presence.Type.available) {
+                    L.debug("available: " + fromId);
+
+                } else if (presence.getType() == Presence.Type.unavailable) {
+                    L.debug("unavailable: " + fromId);
+
+                }
+            }
+        }, new PacketTypeFilter(Presence.class));
+        L.debug("================================");
 
     }
 }

@@ -76,7 +76,7 @@ public class MAMExtensionProvider extends DataPacketProvider.PacketExtensionProv
 
                         case "body":
                             body = parser.nextText();
-                            //L.debug("body: "+body);
+                            L.debug("body: "+body);
                             break;
 
                         case "thread":

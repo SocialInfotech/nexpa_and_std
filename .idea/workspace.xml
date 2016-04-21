@@ -26,17 +26,14 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/res/resources-debug.ap_" afterPath="$PROJECT_DIR$/build/intermediates/res/resources-debug.ap_" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/taskArtifacts.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-hdpi-v4.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-hdpi-v4.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-mdpi-v4.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-mdpi-v4.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-xhdpi-v4.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-xhdpi-v4.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-xxhdpi-v4.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-xxhdpi-v4.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-xxxhdpi-v4.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable-xxxhdpi-v4.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/drawable.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/layout.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/layout.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugResources/merger.xml" afterPath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugResources/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="nexpa_and_std.iws" />
@@ -70,9 +67,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="97" column="9" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -137,7 +132,7 @@
       <file leaf-file-name="AroundMeActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/AroundMeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-27.034595">
+            <state vertical-scroll-proportion="-25.4201">
               <caret line="82" column="13" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -150,42 +145,8 @@
                 <element signature="e#4583#4591#0" expanded="true" />
                 <element signature="e#4776#4784#0" expanded="true" />
                 <element signature="e#5079#5092#0" expanded="true" />
-                <element signature="e#8666#9036#0" expanded="true" />
-                <element signature="e#9035#9036#0" expanded="true" />
-                <element signature="e#9181#10110#0" expanded="true" />
-                <element signature="e#10109#10110#0" expanded="true" />
-                <element signature="e#10397#10964#0" expanded="true" />
-                <element signature="e#10963#10964#0" expanded="true" />
-                <element signature="e#15057#16171#0" expanded="true" />
                 <element signature="e#15221#15237#0" expanded="true" />
-                <element signature="e#16170#16171#0" expanded="true" />
-                <element signature="e#16771#16983#0" expanded="true" />
-                <element signature="e#16982#16983#0" expanded="true" />
-                <element signature="e#18478#18787#0" expanded="true" />
-                <element signature="e#18786#18787#0" expanded="true" />
-                <element signature="e#24818#25340#0" expanded="true" />
-                <element signature="e#24967#25309#0" expanded="true" />
-                <element signature="e#25308#25309#0" expanded="true" />
-                <element signature="e#25339#25340#0" expanded="true" />
-                <element signature="e#25385#25537#0" expanded="true" />
-                <element signature="e#25536#25537#0" expanded="true" />
-                <element signature="e#26442#27649#0" expanded="true" />
                 <element signature="e#26651#26658#0" expanded="true" />
-                <element signature="e#27648#27649#0" expanded="true" />
-                <element signature="e#28164#28299#0" expanded="true" />
-                <element signature="e#28298#28299#0" expanded="true" />
-                <element signature="e#29271#30530#0" expanded="true" />
-                <element signature="e#30529#30530#0" expanded="true" />
-                <element signature="e#31628#31828#0" expanded="true" />
-                <element signature="e#31827#31828#0" expanded="true" />
-                <element signature="e#32750#32894#0" expanded="true" />
-                <element signature="e#32893#32894#0" expanded="true" />
-                <element signature="e#33493#33635#0" expanded="true" />
-                <element signature="e#33634#33635#0" expanded="true" />
-                <element signature="e#33731#33851#0" expanded="true" />
-                <element signature="e#33850#33851#0" expanded="true" />
-                <element signature="e#35093#37041#0" expanded="true" />
-                <element signature="e#37040#37041#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -930,7 +891,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std" value="1461221019430" />
+        <entry key="C:\Users\HP PAVILION\Desktop\git\nexpa_v7\nexpa_and_std" value="1461221564146" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1352,95 +1313,11 @@
               <option name="myItemId" value="nexpa_and_std" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="activities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -1713,7 +1590,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1932" height="1056" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1730,7 +1607,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19551282" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19551282" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18070363" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -1817,42 +1694,8 @@
             <element signature="e#4583#4591#0" expanded="true" />
             <element signature="e#4776#4784#0" expanded="true" />
             <element signature="e#5079#5092#0" expanded="true" />
-            <element signature="e#8666#9036#0" expanded="true" />
-            <element signature="e#9035#9036#0" expanded="true" />
-            <element signature="e#9181#10110#0" expanded="true" />
-            <element signature="e#10109#10110#0" expanded="true" />
-            <element signature="e#10397#10964#0" expanded="true" />
-            <element signature="e#10963#10964#0" expanded="true" />
-            <element signature="e#15057#16171#0" expanded="true" />
             <element signature="e#15221#15237#0" expanded="true" />
-            <element signature="e#16170#16171#0" expanded="true" />
-            <element signature="e#16771#16983#0" expanded="true" />
-            <element signature="e#16982#16983#0" expanded="true" />
-            <element signature="e#18478#18787#0" expanded="true" />
-            <element signature="e#18786#18787#0" expanded="true" />
-            <element signature="e#24818#25340#0" expanded="true" />
-            <element signature="e#24967#25309#0" expanded="true" />
-            <element signature="e#25308#25309#0" expanded="true" />
-            <element signature="e#25339#25340#0" expanded="true" />
-            <element signature="e#25385#25537#0" expanded="true" />
-            <element signature="e#25536#25537#0" expanded="true" />
-            <element signature="e#26442#27649#0" expanded="true" />
             <element signature="e#26651#26658#0" expanded="true" />
-            <element signature="e#27648#27649#0" expanded="true" />
-            <element signature="e#28164#28299#0" expanded="true" />
-            <element signature="e#28298#28299#0" expanded="true" />
-            <element signature="e#29271#30530#0" expanded="true" />
-            <element signature="e#30529#30530#0" expanded="true" />
-            <element signature="e#31628#31828#0" expanded="true" />
-            <element signature="e#31827#31828#0" expanded="true" />
-            <element signature="e#32750#32894#0" expanded="true" />
-            <element signature="e#32893#32894#0" expanded="true" />
-            <element signature="e#33493#33635#0" expanded="true" />
-            <element signature="e#33634#33635#0" expanded="true" />
-            <element signature="e#33731#33851#0" expanded="true" />
-            <element signature="e#33850#33851#0" expanded="true" />
-            <element signature="e#35093#37041#0" expanded="true" />
-            <element signature="e#37040#37041#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2239,9 +2082,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="97" column="9" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2289,7 +2130,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/AroundMeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-27.034595">
+        <state vertical-scroll-proportion="-25.4201">
           <caret line="82" column="13" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -2302,42 +2143,8 @@
             <element signature="e#4583#4591#0" expanded="true" />
             <element signature="e#4776#4784#0" expanded="true" />
             <element signature="e#5079#5092#0" expanded="true" />
-            <element signature="e#8666#9036#0" expanded="true" />
-            <element signature="e#9035#9036#0" expanded="true" />
-            <element signature="e#9181#10110#0" expanded="true" />
-            <element signature="e#10109#10110#0" expanded="true" />
-            <element signature="e#10397#10964#0" expanded="true" />
-            <element signature="e#10963#10964#0" expanded="true" />
-            <element signature="e#15057#16171#0" expanded="true" />
             <element signature="e#15221#15237#0" expanded="true" />
-            <element signature="e#16170#16171#0" expanded="true" />
-            <element signature="e#16771#16983#0" expanded="true" />
-            <element signature="e#16982#16983#0" expanded="true" />
-            <element signature="e#18478#18787#0" expanded="true" />
-            <element signature="e#18786#18787#0" expanded="true" />
-            <element signature="e#24818#25340#0" expanded="true" />
-            <element signature="e#24967#25309#0" expanded="true" />
-            <element signature="e#25308#25309#0" expanded="true" />
-            <element signature="e#25339#25340#0" expanded="true" />
-            <element signature="e#25385#25537#0" expanded="true" />
-            <element signature="e#25536#25537#0" expanded="true" />
-            <element signature="e#26442#27649#0" expanded="true" />
             <element signature="e#26651#26658#0" expanded="true" />
-            <element signature="e#27648#27649#0" expanded="true" />
-            <element signature="e#28164#28299#0" expanded="true" />
-            <element signature="e#28298#28299#0" expanded="true" />
-            <element signature="e#29271#30530#0" expanded="true" />
-            <element signature="e#30529#30530#0" expanded="true" />
-            <element signature="e#31628#31828#0" expanded="true" />
-            <element signature="e#31827#31828#0" expanded="true" />
-            <element signature="e#32750#32894#0" expanded="true" />
-            <element signature="e#32893#32894#0" expanded="true" />
-            <element signature="e#33493#33635#0" expanded="true" />
-            <element signature="e#33634#33635#0" expanded="true" />
-            <element signature="e#33731#33851#0" expanded="true" />
-            <element signature="e#33850#33851#0" expanded="true" />
-            <element signature="e#35093#37041#0" expanded="true" />
-            <element signature="e#37040#37041#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -151,6 +151,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
 
         adapter = new ChatHistoryAdapter(getActivity(), mCallback);
         rvChatHistory.setAdapter(adapter);
+        rvChatHistory.setLongClickable(true);
 
         mSwipeRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.niagara, R.color.buttercup, R.color.niagara);
@@ -482,7 +483,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
             return new ViewHolder(itemView);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+        class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener, View.OnLongClickListener {
 
             TextView tvBuddys;
             TextView tvMsg;
@@ -498,6 +499,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
                 imgProfilePic = (ImageView) view.findViewById(R.id.img_profile_pic);
 
                 view.setOnClickListener(this);
+                view.setOnLongClickListener(this);
             }
 
             @Override
@@ -506,11 +508,19 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
                 mCallback.onShowChatHistory(tvBuddys.getText().toString());
             }
 
+            @Override
+            public boolean onLongClick(View v) {
+
+                //L.debug("long click...");
+                mCallback.onDeleteChatHistory(tvBuddys.getText().toString());
+                return true;
+            }
         }
     }
 
     public interface OnShowChatHistoryListener {
         public void onShowChatHistory(String with);
+        public void onDeleteChatHistory(String with);
         //public void onShowChatHistory(Correspondent buddy);
     }
 

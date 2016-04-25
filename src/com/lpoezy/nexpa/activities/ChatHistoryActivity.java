@@ -108,6 +108,15 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
 
     }
 
+    @Override
+    public void onDeleteChatHistory(String with) {
+
+        ChatHistoryOptionsFragment profPicDialog = ChatHistoryOptionsFragment.newInstance(with);
+
+        profPicDialog.show(getFragmentManager().beginTransaction(), ChatHistoryOptionsFragment.TAG);
+
+    }
+
 
     @Override
     public void onRetrieveMessageArchive(List<MessageResultElement> msgs, int first, int last, int count) {
@@ -143,7 +152,5 @@ public class ChatHistoryActivity extends AppCompatActivity implements OnShowChat
         ChatHistoryListFragment frag = (ChatHistoryListFragment) getFragmentManager().findFragmentByTag("ChatHistoryList");
         XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) frag;
         onServiceConnectedListener.OnServiceDisconnected();
-
-
     }
 }

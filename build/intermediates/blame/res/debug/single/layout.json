@@ -96,6 +96,10 @@
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\res\\layout\\activity_gender.xml"
     },
     {
+        "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_chat_history_options.xml",
+        "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\res\\layout\\fragment_chat_history_options.xml"
+    },
+    {
         "merged": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\layout\\design_menu_item_action_area.xml",
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.2.1\\res\\layout\\design_menu_item_action_area.xml"
     },

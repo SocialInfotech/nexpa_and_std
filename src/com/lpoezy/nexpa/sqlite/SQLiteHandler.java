@@ -1270,6 +1270,8 @@ public class SQLiteHandler {
     }
 
 
+
+
     public int deleteFavorite(String name) {
 
         return sqLiteDatabase.delete(TABLE_FAVORITES, FAVORITE_USERNAME + "=?", new String[]{name});
@@ -1349,7 +1351,7 @@ public class SQLiteHandler {
 
         sqLiteDatabase.insertWithOnConflict(TABLE_BROADCASTS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
-        L.debug("saved broadcast "+itemId);
+        L.debug("saved broadcast " + itemId);
     }
 
     public long saveCorrespondent(String username) {
@@ -1441,6 +1443,12 @@ public class SQLiteHandler {
         }
 
         return msgs;
+    }
+
+    public int deleteChatHistoryWith(String uname) {
+
+        return sqLiteDatabase.delete(TABLE_MSG_ARCHIVE, MAM_TO + "=? OR " + MAM_FROM
+                + "=?", new String[]{uname, uname});
     }
 
     public void deleteMsgArchive(){

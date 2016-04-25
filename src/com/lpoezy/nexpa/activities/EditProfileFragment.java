@@ -177,61 +177,6 @@ public class EditProfileFragment extends DialogFragment {
 
     }
 
-    protected void saveUserInfoOffline() {
-
-//		long now = System.currentTimeMillis();
-//
-//		String dateUpdated = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
-//		SQLiteHandler db = new SQLiteHandler(getActivity());
-//		db.openToRead();
-//
-//		long uId = Long.parseLong(db.getLoggedInID());
-//
-//		String uname = edtName.getText().toString();
-//		String description = edtDescription.getText().toString();
-//		String profession = edtProfession.getText().toString();
-//		String url0 = edtUrl0.getText().toString();
-//		String url1 = edtUrl1.getText().toString();
-//		String url2 = edtUrl2.getText().toString();
-//		boolean isSyncedOnline = false;
-//		UserProfile userProfile = new UserProfile(uname, description, profession, url0, url1, url2);
-//
-//		//moved to sync in settings screen
-//		//String result = userProfile.saveOnline(getActivity());
-//
-//		userProfile.saveOffline(getActivity());
-//
-//
-////		try {
-////			JSONObject jResult = new JSONObject(result);
-////			if(!jResult.getBoolean("error")){
-////				userProfile.saveOffline(getActivity());
-////			}
-////		} catch (JSONException e) {
-////			L.error(""+e);
-////		}
-//
-//		db.close();
-    }
-
-//    protected void saveProfilePicOffline() {
-////		SQLiteHandler db = new SQLiteHandler(getActivity());
-////		db.openToRead();
-////		ProfilePicture pic = new ProfilePicture();
-////		pic.setUserId(Long.parseLong(db.getLoggedInID()));
-//
-//        long now = System.currentTimeMillis();
-//
-//        String dateUploaded = DateUtils.millisToSimpleDate(now, DateFormatz.DATE_FORMAT_5);
-//
-//        //mProfilePicture.setDateUploaded(dateUploaded);
-//        //mProfilePicture.setSyncedOnline(false);
-//
-//        //mProfilePicture.saveOffline(getActivity());
-////		db.close();
-//
-//    }
-
     private void addClickListenerToBtnProfilePic(View v) {
         ((LinearLayout) v.findViewById(R.id.btn_profile_pic)).setOnClickListener(new View.OnClickListener() {
 

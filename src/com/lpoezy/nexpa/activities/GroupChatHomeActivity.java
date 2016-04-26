@@ -289,27 +289,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     }
 
 
-    private void downloadReceivedBroadcastsNearby() {
 
-        List<Announcement> broadcasts = Announcement.downloadOffline(GroupChatHomeActivity.this);
-
-        SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
-        db.openToRead();
-        if (broadcasts != null && !broadcasts.isEmpty() || mNearbyUsers != null && !mNearbyUsers.isEmpty()) {
-            for (int i = 0; i < broadcasts.size(); i++) {
-                Announcement ann = broadcasts.get(i);
-
-                for (int j = 0; j < mNearbyUsers.size(); j++) {
-                    Geolocation nearby = mNearbyUsers.get(j);
-                    if (ann.getFrom().equals(nearby.getUsername()) || ann.getFrom().equals(db.getUsername())) {
-                        addNewAnnouncement(ann);
-                    }
-                }
-            }
-        }
-
-        db.close();
-    }
 
     public static void addNewAnnouncement(final Announcement ann) {
 
@@ -898,6 +878,28 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
     }
 
+    private void downloadReceivedBroadcastsNearby() {
+
+        List<Announcement> broadcasts = Announcement.downloadOffline(GroupChatHomeActivity.this);
+
+        SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
+        db.openToRead();
+        if (broadcasts != null && !broadcasts.isEmpty() || mNearbyUsers != null && !mNearbyUsers.isEmpty()) {
+            for (int i = 0; i < broadcasts.size(); i++) {
+                Announcement ann = broadcasts.get(i);
+
+                for (int j = 0; j < mNearbyUsers.size(); j++) {
+                    Geolocation nearby = mNearbyUsers.get(j);
+                    if (ann.getFrom().equals(nearby.getUsername()) || ann.getFrom().equals(db.getUsername())) {
+                        addNewAnnouncement(ann);
+                    }
+                }
+            }
+        }
+
+        db.close();
+    }
+
     private class OnBroadcastMessageTask implements OnExecutePendingTaskListener {
 
         private final String msgToBroadcast;
@@ -1118,7 +1120,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 public void run() {
                     downloadNearbyUsers();
                     subscribeToUsers();
-                    downloadReceivedBroadcastsNearby();
+                    //downloadReceivedBroadcastsNearby();
                 }
             }).start();
 

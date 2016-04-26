@@ -403,7 +403,7 @@ public class UserProfile {
         SQLiteHandler db = new SQLiteHandler(context);
         db.openToRead();
         Map<String, String> map = db.downloadUserProfile(this.username);
-        // L.debug("UserProfile, downloadOffline: "+map.size());
+         L.debug("UserProfile, downloadOffline: "+map);
         if (map != null) {
 
             this.username = map.get(SQLiteHandler.USER_PROFILE_USERNAME);

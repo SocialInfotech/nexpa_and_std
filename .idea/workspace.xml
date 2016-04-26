@@ -19,16 +19,21 @@
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="nexpa" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="958fe86d-119b-466a-8f08-a477e4a694ab" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/GroupChatHomeActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/GroupChatHomeActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/openfire/XMPPManager$MMessageListener.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/openfire/XMPPManager$MMessageListener.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex" afterPath="$PROJECT_DIR$/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileSnapshots.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/taskArtifacts.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/UserProfile.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/UserProfile.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="nexpa_and_std.iws" />
@@ -67,11 +72,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GroupChatHomeActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GroupChatHomeActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5914634">
-              <caret line="496" column="95" selection-start-line="496" selection-start-column="95" selection-end-line="496" selection-end-column="95" />
+            <state vertical-scroll-proportion="-9.0">
+              <caret line="893" column="48" selection-start-line="893" selection-start-column="48" selection-end-line="893" selection-end-column="48" />
+              <folding>
+                <element signature="e#12109#12252#0" expanded="true" />
+                <element signature="e#12251#12252#0" expanded="true" />
+                <element signature="e#44966#45022#0" expanded="true" />
+                <element signature="e#45779#45815#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommentsFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/CommentsFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="305" column="0" selection-start-line="305" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChatHistoryListFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryListFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="385" column="78" selection-start-line="385" selection-start-column="78" selection-end-line="385" selection-end-column="78" />
               <folding />
             </state>
           </provider>
@@ -81,7 +111,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="841" column="68" selection-start-line="841" selection-start-column="68" selection-end-line="841" selection-end-column="68" />
+              <caret line="811" column="43" selection-start-line="811" selection-start-column="43" selection-end-line="811" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -106,15 +136,13 @@
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="1975" column="58" selection-start-line="1975" selection-start-column="58" selection-end-line="1975" selection-end-column="58" />
+              <caret line="551" column="31" selection-start-line="551" selection-start-column="31" selection-end-line="551" selection-end-column="31" />
               <folding>
                 <element signature="e#47995#48011#0" expanded="true" />
                 <element signature="e#50077#50093#0" expanded="true" />
                 <element signature="e#51567#51577#0" expanded="true" />
                 <element signature="e#54815#54827#0" expanded="true" />
                 <element signature="e#55900#55912#0" expanded="true" />
-                <element signature="e#65514#65515#0" expanded="true" />
-                <element signature="e#65581#65582#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -125,9 +153,27 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="209" column="41" selection-start-line="209" selection-start-column="41" selection-end-line="209" selection-end-column="41" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MyBroadcastsFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="384" column="55" selection-start-line="384" selection-start-column="55" selection-end-line="384" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserProfile.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/UserProfile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.37956205">
+              <caret line="297" column="0" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1122,7 +1168,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/UserProfile.java" />
         <option value="$PROJECT_DIR$/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/res/layout/activity_userprofile_header.xml" />
         <option value="$PROJECT_DIR$/res/layout/activity_profile_personal.xml" />
@@ -1137,7 +1182,6 @@
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/PeopleProfileActivity.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/res/layout/list_comment.xml" />
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/TabHostActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/CommentsActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/CommentsFragment.java" />
@@ -1145,7 +1189,6 @@
         <option value="$PROJECT_DIR$/res/layout/fragment_chat_history_list.xml" />
         <option value="$PROJECT_DIR$/res/layout/row_chat_history.xml" />
         <option value="$PROJECT_DIR$/res/layout/list_broadcast.xml" />
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/AroundMeActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/EditProfileFragment.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryListFragment.java" />
@@ -1154,7 +1197,10 @@
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/DeleteMessageArchiveIQ.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryOptionsFragment.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/UserProfile.java" />
       </list>
     </option>
   </component>
@@ -1629,14 +1675,29 @@
       <option name="project" value="LOCAL" />
       <updated>1461572825539</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="-enable commenting on users own broadcast.">
+      <created>1461633181709</created>
+      <option name="number" value="00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1461633181709</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1932" height="1056" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1644,7 +1705,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26140156" sideWeight="0.5021322" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.56395996" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28253615" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20689656" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1653,6 +1714,8 @@
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20459402" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18055555" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -1661,11 +1724,9 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1702,7 +1763,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java</url>
-          <line>1026</line>
+          <line>1028</line>
           <properties />
         </line-breakpoint>
       </breakpoints>
@@ -1711,17 +1772,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/res/layout/content_comments.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/toolbar.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -1962,13 +2012,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/CommentsFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="4.6093116">
-          <caret line="337" column="66" selection-start-line="337" selection-start-column="66" selection-end-line="337" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/list_comment.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -1988,16 +2031,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="59" column="56" selection-start-line="59" selection-start-column="56" selection-end-line="59" selection-end-column="56" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="410" column="28" selection-start-line="410" selection-start-column="28" selection-end-line="410" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2029,14 +2062,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.827586">
           <caret line="65" column="56" selection-start-line="65" selection-start-column="41" selection-end-line="65" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryListFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="513" column="43" selection-start-line="513" selection-start-column="43" selection-end-line="513" selection-end-column="43" />
           <folding />
         </state>
       </provider>
@@ -2081,32 +2106,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/UserProfileActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="209" column="41" selection-start-line="209" selection-start-column="41" selection-end-line="209" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1975" column="58" selection-start-line="1975" selection-start-column="58" selection-end-line="1975" selection-end-column="58" />
-          <folding>
-            <element signature="e#47995#48011#0" expanded="true" />
-            <element signature="e#50077#50093#0" expanded="true" />
-            <element signature="e#51567#51577#0" expanded="true" />
-            <element signature="e#54815#54827#0" expanded="true" />
-            <element signature="e#55900#55912#0" expanded="true" />
-            <element signature="e#65514#65515#0" expanded="true" />
-            <element signature="e#65581#65582#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/MessageArchiveWithIQ.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2139,6 +2138,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2224299">
           <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2152,14 +2152,6 @@
             <element signature="e#579#580#0" expanded="false" />
             <element signature="e#632#633#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="841" column="68" selection-start-line="841" selection-start-column="68" selection-end-line="841" selection-end-column="68" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2199,8 +2191,75 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5914634">
-          <caret line="496" column="95" selection-start-line="496" selection-start-column="95" selection-end-line="496" selection-end-column="95" />
+        <state vertical-scroll-proportion="-9.0">
+          <caret line="893" column="48" selection-start-line="893" selection-start-column="48" selection-end-line="893" selection-end-column="48" />
+          <folding>
+            <element signature="e#12109#12252#0" expanded="true" />
+            <element signature="e#12251#12252#0" expanded="true" />
+            <element signature="e#44966#45022#0" expanded="true" />
+            <element signature="e#45779#45815#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/CommentsFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="305" column="0" selection-start-line="305" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryListFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="385" column="78" selection-start-line="385" selection-start-column="78" selection-end-line="385" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="811" column="43" selection-start-line="811" selection-start-column="43" selection-end-line="811" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="551" column="31" selection-start-line="551" selection-start-column="31" selection-end-line="551" selection-end-column="31" />
+          <folding>
+            <element signature="e#47995#48011#0" expanded="true" />
+            <element signature="e#50077#50093#0" expanded="true" />
+            <element signature="e#51567#51577#0" expanded="true" />
+            <element signature="e#54815#54827#0" expanded="true" />
+            <element signature="e#55900#55912#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/UserProfileActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="209" column="41" selection-start-line="209" selection-start-column="41" selection-end-line="209" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/MyBroadcastsFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="384" column="55" selection-start-line="384" selection-start-column="55" selection-end-line="384" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/UserProfile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.37956205">
+          <caret line="297" column="0" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
           <folding />
         </state>
       </provider>

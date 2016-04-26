@@ -375,7 +375,7 @@ public class MyBroadcastsFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
+                L.debug("updateUI");
                 //*/
                 SQLiteHandler db = new SQLiteHandler(getActivity());
                 db.openToRead();

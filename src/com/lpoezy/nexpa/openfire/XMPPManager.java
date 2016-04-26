@@ -857,9 +857,9 @@ public class XMPPManager {
 
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if (eventType == XmlPullParser.START_DOCUMENT) {
-                        L.debug("Start document");
+                        //L.debug("Start document");
                     } else if (eventType == XmlPullParser.START_TAG) {
-                        L.debug("Start tag " + xpp.getName());
+                        //L.debug("Start tag " + xpp.getName());
                         switch (xpp.getName()) {
                             case "item":
                                 itemId = xpp.getAttributeValue("", "id");
@@ -880,7 +880,7 @@ public class XMPPManager {
                     eventType = xpp.next();
                 }
 
-                L.debug("End document");
+                //L.debug("End document");
             } catch (XmlPullParserException e) {
                 L.error(e.getMessage());
             } catch (IOException e) {

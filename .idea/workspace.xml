@@ -23,84 +23,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="958fe86d-119b-466a-8f08-a477e4a694ab" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryOptionsFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/DeleteMessageArchiveIQ.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/layout/fragment_chat_history_options.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/AroundMeActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatActivity$ChatAdapter$ViewHolder.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatActivity$ChatAdapter$ViewHolder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatActivity$ChatAdapter.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatActivity$ChatAdapter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$1.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$2.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$3.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$ChatHistoryAdapter$ViewHolder.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$ChatHistoryAdapter$ViewHolder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$ChatHistoryAdapter.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$ChatHistoryAdapter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$OnShowChatHistoryListener.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment$OnShowChatHistoryListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatHistoryListFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatLoginActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ChatLoginActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/CustomGrid.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/CustomGrid.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/EditProfileFragment$2.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/EditProfileFragment$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/EditProfileFragment.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/EditProfileFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ForgotPasswordActivity$3.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ForgotPasswordActivity$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ForgotPasswordActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ForgotPasswordActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MyBroadcastsFragment$2.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MyBroadcastsFragment$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MyBroadcastsFragment$ViewHolder.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MyBroadcastsFragment$ViewHolder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MyBroadcastsFragment.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/MyBroadcastsFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/OthersBroadcastsFragment$1.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/OthersBroadcastsFragment$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/OthersBroadcastsFragment$ViewHolder.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/OthersBroadcastsFragment$ViewHolder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/OthersBroadcastsFragment.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/OthersBroadcastsFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/PeopleActivity$CreateNewProduct$LoadAllProducts$1.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/PeopleActivity$CreateNewProduct$LoadAllProducts$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/PeopleActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/PeopleActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ProfilePicFragment.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/ProfilePicFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/android/support/v7/appcompat/R$id.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/android/support/v7/appcompat/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/R$id.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/base/R$id.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/base/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/gcm/R$id.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/gcm/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/measurement/R$id.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/measurement/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$id.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$integer.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$integer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/android/support/v7/appcompat/R$layout.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/android/support/v7/appcompat/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/R$layout.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/base/R$layout.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/base/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/gcm/R$layout.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/gcm/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/measurement/R$layout.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/google/android/gms/measurement/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$layout.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$menu.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$menu.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$string.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$string.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$style.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$style.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$styleable.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/R$styleable.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/chatservice/RegistrationIntentService.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/chatservice/RegistrationIntentService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/sqlite/SQLiteHandler.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/sqlite/SQLiteHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity$1.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity$4$1.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity$4$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity$4$2.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity$4$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity$4.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/SearchPostActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/TabHostActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/TabHostActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/UserProfileActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lpoezy/nexpa/activities/UserProfileActivity.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex" afterPath="$PROJECT_DIR$/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/res/resources-debug.ap_" afterPath="$PROJECT_DIR$/build/intermediates/res/resources-debug.ap_" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.8/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryActivity.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryListFragment.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/EditProfileFragment.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/EditProfileFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/generated/source/r/debug/android/support/v7/appcompat/R.java" afterPath="$PROJECT_DIR$/build/generated/source/r/debug/android/support/v7/appcompat/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/generated/source/r/debug/com/google/android/gms/R.java" afterPath="$PROJECT_DIR$/build/generated/source/r/debug/com/google/android/gms/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/generated/source/r/debug/com/google/android/gms/base/R.java" afterPath="$PROJECT_DIR$/build/generated/source/r/debug/com/google/android/gms/base/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/generated/source/r/debug/com/google/android/gms/gcm/R.java" afterPath="$PROJECT_DIR$/build/generated/source/r/debug/com/google/android/gms/gcm/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/generated/source/r/debug/com/google/android/gms/measurement/R.java" afterPath="$PROJECT_DIR$/build/generated/source/r/debug/com/google/android/gms/measurement/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/generated/source/r/debug/com/lpoezy/nexpa/R.java" afterPath="$PROJECT_DIR$/build/generated/source/r/debug/com/lpoezy/nexpa/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/symbols/debug/R.txt" afterPath="$PROJECT_DIR$/build/intermediates/symbols/debug/R.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/layout.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/single/layout.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugResources/merger.xml" afterPath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugResources/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/strings.xml" afterPath="$PROJECT_DIR$/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/blame/res/debug/multi/values.json" afterPath="$PROJECT_DIR$/build/intermediates/blame/res/debug/multi/values.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/res/merged/debug/values/values.xml" afterPath="$PROJECT_DIR$/build/intermediates/res/merged/debug/values/values.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java" afterPath="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="nexpa_and_std.iws" />
@@ -133,62 +61,17 @@
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ProfilePicFragment.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
+              <caret line="32" column="56" selection-start-line="32" selection-start-column="55" selection-end-line="32" selection-end-column="56" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ChatHistoryOptionsFragment.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryOptionsFragment.java">
+      <file leaf-file-name="GroupChatHomeActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.96517414">
-              <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-              <folding>
-                <element signature="e#1952#2735#0" expanded="true" />
-                <element signature="e#2043#2715#0" expanded="true" />
-                <element signature="e#2714#2715#0" expanded="true" />
-                <element signature="e#2734#2735#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageArchiveWithIQ.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/MessageArchiveWithIQ.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="28" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ListOfCollectionsIQ.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/ListOfCollectionsIQ.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DeleteMessageArchiveIQ.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/DeleteMessageArchiveIQ.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="XMPPService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/chatservice/XMPPService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="41" column="56" selection-start-line="41" selection-start-column="41" selection-end-line="41" selection-end-column="56" />
+            <state vertical-scroll-proportion="0.5914634">
+              <caret line="496" column="95" selection-start-line="496" selection-start-column="95" selection-end-line="496" selection-end-column="95" />
               <folding />
             </state>
           </provider>
@@ -209,7 +92,12 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="73" column="19" selection-start-line="68" selection-start-column="7" selection-end-line="73" selection-end-column="19" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#329#342#0" expanded="false" />
+                <element signature="e#579#580#0" expanded="false" />
+                <element signature="e#632#633#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -217,7 +105,7 @@
       <file leaf-file-name="SQLiteHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.068966">
+            <state vertical-scroll-proportion="0.0">
               <caret line="1975" column="58" selection-start-line="1975" selection-start-column="58" selection-end-line="1975" selection-end-column="58" />
               <folding>
                 <element signature="e#47995#48011#0" expanded="true" />
@@ -235,9 +123,11 @@
       <file leaf-file-name="UserProfileActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/UserProfileActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.103448">
+            <state vertical-scroll-proportion="0.0">
               <caret line="209" column="41" selection-start-line="209" selection-start-column="41" selection-end-line="209" selection-end-column="41" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -259,7 +149,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="development" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
   </component>
@@ -1248,7 +1138,6 @@
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/res/layout/list_comment.xml" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/openfire/XMPPManager.java" />
-        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/TabHostActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/CommentsActivity.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/CommentsFragment.java" />
@@ -1265,6 +1154,7 @@
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/objects/DeleteMessageArchiveIQ.java" />
         <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryOptionsFragment.java" />
+        <option value="$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java" />
       </list>
     </option>
   </component>
@@ -1300,222 +1190,8 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Gradle Scripts" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="openfire" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="objects" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chatservice" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="activities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nexpa_and_std" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1561,6 +1237,110 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa_and_std" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nexpa" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="activities" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1843,7 +1623,13 @@
       <option name="project" value="LOCAL" />
       <updated>1461221711606</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="-added delete chat history click listener">
+      <created>1461572825539</created>
+      <option name="number" value="00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1461572825539</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1859,16 +1645,14 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.56395996" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29810902" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20689656" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18803419" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20459402" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18055555" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -1877,8 +1661,10 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1907,7 +1693,9 @@
     <MESSAGE value="-removed unused imports" />
     <MESSAGE value="-Fxed cat his showing only two chat messages" />
     <MESSAGE value="-merge with dev success" />
-    <option name="LAST_COMMIT_MESSAGE" value="-merge with dev success" />
+    <MESSAGE value="-added delete chat history click listener" />
+    <MESSAGE value="-enable commenting on users own broadcast." />
+    <option name="LAST_COMMIT_MESSAGE" value="-enable commenting on users own broadcast." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1924,58 +1712,58 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/res/layout/content_comments.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/toolbar.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/toolbar.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4074074">
           <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_chat_history.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/activity_chat_history.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.29651162">
           <caret line="9" column="60" selection-start-line="9" selection-start-column="60" selection-end-line="9" selection-end-column="60" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_comments.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/activity_comments.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="39" selection-start-line="6" selection-start-column="39" selection-end-line="6" selection-end-column="39" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/layoutmain.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/layoutmain.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.58237547">
           <caret line="49" column="79" selection-start-line="0" selection-start-column="0" selection-end-line="119" selection-end-column="15" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="jar://C:/adt-bundle-windows-x86_64-20130729/sdk/extras/android/m2repository/com/android/support/recyclerview-v7/23.2.1/recyclerview-v7-23.2.1-sources.jar!/android/support/v7/widget/RecyclerView.java">
@@ -2043,14 +1831,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_people_profile.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="40" selection-start-line="43" selection-start-column="40" selection-end-line="43" selection-end-column="40" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/PeopleProfileActivity.java">
@@ -2062,14 +1850,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/list_comments_header.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://C:/adt-bundle-windows-x86_64-20130729/sdk/sources/android-23/android/widget/LinearLayout.java">
@@ -2134,36 +1922,36 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/fragment_comments.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="44" column="35" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="35" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/fragment_chat_history_list.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/fragment_chat_history_list.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/row_chat_history.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/row_chat_history.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="47" selection-start-line="43" selection-start-column="47" selection-end-line="43" selection-end-column="47" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatActivity.java">
@@ -2182,34 +1970,24 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/list_comment.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="41" column="56" selection-start-line="35" selection-start-column="12" selection-end-line="41" selection-end-column="56" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/list_broadcast.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/list_broadcast.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="59" column="56" selection-start-line="59" selection-start-column="56" selection-end-line="59" selection-end-column="56" />
           <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="439" column="13" selection-start-line="439" selection-start-column="13" selection-end-line="439" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2245,14 +2023,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_profile_personal.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.827586">
           <caret line="65" column="56" selection-start-line="65" selection-start-column="41" selection-end-line="65" selection-end-column="56" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryListFragment.java">
@@ -2264,17 +2042,20 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/fragment_profile_pic.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.7586207">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/fragment_chat_history_options.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/fragment_chat_history_options.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-4.6896553">
           <caret line="8" column="48" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="48" />
@@ -2282,9 +2063,6 @@
             <element signature="e#826#855#0" expanded="true" />
           </folding>
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryActivity.java">
@@ -2305,23 +2083,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/UserProfileActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.103448">
-          <caret line="209" column="41" selection-start-line="209" selection-start-column="41" selection-end-line="209" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ProfilePicFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
-          <folding />
+          <caret line="209" column="41" selection-start-line="209" selection-start-column="41" selection-end-line="209" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/sqlite/SQLiteHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.068966">
+        <state vertical-scroll-proportion="0.0">
           <caret line="1975" column="58" selection-start-line="1975" selection-start-column="58" selection-end-line="1975" selection-end-column="58" />
           <folding>
             <element signature="e#47995#48011#0" expanded="true" />
@@ -2347,7 +2119,19 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1813#1814#0" expanded="false" />
+            <element signature="e#1844#1845#0" expanded="false" />
+            <element signature="e#1981#1982#0" expanded="false" />
+            <element signature="e#2021#2022#0" expanded="false" />
+            <element signature="e#2067#2068#0" expanded="false" />
+            <element signature="e#2109#2110#0" expanded="false" />
+            <element signature="e#2145#2146#0" expanded="false" />
+            <element signature="e#2180#2181#0" expanded="false" />
+            <element signature="e#2216#2217#0" expanded="false" />
+            <element signature="e#2252#2253#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2355,7 +2139,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2224299">
           <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2363,7 +2146,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="73" column="19" selection-start-line="68" selection-start-column="7" selection-end-line="73" selection-end-column="19" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#329#342#0" expanded="false" />
+            <element signature="e#579#580#0" expanded="false" />
+            <element signature="e#632#633#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2387,20 +2175,33 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ChatHistoryOptionsFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.96517414">
-          <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-          <folding>
-            <element signature="e#1952#2735#0" expanded="true" />
-            <element signature="e#2043#2715#0" expanded="true" />
-            <element signature="e#2714#2715#0" expanded="true" />
-            <element signature="e#2734#2735#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.89927006">
+          <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/ProfilePicFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="56" selection-start-line="32" selection-start-column="55" selection-end-line="32" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lpoezy/nexpa/activities/GroupChatHomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5914634">
+          <caret line="496" column="95" selection-start-line="496" selection-start-column="95" selection-end-line="496" selection-end-column="95" />
+          <folding />
         </state>
       </provider>
     </entry>

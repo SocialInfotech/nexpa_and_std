@@ -490,9 +490,9 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 db.openToRead();
                 String uname = db.getUsername();
                 db.close();
-                if (tvBroadFrm.getText().toString().equals(uname)) {
-                    return;
-                }
+//                if (tvBroadFrm.getText().toString().equals(uname)) {
+//                    return;
+//                }
 
                 Intent intent = new Intent(GroupChatHomeActivity.this, CommentsActivity.class);
                 String locLocal = (mAddress != null && !mAddress.isEmpty()) ? mAddress : "";

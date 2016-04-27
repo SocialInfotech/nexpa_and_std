@@ -56,7 +56,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class MyBroadcastsFragment extends Fragment {
+public class MyBroadcastsFragment extends Fragment implements XMPPService.OnServiceConnectedListener {
 
 
     List<Announcement> mAnouncements;
@@ -100,7 +100,11 @@ public class MyBroadcastsFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
 
             //resetProfilePic();
-            updateUI();
+           // updateUI();
+
+            if(mService!=null){
+                mService.onExecutePendingTask(new OnUpdateUi());
+            }
         }
     };
 
@@ -191,6 +195,19 @@ public class MyBroadcastsFragment extends Fragment {
         mTvUrl1 = (TextView) header.findViewById(R.id.tv_url1);
         mTvUrl2 = (TextView) header.findViewById(R.id.tv_url2);
 
+        mTvDescription.setVisibility(View.GONE);
+        //mTvUname.setVisibility(View.GONE);
+
+        SQLiteHandler db = new SQLiteHandler(getActivity());
+        db.openToRead();
+        mTvUname.setText(db.getUsername());
+        db.close();
+
+
+        mTvUrl0.setVisibility(View.GONE);
+        mTvUrl1.setVisibility(View.GONE);
+        mTvUrl2.setVisibility(View.GONE);
+
 
         ((ImageView) header.findViewById(R.id.img_settings)).setOnClickListener(new View.OnClickListener() {
 
@@ -224,6 +241,27 @@ public class MyBroadcastsFragment extends Fragment {
         super.onPause();
 
         getActivity().unregisterReceiver(mActionUserProfileUpdatedReceived);
+    }
+
+    protected XMPPService mService;
+    protected boolean mBounded;
+
+    @Override
+    public void OnServiceConnected(XMPPService service) {
+
+        mService = service;
+        mBounded = true;
+        mService.onExecutePendingTask(new OnUpdateUi());
+
+    }
+
+    @Override
+    public void OnServiceDisconnected() {
+
+        mService = null;
+        mBounded = false;
+
+
     }
 
 
@@ -365,9 +403,32 @@ public class MyBroadcastsFragment extends Fragment {
         retrieveMyOwnBroadcast.onExecutePendingTask();
 
         //resetProfilePic();
-        updateUI();
+        //updateUI();
 
     }
+
+    private class  OnUpdateUi implements OnExecutePendingTaskListener{
+        @Override
+        public void onExecutePendingTask() {
+            if (!XMPPService.xmpp.connection.isConnected()) {
+
+
+
+                XMPPManager.getInstance(getActivity()).instance = null;
+
+                XMPPService.xmpp = XMPPManager.getInstance(getActivity());
+
+                XMPPService.xmpp.connect("onCreate");
+
+            } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+                XMPPService.xmpp.login();
+            } else {
+
+                updateUI();
+            }
+        }
+    };
 
 
     private void updateUI() {
@@ -382,41 +443,54 @@ public class MyBroadcastsFragment extends Fragment {
 
                 final UserProfile profile = new UserProfile();
                 profile.setUsername(db.getUsername());
-                profile.downloadOffline(getActivity());
+                //profile.downloadOffline(getActivity());
+                profile.loadVCard(XMPPService.xmpp.connection);
 
-                 Bitmap rawImage = BitmapFactory.decodeResource(getActivity().getResources(),
+                mAvatar = BitmapFactory.decodeResource(getActivity().getResources(),
                         R.drawable.pic_sample_girl);
 
                 
 
-                if (profile.getAvatarDir() != null && !profile.getAvatarDir().isEmpty()) {
+//                if (profile.getAvatarDir() != null && !profile.getAvatarDir().isEmpty()) {
+//
+//                    // Get the dimensions of the View
+//                    int targetW = mImgProfile.getWidth();
+//                    int targetH = mImgProfile.getHeight();
+//
+//                    BmpFactory bmpFactory = new BmpFactory();
+//
+//                    Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, profile.getAvatarDir());
+//
+//                    if (newImage != null) rawImage = newImage;
+//                }
 
-                    // Get the dimensions of the View
-                    int targetW = mImgProfile.getWidth();
-                    int targetH = mImgProfile.getHeight();
+                if(profile.getAvatarImg()!=null){
 
-                    BmpFactory bmpFactory = new BmpFactory();
+                    mAvatar = profile.getAvatarImg();
 
-                    Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, profile.getAvatarDir());
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    if (newImage != null) rawImage = newImage;
+                            mImgProfile.setImageBitmap(mAvatar);
+                            mAdapter.notifyDataSetChanged();
+
+
+                        }
+                    });
                 }
-                mAvatar = rawImage;
+                //mAvatar = rawImage;
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
 
-                        if(mAvatar!=null)
-                            mAdapter.notifyDataSetChanged();
+//                        if(mAvatar!=null)
+//                            mAdapter.notifyDataSetChanged();
+//
+//                        mImgProfile.setImageBitmap(mAvatar);
 
-                        mImgProfile.setImageBitmap(mAvatar);
 
-                        mTvDescription.setVisibility(View.GONE);
-                        mTvUname.setVisibility(View.GONE);
-                        mTvUrl0.setVisibility(View.GONE);
-                        mTvUrl1.setVisibility(View.GONE);
-                        mTvUrl2.setVisibility(View.GONE);
 
 
                         if (profile.getDescription() != null && !profile.getDescription().equals("")) {

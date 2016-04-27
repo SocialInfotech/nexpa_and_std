@@ -145,12 +145,21 @@ public class UserProfileActivity extends AppCompatActivity
 	protected void onPause() {
 		super.onPause();
 
+		MyBroadcastsFragment frag = (MyBroadcastsFragment) getFragmentManager().findFragmentByTag("MyBroadcasts");
+		XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) frag;
+		onServiceConnectedListener.OnServiceDisconnected();
 
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		if (((TabHostActivity) getParent()).getService()!=null) {
+			MyBroadcastsFragment frag = (MyBroadcastsFragment) getFragmentManager().findFragmentByTag("MyBroadcasts");
+			XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) frag;
+			onServiceConnectedListener.OnServiceConnected(((TabHostActivity) getParent()).getService());
+		}
 
 	}
 
@@ -187,14 +196,29 @@ public class UserProfileActivity extends AppCompatActivity
 	static TextView edtStatus1;
 
 	private static ProgressDialog pDialog;
-
+	protected XMPPService mService;
+	protected boolean mBounded;
 	@Override
 	public void OnServiceConnected(XMPPService service) {
+
+		mService = service;
+		mBounded = true;
+
+		MyBroadcastsFragment frag = (MyBroadcastsFragment) getFragmentManager().findFragmentByTag("MyBroadcasts");
+		XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) frag;
+		onServiceConnectedListener.OnServiceConnected(mService);
 
 	}
 
 	@Override
 	public void OnServiceDisconnected() {
+
+		mService = null;
+		mBounded = false;
+
+		MyBroadcastsFragment frag = (MyBroadcastsFragment) getFragmentManager().findFragmentByTag("MyBroadcasts");
+		XMPPService.OnServiceConnectedListener onServiceConnectedListener = (XMPPService.OnServiceConnectedListener) frag;
+		onServiceConnectedListener.OnServiceDisconnected();
 
 	}
 
@@ -207,6 +231,7 @@ public class UserProfileActivity extends AppCompatActivity
 
 	@Override
 	public void onShowProfilePicScreen() {
+
 		profPicDialog = ProfilePicFragment.newInstance();
 
 		profPicDialog.show(getFragmentManager().beginTransaction(), ProfilePicFragment.TAG);

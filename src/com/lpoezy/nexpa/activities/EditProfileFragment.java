@@ -3,11 +3,17 @@ package com.lpoezy.nexpa.activities;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +25,13 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.ProfilePicture;
 import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.sqlite.SQLiteHandler;
 import com.lpoezy.nexpa.utility.BmpFactory;
 import com.lpoezy.nexpa.utility.DateUtils;
@@ -33,6 +42,8 @@ import com.lpoezy.nexpa.utility.Utilz;
 public class EditProfileFragment extends DialogFragment {
 
     public static final String TAG = "EditProfileFragment";
+    private Bitmap rawImage;
+    private String mUname;
 
     public static EditProfileFragment newInstance() {
         EditProfileFragment fragment = new EditProfileFragment();
@@ -77,12 +88,27 @@ public class EditProfileFragment extends DialogFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+
+    }
+
+    @Override
     public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
+        L.debug("Loading ...");
 
-        resetProfilePic();
-        resetProfileInfo();
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setCancelable(false);
+        pDialog.setMessage("Loading ...");
+        pDialog.show();
+        //resetProfilePic();
+        //resetProfileInfo();
+        if(((TabHostActivity) getActivity().getParent()).getService()!=null){
+            ((TabHostActivity) getActivity().getParent()).getService().onExecutePendingTask(new OnResetProfileInfo());
+        }
     }
 
     @Override
@@ -119,6 +145,12 @@ public class EditProfileFragment extends DialogFragment {
         edtUrl0 = (EditText) v.findViewById(R.id.edt_url0);
         edtUrl1 = (EditText) v.findViewById(R.id.edt_url1);
         edtUrl2 = (EditText) v.findViewById(R.id.edt_url2);
+
+        SQLiteHandler db = new SQLiteHandler(getActivity());
+        db.openToRead();
+        mUname = db.getUsername();
+        db.close();
+
 
         return v;
     }
@@ -189,92 +221,125 @@ public class EditProfileFragment extends DialogFragment {
 
     }
 
+    protected XMPPService mService;
+    protected boolean mBounded;
+
+
+
+    private class OnResetProfileInfo implements OnExecutePendingTaskListener{
+        @Override
+        public void onExecutePendingTask() {
+            if (!XMPPService.xmpp.connection.isConnected()) {
+
+                XMPPManager.getInstance(getActivity()).instance = null;
+
+                XMPPService.xmpp = XMPPManager.getInstance(getActivity());
+
+                XMPPService.xmpp.connect("onCreate");
+
+            } else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+                XMPPService.xmpp.login();
+            } else {
+                resetProfileInfo();
+            }
+        }
+    };
+
     private void resetProfileInfo() {
         L.debug("reset profile");
-        SQLiteHandler db = new SQLiteHandler(getActivity());
-        db.openToRead();
-        UserProfile userProfile = new UserProfile();
-        userProfile.setUsername(db.getUsername());
-        userProfile.downloadOffline(getActivity());
+
+
+        final UserProfile userProfile = new UserProfile();
+        userProfile.setUsername(mUname);
+
+       rawImage = BitmapFactory.decodeResource(getResources(), R.drawable.pic_sample_girl);
+
+        profilePic.setImageBitmap(rawImage);
 
         edtName.setText(userProfile.getUsername());
 
-        if (userProfile.getDescription() != null) {
-            edtDescription.setText(userProfile.getDescription());
-            edtDescription.setSelection(userProfile.getDescription().length());
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        if (userProfile.getProfession() != null) {
-            edtProfession.setText(userProfile.getProfession());
-            edtProfession.setSelection(userProfile.getProfession().length());
-        }
 
-        if (userProfile.getUrl0() != null) {
-            edtUrl0.setText(userProfile.getUrl0());
-            edtUrl0.setSelection(userProfile.getUrl0().length());
-        }
+                //userProfile.downloadOffline(getActivity());
+                userProfile.loadVCard(XMPPService.xmpp.connection);
 
-        if (userProfile.getUrl1() != null) {
-            edtUrl1.setText(userProfile.getUrl1());
-            edtUrl1.setSelection(userProfile.getUrl1().length());
-        }
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
 
-        if (userProfile.getUrl2() != null) {
-            edtUrl2.setText(userProfile.getUrl2());
-            edtUrl2.setSelection(userProfile.getUrl2().length());
-        }
+                        edtName.setText(userProfile.getUsername());
+                        String imgDecodableString = Utilz.getDataFrmSharedPref(getActivity().getApplicationContext(), UserProfile.AVATAR_DIR, "");
+                        if (imgDecodableString != null && !imgDecodableString.equalsIgnoreCase("")) {
+                            // Get the dimensions of the View
+                            int targetW = profilePic.getWidth();
+                            int targetH = profilePic.getHeight();
 
-        db.close();
+                            BmpFactory bmpFactory = new BmpFactory();
+                            Bitmap newImage = bmpFactory.getBmpWithTargetWTargetHFrm(targetW, targetH, imgDecodableString);
+                            if (newImage != null) rawImage = newImage;
+
+                        } else  {
+                            if(userProfile.getAvatarImg() != null){
+                                rawImage = userProfile.getAvatarImg();
+                            }
+
+
+                        }
+
+                        profilePic.setImageBitmap(rawImage);
+
+
+                        if (userProfile.getDescription() != null) {
+                            edtDescription.setText(userProfile.getDescription());
+                            edtDescription.setSelection(userProfile.getDescription().length());
+                        }
+
+                        if (userProfile.getProfession() != null) {
+                            edtProfession.setText(userProfile.getProfession());
+                            edtProfession.setSelection(userProfile.getProfession().length());
+                        }
+
+                        if (userProfile.getUrl0() != null) {
+                            edtUrl0.setText(userProfile.getUrl0());
+                            edtUrl0.setSelection(userProfile.getUrl0().length());
+                        }
+
+                        if (userProfile.getUrl1() != null) {
+                            edtUrl1.setText(userProfile.getUrl1());
+                            edtUrl1.setSelection(userProfile.getUrl1().length());
+                        }
+
+                        if (userProfile.getUrl2() != null) {
+                            edtUrl2.setText(userProfile.getUrl2());
+                            edtUrl2.setSelection(userProfile.getUrl2().length());
+                        }
+
+                        if(pDialog!=null){
+                            pDialog.dismiss();
+                            pDialog = null;
+                        }
+                    }
+                });
+
+
+            }
+        }).start();
+
+
     }
 
     private void resetProfilePic() {
 
 
         if (profilePic != null) {
-            String imgDecodableString = Utilz.getDataFrmSharedPref(getActivity().getApplicationContext(), UserProfile.AVATAR_DIR, "");
 
-//            if (mProfilePicture == null) mProfilePicture = new ProfilePicture();
-//            //ProfilePicture pic = new ProfilePicture();
-////			pic.setUserId(userId);
-////			pic.downloadOffline(getActivity());
-//
-//            long userId = -1;
-//            SQLiteHandler db = new SQLiteHandler(getActivity());
-//            db.openToRead();
-//            //userId = Long.parseLong(db.getLoggedInID());
-//            //mProfilePicture.setUserId(userId);
-//            db.close();
-
-
-//            if (imgDecodableString != null && !imgDecodableString.equalsIgnoreCase("")) {
-//                int pos = imgDecodableString.lastIndexOf("/");
-//
-//                String imgDir = imgDecodableString.substring(0, pos);
-//                String imgFile = Uri.parse(imgDecodableString).getLastPathSegment();
-//
-//                mProfilePicture.setImgDir(imgDir);
-//                mProfilePicture.setImgFile(imgFile);
-//
-//            } else {
-//
-//                mProfilePicture.downloadOffline(getActivity());
-//                imgDecodableString = mProfilePicture.getImgDir() + "/" + mProfilePicture.getImgFile();
-//            }
-
-
-            //ProfilePicture pic = new ProfilePicture(userId, imgDir, imgFile, dateCreated, isSyncedOnline);
-            //pic.saveOffline(getActivity());
-
-
-//			ProfilePicture pic = new ProfilePicture();
-//			pic.setUserId(userId);
-//			pic.downloadOffline(getActivity());
-//
-//			
-//			String imgDecodableString = pic.getImgDir() + "/" + pic.getImgFile();
 
             Bitmap rawImage = BitmapFactory.decodeResource(getResources(), R.drawable.pic_sample_girl);
-
+            String imgDecodableString = Utilz.getDataFrmSharedPref(getActivity().getApplicationContext(), UserProfile.AVATAR_DIR, "");
             if (imgDecodableString != null && !imgDecodableString.equalsIgnoreCase("")) {
                 L.debug("SettingsActivity, imgDecodableString " + imgDecodableString);
                 // Get the dimensions of the View

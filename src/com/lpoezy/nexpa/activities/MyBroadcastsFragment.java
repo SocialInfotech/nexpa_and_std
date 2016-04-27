@@ -3,6 +3,7 @@ package com.lpoezy.nexpa.activities;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -64,6 +65,7 @@ public class MyBroadcastsFragment extends Fragment implements XMPPService.OnServ
     private RecyclerView mRvBroadcasts;
     protected String mUsername;
     private Bitmap mAvatar;
+    private ProgressDialog pDialog;
 
 
     public static MyBroadcastsFragment newInstance() {
@@ -228,6 +230,8 @@ public class MyBroadcastsFragment extends Fragment implements XMPPService.OnServ
                 EditProfileFragment editProfileFrag = EditProfileFragment.newInstance();
 
                 editProfileFrag.show(getFragmentManager().beginTransaction(), EditProfileFragment.TAG);
+
+                //editProfileFrag.OnServiceConnected(((TabHostActivity) getActivity().getParent()).getService());
 
             }
         });
@@ -405,6 +409,11 @@ public class MyBroadcastsFragment extends Fragment implements XMPPService.OnServ
         //resetProfilePic();
         //updateUI();
 
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setCancelable(false);
+        pDialog.setMessage("Loading ...");
+        pDialog.show();
+
     }
 
     private class  OnUpdateUi implements OnExecutePendingTaskListener{
@@ -516,6 +525,11 @@ public class MyBroadcastsFragment extends Fragment implements XMPPService.OnServ
                         if (profile.getUrl2() != null && !profile.getUrl2().equals("")) {
                             mTvUrl2.setVisibility(View.VISIBLE);
                             mTvUrl2.setText(profile.getUrl2());
+                        }
+
+                        if(pDialog!=null){
+                            pDialog.dismiss();
+                            pDialog = null;
                         }
 
                     }

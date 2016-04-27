@@ -34,6 +34,7 @@ android:orientation="vertical">
         
 		<Button android:id="@+id/dialogButtonOK"
 		android:layout_width="30dp" android:layout_height="30dp"
+			android:visibility="gone"
 		android:background="@drawable/btn_ok" />
 
 	</LinearLayout>

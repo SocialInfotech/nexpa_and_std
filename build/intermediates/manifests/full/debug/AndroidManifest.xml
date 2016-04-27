@@ -50,43 +50,70 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.lpoezy.nexpa.activities.PeopleActivity" />
-        <activity android:name="com.lpoezy.nexpa.activities.ForgotPasswordActivity" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.PeopleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lpoezy.nexpa.activities.TabHostActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name="com.lpoezy.nexpa.activities.SearchActivity" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.SearchActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lpoezy.nexpa.activities.ChatActivity"
             android:parentActivityName="com.lpoezy.nexpa.activities.TabHostActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.TabHostActivity" />
         </activity>
-        <activity android:name="com.lpoezy.nexpa.activities.CreateAccountActivity" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.CreateAccountActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lpoezy.nexpa.activities.PeopleProfileActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name="com.lpoezy.nexpa.activities.RegisterActivity" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.RegisterActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lpoezy.nexpa.activities.SearchPostActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name="com.lpoezy.nexpa.activities.LogInActivity" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.LogInActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lpoezy.nexpa.activities.GroupChatHomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name="com.lpoezy.nexpa.activities.GroupChatMainActivity" />
-        <activity android:name="com.lpoezy.nexpa.activities.ProfileActivity" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.GroupChatMainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.ProfileActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lpoezy.nexpa.activities.UserProfileActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.lpoezy.nexpa.activities.MainSignInActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name="com.lpoezy.nexpa.activities.GroupActivity" />
-        <activity android:name="com.lpoezy.nexpa.activities.AroundMeActivity" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.GroupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.AroundMeActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -94,7 +121,29 @@
 
         <activity
             android:name="com.lpoezy.nexpa.activities.ChatHistoryActivity"
-            android:label="@string/title_activity_chat_history" />
+            android:label="@string/title_activity_chat_history"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.OthersBroadcastActivity"
+            android:parentActivityName="com.lpoezy.nexpa.activities.GroupChatHomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.GroupChatHomeActivity" />
+        </activity>
+        <activity
+            android:name="com.lpoezy.nexpa.activities.BuddyRequestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lpoezy.nexpa.activities.CommentsActivity"
+            android:label="@string/title_activity_comments"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <service
             android:name="com.lpoezy.nexpa.chatservice.ChatMessagesService"
@@ -110,24 +159,9 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name="com.lpoezy.nexpa.activities.SettingsActivity"
-            android:theme="@style/AppTheme" />
-
         <service android:name="com.lpoezy.nexpa.chatservice.SyncDataService" />
         <service android:name="com.lpoezy.nexpa.chatservice.SyncUserProfileService" />
         <service android:name="com.lpoezy.nexpa.chatservice.SyncProfilePictureService" />
-
-        <activity
-            android:name="com.lpoezy.nexpa.activities.OthersBroadcastActivity"
-            android:parentActivityName="com.lpoezy.nexpa.activities.GroupChatHomeActivity"
-            android:theme="@style/AppTheme" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.GroupChatHomeActivity" />
-        </activity>
-        <activity android:name="com.lpoezy.nexpa.activities.BuddyRequestActivity" />
-
         <service
             android:name="com.lpoezy.nexpa.chatservice.XMPPService"
             android:enabled="true"
@@ -153,15 +187,6 @@
                 <category android:name="com.codepath.gcmquickstart" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name="com.lpoezy.nexpa.activities.Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name="com.lpoezy.nexpa.activities.CommentsActivity"
-            android:label="@string/title_activity_comments"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <provider
             android:name="com.google.android.gms.measurement.AppMeasurementContentProvider"

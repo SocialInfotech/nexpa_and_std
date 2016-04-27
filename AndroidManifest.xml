@@ -45,43 +45,64 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.PeopleActivity" />
-        <activity android:name=".activities.ForgotPasswordActivity" />
+        <activity android:name=".activities.PeopleActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.ForgotPasswordActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.TabHostActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.SearchActivity" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"
+
+            />
+        <activity android:name=".activities.SearchActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activities.ChatActivity"
             android:parentActivityName=".activities.TabHostActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.TabHostActivity" />
         </activity>
-        <activity android:name=".activities.CreateAccountActivity" />
+        <activity android:name=".activities.CreateAccountActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.PeopleProfileActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".activities.RegisterActivity" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.RegisterActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.SearchPostActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".activities.LogInActivity" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.LogInActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.GroupChatHomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activities.GroupChatMainActivity" />
-        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.GroupChatMainActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activities.ProfileActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.UserProfileActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.MainSignInActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activities.GroupActivity" />
-        <activity android:name=".activities.AroundMeActivity" />
+        <activity android:name=".activities.GroupActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.AroundMeActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -89,7 +110,32 @@
 
         <activity
             android:name=".activities.ChatHistoryActivity"
-            android:label="@string/title_activity_chat_history" />
+            android:label="@string/title_activity_chat_history"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+
+
+        <activity
+            android:name=".activities.OthersBroadcastActivity"
+            android:parentActivityName=".activities.GroupChatHomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.GroupChatHomeActivity" />
+        </activity>
+        <activity android:name=".activities.BuddyRequestActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activities.CommentsActivity"
+            android:label="@string/title_activity_comments"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name=".chatservice.ChatMessagesService"
@@ -105,23 +151,13 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:theme="@style/AppTheme" />
+
 
         <service android:name=".chatservice.SyncDataService" />
         <service android:name=".chatservice.SyncUserProfileService" />
         <service android:name=".chatservice.SyncProfilePictureService" />
 
-        <activity
-            android:name=".activities.OthersBroadcastActivity"
-            android:parentActivityName=".activities.GroupChatHomeActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.GroupChatHomeActivity" />
-        </activity>
-        <activity android:name=".activities.BuddyRequestActivity" />
+
 
         <service
             android:name=".chatservice.XMPPService"
@@ -149,14 +185,8 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".activities.Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".activities.CommentsActivity"
-            android:label="@string/title_activity_comments"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+
+
     </application>
 
 </manifest>

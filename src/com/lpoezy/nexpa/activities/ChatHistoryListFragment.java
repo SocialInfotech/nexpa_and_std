@@ -499,7 +499,7 @@ public class ChatHistoryListFragment extends Fragment implements Correspondent.O
                 imgProfilePic = (ImageView) view.findViewById(R.id.img_profile_pic);
 
                 view.setOnClickListener(this);
-                view.setOnLongClickListener(this);
+                //view.setOnLongClickListener(this);
             }
 
             @Override

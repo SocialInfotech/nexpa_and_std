@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,8 +19,6 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +51,6 @@ import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.configuration.AppConfig;
 import com.lpoezy.nexpa.objects.Announcement;
-import com.lpoezy.nexpa.objects.BroadcastComment;
 import com.lpoezy.nexpa.objects.Geolocation;
 import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.UserProfile;
@@ -65,13 +61,12 @@ import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.DividerItemDecoration;
 import com.lpoezy.nexpa.utility.HttpUtilz;
 import com.lpoezy.nexpa.utility.L;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.filter.StanzaFilter;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smackx.pubsub.AccessModel;
 import org.jivesoftware.smackx.pubsub.ConfigureForm;
 import org.jivesoftware.smackx.pubsub.ItemPublishEvent;
@@ -83,22 +78,16 @@ import org.jivesoftware.smackx.pubsub.PublishModel;
 import org.jivesoftware.smackx.pubsub.SimplePayload;
 import org.jivesoftware.smackx.pubsub.Subscription;
 import org.jivesoftware.smackx.pubsub.listener.ItemEventListener;
-import org.jivesoftware.smackx.time.packet.Time;
 import org.jivesoftware.smackx.xdata.packet.DataForm;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -138,7 +127,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
     DateUtils du;
     ListView mListView;
-    SimpleCursorAdapter mAdapter;
+    //SimpleCursorAdapter mAdapter;
     Handler mHandler;
     Handler mNotifier;
     Handler mRepeater;
@@ -166,10 +155,11 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
     private String mUsername;
     private RecyclerView mRvBroadcasts;
     public static List<Announcement> announcements;
-    public static BroadcastAdapter adapter;
+    private BroadcastAdapter mAdapter;
     public static boolean isRunning;
     private static boolean frmOnSavedInstance;
     private static boolean frmPause;
+    private SwipyRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onStop() {
@@ -284,14 +274,8 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         isRunning = true;
     }
 
-    public static void updateUI(Context context) {
 
-    }
-
-
-
-
-    public static void addNewAnnouncement(final Announcement ann) {
+    private  void addNewAnnouncement(final Announcement ann) {
 
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -327,7 +311,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                                     @Override
                                     public void run() {
 
-                                        adapter.notifyDataSetChanged();
+                                        mAdapter.notifyDataSetChanged();
 
                                     }
                                 });
@@ -343,7 +327,13 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
                     announcements.add(0, ann);
                     //Collections.reverse(announcements);
-                    adapter.notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
+
+
+
+
+
+
                 }
             }
         });
@@ -498,8 +488,8 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         mRvBroadcasts.setLayoutManager(new LinearLayoutManager(GroupChatHomeActivity.this));
         mRvBroadcasts.addItemDecoration(new DividerItemDecoration(GroupChatHomeActivity.this, DividerItemDecoration.VERTICAL_LIST));
         announcements = new ArrayList<Announcement>();
-        adapter = new BroadcastAdapter(GroupChatHomeActivity.this);
-        mRvBroadcasts.setAdapter(adapter);
+        mAdapter = new BroadcastAdapter(GroupChatHomeActivity.this);
+        mRvBroadcasts.setAdapter(mAdapter);
 
 
         lnBroadcast = (LinearLayout) findViewById(R.id.lnBroadcast);
@@ -520,6 +510,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         //btnOptions = (Button) findViewById(R.id.btnOptions);
         txtConnection = (TextView) findViewById(R.id.txt_broad_stat);
         txtConnection.setText("Connected To Server");
+        txtConnection.setVisibility(View.GONE);
         mGson = new Gson();
         mListView = (ListView) findViewById(R.id.listview);
 
@@ -571,6 +562,25 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         }
 
         createLocationRequest();
+
+        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.niagara, R.color.buttercup, R.color.niagara);
+        mSwipeRefreshLayout.setBackgroundColor(getResources().getColor(R.color.carrara));
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+
+                downloadReceivedBroadcastsNearby();
+            }
+        });
+
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
     }
 
     private void openDistanceDialog() {
@@ -896,6 +906,17 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 }
             }
         }
+          //L.debug("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv: "+broadcasts.size());
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(mSwipeRefreshLayout.isRefreshing()){
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+
 
         db.close();
     }

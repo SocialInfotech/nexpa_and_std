@@ -34,7 +34,7 @@ android:orientation="vertical">
 		android:weightSum="7" android:orientation="horizontal"  android:padding="8dp">
 		
 		    <EditText
-			    android:id="@+id/btnOptions"
+			    android:id="@+id/et_search"
 			    android:layout_width="wrap_content"
  				android:layout_weight="5"
  				android:paddingTop="-50dp"
@@ -45,7 +45,8 @@ android:orientation="vertical">
 			    android:hint="SEARCH"
 			    android:textColor="@color/white_smoke"
 			    android:layout_height="30dp"
-				android:layout_centerHorizontal="true" 
+				android:layout_centerHorizontal="true"
+				android:visibility="invisible"
 			   />
 		    
 		    <TextView		   
@@ -62,7 +63,7 @@ android:orientation="vertical">
 			 
 			    android:layout_weight="0"
 			    android:padding="5dp"
-			    
+					 android:visibility="invisible"
 			    android:scaleType="center"
 			    android:background="@drawable/btn_search" />
 		       	<TextView		   
@@ -165,12 +166,24 @@ android:orientation="vertical">
 	android:layout_width="fill_parent" android:layout_height="match_parent"
 	android:gravity="bottom" android:orientation="vertical">
 
-		<android.support.v7.widget.RecyclerView
-			android:id="@+id/rv_my_broadcasts"
+
+
+
+		<com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+			android:id="@+id/swipeRefreshLayout"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			>
-		</android.support.v7.widget.RecyclerView>
+
+
+			<android.support.v7.widget.RecyclerView
+				android:id="@+id/rv_my_broadcasts"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				>
+			</android.support.v7.widget.RecyclerView>
+
+		</com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 
 
 		<!--<ListView android:layout_width="match_parent"

@@ -2,10 +2,15 @@ package com.lpoezy.nexpa.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,9 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lpoezy.nexpa.R;
+import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.XMPPService;
 import com.lpoezy.nexpa.objects.Correspondent;
+import com.lpoezy.nexpa.objects.OnExecutePendingTaskListener;
 import com.lpoezy.nexpa.objects.UserProfile;
+import com.lpoezy.nexpa.openfire.XMPPManager;
 import com.lpoezy.nexpa.utility.L;
 
 public class PeopleProfileActivity extends Activity /*implements Correspondent.OnCorrespondentUpdateListener*/{
@@ -36,6 +44,7 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 	private TextView mTvUrl2;
 	protected Correspondent mCorrespondent;
 	public static boolean isRunning = false;
+	private ProgressDialog pDialog;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -100,6 +109,28 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 
 	}
 
+	private boolean mBounded;
+	private XMPPService mService;
+
+	private ServiceConnection mServiceConn = new ServiceConnection() {
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			mBounded = false;
+			mService = null;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			mBounded = true;
+			L.debug("PeopleProfileACtivity, onServiceConnected");
+			mService = ((LocalBinder<XMPPService>) service).getService();
+
+			mService.onExecutePendingTask(new OnUpdateUI());
+		}
+	};
+
 	@Override
 	protected void onResume() {
 		
@@ -107,7 +138,15 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 		
 		isRunning = true;
 
-		updateUI();
+		Intent service = new Intent(this, XMPPService.class);
+		bindService(service, mServiceConn, Context.BIND_AUTO_CREATE);
+
+		//updateUI();
+
+		pDialog = new ProgressDialog(PeopleProfileActivity.this);
+		pDialog.setCancelable(false);
+		pDialog.setMessage("Loading ...");
+		pDialog.show();
 
 	}
 	
@@ -118,27 +157,33 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 		
 		isRunning = false;
 
+		if (mService != null) {
+
+
+			unbindService(mServiceConn);
+		}
+
 	}
 
-//	@Override
-//	public void onCorrespondentUpdate() {
-//		Bitmap rawImage = mCorrespondent.getProfilePic();
-//
-//		RoundedImageView riv = new RoundedImageView(PeopleProfileActivity.this);
-//        final Bitmap circImage = riv.getCroppedBitmap(rawImage, 100);
-//
-//        imgProfile.post(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//
-//				imgProfile.setImageBitmap(circImage);
-//
-//			}
-//		});
-//
-//	}
+	private class OnUpdateUI implements OnExecutePendingTaskListener{
+		@Override
+		public void onExecutePendingTask() {
+			if (!XMPPService.xmpp.connection.isConnected()) {
 
+				XMPPManager.getInstance(PeopleProfileActivity.this).instance = null;
+
+				XMPPService.xmpp = XMPPManager.getInstance(PeopleProfileActivity.this);
+
+				XMPPService.xmpp.connect("onCreate");
+
+			} else if (!XMPPService.xmpp.connection.isAuthenticated()) {
+
+				XMPPService.xmpp.login();
+			} else {
+				updateUI();
+			}
+		}
+	};
 
 	private void updateUI() {
 
@@ -181,6 +226,11 @@ public class PeopleProfileActivity extends Activity /*implements Correspondent.O
 						if (profile.getUrl2() != null && !profile.getUrl2().equalsIgnoreCase("null") && !profile.getUrl2().equals("")) {
 							mTvUrl2.setVisibility(View.VISIBLE);
 							mTvUrl2.setText(profile.getUrl2());
+						}
+
+						if(pDialog!=null){
+							pDialog.dismiss();
+							pDialog = null;
 						}
 
 					}

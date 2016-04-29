@@ -147,6 +147,8 @@ public class CreateAccountActivity extends Activity {
 		return isValid;
 	}
 
+
+
 	boolean succession;
 
 	private void registerUser(final String uname, final String email, final String password) {

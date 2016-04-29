@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
+import com.devspark.appmsg.AppMsg;
 import com.lpoezy.nexpa.R;
 import com.lpoezy.nexpa.chatservice.LocalBinder;
 import com.lpoezy.nexpa.chatservice.XMPPService;
@@ -38,6 +39,10 @@ import com.lpoezy.nexpa.utility.DateUtils;
 import com.lpoezy.nexpa.utility.DateUtils.DateFormatz;
 import com.lpoezy.nexpa.utility.L;
 import com.lpoezy.nexpa.utility.Utilz;
+
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class EditProfileFragment extends DialogFragment {
 
@@ -155,6 +160,33 @@ public class EditProfileFragment extends DialogFragment {
         return v;
     }
 
+    public boolean isValidURL(String url) {
+        final String prefix = "http://";
+        StringBuilder sb = new StringBuilder();
+        if(!url.contains(prefix)){
+            sb.append(prefix);
+        }
+
+        sb.append(url);
+        URL u = null;
+
+        try {
+            u = new URL(sb.toString());
+        } catch (MalformedURLException e) {
+            L.error(""+e.getMessage());
+            return false;
+        }
+
+        try {
+            u.toURI();
+        } catch (URISyntaxException e) {
+            L.error(""+e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
     private void addClickListenerToBtnOk(View v) {
 
         ((Button) v.findViewById(R.id.dialogButtonOK)).setOnClickListener(new View.OnClickListener() {
@@ -162,6 +194,13 @@ public class EditProfileFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
 
+                final String url0 = edtUrl0.getText().toString();
+                final String url1 = edtUrl1.getText().toString();
+                final String url2 = edtUrl2.getText().toString();
+                if(!url0.isEmpty() && !isValidURL(url0) || !url1.isEmpty() && !isValidURL(url1) ||!url2.isEmpty() && !isValidURL(url2)){
+                    L.makeText(getActivity(), "Url is not valid.", AppMsg.STYLE_ALERT);
+                    return;
+                }
                 pDialog = new ProgressDialog(getActivity());
                 pDialog.setCancelable(false);
                 pDialog.setMessage("Saving ...");
@@ -182,9 +221,7 @@ public class EditProfileFragment extends DialogFragment {
                         String uname = edtName.getText().toString();
                         String description = edtDescription.getText().toString();
                         String profession = edtProfession.getText().toString();
-                        String url0 = edtUrl0.getText().toString();
-                        String url1 = edtUrl1.getText().toString();
-                        String url2 = edtUrl2.getText().toString();
+
                         String avatarDir = Utilz.getDataFrmSharedPref(getActivity().getApplicationContext(), UserProfile.AVATAR_DIR, "");
 
                         UserProfile userProfile = new UserProfile(uname, description, profession, url0, url1, url2, avatarDir);
@@ -249,15 +286,18 @@ public class EditProfileFragment extends DialogFragment {
     private void resetProfileInfo() {
         L.debug("reset profile");
 
-
+        SQLiteHandler db = new SQLiteHandler(getActivity());
+        db.openToRead();
         final UserProfile userProfile = new UserProfile();
-        userProfile.setUsername(mUname);
+        userProfile.setUsername(db.getUsername());
+
+        db.close();
 
        rawImage = BitmapFactory.decodeResource(getResources(), R.drawable.pic_sample_girl);
 
         profilePic.setImageBitmap(rawImage);
 
-        edtName.setText(userProfile.getUsername());
+
 
         new Thread(new Runnable() {
             @Override
@@ -289,9 +329,9 @@ public class EditProfileFragment extends DialogFragment {
 
 
                         }
-
+                        L.debug("userProfile.getUsername: "+mUname);
                         profilePic.setImageBitmap(rawImage);
-
+                        edtName.setText(mUname);
 
                         if (userProfile.getDescription() != null) {
                             edtDescription.setText(userProfile.getDescription());

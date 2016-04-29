@@ -116,6 +116,7 @@
         android:layout_height="wrap_content"
         android:background="@color/flat_white"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:padding="20dp"
         tools:ignore="HardcodedText" >
 
@@ -152,6 +153,7 @@
         android:background="@color/flat_white"
         android:orientation="horizontal"
         android:padding="20dp"
+        android:visibility="gone"
         tools:ignore="HardcodedText" >
 
         <TextView

@@ -203,17 +203,17 @@ public class XMPPManager {
                 if (connection.isConnected())
                     return false;
                 isconnecting = true;
-                if (isToasted)
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-
-                        @Override
-                        public void run() {
-
-                            Toast.makeText(context,
-                                    caller + "=>connecting....",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
+//                if (isToasted)
+//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+//
+//                        @Override
+//                        public void run() {
+//
+//                            Toast.makeText(context,
+//                                    caller + "=>connecting....",
+//                                    Toast.LENGTH_LONG).show();
+//                        }
+//                    });
                 L.debug("Connect() Function " + caller + "=>connecting....");
 
                 try {
@@ -235,50 +235,50 @@ public class XMPPManager {
 
 
                 } catch (IOException e) {
-                    if (isToasted)
-                        new Handler(Looper.getMainLooper())
-                                .post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-
-                                        Toast.makeText(
-                                                context,
-                                                "(" + caller + ")"
-                                                        + "IOException: ",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+//                    if (isToasted)
+//                        new Handler(Looper.getMainLooper())
+//                                .post(new Runnable() {
+//
+//                                    @Override
+//                                    public void run() {
+//
+//                                        Toast.makeText(
+//                                                context,
+//                                                "(" + caller + ")"
+//                                                        + "IOException: ",
+//                                                Toast.LENGTH_SHORT).show();
+//                                    }
+//                                });
 
                     L.error("(" + caller + "), IOException: " + e.getMessage());
                 } catch (SmackException e) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            Toast.makeText(context,
-                                    "(" + caller + ")" + "SMACKException: ",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+//
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(context,
+//                                    "(" + caller + ")" + "SMACKException: ",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                     L.error("(" + caller + "), SMACKException: "
                             + e.getMessage());
                 } catch (XMPPException e) {
-                    if (isToasted)
-
-                        new Handler(Looper.getMainLooper())
-                                .post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-
-                                        Toast.makeText(
-                                                context,
-                                                "(" + caller + ")"
-                                                        + "XMPPException: ",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+//                    if (isToasted)
+//
+//                        new Handler(Looper.getMainLooper())
+//                                .post(new Runnable() {
+//
+//                                    @Override
+//                                    public void run() {
+//
+//                                        Toast.makeText(
+//                                                context,
+//                                                "(" + caller + ")"
+//                                                        + "XMPPException: ",
+//                                                Toast.LENGTH_SHORT).show();
+//                                    }
+//                                });
                     L.error("connect(" + caller + ")" +
                             "XMPPException: " + e.getMessage());
 

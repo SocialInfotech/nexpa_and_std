@@ -342,9 +342,12 @@ public class MyBroadcastsFragment extends Fragment implements XMPPService.OnServ
                                             //L.debug("End tag " + xpp.getName());
                                         } else if(eventType == XmlPullParser.TEXT) {
                                             L.debug("Text " + xpp.getText());
-
-                                            Announcement announcement = gson.fromJson(xpp.getText(), Announcement.class);
-                                            announcements.add(announcement);
+                                            try {
+                                                Announcement announcement = gson.fromJson(xpp.getText(), Announcement.class);
+                                                announcements.add(announcement);
+                                            }catch(Exception e){
+                                                L.error(e.getMessage());
+                                            }
 
                                         }
                                         eventType = xpp.next();

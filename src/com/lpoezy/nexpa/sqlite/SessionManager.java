@@ -23,6 +23,7 @@ public class SessionManager {
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_IS_SUPERUSER = "isSuperuser";
+    private static final String KEY_IS_SUPERUSER_BROADCAST = "isSuperuserBroadcast";
 
     public SessionManager(Context context) {
         this._context = context;
@@ -60,6 +61,16 @@ public class SessionManager {
         Log.d(TAG, "User login session modified!");
     }
 
+    public void setSuperuserBroadcast(boolean isSuperuser) {
+
+        editor.putBoolean(KEY_IS_SUPERUSER_BROADCAST, isSuperuser);
+
+        // commit changes
+        editor.commit();
+
+        Log.d(TAG, "User login session modified!");
+    }
+
 
     public  void clearSession() {
         this._context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply();
@@ -76,5 +87,9 @@ public class SessionManager {
 
     public boolean isSuperuser(){
         return pref.getBoolean(KEY_IS_SUPERUSER, false);
+    }
+
+    public boolean isSuperuserBroadcast(){
+        return pref.getBoolean(KEY_IS_SUPERUSER_BROADCAST, false);
     }
 }

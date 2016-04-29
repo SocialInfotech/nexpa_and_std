@@ -215,59 +215,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
 
         if (XMPPService.xmpp != null)
             XMPPService.xmpp.registerUpdateBroadcastUIListener(mOnupdateUI);
-/*/
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
 
-                if (XMPPService.xmpp.connection != null && XMPPService.xmpp.connection.isAuthenticated()) {
-
-
-                    SQLiteHandler db = new SQLiteHandler(GroupChatHomeActivity.this);
-                    db.openToRead();
-                    // Create a pubsub manager using an existing XMPPConnection
-                    PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
-
-                    LeafNode node = null;
-                    try {
-
-                        ConfigureForm form = new ConfigureForm(DataForm.Type.form.submit);
-                        form.setAccessModel(AccessModel.open);
-                        form.setDeliverPayloads(true);
-                        form.setNotifyRetract(true);
-                        form.setPersistentItems(true);
-                        form.setPublishModel(PublishModel.open);
-
-                        node = (LeafNode) mgr.createNode(db.getUsername() + "-broadcast", form);
-
-                    } catch (SmackException.NoResponseException e) {
-                        L.error(e.getMessage());
-                    } catch (XMPPException.XMPPErrorException e) {
-                        L.error(e.getMessage());
-                    } catch (SmackException.NotConnectedException e) {
-                        L.error(e.getMessage());
-                    }
-                    //PubSubManager mgr = new PubSubManager(XMPPService.xmpp.connection);
-                    try {
-                        node = mgr.getNode(db.getUsername() + "-broadcast");
-
-                        //node.addItemEventListener(new ItemEventCoordinator());
-
-                        node.subscribe(db.getUsername() + "@198.154.106.139");
-                    } catch (SmackException.NoResponseException e) {
-                        L.error(e.getMessage());
-                    } catch (XMPPException.XMPPErrorException e) {
-                        L.error(e.getMessage());
-                    } catch (SmackException.NotConnectedException e) {
-                        L.error(e.getMessage());
-                    }
-
-
-                    db.close();
-                }
-            }
-        }).start();
-//*/
         if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
             startLocationUpdates();
         }
@@ -627,7 +575,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                 .findViewById(R.id.cbx_superuser);
         SessionManager sm = new SessionManager(
                 GroupChatHomeActivity.this);
-        cbxSuperUser.setChecked(sm.isSuperuser());
+        cbxSuperUser.setChecked(sm.isSuperuserBroadcast());
 
         cbxSuperUser.setOnClickListener(new View.OnClickListener() {
 
@@ -637,9 +585,9 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
                         GroupChatHomeActivity.this);
                 if (((CheckBox) v).isChecked()) {
                     rbDistance.setEnabled(false);
-                    sm.setSuperuser(true);
+                    sm.setSuperuserBroadcast(true);
                 } else {
-                    sm.setSuperuser(false);
+                    sm.setSuperuserBroadcast(false);
                     rbDistance.setEnabled(true);
                 }
 
@@ -767,7 +715,7 @@ public class GroupChatHomeActivity extends AppCompatActivity implements XMPPServ
         HashMap<String, String> postDataParams = new HashMap<String, String>();
 
         SessionManager sm = new SessionManager(GroupChatHomeActivity.this);
-        int newDistance = sm.isSuperuser() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
+        int newDistance = sm.isSuperuserBroadcast() ? AppConfig.SUPERUSER_MAX_DISTANCE_KM : dst;
 
         postDataParams.put("tag", "download_nearby_users");
         postDataParams.put("username", mUsername);

@@ -4,12 +4,12 @@
         "source": "C:\\Users\\HP PAVILION\\Desktop\\git\\nexpa_v7\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\drawable\\abc_btn_check_material.xml"
     },
     {
-        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_light.xml",
-        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\8.4.0\\res\\drawable\\common_google_signin_btn_text_light.xml"
-    },
-    {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable\\roundrect.xml",
         "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.appyvet\\materialrangebar\\1.3\\res\\drawable\\roundrect.xml"
+    },
+    {
+        "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_light.xml",
+        "source": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\8.4.0\\res\\drawable\\common_google_signin_btn_text_light.xml"
     },
     {
         "merged": "C:\\Users\\ldonios\\git\\nexpa_v5\\nexpa_and_std\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background_light.xml",

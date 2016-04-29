@@ -120,7 +120,7 @@
                             android:id="@+id/cbx_superuser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Premium user - unlimited broadcast range" />
+                            android:text="World wide - unlimited broadcast range" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

@@ -96,7 +96,7 @@ public class CustomGrid extends BaseAdapter {
                 R.drawable.pic_sample_girl);
         int avalability = R.drawable.offline;
 
-        try{
+        try {
 
 
             textView.setText(web.get(position)/*+  "|" */ /*+ distance.get(position) +"m" +avalability*/);
@@ -106,36 +106,18 @@ public class CustomGrid extends BaseAdapter {
             avalability = mCorrespondents.get(position).isAvailable() ? R.drawable.online : R.drawable.offline;
 
 
-            if(mCorrespondents.get(position).getProfilePic()!=null){
+            if (mCorrespondents.get(position).getProfilePic() != null) {
                 rawImage = mCorrespondents.get(position).getProfilePic();
             }
 
-        } catch (IndexOutOfBoundsException e) {L.error(e.getMessage());}
+        } catch (IndexOutOfBoundsException e) {
+            L.error(e.getMessage());
+        }
 
         offline.setImageResource(avalability);
         imageView.setImageBitmap(rawImage);
 
         return grid;
     }
-
-//       private Bitmap getCorrespondentPic(final Correspondent correspondent) {
-//			
-//			Bitmap rawImage = BitmapFactory.decodeResource(mContext.getResources(),
-//			        R.drawable.pic_sample_girl);
-//			//L.debug("CustomGrid, getCorrespondentPic: "+this.userIds.get(pos)+", "+this.web.get(pos));
-//			
-//			new Thread(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					
-//					correspondent.downloadProfilePicOnline(mContext);
-//					
-//				}
-//			}).start();
-//			
-//			return rawImage;
-//		}
-
 
 }

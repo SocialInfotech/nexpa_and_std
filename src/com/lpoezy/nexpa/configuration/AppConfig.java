@@ -25,6 +25,6 @@ public class AppConfig {
 	public static final String ACTION_USER_PROFILE_UPDATED = "com.lpoezy.nexpa.actions.ACTION_USER_PROFILE_UPDATED";
 	public static final int SUPERUSER_MIN_DISTANCE_KM = 1;
 
-	public static int SUPERUSER_MAX_DISTANCE_KM = 7000;
+	public static int SUPERUSER_MAX_DISTANCE_KM = 40000;
 
 }
